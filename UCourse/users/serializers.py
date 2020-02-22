@@ -1,37 +1,33 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from django.contrib.auth import get_user_model, authenticate
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = get_user_model()
-        fields = ('email', 'password')
-        extra_kwargs = {'password': {'write_only': True, 'min_length': 8}}
+        fields = ('id', 'username', 'email','date_joined','is_active')
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        return get_user_model().objects.create_user(**validated_data)
+        email = validated_data['email']
+        password = validated_data['password']
+        user = get_user_model().objects.create_user(email, password)
+
+        return user
 
 
-class AuthTokenSerializer(serializers.Serializer):
+class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
-    password = serializers.CharField(
-        style={'input_type': 'password'},
-        trim_whitespace=False
-    )
+    password = serializers.CharField()
 
     def validate(self, attrs):
-        email = attrs.get('email')
-        password = attrs.get('password')
-
-        user = authenticate(
-            request=self.context.get('request'),
-            username=email,
-            password=password
-        )
-        if not user:
-            msg = ('Unable to authenticate with provided credentials')
-            raise serializers.ValidationError(msg, code='authentication')
-
-        attrs['user'] = user
-        return attrs
+        user = authenticate(**attrs)
+        if user:
+            return user
+        raise serializers.ValidationError("Incorrect email or password")

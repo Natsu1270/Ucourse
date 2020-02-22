@@ -1,0 +1,7 @@
+node_modules/
+venv/
+__pycache__/
+migrations/
+db.sqlite3
+.idea/
+.vscode/
