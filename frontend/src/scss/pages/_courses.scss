@@ -1,0 +1,54 @@
+h1 {
+	color: #00c6d1;
+}
+
+.section-filter-course {
+	margin-top: 20vh;
+	background: $main-blur-color;
+	padding-top: 30px;
+	padding-bottom: 40px;
+
+	.filter-area {
+		align-items: center;
+	}
+
+	.cs-filter-item {
+		margin-right: 50px;
+		width: 18rem;
+		.dropdown {
+
+		}
+	}
+
+}
+
+.section-course-show {
+	.courses-area {
+		flex-wrap: wrap;
+		.course-item {
+			display: inline-block;
+			padding: 16px;
+			flex-grow: 0;
+			max-width: 25%;
+			flex-basis: 25%;
+			cursor: pointer;
+			background: transparent;
+
+			.text--main {
+				color: #ffffff;
+			}
+		}
+
+	}
+
+	.courses-not-found {
+		.des-img {
+			text-align: center;
+			&__not-found-data {
+				width: 40%;
+			}
+		}
+	}
+}
+
+

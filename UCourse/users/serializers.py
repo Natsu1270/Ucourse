@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.models import update_last_login
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email','date_joined','is_active')
+        fields = ('id', 'username', 'email', 'date_joined', 'is_active', 'is_student', 'is_teacher')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -23,11 +24,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField()
+    username = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, attrs):
         user = authenticate(**attrs)
         if user:
+            update_last_login(sender=None, user=user)
             return user
         raise serializers.ValidationError("Incorrect email or password")

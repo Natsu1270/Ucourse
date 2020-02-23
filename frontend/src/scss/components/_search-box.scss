@@ -1,0 +1,33 @@
+.search_box {
+	width: 35%;
+	.input-group {
+		width: 100% !important;
+		background-color: $main-blur-color;
+		input {
+			outline: none;
+			border-color: transparent;
+			background-color: transparent;
+		}
+
+		.form-control	{
+			height: 44px;
+			font-size: 1.3rem;
+		}
+
+		.cs-search-btn {
+			width: 4.5rem;
+			border-radius: 0;
+			i {
+				font-size: 1.3rem;
+				color: $theme-font-color;
+			}
+			&:hover {
+				background-color: $theme-font-color;
+				border-radius: 0;
+				i {
+					color: #ffffff;
+				}
+			}
+		}
+	}
+}

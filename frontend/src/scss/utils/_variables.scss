@@ -1,0 +1,45 @@
+// color
+$main-background-color:					#fafafa !default;
+$white-color:							#ffffff !default;
+$theme-font-color:						#5637f2 !default;
+$theme-font-color-light:				#7F79F1 !default;
+$dark-blue-color: 						#242f6c !default;
+$theme-green-color:						#00c6d1 !default;
+$theme-green-color2:					#20c997 !default;
+$theme-green-dark:						#1F8354 !default;
+$theme-linear-color:					linear-gradient(90deg, rgba(86,55,242,1) 0%, rgba(127,121,241,1) 100%) !default;
+$reverse-theme-linear-color:			linear-gradient(90deg, rgba(127,121,241,1) 0%,rgba(86,55,242,1) 100%) !default;
+$main-blur-color:						#7569f21f !default;
+$star-rating-color:						#f6ba42 !default;
+$text-color-gray:						#757575 !default;
+$color-grey-light-1: 					#faf9f9 !default;
+$color-grey-light-2: 					#f4f2f2 !default;
+$color-grey-light-3: 					#f0eeee !default;
+$color-grey-light-4: 					#ccc    !default;
+
+$color-grey-dark-1: 					#333    !default;
+$color-grey-dark-2: 					#777    !default;
+$color-grey-dark-3: 					#999    !default;
+
+$black:                                 #000    !default;
+
+// font-size
+$info-font-size:						1.3rem  !default;
+$default-font-size:						1.6rem  !default;
+
+// shadow
+$button-box-shadow:						0 12px 38px rgba(51, 0, 253, 0.29), 0 12px 12px rgba(52, 58, 251, 0.16) !default;
+$button-click-box-shadow:				0 12px 38px rgba(51, 0, 253, 0.5), 0 12px 12px rgba(52, 58, 251, 0.3) !default;
+$button-box-shadow2:					0 1rem 2rem rgba($theme-font-color, .2) !default;
+$button-click-box-shadow2:				0 .5rem 1rem rgba(0, 0, 0, .4) !default;
+$shadow-dark: 							0 2rem 6rem rgba(0,0,0,.3);
+$shadow-light: 							0 2rem 5rem rgba(0,0,0,.06);
+$small-box-shadow-black:				0 .5rem 1rem rgba($black, .15) !default;
+$small-box-shadow-theme:				0 .5rem 1rem rgba($theme-font-color, .15) !default;
+
+// size
+$bp-largest: 75em;     // 1200px
+$bp-large: 68.75em;    // 1100px
+$bp-medium: 56.25em;   // 900px
+$bp-small: 37.5em;     // 600px
+$bp-smallest: 31.25em; // 500px

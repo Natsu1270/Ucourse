@@ -6,14 +6,17 @@ from . import models
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
-    list_display = ['email']
+    list_display = ['email', 'username']
+    list_filter = ['is_student', 'is_teacher']
+    search_fields = ['username', 'email']
+    readonly_fields = ('date_joined', 'last_login',)
     fieldsets = (
         (None, {
             "fields": (
-                'email', 'password'
+                'username', 'email', 'password', 'is_teacher', 'is_student', 'is_staff', 'is_superuser', 'date_joined', 'last_login'
             ),
         }),
     )
 
 
-admin.site.register(models.User)
+admin.site.register(models.User, UserAdmin)

@@ -1,0 +1,60 @@
+.section-banner {
+	&::before {
+		position: absolute;
+		content: url("../../assets/banner-background.png");
+		right: 0;
+		top: 100px;
+		z-index: -1;
+		animation: floating 6s 2s ease-in-out infinite;
+	}
+	margin: 0 auto;
+	position: relative;
+	z-index: 1;
+	height: 50rem;
+
+	.banner-content {
+		.banner-content-left {
+			position: absolute;
+			top: 23rem;
+			left: 0;
+			z-index: 900;
+			max-width: 50%;
+			padding-left: 50px;
+
+			.banner-slogan {
+				h1 {
+					font-size: 5rem;
+					color: $dark-blue-color;
+				}
+				p {
+					margin-top: 2rem;
+				}
+			}
+
+			.banner-description {
+				h5 {
+					font-size: 2rem;
+					font-weight: 400;
+					line-height: 2.8rem;
+					color: $theme-font-color;
+
+				}
+			}
+			.cs-btn--banner {
+				&,
+				&:link,
+				&:visited {
+					margin-top: 5rem;
+					margin-left: 30%;
+				}
+			}
+
+		}
+
+		.banner-content-right {
+			position: absolute;
+			top: 7rem;
+			right: 0;
+		}
+	}
+}

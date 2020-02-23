@@ -1,0 +1,23 @@
+.exam-card {
+	width: 30rem;
+	padding: 1rem 2rem;
+	margin-top: 3rem;
+	display: inline-block;
+	border-radius: 1rem;
+	box-shadow: $small-box-shadow-theme;
+	margin-right: 2rem;
+	&__title {
+		font-size: 1.8rem;
+		margin-bottom: 1rem;
+		font-weight: 600;
+		color: $text-color-gray;
+
+	}
+	&__button {
+		margin-top: 1.5rem;
+		text-align: center;
+		a {
+			box-shadow: $small-box-shadow-theme !important;
+		}
+	}
+}

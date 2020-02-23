@@ -1,0 +1,30 @@
+
+@import 'vendors/bootstrap';
+
+@import 'utils/functions';
+@import 'utils/variables';
+@import 'utils/mixin';
+
+@import 'base/animations';
+@import 'base/base';
+@import 'base/typography';
+
+@import 'components/component';
+
+@import 'layouts/header';
+@import 'layouts/main-banner';
+@import 'layouts/footer';
+@import 'layouts/take-exam';
+@import 'layouts/course-sidebar';
+
+@import 'pages/home';
+@import 'pages/courses';
+@import 'pages/course-detail';
+@import 'pages/about';
+@import 'pages/ability-exam';
+@import 'pages/course-learn';
+
+
+.login-register-page {
+  margin-top: 200px;
+}

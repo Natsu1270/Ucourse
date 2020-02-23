@@ -1,0 +1,115 @@
+.side-nav {
+    font-size: 1.4rem;
+    list-style: none;
+    margin-top: 3.5rem;
+
+    @media only screen and (max-width: $bp-medium) {
+        display: flex;
+        margin: 0;
+    }
+
+    &__item {
+		.collapse-week {
+			list-style-type: none;
+			padding-left: 5rem;
+			li {
+				margin-bottom: 2rem;
+				color: $color-grey-dark-2;
+			}
+		}
+        position: relative;
+		&--text {
+			color: $color-grey-dark-2;
+			z-index: 100;
+		}
+
+		&--figure {
+			text-align: center;
+		}
+
+		&--avatar {
+			height: 10rem;
+			width: 15rem;
+		}
+		margin-top: 2rem;
+        &{
+            margin-bottom: 2rem;
+
+            @media only screen and (max-width: $bp-medium) {
+                margin: 0;
+            }
+        }
+
+        @media only screen and (max-width: $bp-medium) {
+            flex: 1;
+        }
+    }
+
+    &__item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -1px;
+        height: 100%;
+        width: 1rem;
+        background-color: $theme-font-color;
+        transform: scaleY(0);
+        transition: transform .2s,
+                    width .4s cubic-bezier(1,0,0,1) .2s,
+                    background-color .1s;
+    }
+
+    &__item:hover::before,
+    &__item--active::before {
+        transform: scaleY(1);
+    }
+
+    &__item:active::before {
+        background-color: $theme-font-color-light;
+    }
+	&__item--active {
+		background-color: #ffffff;
+	}
+
+    &__link {
+        color: $color-grey-light-1;
+        text-decoration: none;
+        text-transform: uppercase;
+        padding: 1.5rem 3rem;
+        position: relative;
+        z-index: 10;
+
+        display: flex;
+        align-items: center;
+
+
+        @media only screen and (max-width: $bp-medium) {
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @media only screen and (max-width: $bp-small) {
+            flex-direction: column;
+            padding: 1.5rem .5rem;
+        }
+
+		.span-toggle {
+			cursor: pointer;
+		}
+
+    }
+
+    &__icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        margin-right: 2rem;
+        fill: currentColor;
+
+        @media only screen and (max-width: $bp-small) {
+            margin-right: 0;
+            margin-bottom: .7rem;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+}

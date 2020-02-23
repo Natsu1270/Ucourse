@@ -1,0 +1,8 @@
+.star-rating {
+	&__star {
+		font-size: 1.3rem;
+	}
+	.fas, .fal {
+		color: $star-rating-color;
+	}
+}

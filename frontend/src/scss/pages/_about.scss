@@ -1,0 +1,30 @@
+// about
+.cs-about {
+	margin-top: 20vh;
+	&--text {
+		&__main {
+			font-size: 3rem;
+			font-weight: 700;
+		   	color: $theme-green-color;
+		}
+		&__sub {
+			font-size: 1.5rem;
+			color: $dark-blue-color;
+			text-align: justify;
+		}
+	}
+}
+
+.img-area {
+	&::before {
+		position: absolute;
+		content: url("../../assets/banner-background.png");
+		width: 100vh;
+		right: 0;
+		top: 0;
+		z-index: -1;
+	}
+	.img-about {
+		margin-top: 60px;
+	}
+}

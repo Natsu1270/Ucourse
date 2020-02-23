@@ -1,0 +1,20 @@
+.cs-dropdown {
+	background: #5897fb;
+	border-radius: 0.2rem;
+	.dropdown-menu {
+		width: 100%;
+	}
+
+	.dropdown-item {
+		font-size: 1.4rem;
+	}
+
+	button {
+		color: #ffffff;
+    	font-size: 1.6rem;
+		&:hover {
+			color: #ffffff;
+		}
+
+	}
+}

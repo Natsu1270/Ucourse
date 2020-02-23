@@ -1,0 +1,44 @@
+.course-learn {
+	margin-top: 20vh;
+	display: flex;
+	&__home {
+		flex: 1;
+		position: absolute;
+		height: auto;
+		left: 22rem;
+		width: calc(100% - 220px);
+	}
+
+	&__content {
+		margin: 0 auto;
+		padding: 3rem 4rem;
+		section {
+			display: none;
+			animation: {
+				name: tabContent;
+				direction: normal;
+				duration: 0.3s;
+				timing-function: ease-in-out;
+				iteration-count: 1;
+			  }
+		}
+	}
+
+	input[name="tab-control"] {
+			display: none;
+			@include tabLearn
+		}
+
+
+	.sidebar {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		top: 12rem;
+		overflow-x: hidden;
+		overflow-y: scroll;
+		width: 22rem;
+		height: auto;
+
+	}
+}

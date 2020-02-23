@@ -1,0 +1,166 @@
+@mixin responsive($breakpoint) {
+	@if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content };    //600px
+    }
+    @if $breakpoint == tab-port {
+        @media only screen and (max-width: 56.25em) { @content };     //900px
+    }
+    @if $breakpoint == tab-land {
+        @media only screen and (max-width: 75em) { @content };    //1200px
+    }
+    @if $breakpoint == big-desktop {
+        @media only screen and (min-width: 112.5em) { @content };    //1800
+    }
+}
+
+@mixin font-face($style-name, $path, $category:"") {
+	$filepath : $path + $style-name;
+    @font-face {
+        font-family: "#{$style-name}";
+        src: url($filepath + ".eot");
+        src: url($filepath + ".eot?#iefix") format('embedded-opentype'), url($filepath + ".woff") format('woff'), url($filepath + ".ttf")  format('truetype'), url($filepath + ".svg#" + $style-name + "") format('svg');
+    }
+    %#{$style-name} {
+        font: {
+            @if $category != "" {
+                family: "#{$style-name}", #{$category};
+            }
+            @else {
+                family: "#{$style-name}";
+                weight: normal;
+            }
+        }
+    }
+}
+
+@mixin clearfix {
+	&::after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+@mixin absCenter {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin tabs(
+  $label-selector: "~ ul > li",
+  $slider-selector: "~ .slider",
+  $content-selector: "~ .content > section") {
+
+  @for $i from 1 through 100 {
+    &:nth-of-type(#{$i}):checked {
+      #{$label-selector}:nth-child(#{$i}) {
+        @content;
+      }
+
+      #{$content-selector}:nth-child(#{$i}) {
+        display: block;
+      }
+    }
+  }
+}
+
+@mixin tabLearn(
+  $label-selector: "~ ul > li",
+  $slider-selector: "~ .slider",
+  $content-selector: "~ main > .content > section") {
+
+  @for $i from 1 through 100 {
+    &:nth-of-type(#{$i}):checked {
+      #{$label-selector}:nth-child(#{$i}) {
+        @content;
+      }
+
+      #{$content-selector}:nth-child(#{$i}) {
+        display: block;
+      }
+    }
+  }
+}
+
+/* Key frame */
+@keyframes moveRightMainSlogan {
+
+	0% {
+		transform: translateX(-25rem);
+		opacity: 0;
+	}
+
+	80% {
+		transform: translateX(1rem);
+		opacity: .8;
+	}
+
+	100% {
+		transform: initial;
+		opacity: 1;
+	}
+
+}
+
+@keyframes moveUp {
+	0% {
+		transform: translateY(5rem);
+		opacity: 0;
+	}
+
+	80% {
+		transform: translateY(-1rem);
+		opacity: 0.8;
+		box-shadow: none;
+	}
+
+	100% {
+		transform: initial;
+		opacity: 1;
+	}
+}
+
+@keyframes floating {
+	0% {
+		transform: translateY(0rem)  ;
+	}
+	50% {
+		transform: translateY(-2rem) ;
+	}
+	100% {
+		transform:translateY(0rem) ;
+	}
+}
+
+@keyframes moveLeft {
+	0% { transform: translateX(50rem)}
+
+	80% { transform: translateX(-5rem)}
+
+	100% { transform: initial}
+}
+
+@keyframes tabContent {
+	from {
+	  opacity: 0;
+	  transform: translateY(5%);
+	}
+	to {
+	  opacity: 1;
+	  transform: translateY(0%);
+	}
+}
+
+@keyframes show {
+		0%, 49.99% {
+			opacity: 0;
+			z-index: 1;
+		}
+
+		50%, 100% {
+			opacity: 1;
+			z-index: 5;
+		}
+	}

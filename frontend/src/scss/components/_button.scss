@@ -1,0 +1,58 @@
+
+
+.cs-btn {
+	&,
+    &:link,
+    &:visited {
+        text-decoration: none;
+        padding: .5rem 1.5rem;
+        display: inline-block;
+        border-radius: 0.2rem;
+        transition: all .2s;
+        position: relative;
+        font-size: $default-font-size;
+		color: #ffffff;
+        //Change for the <button> element
+        border: none;
+        cursor: pointer;
+		background: linear-gradient(90deg, rgba(86, 55, 242, 1) 0%, rgba(127, 121, 241, 1) 100%);
+		box-shadow: $button-box-shadow2;
+		text-align: center;
+    }
+
+	&--animated {
+		transition: transform 0.2s ease;
+		&:hover {
+			transform: translateY(-3px);
+			color: #ffffff;
+		}
+		&:active {
+			transform: translateY(-1px);
+			box-shadow: $button-click-box-shadow2;
+		}
+	}
+
+	&--fixed {
+		width: 10rem;
+	}
+
+	&--banner {
+		&,
+		&:link,
+		&:visited {
+			font-weight: 700;
+			padding: 3rem 5rem;
+		}
+	}
+
+	&--white {
+		&,
+		&:link,
+		&:visited {
+			background: #ffffff;
+			color: $theme-font-color;
+			padding: 2.35rem 5rem;
+		}
+	}
+}
+

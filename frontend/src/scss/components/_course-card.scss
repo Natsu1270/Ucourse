@@ -1,0 +1,20 @@
+.course-card-small {
+	&__avatar {
+		max-height: 180px;
+		overflow: hidden;
+	}
+	&__body {
+		padding: 1rem 2rem ;
+		border: 1px solid rgba(202, 202, 202, 0.3);
+		.card-title {
+			a {
+				&, &:link, &:visited {
+					text-decoration: none;
+					font-size: 1.6rem;
+					font-weight: 500;
+					color: #6c757d;
+				}
+			}
+		}
+	}
+}
