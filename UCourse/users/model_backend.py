@@ -15,5 +15,5 @@ class UcourseModelBackend(ModelBackend):
             if user.check_password(password):
                 return user
         except UserModel.DoesNotExist:
-            UserModel.set_password(password)
+            return None
 

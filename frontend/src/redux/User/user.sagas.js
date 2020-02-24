@@ -1,25 +1,28 @@
-import { takeLatest, put, call ,all } from 'redux-saga/effects';
-import axios from 'axios'
-
+import { takeLatest, takeEvery, put, call, all } from 'redux-saga/effects';
 import UserActionTypes from './user.types';
 import * as UserAction from './user.actions'
-import {API_URL} from '../../configs'
+import * as UserService from '../../api/user.services'
 
-const USER_API_URL = `${API_URL}auth/`
-const LOGIN_API_URL = `${USER_API_URL}login`
 
-function loginAPI(authParams) {
-    return axios.request({
-        headers: {'Content-Type': 'application/json'},
-        method: 'POST',
-        url: LOGIN_API_URL,
-        data: authParams
-    })
+// load user saga
+export function* loadUser(payload) {
+    try {
+        let { data } = yield call(UserService.loadUserAPI, payload)
+        yield put(UserAction.loadUserSuccess(data))
+    } catch (err) {
+        yield put(UserAction.loadUserFail(err.message))
+    }
 }
 
-export function* login({payload: {email, password}}) {
+export function* onLoadUser() {
+    yield takeEvery(UserActionTypes.LOAD_USER_START, loadUser)
+}
+
+
+// login saga
+export function* login({ payload: { username, password } }) {
     try {
-        let {data} = yield call(loginAPI,{email, password})
+        let { data } = yield call(UserService.loginAPI, { username, password })
         yield put(UserAction.loginSuccess(data))
     } catch (err) {
         yield put(UserAction.loginFail(err.message))

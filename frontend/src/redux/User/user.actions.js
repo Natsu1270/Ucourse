@@ -1,9 +1,23 @@
 import UserActionTypes from "./user.types";
 
-export const setCurrentUser = (user) => {
+export const loadUserStart = (token) => {
     return {
-        type: UserActionTypes.SET_CURRENT_USER,
+        type: UserActionTypes.LOAD_USER_START,
+        payload: token
+    }
+}
+
+export const loadUserSuccess = (user) => {
+    return {
+        type: UserActionTypes.LOAD_USER_SUCCESS,
         payload: user
+    }
+}
+
+export const loadUserFail = (err) => {
+    return {
+        type: UserActionTypes.LOAD_USER_FAIL,
+        payload: err
     }
 }
 
