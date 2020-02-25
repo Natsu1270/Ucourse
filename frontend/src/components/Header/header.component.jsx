@@ -8,9 +8,9 @@ const Header = () => {
         <header className="cs-main-header" id="main-header">
             <div className="header-content">
                 <nav className="navbar navbar-extend-lg cs-navbar">
-                    <a href="" className="navbar-brand cs-logo">
+                    <Link to="/" className="navbar-brand cs-logo">
                         <img src={logo} className="cs-logo__img" alt="cs-logo"/>
-                    </a>
+                    </Link>
                     <div className="navbar_supported cs-navbar-item">
                         <ul className="navbar-nav">
                             <li className="search_box">
