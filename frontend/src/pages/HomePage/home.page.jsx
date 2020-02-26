@@ -1,5 +1,7 @@
 import React from 'react'
 
+import banner from '../../assets/banner.png'
+
 const HomePage = () => {
     return (
         <section className="section section-banner" id="cs-banner">
@@ -19,7 +21,7 @@ const HomePage = () => {
                     </div>
                 </div>
                 <div className="banner-content-right">
-                    <img src="" id="banner-img" alt="" />
+                    <img src={banner} id="banner-img" alt="" />
                 </div>
             </div>
         </section>

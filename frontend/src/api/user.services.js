@@ -22,7 +22,7 @@ export function loginAPI(authParams) {
 export function logoutAPI(token) {
     return axios.request({
         headers: {'Content-Type': 'application/json', 'Authorization': `Token ${token}`},
-        method: 'GET',
+        method: 'POST',
         url: `${AUTH_API_URL}logout`
     })
 }

@@ -7,6 +7,7 @@ import Header from "./components/Header/header.component";
 import Footer from "./components/Footer/footer.component";
 
 import './App.scss';
+import 'antd/dist/antd.css'
 import HomePage from "./pages/HomePage/home.page";
 
 function App() {

@@ -5,7 +5,7 @@ import * as UserService from '../../api/user.services'
 
 
 // load user saga
-export function* loadUser(payload) {
+export function* loadUser({payload}) {
     try {
         let { data } = yield call(UserService.loadUserAPI, payload)
         yield put(UserAction.loadUserSuccess(data))
@@ -23,6 +23,7 @@ export function* onLoadUser() {
 export function* login({ payload: { username, password } }) {
     try {
         let { data } = yield call(UserService.loginAPI, { username, password })
+        localStorage.setItem('token', data.token)
         yield put(UserAction.loginSuccess(data))
     } catch (err) {
         yield put(UserAction.loginFail(err.message))
@@ -33,9 +34,25 @@ export function* onLogin() {
     yield takeLatest(UserActionTypes.LOGIN_START, login);
 }
 
+export function* logout({payload}) {
+    try {
+        yield call(UserService.logoutAPI, payload)
+        localStorage.removeItem('token')
+        yield put(UserAction.logoutSuccess())
+    } catch (err) {
+        yield put(UserAction.logoutFail(err))
+    }
+}
+
+export function* onLogout() {
+    yield takeLatest(UserActionTypes.LOGOUT_START, logout)
+}
+
 
 export function* userSaga() {
     yield all([
-        call(onLogin)
+        call(onLogin),
+        call(onLoadUser),
+        call(onLogout),
     ])
 }

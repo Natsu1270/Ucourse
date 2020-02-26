@@ -42,9 +42,10 @@ export const loginFail = (err) => {
     }
 }
 
-export const logoutStart = () => {
+export const logoutStart = (token) => {
     return {
-        type: UserActionTypes.LOGOUT_START
+        type: UserActionTypes.LOGOUT_START,
+        payload: token
     }
 }
 
