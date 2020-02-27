@@ -1,4 +1,5 @@
 import React from 'react'
+import aboutImg from '../../assets/about.png'
 
 const AboutPage = () => {
     return (
@@ -17,7 +18,7 @@ const AboutPage = () => {
                         Bách Khoa - Đại học Quốc gia Thành phố Hồ Chí Minh. <b>Csource</b> cung cấp các khóa học hướng
                         tới tất cả các
                         đối tượng và lứa tuổi có nhu cầu nâng cao kiến thức về lĩnh vực công nghệ thông tin. </p>
-                    <br/>
+                    <br />
                     <span className="cs-about--text__main">Our vision</span>
                     <p className="cs-about--text__sub"><b>Csource</b> kết hợp 2 hình thức đào tạo: Đào tạo tập trung và mua
                         bán khóa học trực tuyến bằng cách cung
@@ -36,7 +37,7 @@ const AboutPage = () => {
 
                 <div className="col-md-6 img-area">
                     <div className="img-fluid align-center img-about">
-                        <img src="" width="100%"/>
+                        <img src={aboutImg} width="100%" />
                     </div>
                 </div>
             </div>

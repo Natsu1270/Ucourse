@@ -1,12 +1,12 @@
 import React from 'react'
 
-import Login from '../../components/Login/login.component'
+import RegisterOrLogin from '../../components/RegisterOrLogin/register-or-login.component'
 
 const LoginAndRegisterPage = () => {
 
     return (
         <div className='login-register-page'>
-            <Login />
+            <RegisterOrLogin visible={true} />
         </div>
     )
 }
