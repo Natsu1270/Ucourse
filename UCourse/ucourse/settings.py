@@ -128,6 +128,7 @@ AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'EXCEPTION_HANDLER': 'api.utils.uc_exception_handle',
 }
 
 REST_KNOX = {

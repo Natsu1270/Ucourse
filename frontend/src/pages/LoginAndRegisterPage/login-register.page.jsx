@@ -6,7 +6,7 @@ const LoginAndRegisterPage = () => {
 
     return (
         <div className='login-register-page'>
-            <RegisterOrLogin visible={true} />
+            <RegisterOrLogin />
         </div>
     )
 }

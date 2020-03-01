@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createStructuredSelector } from "reselect";
 import { Link } from 'react-router-dom'
-import { tokenSelector, currentUserSelector, userIsLoadingSelector } from '../../redux/User/user.selects'
-import { loadUserStart, logoutStart } from "../../redux/User/user.actions";
+import { tokenSelector, currentUserSelector, isLoadUserLoadingSelector } from '../../redux/Auth/auth.selects'
+import { loadUserStart, logoutStart } from "../../redux/Auth/auth.actions";
+import { toggleRLModal } from '../../redux/UI/ui.actions'
 
 import { Button, Spin, Icon } from 'antd'
 import SearchInput from "../SearchInput/search-input.component";
 import logo from '../../assets/temp-logo.png'
+
+const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
 const Header = () => {
     // load token and get current user if logged in
@@ -16,7 +19,7 @@ const Header = () => {
     const { token, currentUser, isUserLoading } = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
-        isUserLoading: userIsLoadingSelector
+        isUserLoading: isLoadUserLoadingSelector
     }))
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
@@ -27,7 +30,7 @@ const Header = () => {
     }, [dispatch])
 
     const handleScroll = () => {
-        setStick(window.pageYOffset > 100)
+        setStick(window.pageYOffset > 50)
     }
 
     return (
@@ -39,17 +42,6 @@ const Header = () => {
                     </Link>
                     <div className="navbar_supported cs-navbar-item">
                         <ul className="navbar-nav">
-                            {/*<li className="search_box">*/}
-                            {/*    <form action="" method="get" className="form-inline">*/}
-                            {/*        <div className="input-group">*/}
-                            {/*            <input type="text" className="form-control" name="search"*/}
-                            {/*                   aria-label="search" placeholder="Tìm khoá học..."/>*/}
-                            {/*            <button type="submit" className="btn cs-search-btn">*/}
-                            {/*                <i className="fa fa-search"></i>*/}
-                            {/*            </button>*/}
-                            {/*        </div>*/}
-                            {/*    </form>*/}
-                            {/*</li>*/}
                             <li className="header-item">
                                 <SearchInput />
                             </li>
@@ -72,7 +64,7 @@ const Header = () => {
                                         </li>
                                     ) : (
                                             <li className="nav-item active-nav" id="logout-btn">
-                                                <Button type="primary"><Link to="/auth">Login</Link></Button>
+                                                <Button type="primary" onClick={() => dispatch(toggleRLModal())}>Get Started</Button>
                                             </li>
                                         )
                             }
@@ -80,6 +72,9 @@ const Header = () => {
                     </div>
                 </nav>
             </div>
+            <Suspense fallback={<Spin />}>
+                <RegisterOrLogin />
+            </Suspense>
         </header>
     )
 }

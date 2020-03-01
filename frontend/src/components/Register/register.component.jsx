@@ -1,15 +1,81 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+
+import { registerStart, googleSignInStart } from '../../redux/Auth/auth.actions'
+import { toggleRLModal } from '../../redux/UI/ui.actions'
+import {
+    isRegisterLoadingSelector,
+    currentUserSelector,
+    registerErrMessageSelector
+} from '../../redux/Auth/auth.selects'
+
+import { Input, Tooltip, Spin, message } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined, UserOutlined, UnlockOutlined, MailOutlined } from '@ant-design/icons'
 
 const Register = () => {
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const dispatch = useDispatch()
+    const { isRegisterLoading, currentUser, registerErrMessage } = useSelector(createStructuredSelector({
+        isRegisterLoading: isRegisterLoadingSelector,
+        currentUser: currentUserSelector,
+        registerErrMessage: registerErrMessageSelector
+    }))
+    // const [userInfo, setUserInfo] = useState({
+    //     username: '',
+    //     email: '',
+    //     password: ''
+    // })
+
+
+
+    const handleFormSubmit = event => {
+        event.preventDefault()
+        dispatch(registerStart({ username, email, password }))
+
+    }
+
+    useEffect(() => {
+        if (registerErrMessage !== null && isRegisterLoading == false) {
+            let err = ""
+            const errResponse = registerErrMessage.response
+            if (errResponse.status === 500) {
+                err = "Opps! Server is down, try again later"
+            } else {
+                err = errResponse.data['email'] ? errResponse.data['email'] : '' +
+                    errResponse.data['username'] ? errResponse.data['username'] : '' +
+                        errResponse.data['password'] ? errResponse.data['password'] : ''
+            }
+            message.error(err)
+        } else if (currentUser !== null) {
+            message.success("Register successfully!")
+        }
+    }, [isRegisterLoading])
+
+    const handleInputChange = event => {
+        const { name, value } = event.target
+        name === "username" ? setUsername(value) :
+            name === "email" ? setEmail(value) :
+                setPassword(value)
+    }
+
+    const inputStyle = {
+        transform: "translateY(-25%)"
+    }
+
+    const spinIcon = <LoadingOutlined style={{ fontSize: 24, color: "#fff" }} spin />;
 
     return (
         <div className="form-container sign-up-container" id="sign-up-container">
-            <form action="" method="post" id="signup-form">
+            <form onSubmit={handleFormSubmit} id="signup-form">
                 <h1 className="cs-account-form__title1">Create Account</h1>
                 <div className="social-container">
-                    <a href="" className="social social--fb"><i className="fab fa-facebook-f"></i></a>
-                    <a href="" className="social social--gm"><i className="fab fa-google-plus-g"></i></a>
-                    <a href="" className="social social--lk"><i className="fab fa-linkedin-in"></i></a>
+                    <button type="button" className="social social--fb"><i className="fab fa-facebook-f"></i></button>
+                    <button onClick={() => dispatch(googleSignInStart())} type="button" className="social social--gm"><i className="fab fa-google-plus-g"></i></button>
+                    <button type="button" className="social social--lk"><i className="fab fa-github"></i></button>
                 </div>
                 <div className="alert alert-danger alert-signup" role="alert">
                     <span className="error-message" id="signup-err-msg"></span>
@@ -17,13 +83,37 @@ const Register = () => {
                 <span className="text--sub__bigger">or use your email for registration</span>
                 <div className="form-group">
                     <label htmlFor="signup-username">Username</label>
-                    <input type="text" name="" placeholder="Username" id="signup-username" />
+                    <Input
+                        required
+                        onChange={handleInputChange}
+                        name="username"
+                        value={username}
+                        size="large"
+                        prefix={<UserOutlined style={inputStyle} className="site-form-item-icon" />}
+                        allowClear={true}
+                        placeholder="Username" id="signup-username" />
                     <label htmlFor="signup-email">Email</label>
-                    <input type="email" name="" id="signup-email" placeholder="Email" />
+                    <Input
+                        required
+                        onChange={handleInputChange}
+                        name="email"
+                        value={email}
+                        size="large"
+                        allowClear={true}
+                        prefix={<MailOutlined style={inputStyle} className="site-form-item-icon" />}
+                        type="email" id="signup-email" placeholder="Email" />
                     <label htmlFor="signup-password">Password</label>
-                    <input type="password" name="" id="signup-password" placeholder="Password" />
+                    <Input.Password
+                        required
+                        onChange={handleInputChange}
+                        name="password"
+                        value={password}
+                        prefix={<UnlockOutlined style={inputStyle} />}
+                        size="large" id="signup-password" placeholder="Password" />
                 </div>
-                <button className="cs-form-btn" type="submit" name="signup">Sign Up</button>
+                <button className="cs-form-btn" type="submit" name="signup">
+                    {isRegisterLoading ? <Spin indicator={spinIcon} /> : 'Register'}
+                </button>
             </form>
         </div>
 

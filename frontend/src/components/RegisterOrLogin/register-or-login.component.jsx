@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
-
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+import { isRLModalActiveSelector, isSignupPanelActiveSelector } from '../../redux/UI/ui.selects'
+import { toggleRLModal, switchRLForm } from '../../redux/UI/ui.actions'
 import Login from '../Login/login.component'
 import Register from '../Register/register.component'
 import LoginSignUpOverlay from './login-signup-overlay.ulti'
@@ -8,17 +11,23 @@ import { Modal } from 'antd'
 import './register-or-login.style.scss'
 
 
-const RegisterOrLogin = (props) => {
-    const [visible, setVisible] = useState(props.visible)
+const RegisterOrLogin = () => {
+
+    const dispatch = useDispatch()
+    const { isRLModalActive, isSignupFormActive } = useSelector(createStructuredSelector({
+        isRLModalActive: isRLModalActiveSelector,
+        isSignupFormActive: isSignupPanelActiveSelector
+    }))
     const handleClose = (e) => {
-        setVisible(false)
+        dispatch(toggleRLModal())
     }
 
 
     return (
         <Modal
             title=""
-            visible={visible}
+            closeIcon={<i></i>}
+            visible={isRLModalActive}
             onCancel={handleClose}
             footer={null}
             width={800}
@@ -28,7 +37,8 @@ const RegisterOrLogin = (props) => {
                 }
             }
         >
-            <div className="cs-account-form__container cs-signup" id="cs-form-container">
+            <div className={`cs-account-form__container cs-signup${isSignupFormActive ? ' right-panel-active' : ''}`}
+                id="cs-form-container">
                 <Login />
                 <Register />
                 <LoginSignUpOverlay />

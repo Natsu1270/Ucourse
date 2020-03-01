@@ -1,0 +1,6 @@
+{
+    "common.serverError": "Lỗi máy chủ, xin hãy thử lại sau !",
+    "login.wrongCreditials": "Tên đăng nhập/địa chỉ email hoặc mật khẩu không hợp lệ",
+    "auth.username": "Tên đăng nhập",
+    "auth.password": "Mật khẩu"
+}

@@ -1,0 +1,6 @@
+{
+    "common.serverError": "Opps! Server is down, try again later!",
+    "login.wrongCreditials": "Invalid username/email or password",
+    "auth.username": "Username",
+    "auth.password": "Password"
+}

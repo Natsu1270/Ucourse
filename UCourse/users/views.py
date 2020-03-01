@@ -23,8 +23,13 @@ class RegisterAPI(generics.GenericAPIView):
         data = serializer.validated_data
         user = serializer.save()
         return Response({
-            "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1],
+            "data": {
+                "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
+                "token": AuthToken.objects.create(user)[1]
+            },
+            "result": True,
+            "message": "Register successfully",
+            "status_code": 201
         }, status=status.HTTP_201_CREATED)
 
 
@@ -36,6 +41,11 @@ class LoginAPI(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         return Response({
-            "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1],
+            "data": {
+                "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
+                "token": AuthToken.objects.create(user)[1]
+            },
+            "result": True,
+            "message": "Login successfully",
+            "status_code": 200
         }, status=status.HTTP_200_OK)
