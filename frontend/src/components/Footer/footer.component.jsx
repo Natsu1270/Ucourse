@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
@@ -10,32 +11,32 @@ const Footer = () => {
 
                     <div className="col-md-6 mt-md-0 mt-3">
                         <h1 className="text-white">CSourse</h1>
-                        <br/>
+                        <br />
                         <p className="text-white ">Learn online, ear certificates</p>
                         <div className="img-fluid align-center mt-3 mb-3 footer-logo">
-                            <img src="" width="200px" alt="logo"/>
+                            <img src="" width="200px" alt="logo" />
                         </div>
                     </div>
 
-                    <hr className="clearfix w-100 d-md-none pb-3"/>
+                    <hr className="clearfix w-100 d-md-none pb-3" />
 
                     <div className="col-md-3 mb-md-0 mb-3 mt-2">
 
                         <h5 className="text-uppercase">TRỢ GIÚP</h5>
-                        <br/>
+                        <br />
 
                         <ul className="list-unstyled">
                             <li>
-                                <a href=""> Hướng dẫn đăng ký </a>
+                                <Link to="#"> Hướng dẫn đăng ký </Link>
                             </li>
                             <li>
-                                <a href="">Hướng dẫn thanh toán</a>
+                                <Link to="#">Hướng dẫn thanh toán</Link>
                             </li>
                             <li>
-                                <a href="">Tài khoản giao dịch</a>
+                                <Link to="#">Tài khoản giao dịch</Link>
                             </li>
                             <li>
-                                <a href="">Liên hệ</a>
+                                <Link to="#">Liên hệ</Link>
                             </li>
                         </ul>
 
@@ -44,7 +45,7 @@ const Footer = () => {
                     <div className="col-md-3 mb-md-0 mb-3 mt-2">
 
                         <h5 className="text-uppercase">KẾT NỐI VỚI CHÚNG TÔI</h5>
-                        <br/>
+                        <br />
                         <ul className="list-unstyled">
                             <li>
                                 <i className="fa fa-envelope-square"></i><a> Email</a>
@@ -65,7 +66,7 @@ const Footer = () => {
             </div>
 
             <div className="footer-copyright text-center py-3">©2019 Copyright:
-                <a href="#">CsourceTraining.com</a>
+                <Link to="#">CsourceTraining.com</Link>
             </div>
         </footer>
 

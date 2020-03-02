@@ -33,7 +33,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        if (loginErrorMessage !== null && isLoginLoading == false) {
+        if (loginErrorMessage !== null && isLoginLoading === false) {
             let err = ""
             if (loginErrorMessage.response.status === 500) {
                 err = "Opps! Server is down, try again later"

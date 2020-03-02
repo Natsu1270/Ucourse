@@ -6,7 +6,7 @@ import { tokenSelector, currentUserSelector, isLoadUserLoadingSelector } from '.
 import { loadUserStart, logoutStart } from "../../redux/Auth/auth.actions";
 import { toggleRLModal } from '../../redux/UI/ui.actions'
 
-import { Button, Spin, Icon } from 'antd'
+import { Button, Spin } from 'antd'
 import SearchInput from "../SearchInput/search-input.component";
 import logo from '../../assets/temp-logo.png'
 
@@ -27,7 +27,7 @@ const Header = () => {
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
-    }, [dispatch])
+    }, [dispatch, token])
 
     const handleScroll = () => {
         setStick(window.pageYOffset > 50)

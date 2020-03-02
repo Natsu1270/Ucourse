@@ -3,16 +3,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 
 import { registerStart, googleSignInStart } from '../../redux/Auth/auth.actions'
-import { toggleRLModal } from '../../redux/UI/ui.actions'
 import {
     isRegisterLoadingSelector,
     currentUserSelector,
     registerErrMessageSelector
 } from '../../redux/Auth/auth.selects'
 
-import { Input, Tooltip, Spin, message } from 'antd'
+import { Input, Spin, message } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import { InfoCircleOutlined, UserOutlined, UnlockOutlined, MailOutlined } from '@ant-design/icons'
+import { UserOutlined, UnlockOutlined, MailOutlined } from '@ant-design/icons'
 
 const Register = () => {
     const [username, setUsername] = useState('')
@@ -24,13 +23,6 @@ const Register = () => {
         currentUser: currentUserSelector,
         registerErrMessage: registerErrMessageSelector
     }))
-    // const [userInfo, setUserInfo] = useState({
-    //     username: '',
-    //     email: '',
-    //     password: ''
-    // })
-
-
 
     const handleFormSubmit = event => {
         event.preventDefault()
@@ -39,7 +31,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-        if (registerErrMessage !== null && isRegisterLoading == false) {
+        if (registerErrMessage !== null && isRegisterLoading === false) {
             let err = ""
             const errResponse = registerErrMessage.response
             if (errResponse.status === 500) {

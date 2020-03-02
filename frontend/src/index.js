@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { IntlProvider, injectIntl } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 import './index.scss';
 import App from './App';
 import './static/css/all.css'

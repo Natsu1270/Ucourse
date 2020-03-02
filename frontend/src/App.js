@@ -12,7 +12,6 @@ import 'antd/dist/antd.css'
 import { Spin } from 'antd';
 
 const AboutPage = React.lazy(() => import('./pages/AboutPage/about.page'))
-const RegisterOrLogin = React.lazy(() => import('./components/RegisterOrLogin/register-or-login.component'))
 
 function App() {
   return (

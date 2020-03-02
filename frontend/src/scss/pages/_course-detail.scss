@@ -69,7 +69,7 @@
 		list-style: none;
 		margin-bottom: 0;
 		display: flex;
-		justify-content: start;
+		justify-content: flex-start;
 		align-items: center;
 		height: 100%;
 		&__address {
@@ -226,7 +226,7 @@
 
 		&-item {
 			display: flex;
-			justify-content: start;
+			justify-content: flex-start;
 		}
 
 		&-ico {
@@ -251,7 +251,7 @@
 			padding: 2rem 3rem;
 			list-style: none;
 			display: flex;
-			justify-content: start;
+			justify-content: flex-start;
 			flex-wrap: wrap;
 		}
 		&--item {
@@ -409,7 +409,7 @@
 		.feedback-rating {
 			display: flex;
 			justify-content: flex-start;
-			align-items: start;
+			align-items: flex-start;
 
 			&__score {
 				margin-right: 8rem;
