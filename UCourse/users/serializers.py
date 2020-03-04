@@ -2,11 +2,15 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import update_last_login
 
+from roles.serializers import RoleSerializer
+
 
 class UserSerializer(serializers.ModelSerializer):
+    role = RoleSerializer(many=False)
+
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'date_joined', 'is_active', 'is_student', 'is_teacher')
+        fields = ('id', 'username', 'email', 'date_joined', 'is_active','role')
 
 
 class RegisterSerializer(serializers.ModelSerializer):

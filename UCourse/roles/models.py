@@ -1,3 +1,4 @@
+
 from django.db import models
 
 
@@ -18,3 +19,6 @@ class Role(models.Model):
     description = models.CharField(max_length=255, blank=True)
     created_date = models.DateField(auto_now_add=True)
     modified_date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.name

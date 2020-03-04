@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.contrib.auth import validators
 from django.utils.translation import gettext as _
 from django.utils import timezone
+from roles.models import Role
 
 
 class UserManager(BaseUserManager):
@@ -41,11 +42,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     email = models.EmailField(max_length=255, unique=True)
+    role = models.OneToOneField(Role, on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     objects = UserManager()
     USERNAME_FIELD = 'email'
+
+    def __str__(self):
+        return self.email

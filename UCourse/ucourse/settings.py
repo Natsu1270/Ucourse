@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     'api',
     'users',
+    'roles',
+    'profiles',
 
 ]
 

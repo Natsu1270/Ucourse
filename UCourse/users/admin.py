@@ -7,13 +7,13 @@ from . import models
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
     list_display = ['email', 'username']
-    list_filter = ['is_student', 'is_teacher']
+    list_filter = ['role']
     search_fields = ['username', 'email']
     readonly_fields = ('date_joined', 'last_login',)
     fieldsets = (
         (None, {
             "fields": (
-                'username', 'email', 'password', 'is_teacher', 'is_student', 'is_staff', 'is_superuser', 'date_joined', 'last_login'
+                'username', 'email', 'password', 'role', 'is_staff', 'is_superuser', 'date_joined', 'last_login'
             ),
         }),
     )

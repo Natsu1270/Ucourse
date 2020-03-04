@@ -1,7 +1,15 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from knox.models import AuthToken
+from django.contrib.auth import get_user_model
 from . import serializers
+
+
+class UserListAPI(generics.ListAPIView):
+    serializer_class = serializers.UserSerializer
+
+    def get_queryset(self):
+        return get_user_model().objects.all()
 
 
 class UserAPI(generics.RetrieveAPIView):
