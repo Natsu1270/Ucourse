@@ -47,13 +47,13 @@ class Profile(models.Model):
         return settings.DEFAULT_AVATAR_URL
 
     @property
-    def get_age(self):
+    def age(self):
         delta_day = date.today() - self.birth_date
         return delta_day.days // 365
 
     @property
-    def get_fullname(self):
-        return self.first_name + self.last_name
+    def fullname(self):
+        return self.first_name + ' ' + self.last_name
 
 
 

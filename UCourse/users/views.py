@@ -12,7 +12,7 @@ class UserListAPI(generics.ListAPIView):
         return get_user_model().objects.all()
 
 
-class UserAPI(generics.RetrieveAPIView):
+class UserAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
@@ -20,6 +20,8 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
 
 
 class RegisterAPI(generics.GenericAPIView):

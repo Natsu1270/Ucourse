@@ -21,12 +21,21 @@ class UserManager(BaseUserManager):
         user = self.create_user(email, password)
         user.is_staff = True
         user.is_superuser = True
+        user.role = Role.objects.filter(code='AD').first()
         user.save(using=self._db)
+
+        return user
+
+    def create_teacher(self, email, password=None, username=None, **extra_fields):
+        user = self.create_user(email, password, username, **extra_fields)
+        user.role = Role.objects.filter(code='TC').first()
+        user.save(using=self.__db)
 
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    student_role = Role.objects.filter(code='SD').first()
     username_validator = validators.UnicodeUsernameValidator()
     username = models.CharField(
         _('username'),
@@ -42,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     email = models.EmailField(max_length=255, unique=True)
-    role = models.OneToOneField(Role, on_delete=models.SET_NULL, null=True)
+    role = models.OneToOneField(Role, on_delete=models.SET_NULL, null=True, default=student_role)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
