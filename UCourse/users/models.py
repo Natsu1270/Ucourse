@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     email = models.EmailField(max_length=255, unique=True)
-    role = models.OneToOneField(Role, on_delete=models.SET_NULL, null=True, default=student_role)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, default=student_role)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)

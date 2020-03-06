@@ -6,3 +6,7 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
+        extra_kwargs = {
+            'code': {'validators': []},
+            'name': {'validators': []},
+        }
