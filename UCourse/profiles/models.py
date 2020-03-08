@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 from datetime import date
 
@@ -36,6 +37,8 @@ class Profile(models.Model):
     major = models.CharField(max_length=255, blank=True)
     occupation = models.CharField(max_length=50, blank=True)
     public_info = models.BooleanField(default=True)
+    created_date = models.DateTimeField(default=timezone.now, null=True)
+    modified_date = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return self.user.email

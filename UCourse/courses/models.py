@@ -1,10 +1,11 @@
 from django.db import models
 from django.conf import settings
-from UCourse.programs.models import Program
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from programs.models import Program
 
 
 class Course(models.Model):
-
     BEGINNER = 'bg'
     INTERMEDIATE = 'im'
     ADVANCED = 'av'
@@ -17,17 +18,51 @@ class Course(models.Model):
         (ALL_LEVEL, 'All level'),
     ]
 
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+    CLOSED = 'closed'
+    FULL = 'full'
+    COURSE_STATUS_CHOICES = [
+        (ACTIVE, 'Active'),
+        (CLOSED, 'Closed'),
+        (FULL, 'Full'),
+        (INACTIVE, 'Inactive'),
+
+    ]
+
     title = models.CharField(max_length=50)
     code = models.CharField(max_length=50, unique=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
+    status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
     program = models.ManyToManyField(
-        Program, related_name='program_course', on_delete=models.SET_NULL)
+        Program, related_name='program_course',
+        blank=True
+    )
     teacher = models.ManyToManyField(
-        settings.AUTH_MODEL_FIELD, related_name='teacher_course', on_delete=models.CASCADE)
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-    created_by = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name='teacher_course',
+        blank=True,
+    )
+    created_date = models.DateTimeField(default=timezone.now)
+    updated_date = models.DateTimeField(auto_now=True, null=True)
+    created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name='user_created_course',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        null=True
     )
+
+    def __str__(self):
+        return self.title
+
+
+class CourseDetail(models.Model):
+    verbose_name = models.CharField(max_length=255)
+    course = models.OneToOneField(Course, on_delete=models.CASCADE)
+    short_description = models.CharField(max_length=255, blank=True)
+    full_description = models.TextField(blank=True, null=True)
+    benefits = models.TextField(help_text=_(
+        'What you will learn'), blank=True, null=True)
+    open_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return self.course.title

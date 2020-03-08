@@ -35,7 +35,6 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    student_role = Role.objects.filter(code='SD').first()
     username_validator = validators.UnicodeUsernameValidator()
     username = models.CharField(
         _('username'),
@@ -51,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         null=True
     )
     email = models.EmailField(max_length=255, unique=True)
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, default=student_role)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)

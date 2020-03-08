@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'users',
     'roles',
     'profiles',
+    'courses',
+    'programs',
 
 ]
 
@@ -131,6 +133,10 @@ AUTH_USER_MODEL = 'users.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'EXCEPTION_HANDLER': 'api.utils.uc_exception_handle',
+    'DEFAULT_RENDERER_CLASSES': (
+            'api.renderers.UcApiRenderer',
+            'rest_framework.renderers.BrowsableAPIRenderer',
+        ),
 }
 
 REST_KNOX = {
