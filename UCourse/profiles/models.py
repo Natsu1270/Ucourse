@@ -6,7 +6,6 @@ from datetime import date
 
 
 class Profile(models.Model):
-
     MALE = 'M'
     FEMALE = 'F'
     OTHER = 'O'
@@ -32,6 +31,8 @@ class Profile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     bio = models.TextField(null=True)
     address = models.CharField(max_length=255, blank=True)
+    is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False)
 
     university = models.CharField(max_length=255, blank=True)
     major = models.CharField(max_length=255, blank=True)
@@ -58,5 +59,28 @@ class Profile(models.Model):
     def fullname(self):
         return self.first_name + ' ' + self.last_name
 
+
+class TeacherManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_teacher=True)
+
+
+class StudentManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_student=True)
+
+
+class Teacher(Profile):
+    class Meta:
+        proxy = True
+
+    objects = TeacherManager()
+
+
+class Student(Profile):
+    class Meta:
+        proxy = True
+
+    objects = StudentManager()
 
 

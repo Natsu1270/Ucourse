@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'corsheaders',
+    'django_elasticsearch_dsl',
+    'django_extensions',
+    'django_filters',
 
     'api',
     'users',
@@ -134,9 +137,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'EXCEPTION_HANDLER': 'api.utils.uc_exception_handle',
     'DEFAULT_RENDERER_CLASSES': (
-            'api.renderers.UcApiRenderer',
-            'rest_framework.renderers.BrowsableAPIRenderer',
-        ),
+        'api.renderers.UcApiRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
 
 REST_KNOX = {
@@ -147,6 +150,12 @@ REST_KNOX = {
     'TOKEN_LIMIT_PER_USER': None,
     'AUTO_REFRESH': False,
     'EXPIRY_DATETIME_FORMAT': api_settings.DATETIME_FORMAT,
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:8000'
+    },
 }
 
 USE_TZ = True
