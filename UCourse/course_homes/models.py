@@ -14,9 +14,21 @@ class CourseHome(models.Model):
 
 
 class Timeline(models.Model):
+
+    ACTIVE = 'active'
+    INACTIVE = 'inactive'
+    CLOSED = 'closed'
+
+    TIMELINE_STATUS_CHOICES = [
+        (ACTIVE, 'Active'),
+        (INACTIVE, 'Inactive'),
+        (CLOSED, 'Closed'),
+    ]
+
     name = models.CharField(max_length=50)
     code = models.CharField(max_length=10, unique=True)
     course_home = models.OneToOneField(CourseHome, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=TIMELINE_STATUS_CHOICES)
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
 
