@@ -51,6 +51,10 @@ INSTALLED_APPS = [
     'profiles',
     'courses',
     'programs',
+    'course_homes',
+    'exams',
+    'lessons',
+    'resources',
 
 ]
 

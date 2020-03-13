@@ -8,56 +8,6 @@ from lessons.models import Lesson
 from courses.models import Course
 
 
-class Exam(models.Model):
-
-    PRE_COURSE_TEST = "pc"
-    LESSON_TEST = "lt"
-    MIDDLE_COURSE_TEST = "mc"
-    FINAL_COURSE_TEST = "fc"
-
-    EXAM_TYPE_CHOICES = [
-        (PRE_COURSE_TEST, "PreCourse Test"),
-        (LESSON_TEST, "Regular Lesson Test"),
-        (MIDDLE_COURSE_TEST, "Middle Course Test"),
-        (FINAL_COURSE_TEST, "Final Course Test"),
-    ]
-
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True, db_index=True)
-    exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES)
-    questions = models.ManyToManyField(Question, related_name="question_exams")
-    max_score = models.FloatField(max_length=3)
-    pass_score = models.FloatField(max_length=3)
-
-    lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, null=True)
-
-    course = models.ForeignKey(
-        Course, on_delete=models.SET_NULL, related_name="input_exam", null=True
-    )
-    status = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
-    modified_date = models.DateTimeField(auto_now=True)
-    created_by = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
-    )
-    created_by_name = models.CharField(max_length=255, blank=True, null=True)
-    modified_by = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
-    )
-    modified_by_name = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-    def set_created_by(self, user):
-        self.created_by = user
-        self.created_by_name = user.email
-
-    def set_modified_by(self, user):
-        self.modified_by = user
-        self.modified_by_name = user.email
-
-
 class Question(models.Model):
 
     MULTI_CHOICE = "mc"
@@ -99,3 +49,55 @@ class Answer(models.Model):
 
     def __str__(self):
         return "{0} - {1}".format(self.code, self.content[:5])
+
+class Exam(models.Model):
+
+    PRE_COURSE_TEST = "pc"
+    LESSON_TEST = "lt"
+    MIDDLE_COURSE_TEST = "mc"
+    FINAL_COURSE_TEST = "fc"
+
+    EXAM_TYPE_CHOICES = [
+        (PRE_COURSE_TEST, "PreCourse Test"),
+        (LESSON_TEST, "Regular Lesson Test"),
+        (MIDDLE_COURSE_TEST, "Middle Course Test"),
+        (FINAL_COURSE_TEST, "Final Course Test"),
+    ]
+
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, unique=True, db_index=True)
+    exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES)
+    questions = models.ManyToManyField(Question, related_name="question_exams")
+    max_score = models.FloatField(max_length=3)
+    pass_score = models.FloatField(max_length=3)
+
+    lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, null=True)
+
+    course = models.ForeignKey(
+        Course, on_delete=models.SET_NULL, related_name="input_exam", null=True
+    )
+    status = models.BooleanField(default=True)
+    created_date = models.DateTimeField(default=timezone.now)
+    modified_date = models.DateTimeField(auto_now=True)
+    created_by = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_creator'
+    )
+    created_by_name = models.CharField(max_length=255, blank=True, null=True)
+    modified_by = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_modifier'
+    )
+    modified_by_name = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def set_created_by(self, user):
+        self.created_by = user
+        self.created_by_name = user.email
+
+    def set_modified_by(self, user):
+        self.modified_by = user
+        self.modified_by_name = user.email
+
+
+

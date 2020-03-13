@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from course_homes.models import Timeline
 from django.conf import settings
-from exams.models import Exam
 
 
 class Lesson(models.Model):
@@ -20,7 +19,6 @@ class Lesson(models.Model):
     code = models.CharField(max_length=10, unique=True, db_index=True)
     info = models.TextField(blank=True, null=True)
     timeline = models.ForeignKey(Timeline, on_delete=models.CASCADE)
-    exames = models.ManyToManyField(Exam)
     status = models.CharField(
         max_length=10, choices=LESSON_STATUS_CHOICES, default=PENDING
     )
