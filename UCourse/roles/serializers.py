@@ -10,3 +10,4 @@ class RoleSerializer(serializers.ModelSerializer):
             'code': {'validators': []},
             'name': {'validators': []},
         }
+        read_only_fields = ('created_date',)

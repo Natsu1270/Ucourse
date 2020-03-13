@@ -50,9 +50,14 @@ class Course(models.Model):
         on_delete=models.SET_NULL,
         null=True
     )
+    created_by_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.title
+
+    def set_created_by(self, user):
+        self.created_by = user
+        self.created_by_name = user.email
 
 
 class CourseDetail(models.Model):
