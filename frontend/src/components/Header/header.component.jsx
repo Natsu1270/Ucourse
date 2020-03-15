@@ -4,7 +4,7 @@ import { createStructuredSelector } from "reselect";
 import { Link } from 'react-router-dom'
 import { tokenSelector, currentUserSelector, isLoadUserLoadingSelector } from '../../redux/Auth/auth.selects'
 import { loadUserStart, logoutStart } from "../../redux/Auth/auth.actions";
-import { toggleRLModal } from '../../redux/UI/ui.actions'
+import { showRLModal } from '../../redux/UI/ui.actions'
 
 import { Button, Spin } from 'antd'
 import SearchInput from "../SearchInput/search-input.component";
@@ -64,7 +64,7 @@ const Header = () => {
                                         </li>
                                     ) : (
                                             <li className="nav-item active-nav" id="logout-btn">
-                                                <Button type="primary" onClick={() => dispatch(toggleRLModal())}>Get Started</Button>
+                                                <Button type="primary" onClick={() => dispatch(showRLModal())}>Get Started</Button>
                                             </li>
                                         )
                             }

@@ -41,6 +41,28 @@ class RegisterAPI(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class RegisterTeacherAPI(generics.GenericAPIView):
+    serializer_class = serializers.TeacherRegisterSerializer
+    permission_classes = [
+        permissions.IsAdminUser
+    ]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        user = serializer.save()
+        return Response({
+            "data": {
+                "user": serializers.UserSerializer(user, context=self.get_serializer_context()).data,
+                "token": AuthToken.objects.create(user)[1]
+            },
+            "result": True,
+            "message": "Register successfully",
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
+
+
 class LoginAPI(generics.GenericAPIView):
     serializer_class = serializers.LoginSerializer
 
@@ -57,4 +79,3 @@ class LoginAPI(generics.GenericAPIView):
             "message": "Login successfully",
             "status_code": 200
         }, status=status.HTTP_200_OK)
-

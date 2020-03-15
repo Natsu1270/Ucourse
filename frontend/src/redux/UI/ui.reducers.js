@@ -7,11 +7,18 @@ const initState = {
 
 const uiReducer = (state = initState, action) => {
     switch (action.type) {
-        case UIActionTypes.TOGGLE_RL_MODAL:
+        case UIActionTypes.SHOW_RL_MODAL:
             return {
                 ...state,
-                isRLModalActive: !state.isRLModalActive
+                isRLModalActive: true
             }
+
+        case UIActionTypes.HIDE_RL_MODAL:
+            return {
+                ...state,
+                isRLModalActive: false
+            }
+
         case UIActionTypes.SWITCH_RL_FORM:
             return {
                 ...state,

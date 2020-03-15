@@ -1,17 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.contrib.auth import validators
 from django.utils.translation import gettext as _
 from django.utils import timezone
 from roles.models import Role
+from profiles.models import Teacher, Student
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, username=None,  **extra_fields):
+    def create_user(self, email, password=None, username=None, **extra_fields):
         if not email:
             raise ValueError('Email address must be provided')
-        user = self.model(email=self.normalize_email(email),
-                          username=username, **extra_fields)
+        user = self.model(
+            email=self.normalize_email(email), username=username, **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
 
@@ -29,8 +35,22 @@ class UserManager(BaseUserManager):
     def create_teacher(self, email, password=None, username=None, **extra_fields):
         user = self.create_user(email, password, username, **extra_fields)
         user.role = Role.objects.filter(code='TC').first()
-        user.save(using=self.__db)
+        user.is_staff = True
+        user.save(using=self._db)
+        teacher_profile = Teacher.objects.create(user=user)
+        teacher_profile.is_teacher = True
+        teacher_profile.save(using=self._db)
 
+        return user
+
+    def create_student(self, email, password=None, username=None, **extra_fields):
+        user = self.create_user(
+            email=email, password=password, username=username)
+        user.role = Role.objects.filter(code='SD').first()
+        user.save(using=self._db)
+        student_profile = Student.objects.create(user=user)
+        student_profile.is_student = True
+        student_profile.save(using=self._db)
         return user
 
 
@@ -41,13 +61,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=150,
         unique=True,
         help_text=_(
-            'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+            'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'
+        ),
         validators=[username_validator],
-        error_messages={
-            'unique': _("A user with that username already exists."),
-        },
+        error_messages={'unique': _(
+            'A user with that username already exists.'), },
         blank=True,
-        null=True
+        null=True,
     )
     email = models.EmailField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)

@@ -12,25 +12,17 @@ export const tokenSelector = createSelector(
     auth => auth.userToken
 )
 
-export const loginErrMessageSelector = createSelector(
+export const errMessageSelector = createSelector(
     [authSelector],
-    auth => auth.loginErrMessage
+    auth => auth.errMessage
 )
 
 export const isLoadUserLoadingSelector = createSelector(
     [authSelector],
     auth => auth.isLoadUserLoading
 )
-export const isRegisterLoadingSelector = createSelector(
+export const isLoadingSelector = createSelector(
     [authSelector],
-    auth => auth.isRegisterLoading
-)
-export const isLoginLoadingSelector = createSelector(
-    [authSelector],
-    auth => auth.isLoginLoading
+    auth => auth.isLoading
 )
 
-export const registerErrMessageSelector = createSelector(
-    [authSelector],
-    auth => auth.registerErrMessage
-)

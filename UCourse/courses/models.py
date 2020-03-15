@@ -27,7 +27,6 @@ class Course(models.Model):
         (CLOSED, 'Closed'),
         (FULL, 'Full'),
         (INACTIVE, 'Inactive'),
-
     ]
 
     title = models.CharField(max_length=50)
@@ -35,12 +34,12 @@ class Course(models.Model):
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
     program = models.ManyToManyField(
-        Program, related_name='program_course',
-        blank=True
-    )
+        Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name='teacher_course',
+        settings.AUTH_USER_MODEL,
+        related_name='teacher_course',
         blank=True,
+        limit_choices_to={'role_id': 2},
     )
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)
@@ -48,7 +47,7 @@ class Course(models.Model):
         settings.AUTH_USER_MODEL,
         related_name='user_created_course',
         on_delete=models.SET_NULL,
-        null=True
+        null=True,
     )
     created_by_name = models.CharField(max_length=255, blank=True, null=True)
 
@@ -65,8 +64,9 @@ class CourseDetail(models.Model):
     course = models.OneToOneField(Course, on_delete=models.CASCADE)
     short_description = models.CharField(max_length=255, blank=True)
     full_description = models.TextField(blank=True, null=True)
-    benefits = models.TextField(help_text=_(
-        'What you will learn'), blank=True, null=True)
+    benefits = models.TextField(
+        help_text=_('What you will learn'), blank=True, null=True
+    )
     open_date = models.DateField(blank=True, null=True)
 
     def __str__(self):

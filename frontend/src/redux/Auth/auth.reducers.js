@@ -5,12 +5,8 @@ const initState = {
     currentUser: null,
     loadUserErrMessage: null,
     isLoadUserLoading: false,
-
-    registerErrMessage: null,
-    isRegisterLoading: false,
-
-    loginErrMessage: null,
-    isLoginLoading: false,
+    errMessage: null,
+    isLoading: false,
 }
 
 
@@ -22,17 +18,6 @@ const authReducer = (state = initState, action) => {
                 ...state,
                 isLoadUserLoading: true
             }
-        case UserActionTypes.LOGIN_START:
-            return {
-                ...state,
-                isLoginLoading: true
-            }
-        case UserActionTypes.REGISTER_START:
-            return {
-                ...state,
-                isRegisterLoading: true
-            }
-
         case UserActionTypes.LOAD_USER_SUCCESS:
             return {
                 ...state,
@@ -40,22 +25,24 @@ const authReducer = (state = initState, action) => {
                 isLoadUserLoading: false,
                 loadUserErrMessage: null
             }
-        case UserActionTypes.REGISTER_SUCCESS:
+
+        case UserActionTypes.LOGIN_START:
+        case UserActionTypes.REGISTER_START:
             return {
                 ...state,
-                currentUser: action.payload.data.user,
-                userToken: action.payload.data.token,
-                isRegisterLoading: false,
-                registerErrMessage: null
+                isLoading: true
             }
+
+        case UserActionTypes.REGISTER_SUCCESS:
         case UserActionTypes.LOGIN_SUCCESS:
             return {
                 ...state,
                 currentUser: action.payload.data.user,
                 userToken: action.payload.data.token,
-                isLoginLoading: false,
-                loginErrMessage: null
+                isLoading: false,
+                errMessage: null
             }
+
         case UserActionTypes.LOAD_USER_FAIL:
             return {
                 ...state,
@@ -63,17 +50,12 @@ const authReducer = (state = initState, action) => {
                 isLoadUserLoading: false
             }
         case UserActionTypes.REGISTER_FAIL:
-            return {
-                ...state,
-                registerErrMessage: action.payload,
-                isRegisterLoading: false
-            }
         case UserActionTypes.LOGIN_FAIL:
         case UserActionTypes.LOGOUT_FAIL:
             return {
                 ...state,
-                loginErrMessage: action.payload,
-                isLoginLoading: false
+                errMessage: action.payload,
+                isLoading: false
             }
         case UserActionTypes.LOGOUT_SUCCESS:
             return {

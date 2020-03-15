@@ -13,14 +13,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ("id", "username", "email", "date_joined", "is_active", "role")
+        fields = ('id', 'username', 'email',
+                  'date_joined', 'is_active', 'role')
 
     def update(self, instance, validated_data):
-        role = validated_data.pop("role", False)
+        role = validated_data.pop('role', False)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         if role:
-            role = Role.objects.filter(code=role.get("code")).first()
+            role = Role.objects.filter(code=role.get('code')).first()
             instance.role = role
         instance.save()
 
@@ -30,15 +31,29 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "email", "password", "username")
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = ('id', 'email', 'password', 'username')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        email = validated_data["email"]
-        password = validated_data["password"]
-        username = validated_data["username"]
-        user = get_user_model().objects.create_user(email, password, username)
-        Profile.objects.create(user=user)
+        email = validated_data['email']
+        password = validated_data['password']
+        username = validated_data['username']
+        user = get_user_model().objects.create_student(email, password, username)
+
+        return user
+
+
+class TeacherRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'email', 'password', 'username')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        email = validated_data['email']
+        password = validated_data['password']
+        username = validated_data['username']
+        user = get_user_model().objects.create_teacher(email, password, username)
 
         return user
 
@@ -52,4 +67,4 @@ class LoginSerializer(serializers.Serializer):
         if user:
             update_last_login(sender=None, user=user)
             return user
-        raise serializers.ValidationError("Incorrect email or password")
+        raise serializers.ValidationError('Incorrect email or password')

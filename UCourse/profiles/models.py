@@ -25,11 +25,12 @@ class Profile(models.Model):
     )
     first_name = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50, blank=True)
-    avatar = models.ImageField(upload_to='profile/avatar', null=True, blank=True)
+    avatar = models.ImageField(
+        upload_to='profile/avatar', null=True, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
-    bio = models.TextField(null=True)
+    bio = models.TextField(blank=True, null=True)
     address = models.CharField(max_length=255, blank=True)
     is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
@@ -82,5 +83,3 @@ class Student(Profile):
         proxy = True
 
     objects = StudentManager()
-
-

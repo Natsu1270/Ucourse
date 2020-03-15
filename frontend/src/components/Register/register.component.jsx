@@ -1,28 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { registerStart, googleSignInStart } from '../../redux/Auth/auth.actions'
-import {
-    isRegisterLoadingSelector,
-    currentUserSelector,
-    registerErrMessageSelector
-} from '../../redux/Auth/auth.selects'
 
-import { Input, Spin, message } from 'antd'
+
+import { Input, Spin } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { UserOutlined, UnlockOutlined, MailOutlined } from '@ant-design/icons'
 
-const Register = () => {
+const Register = (props) => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
-    const { isRegisterLoading, currentUser, registerErrMessage } = useSelector(createStructuredSelector({
-        isRegisterLoading: isRegisterLoadingSelector,
-        currentUser: currentUserSelector,
-        registerErrMessage: registerErrMessageSelector
-    }))
 
     const handleFormSubmit = event => {
         event.preventDefault()
@@ -30,22 +20,22 @@ const Register = () => {
 
     }
 
-    useEffect(() => {
-        if (registerErrMessage !== null && isRegisterLoading === false) {
-            let err = ""
-            const errResponse = registerErrMessage.response
-            if (errResponse.status === 500) {
-                err = "Opps! Server is down, try again later"
-            } else {
-                err = errResponse.data['email'] ? errResponse.data['email'] : '' +
-                    errResponse.data['username'] ? errResponse.data['username'] : '' +
-                        errResponse.data['password'] ? errResponse.data['password'] : ''
-            }
-            message.error(err)
-        } else if (currentUser !== null) {
-            message.success("Register successfully!")
-        }
-    }, [isRegisterLoading])
+    // useEffect(() => {
+    //     if (registerErrMessage !== null && isRegisterLoading === false) {
+    //         let err = ""
+    //         const errResponse = registerErrMessage.response
+    //         if (errResponse.status === 500) {
+    //             err = "Opps! Server is down, try again later"
+    //         } else {
+    //             err = errResponse.data['email'] ? errResponse.data['email'] : '' +
+    //                 errResponse.data['username'] ? errResponse.data['username'] : '' +
+    //                     errResponse.data['password'] ? errResponse.data['password'] : ''
+    //         }
+    //         message.error(err)
+    //     } else if (registerErrMessage === null && isRegisterLoading === false) {
+    //         message.success("Register successfully!")
+    //     }
+    // }, [isRegisterLoading, registerErrMessage])
 
     const handleInputChange = event => {
         const { name, value } = event.target
@@ -104,7 +94,7 @@ const Register = () => {
                         size="large" id="signup-password" placeholder="Password" />
                 </div>
                 <button className="cs-form-btn" type="submit" name="signup">
-                    {isRegisterLoading ? <Spin indicator={spinIcon} /> : 'Register'}
+                    {props.isLoading ? <Spin indicator={spinIcon} /> : 'Register'}
                 </button>
             </form>
         </div>

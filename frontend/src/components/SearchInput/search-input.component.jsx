@@ -6,15 +6,13 @@ import { Link } from "react-router-dom";
 const { Option, OptGroup } = AutoComplete
 const placeHolderData = [
     {
-        title: 'Course',
+        title: 'Top programs',
         children: [
             {
                 title: 'Python for everyone',
-                count: 10000,
             },
             {
                 title: 'Basic Python',
-                count: 10600,
             },
         ],
     },
@@ -23,11 +21,9 @@ const placeHolderData = [
         children: [
             {
                 title: 'Python ML',
-                count: 60100,
             },
             {
                 title: 'UCourse',
-                count: 30010,
             },
         ],
     },]
@@ -54,7 +50,7 @@ const options = placeHolderData
             {group.children.map(opt => (
                 <Option key={opt.title} value={opt.title}>
                     {opt.title}
-                    <span className="certain-search-item-count">  {opt.count} results</span>
+                    {/* <span className="certain-search-item-count">  {opt.count} results</span> */}
                 </Option>
             ))}
         </OptGroup>
@@ -68,6 +64,7 @@ const options = placeHolderData
     ]);
 
 const SearchInput = () => {
+
     return (
         <div className="certain-category-search-wrapper" style={{ width: 400 }}>
             <AutoComplete

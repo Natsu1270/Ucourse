@@ -36,7 +36,7 @@ export function* register({ payload: { username, email, password } }) {
         localStorage.setItem('token', data.data.token)
         yield put(AuthAction.registerSuccess(data))
     } catch (err) {
-        yield put(AuthAction.registerFail(err))
+        yield put(AuthAction.registerFail(err.response))
     }
 }
 
@@ -52,7 +52,7 @@ export function* login({ payload: { username, password } }) {
         localStorage.setItem('token', data.data.token)
         yield put(AuthAction.loginSuccess(data))
     } catch (err) {
-        yield put(AuthAction.loginFail(err))
+        yield put(AuthAction.loginFail(err.response))
     }
 }
 
@@ -72,7 +72,7 @@ export function* logout({ payload }) {
         }
         yield put(AuthAction.logoutSuccess())
     } catch (err) {
-        yield put(AuthAction.logoutFail(err))
+        yield put(AuthAction.logoutFail(err.response))
     }
 }
 
@@ -85,7 +85,7 @@ export function* signInWithGoogle() {
         const { user } = yield auth.signInWithPopup(googleProvider)
         yield put(AuthAction.googleSignInSuccess(user))
     } catch (err) {
-        yield put(AuthAction.loginFail(err))
+        yield put(AuthAction.loginFail(err.response))
     }
 }
 

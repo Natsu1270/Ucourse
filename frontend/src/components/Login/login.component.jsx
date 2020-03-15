@@ -1,28 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { createStructuredSelector } from 'reselect'
-import { isLoginLoadingSelector, loginErrMessageSelector, currentUserSelector } from '../../redux/Auth/auth.selects'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { loginStart, googleSignInStart } from "../../redux/Auth/auth.actions";
-import { toggleRLModal } from '../../redux/UI/ui.actions'
-import { Input, Spin, message } from 'antd'
+import { Input, Spin } from 'antd'
 import { UserOutlined, UnlockOutlined, LoadingOutlined } from '@ant-design/icons'
 import { FormattedMessage } from 'react-intl'
 
 
-const Login = () => {
+const Login = (props) => {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const dispatch = useDispatch()
-    const { isLoginLoading, loginErrorMessage, currentUser } = useSelector(createStructuredSelector({
-        isLoginLoading: isLoginLoadingSelector,
-        loginErrorMessage: loginErrMessageSelector,
-        currentUser: currentUserSelector
-    }))
 
-    const loginError = (err) => {
-        message.error(err)
-    }
+
 
 
     const handleFormSubmit = (event) => {
@@ -31,20 +22,6 @@ const Login = () => {
             username, password
         }))
     }
-
-    useEffect(() => {
-        if (loginErrorMessage !== null && isLoginLoading === false) {
-            let err = ""
-            if (loginErrorMessage.response.status === 500) {
-                err = "Opps! Server is down, try again later"
-            } else {
-                err = "Invalid username/email or password"
-            }
-            loginError(err)
-        } else if (currentUser !== null) {
-            dispatch(toggleRLModal())
-        }
-    }, [isLoginLoading, currentUser])
 
     const handleInputChange = (event) => {
         const { name, value } = event.target
@@ -95,10 +72,10 @@ const Login = () => {
                         prefix={<UnlockOutlined style={inputStyle} />}
                         placeholder="Password"
                         id="login-password" />
-                    <a href="#"><span className="text--sub">Forgot your password?</span></a>
+                    <Link to="#"><span className="text--sub">Forgot your password?</span></Link>
                 </div>
                 <button className="cs-form-btn" type="submit" name="login" id="btn-login">
-                    {isLoginLoading ? <Spin indicator={spinIcon} /> : 'LOG IN'}
+                    {props.isLoading ? <Spin indicator={spinIcon} /> : 'LOG IN'}
                 </button>
             </form>
         </div>
