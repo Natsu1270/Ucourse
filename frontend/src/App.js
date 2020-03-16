@@ -5,6 +5,7 @@ import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/login-register.pa
 import Header from "./components/Header/header.component";
 import Footer from "./components/Footer/footer.component";
 import HomePage from "./pages/HomePage/home.page";
+import ProfilePage from "./pages/ProfilePage/profile.page";
 
 
 import './App.scss';
@@ -23,6 +24,7 @@ function App() {
           <Suspense fallback={Spin}>
             <Route exact path="/about" component={AboutPage} />
             <Route exact path="/auth" component={LoginAndRegisterPage} />
+            <Route exact path="/profile" component={ProfilePage} />
           </Suspense>
         </Switch>
         <Footer />

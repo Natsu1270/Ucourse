@@ -13,7 +13,7 @@ export function* loadUser({ payload }) {
     try {
         if (payload) {
             let { data } = yield call(AuthService.loadUserAPI, payload)
-            yield put(AuthAction.loadUserSuccess(data))
+            yield put(AuthAction.loadUserSuccess(data.data))
         } else {
             const userAuth = yield getCurrentUser()
             userAuth ?
