@@ -46,13 +46,13 @@ const Header = () => {
                     </Link>
                     <div className="navbar_supported cs-navbar-item">
                         <ul className="navbar-nav">
-                            <li className="header-item">
+                            <li className="header-item navbar-nav--search">
                                 <SearchInput />
                             </li>
-                            <li className="header-item">
+                            <li className="header-item nav-item">
                                 <Link to="/about">About</Link>
                             </li>
-                            <li className="header-item">
+                            <li className="header-item nav-item">
                                 <Link to="/explore">Explore</Link>
                             </li>
 

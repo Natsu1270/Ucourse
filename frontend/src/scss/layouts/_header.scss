@@ -16,16 +16,23 @@
 				align-items: center;
 				flex-grow: 1;
 				.navbar-nav {
+					&--search {
+						flex: 0 0 65%;
+					}
+
 					.nav-item {
-						flex: 0 0 40%;
-						display: flex;
-						justify-content: flex-end;
+						//flex: 0 0 40%;
+						//display: flex;
+						//justify-content: flex-end;
 					}
 				}
 				.header-item {
 					a {
 						text-decoration: none;
-						font-weight: bold;
+						font-size: 1.6rem;
+						font-weight: 500;
+						color: $color-grey-dark-2;
+						text-transform: uppercase;
 					}
 				}
 			}

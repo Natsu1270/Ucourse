@@ -18,9 +18,9 @@
 		0 10px 10px rgba(0, 0, 0, 0.1);
 		position: relative;
 		overflow: hidden;
-		width: 768px;
+		width: 900px;
 		max-width: 100%;
-		min-height: 540px;
+		min-height: 500px;
 
 		.alert {
 			display: none;
@@ -79,7 +79,7 @@
 			color: #000000;
 
 		}
-		
+
 
 		.cs-form-btn {
 			margin-top:1.5rem;
@@ -133,16 +133,7 @@
 			}
 		}
 
-		input {
-			&, &:focus {
-				background-color: #eee;
-				border: none;
-				padding: 1.2rem 1.5rem;
-				margin: 0.5rem 0 1.5rem 0;
-				width: 100%;
-				font-size: 1.6rem;
-			}
-		}
+
 
 		.form-container {
 			position: absolute;
