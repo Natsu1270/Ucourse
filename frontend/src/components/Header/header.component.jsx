@@ -1,16 +1,18 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { createStructuredSelector } from "reselect";
+import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom'
 import { tokenSelector, currentUserSelector, isLoadUserLoadingSelector } from '../../redux/Auth/auth.selects'
-import { loadUserStart, logoutStart } from "../../redux/Auth/auth.actions";
+import { loadUserStart, logoutStart } from '../../redux/Auth/auth.actions';
 import { showRLModal } from '../../redux/UI/ui.actions'
 
 import { Button, Spin } from 'antd'
-import SearchInput from "../SearchInput/search-input.component";
+import SearchInput from '../SearchInput/search-input.component';
+import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import logo from '../../assets/temp-logo.png'
 
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
+
 
 const Header = () => {
     // load token and get current user if logged in
@@ -23,7 +25,7 @@ const Header = () => {
     }))
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
-        dispatch(loadUserStart(token))
+        // dispatch(loadUserStart(token))
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
@@ -32,6 +34,8 @@ const Header = () => {
     const handleScroll = () => {
         setStick(window.pageYOffset > 50)
     }
+
+    const handleLogout = () => dispatch(logoutStart(token))
 
     return (
         <header className={`cs-main-header ${stick ? ' cs-header-fixed' : ''}`} id="main-header">
@@ -59,12 +63,13 @@ const Header = () => {
                                     </li>
                                 ) :
                                     currentUser ? (
-                                        <li className="nav-item active-nav" id="logout-btn">
-                                            <Button type="danger" onClick={() => dispatch(logoutStart(token))}>Logout</Button>
+                                        <li className="nav-item active-nav">
+                                            <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout} />
                                         </li>
                                     ) : (
                                             <li className="nav-item active-nav" id="logout-btn">
-                                                <Button type="primary" onClick={() => dispatch(showRLModal())}>Get Started</Button>
+                                                <Button type="primary" onClick={() => dispatch(showRLModal())}>Get
+                                                Started</Button>
                                             </li>
                                         )
                             }

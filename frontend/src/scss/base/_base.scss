@@ -24,7 +24,7 @@ html {
 
 body {
     box-sizing: border-box;
-	background: $white-color;
+	background-color: $main-background-color;
     @include responsive(tab-port) {
         padding: 0;
     }

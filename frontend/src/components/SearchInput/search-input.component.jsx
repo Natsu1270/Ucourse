@@ -1,84 +1,71 @@
 import React from 'react'
-import { Icon, Input, AutoComplete } from "antd";
-import { Link } from "react-router-dom";
+import {Input, AutoComplete} from "antd";
+import {Link} from "react-router-dom";
 
 
-const { Option, OptGroup } = AutoComplete
-const placeHolderData = [
+const {Option, OptGroup} = AutoComplete
+
+const renderTitle = title => (
+    <span>
+    {title}
+        <a
+            style={{
+                float: 'right',
+            }}
+            href="https://www.google.com/search?q=antd"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+      more
+    </a>
+  </span>
+);
+
+const renderItem = (title, count) => ({
+    value: title,
+    label: (
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+            }}
+        >
+            {title}
+        </div>
+    ),
+});
+
+const options = [
     {
-        title: 'Top programs',
-        children: [
-            {
-                title: 'Python for everyone',
-            },
-            {
-                title: 'Basic Python',
-            },
-        ],
+        label: renderTitle('Libraries'),
+        options: [renderItem('AntDesign', 10000), renderItem('AntDesign UI', 10600)],
     },
     {
-        title: 'Solutions',
-        children: [
-            {
-                title: 'Python ML',
-            },
-            {
-                title: 'UCourse',
-            },
-        ],
-    },]
+        label: renderTitle('Solutions'),
+        options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
+    },
+    {
+        label: renderTitle('Articles'),
+        options: [renderItem('AntDesign design language', 100000)],
+    },
+];
 
-function renderTitle(title) {
-    return (
-        <span>
-            {title}
-            <Link
-                style={{ float: 'right' }}
-                to="https://www.google.com/search?q=antd"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                more
-                </Link>
-        </span>
-    );
-}
-
-const options = placeHolderData
-    .map(group => (
-        <OptGroup key={group.title} label={renderTitle(group.title)}>
-            {group.children.map(opt => (
-                <Option key={opt.title} value={opt.title}>
-                    {opt.title}
-                    {/* <span className="certain-search-item-count">  {opt.count} results</span> */}
-                </Option>
-            ))}
-        </OptGroup>
-    ))
-    .concat([
-        <Option disabled key="all" className="show-all">
-            <a href="https://www.google.com/search?q=antd" target="_blank" rel="noopener noreferrer">
-                View all results
-            </a>
-        </Option>,
-    ]);
 
 const SearchInput = () => {
 
     return (
-        <div className="certain-category-search-wrapper" style={{ width: 400 }}>
+        <div className="certain-category-search-wrapper" style={{width: 400}}>
             <AutoComplete
                 className="certain-category-search"
                 dropdownClassName="certain-category-search-dropdown"
                 dropdownMatchSelectWidth={false}
-                dropdownStyle={{ width: 300 }}
+                dropdownStyle={{width: 300}}
                 size="large"
-                style={{ width: '100%' }}
-                dataSource={options}
-                placeholder="Search everything"
+                style={{width: '100%'}}
+                options={options}
                 optionLabelProp="value"
             >
-                <Input suffix={<Icon type="search" className="certain-category-icon" />} />
+                <Input.Search size ="large" placeholder="Search everything"/>
             </AutoComplete>
         </div>
     );

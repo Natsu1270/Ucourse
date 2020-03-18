@@ -13,7 +13,7 @@ const ProfileMenu = () => {
 
     return (
         <div className="profile-menu">
-            <Card style={{width: 300, marginTop: 16}} >
+            <Card  >
                 <Meta
                     avatar={
                         <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"/>
@@ -29,10 +29,10 @@ const ProfileMenu = () => {
                 mode="inline"
             >
                 <Menu.Item key="1">
-                    <span>Option 1</span>
+                    <span>Profile</span>
                 </Menu.Item>
                 <Menu.Item key="2">
-                    <span>Option 2</span>
+                    <span>Account</span>
                 </Menu.Item>
                 <Menu.Item key="3">
                     <span>Option 3</span>

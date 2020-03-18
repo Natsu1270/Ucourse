@@ -7,7 +7,9 @@ import './static/css/all.css'
 import * as serviceWorker from './serviceWorker';
 
 import { Provider } from 'react-redux'
-import { store } from './redux/store'
+import {persistor, store} from './redux/store'
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 import message_en from './locales/en.json'
 import message_vi from './locales/vi.json'
@@ -31,7 +33,9 @@ const language = 'en'
 const app = (
     <Provider store={store}>
         <IntlProvider locale={language} messages={messages[language]}>
-            <App />
+            <PersistGate persistor={persistor} loading={null}>
+                <App />
+            </PersistGate>
         </IntlProvider>
     </Provider>
 )
