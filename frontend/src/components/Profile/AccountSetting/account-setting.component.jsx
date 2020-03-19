@@ -1,9 +1,10 @@
 import React from 'react'
 
+
 const AccountSetting = () => {
 
     return (
-        <div className="account-setting">
+        <div className="profile-setting">
             Account setting
         </div>
     )

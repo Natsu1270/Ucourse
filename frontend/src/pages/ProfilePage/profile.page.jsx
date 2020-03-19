@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, BrowserRoute as Router, Switch } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import ProfileMenu from '../../components/Profile/ProfileMenu/profile-menu.components'
 import ProfileSetting from '../../components/Profile/ProfileSetting/profile-setting.component'

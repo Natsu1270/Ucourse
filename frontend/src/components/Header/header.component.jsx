@@ -2,11 +2,10 @@ import React, { useEffect, useState, Suspense } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router-dom'
-import { tokenSelector, currentUserSelector, isLoadUserLoadingSelector } from '../../redux/Auth/auth.selects'
 import { loadUserStart, logoutStart } from '../../redux/Auth/auth.actions';
 import { showRLModal } from '../../redux/UI/ui.actions'
 
-import { Button, Spin } from 'antd'
+import { Button, Spin, Layout } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import logo from '../../assets/temp-logo.png'
@@ -14,15 +13,11 @@ import logo from '../../assets/temp-logo.png'
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
 
-const Header = () => {
+const Header = ({token, currentUser, isUserLoading}) => {
     // load token and get current user if logged in
     const [stick, setStick] = useState(false)
     const dispatch = useDispatch()
-    const { token, currentUser, isUserLoading } = useSelector(createStructuredSelector({
-        token: tokenSelector,
-        currentUser: currentUserSelector,
-        isUserLoading: isLoadUserLoadingSelector
-    }))
+    
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
         // dispatch(loadUserStart(token))

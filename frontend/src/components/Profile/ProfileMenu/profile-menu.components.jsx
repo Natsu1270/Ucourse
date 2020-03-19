@@ -30,10 +30,10 @@ const ProfileMenu = () => {
                 mode="inline"
             >
                 <Menu.Item key="1">
-                    <Link to='/profile'>Profile</Link>
+                    <Link className='link--no-decoration' to='/profile'>Profile</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
-                    <Link to='/profile/account'>Account</Link>
+                    <Link className='link--no-decoration' to='/profile/account'>Account</Link>
                 </Menu.Item>
                 <Menu.Item key="3">
                     <span>Option 3</span>

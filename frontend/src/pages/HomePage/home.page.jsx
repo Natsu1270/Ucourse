@@ -1,8 +1,12 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { showRLModal } from '../../redux/UI/ui.actions'
 
 import banner from '../../assets/banner.png'
 
-const HomePage = () => {
+const HomePage = ({ currentUser }) => {
+    const dispatch = useDispatch()
     return (
         <section className="section section-banner" id="cs-banner">
             <div className="banner-content">
@@ -15,9 +19,17 @@ const HomePage = () => {
                             <h5>Develop your skills through online courses, certificates and diplomas offered by the
                                 best universities and companies in the world</h5>
                         </div>
-                        <a href="#" className="cs-btn cs-btn--animated cs-btn--banner" id="main-btn">
-                            Register Now
-                        </a>
+                        {
+                            currentUser ? (
+                                <Link to="/explore" className="cs-btn cs-btn--animated cs-btn--banner" id="main-btn">
+                                    Explore Now
+                                </Link>) : (
+                                <a href="#" className="cs-btn cs-btn--animated cs-btn--banner" id="main-btn" onClick={()=> dispatch(showRLModal())}>
+                                    Register Now
+                                </a>)
+                        }
+                        
+                        
                     </div>
                 </div>
                 <div className="banner-content-right">
