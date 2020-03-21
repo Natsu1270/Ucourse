@@ -93,6 +93,21 @@ export function* onSignInWithGoogle() {
     yield takeLatest(AuthActionTypes.GOOGLE_SIGN_IN_START, signInWithGoogle)
 }
 
+// Update account
+
+export function* updateAccount({ payload: { token, username, email, old_password, password } }) {
+    try {
+        let { data } = yield call(AuthService.updateAccountAPI, { token, username, email, old_password, password })
+        yield put(AuthAction.updateAccountSuccess(data))
+    } catch (err) {
+        yield put(AuthAction.updateAccountFail(err.response))
+    }
+}
+
+export function* onUpdateAccount() {
+    yield takeLatest(AuthActionTypes.UPDATE_ACCOUNT_START, updateAccount)
+}
+
 export function* authSaga() {
     yield all([
         call(onLogin),
@@ -100,5 +115,6 @@ export function* authSaga() {
         call(onLogout),
         call(onRegister),
         call(onSignInWithGoogle),
+        call(onUpdateAccount),
     ])
 }

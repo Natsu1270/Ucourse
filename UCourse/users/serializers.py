@@ -8,13 +8,15 @@ from profiles.models import Profile
 
 
 class UserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
-    role = RoleSerializer(many=False)
+    id = serializers.IntegerField(required=False, read_only=True)
+    role = RoleSerializer(many=False, read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email',
+        fields = ('id', 'username', 'email', 'password',
                   'date_joined', 'is_active', 'role')
+        extra_kwargs = {'password': {'write_only': True}, }
+        read_only_fields = ('id', 'date_joined', 'is_active',)
 
     def update(self, instance, validated_data):
         role = validated_data.pop('role', False)
@@ -68,3 +70,24 @@ class LoginSerializer(serializers.Serializer):
             update_last_login(sender=None, user=user)
             return user
         raise serializers.ValidationError('Incorrect email or password')
+
+
+class UpdateAccountSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.CharField()
+    old_password = serializers.CharField(required=True)
+    password = serializers.CharField()
+
+    def update(self, instance, validated_data):
+        role = validated_data.pop('role', False)
+        new_password = validated_data.get('password')
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if new_password:
+            instance.set_password(new_password)
+        if role:
+            role = Role.objects.filter(code=role.get('code')).first()
+            instance.role = role
+        instance.save()
+
+        return instance

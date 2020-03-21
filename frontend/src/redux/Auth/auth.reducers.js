@@ -1,4 +1,4 @@
-import UserActionTypes from "./auth.types";
+import AuthActionTypes from "./auth.types";
 
 const initState = {
     userToken: localStorage.getItem('token'),
@@ -13,12 +13,12 @@ const initState = {
 const authReducer = (state = initState, action) => {
     switch (action.type) {
 
-        case UserActionTypes.LOAD_USER_START:
+        case AuthActionTypes.LOAD_USER_START:
             return {
                 ...state,
                 isLoadUserLoading: true
             }
-        case UserActionTypes.LOAD_USER_SUCCESS:
+        case AuthActionTypes.LOAD_USER_SUCCESS:
             return {
                 ...state,
                 currentUser: action.payload,
@@ -26,15 +26,16 @@ const authReducer = (state = initState, action) => {
                 loadUserErrMessage: null
             }
 
-        case UserActionTypes.LOGIN_START:
-        case UserActionTypes.REGISTER_START:
+        case AuthActionTypes.LOGIN_START:
+        case AuthActionTypes.REGISTER_START:
+        case AuthActionTypes.UPDATE_ACCOUNT_START:
             return {
                 ...state,
                 isLoading: true
             }
 
-        case UserActionTypes.REGISTER_SUCCESS:
-        case UserActionTypes.LOGIN_SUCCESS:
+        case AuthActionTypes.REGISTER_SUCCESS:
+        case AuthActionTypes.LOGIN_SUCCESS:
             return {
                 ...state,
                 currentUser: action.payload.data.user,
@@ -42,39 +43,50 @@ const authReducer = (state = initState, action) => {
                 isLoading: false,
                 errMessage: null
             }
+        case AuthActionTypes.UPDATE_ACCOUNT_SUCCESS:
+            return {
+                ...state,
+                currentUser: action.payload.data,
+                isLoading: false,
+                errMessage: null
+            }
 
-        case UserActionTypes.LOAD_USER_FAIL:
+        case AuthActionTypes.LOAD_USER_FAIL:
             return {
                 ...state,
                 loadUserErrMessage: action.payload,
                 isLoadUserLoading: false
             }
-        case UserActionTypes.REGISTER_FAIL:
-        case UserActionTypes.LOGIN_FAIL:
-        case UserActionTypes.LOGOUT_FAIL:
+        case AuthActionTypes.REGISTER_FAIL:
+        case AuthActionTypes.LOGIN_FAIL:
+        case AuthActionTypes.LOGOUT_FAIL:
+        case AuthActionTypes.UPDATE_ACCOUNT_FAIL:
             return {
                 ...state,
                 errMessage: action.payload,
                 isLoading: false
             }
-        case UserActionTypes.LOGOUT_SUCCESS:
+        case AuthActionTypes.LOGOUT_SUCCESS:
             return {
                 ...state,
                 userToken: null,
                 currentUser: null,
             }
 
-        case UserActionTypes.GOOGLE_SIGN_IN_SUCCESS:
+        case AuthActionTypes.GOOGLE_SIGN_IN_SUCCESS:
             return {
                 ...state,
                 currentUser: action.payload
             }
 
-        case UserActionTypes.LOAD_USER_GOOGLE_EMPTY:
+        case AuthActionTypes.LOAD_USER_GOOGLE_EMPTY:
             return {
                 ...state,
                 isLoadUserLoading: false
             }
+
+
+
         default:
             return state
     }

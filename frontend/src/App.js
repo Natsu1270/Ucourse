@@ -24,7 +24,7 @@ function App() {
     token: tokenSelector,
     currentUser: currentUserSelector,
     isUserLoading: isLoadUserLoadingSelector
-}))
+  }))
   return (
     <Router>
       <div className="App">
@@ -36,7 +36,7 @@ function App() {
           <Suspense fallback={Spin}>
             <Route exact path="/about" component={AboutPage} />
             <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile" />
-            <PrivateRoute exact path="/profile" component={ProfilePage} />
+            <PrivateRoute path="/profile" component={ProfilePage} />
           </Suspense>
         </Switch>
         <Footer />

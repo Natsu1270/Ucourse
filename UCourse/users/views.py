@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, exceptions
 from rest_framework.response import Response
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
@@ -10,6 +10,7 @@ class UserListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         return get_user_model().objects.all()
+
 
 
 class UserAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -79,3 +80,28 @@ class LoginAPI(generics.GenericAPIView):
             "message": "Login successfully",
             "status_code": 200
         }, status=status.HTTP_200_OK)
+
+
+class UpdateAccountAPI(generics.UpdateAPIView):
+    serializer_class = serializers.UpdateAccountSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        if not instance.check_password(serializer.validated_data.get('old_password')):
+            raise exceptions.AuthenticationFailed('Password provided is not correct!')
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+

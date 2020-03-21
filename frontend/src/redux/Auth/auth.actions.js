@@ -71,3 +71,18 @@ export const logoutFail = (err) => ({
     type: AuthActionTypes.LOGOUT_FAIL,
     payload: err
 })
+
+export const updateAccountStart = (params) => ({
+    type: AuthActionTypes.UPDATE_ACCOUNT_START,
+    payload: params
+})
+
+export const updateAccountSuccess = (user) => ({
+    type: AuthActionTypes.UPDATE_ACCOUNT_SUCCESS,
+    payload: user
+})
+
+export const updateAccountFail = (err) => ({
+    type: AuthActionTypes.UPDATE_ACCOUNT_FAIL,
+    payload: err
+})

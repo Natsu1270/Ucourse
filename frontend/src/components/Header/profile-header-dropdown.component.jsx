@@ -26,6 +26,7 @@ const ProfileHeaderDropdown = (props) => {
                 <Text type="danger" onClick={props.handleLogout}>Logout</Text>
             </Menu.Item>
         </Menu>)
+    const username = props.currentUser.username ? props.currentUser.username : props.currentUser.displayName
     return (
         <Dropdown overlay={menu} placement="bottomCenter">
             <Card style={{ width: 150, height: 50 }}
@@ -33,9 +34,9 @@ const ProfileHeaderDropdown = (props) => {
                 <Meta
                     avatar={
                         <Avatar
-                            src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                            src={props.currentUser.avatar || props.currentUser.photoURL} />
                     }
-                    title={props.currentUser.username}
+                    title={username}
 
                 />
             </Card>

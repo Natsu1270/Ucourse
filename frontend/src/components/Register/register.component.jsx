@@ -12,7 +12,7 @@ const Register = (props) => {
     const dispatch = useDispatch()
     const layout = {
         labelCol: {
-            span: 10,
+            span: 6,
         },
         wrapperCol: {
             span: 16,
@@ -39,17 +39,17 @@ const Register = (props) => {
                 <h1 className="cs-account-form__title1">Create Account</h1>
                 <div className="social-container">
                     <button type="button" className="social social--fb">
-                        <i className="fab fa-facebook-f"/>
+                        <i className="fab fa-facebook-f" />
                     </button>
                     <button onClick={() => dispatch(googleSignInStart())} type="button" className="social social--gm">
-                        <i className="fab fa-google-plus-g"/>
+                        <i className="fab fa-google-plus-g" />
                     </button>
                     <button type="button" className="social social--lk">
-                        <i className="fab fa-github"/>
+                        <i className="fab fa-github" />
                     </button>
                 </div>
                 <div className="alert alert-danger alert-signup" role="alert">
-                    <span className="error-message" id="signup-err-msg"/>
+                    <span className="error-message" id="signup-err-msg" />
                 </div>
                 <span className="text--sub__bigger">or use your email for registration</span>
                 <div className="form-group">
@@ -66,7 +66,7 @@ const Register = (props) => {
                         <Input
                             placeholder="username"
                             size="large"
-                            prefix={<UserOutlined className="site-form-item-icon"/>}
+                            prefix={<UserOutlined className="site-form-item-icon" />}
                             allowClear={true}
                         />
                     </Form.Item>
@@ -84,7 +84,7 @@ const Register = (props) => {
                         <Input
                             placeholder="email"
                             size="large"
-                            prefix={<MailOutlined className="site-form-item-icon"/>}
+                            prefix={<MailOutlined className="site-form-item-icon" />}
                             allowClear={true}
                         />
                     </Form.Item>
@@ -100,8 +100,8 @@ const Register = (props) => {
                         ]}
                     >
                         <Input.Password size="large"
-                                        prefix={<UnlockOutlined/>}
-                                        placeholder="Password"/>
+                            prefix={<UnlockOutlined />}
+                            placeholder="Password" />
                     </Form.Item>
 
                 </div>

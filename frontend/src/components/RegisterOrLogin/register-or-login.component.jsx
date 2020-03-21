@@ -40,11 +40,15 @@ const RegisterOrLogin = () => {
             if (errMessage.status === 500) {
                 message.error(errMessage.statusText)
             } else {
-                const errorLists = errMessage.data.error_message.map(
-                    e => e = e.replace(e[0], e[0].toUpperCase())
-                )
-                const errText = errorLists.join('\n')
-                message.error(errText)
+                if (errMessage.data) {
+                    const errorLists = errMessage.data.error_message.map(
+                        e => e = e.replace(e[0], e[0].toUpperCase())
+                    )
+                    const errText = errorLists.join('\n')
+                    message.error(errText)
+                } else {
+                    message.error(errMessage)
+                }
             }
         }
     }, [errMessage, currentUser, dispatch])

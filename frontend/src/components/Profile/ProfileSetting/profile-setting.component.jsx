@@ -82,8 +82,11 @@ const ProfileSetting = () => {
                 </Form.Item>
                 <Form.Item {...tailLayout}>
                     <Button type="primary" htmlType="submit" className="mr-3">Submit</Button>
-                    <Button htmlType="button" onClick={onReset}>
+                    <Button htmlType="button" onClick={onReset} className="mr-3">
                         Reset
+                    </Button>
+                    <Button htmlType="button" onClick={() => window.open('/', '_self')}>
+                        Cancel
                     </Button>
                 </Form.Item>
             </Form>

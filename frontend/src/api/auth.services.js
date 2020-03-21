@@ -35,3 +35,13 @@ export function logoutAPI(token) {
         url: `${AUTH_API_URL}logout`
     })
 }
+
+export function updateAccountAPI(params) {
+    const { token } = params
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` },
+        method: 'PATCH',
+        url: `${AUTH_API_URL}user/update`,
+        data: params
+    })
+}
