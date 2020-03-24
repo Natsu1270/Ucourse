@@ -1,111 +1,141 @@
 // header
 .cs-main-header {
-	background-color: $white-color;
-	position: fixed;
-	width: 100%;
-	top: 0;
-	z-index: 1000;
-	transition: background 800ms ease, box-shadow 500ms ease;
-	font-size: 1.5rem;
-	.header-content {
-		.cs-navbar {
-			justify-content: flex-start;
-			padding: 0.5rem 5rem;
-			.cs-navbar-item {
-				display: flex;
-				align-items: center;
-				flex-grow: 1;
-				.navbar-nav {
-					&--search {
-						flex: 0 0 65%;
-					}
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  transition: background 800ms ease, box-shadow 500ms ease;
+  font-size: 1.5rem;
+  background-image: linear-gradient(90deg, #1786d8 0%, #00aff0 100%);
 
-					.nav-item {
-						//flex: 0 0 40%;
-						//display: flex;
-						//justify-content: flex-end;
-					}
-				}
-				.header-item {
-					a {
-						text-decoration: none;
-						font-size: 1.8rem;
-						font-weight: 500;
-						color: #1890ff;
-						text-transform: capitalize;
-					}
-				}
-			}
+  .header-content {
+    .cs-navbar {
+      justify-content: flex-start;
+      padding: 0.5rem 5rem;
 
-			.cs-logo {
-				margin-right: 10rem;
-				&__img {
-					height: 8rem;
-					width: 8rem;
-				}
-			}
+      .cs-navbar-item {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
 
-			ul {
-				width: 100%;
-				flex-direction: row;
-				align-items: center;
-				li {
-					display: inline-block;
-					list-style: none;
-					margin-right: 3rem;
-				}
+        .navbar-nav {
+          &--search {
+            flex: 0 0 65%;
+          }
+
+          .nav-item {
+            //flex: 0 0 40%;
+            //display: flex;
+            //justify-content: flex-end;
+            &--btn {
+              &:hover, &:visited, &:focus {
+                color: #fff;
+                background: transparent !important;
+                border-color: #fff;
+              }
+            }
+          }
+        }
+
+        .header-item {
+          a {
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: $white-color;
+            text-transform: capitalize;
+          }
+        }
+      }
+
+      .cs-logo {
+        margin-right: 10rem;
+        color: $white-color;
+
+        &__img {
+          height: 8rem;
+          width: 8rem;
+        }
+      }
+
+      ul {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+
+        li {
+          display: inline-block;
+          list-style: none;
+          margin-right: 3rem;
+        }
 
 
+        .cs-action-btn {
+          border-radius: .5rem;
+          background: linear-gradient(90deg, rgba(86, 55, 242, 1) 0%, rgba(127, 121, 241, 1) 100%);
+          width: 10rem;
 
-				.cs-action-btn {
-					border-radius: .5rem;
-					background: linear-gradient(90deg, rgba(86, 55, 242, 1) 0%, rgba(127, 121, 241, 1) 100%);
-					width: 10rem;
-					a {
-						color: white;
-						text-align: center;
-					}
+          a {
+            color: white;
+            text-align: center;
+          }
 
-					#logout-input {
-						width: 100%;
-						color: white;
-						font-size: 1.5rem;
-					}
-				}
-			}
+          #logout-input {
+            width: 100%;
+            color: white;
+            font-size: 1.5rem;
+          }
+        }
+      }
 
-			a img {
-				width: 10rem;
-				height: 10rem;
-			}
-		}
-	}
+      a img {
+        width: 10rem;
+        height: 10rem;
+      }
+    }
+  }
 }
 
 .cs-main-header.cs-header-fixed {
-		position: fixed;
-		width: 100%;
-		top: -7rem;
-		left: 0;
-		right: 0;
-		background: #ffffff;
-		z-index: 1000;
-		transform: translateY(7rem);
-		transition: transform 500ms ease, background 500ms ease, box-shadow 500ms ease;
-		box-shadow: 0 1rem 2rem rgba($theme-font-color, 0.1);
- 		.header-content {
-			.cs-navbar {
-				.cs-navbar-item {
-					.navbar-nav {
-						.cs-action-btn {
+  position: fixed;
+  width: 100%;
+  top: -7rem;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  z-index: 1000;
+  transform: translateY(7rem);
+  transition: transform 500ms ease, background 500ms ease, box-shadow 500ms ease;
+  box-shadow: 0 1rem 2rem rgba($theme-font-color, 0.1);
 
-						}
-					}
-				}
-			}
-		}
-	}
+  .header-content {
+    .cs-navbar {
+      .cs-logo {
+        color: #051441;
+      }
+
+      .cs-navbar-item {
+        .navbar-nav {
+          .cs-action-btn {
+
+          }
+        }
+
+        .header-item {
+          a {
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #051441;
+            text-transform: capitalize;
+          }
+        }
+      }
+    }
+
+  }
+}
 
 .cs-header-replaced {
-	transform: translateY(-20rem);
+  transform: translateY(-20rem);
 }

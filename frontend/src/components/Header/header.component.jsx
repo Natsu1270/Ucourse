@@ -36,7 +36,7 @@ const Header = ({token, currentUser}) => {
         <header className={`cs-main-header ${stick ? ' cs-header-fixed' : ''}`} id="main-header">
             <div className="header-content">
                 <nav className="navbar navbar-extend-lg cs-navbar">
-                    <Link to="/" className="navbar-brand cs-logo  text--main__bigger bold">
+                    <Link to="/" className="navbar-brand cs-logo text--main__bigger bold">
                         UCourse
                     </Link>
                     <div className="navbar_supported cs-navbar-item">
@@ -58,8 +58,12 @@ const Header = ({token, currentUser}) => {
                                     </li>
                                 ) : (
                                     <li className="nav-item active-nav" id="logout-btn">
-                                        <Button type="primary" onClick={() => dispatch(showRLModal())}>Get
-                                            Started</Button>
+                                        {stick ? <Button type="primary" onClick={() => dispatch(showRLModal())}>
+                                            Get Started
+                                        </Button> :
+                                        <Button className="nav-item--btn" ghost onClick={() => dispatch(showRLModal())}>
+                                            Get Started
+                                        </Button>}
                                     </li>
                                 )
                             }

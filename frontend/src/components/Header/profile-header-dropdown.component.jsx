@@ -12,7 +12,7 @@ const ProfileHeaderDropdown = (props) => {
     const cardStyles = {
         boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0.2rem 1rem',
         width: 150, height: 50,
-        backgroundColor: '#f0eeee'
+        backgroundColor: '#fff'
     };
     const bodyStyles = {
         backgroundColor: '#33b5e5'

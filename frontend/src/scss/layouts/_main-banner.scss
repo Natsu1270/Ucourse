@@ -1,7 +1,7 @@
 .section-banner {
 	&::before {
 		position: absolute;
-		content: url("../../assets/banner-background.png");
+		//content: url("../../assets/banner-background.png");
 		right: 0;
 		top: 13rem;
 		z-index: -1;
@@ -10,8 +10,8 @@
 	margin: 0 auto;
 	position: relative;
 	z-index: 1;
-	height: 50rem;
-
+	height: 75rem;
+	background-image: linear-gradient(90deg, #1786d8 0%, #00aff0 100%);
 	.banner-content {
 		.banner-content-left {
 			position: absolute;
@@ -24,10 +24,13 @@
 			.banner-slogan {
 				h1 {
 					font-size: 5rem;
-					color: $dark-blue-color;
+					color: $white-color;
 				}
 				p {
 					margin-top: 2rem;
+				}
+				.main-slogan--text {
+					color: $white-color;
 				}
 			}
 
@@ -36,7 +39,7 @@
 					font-size: 2rem;
 					font-weight: 400;
 					line-height: 2.8rem;
-					color: $theme-font-color;
+					color: $white-color;
 
 				}
 			}
@@ -45,7 +48,7 @@
 				&:link,
 				&:visited {
 					margin-top: 5rem;
-					margin-left: 30%;
+					//margin-left: 30%;
 				}
 			}
 

@@ -62,7 +62,7 @@ const SearchInput = () => {
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search size ="large" placeholder="Search everything" enterButton />
+                <Input.Search size ="large" placeholder="Search everything"  />
             </AutoComplete>
         </div>
     );
