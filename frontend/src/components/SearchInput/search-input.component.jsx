@@ -3,7 +3,7 @@ import {Input, AutoComplete} from "antd";
 import {Link} from "react-router-dom";
 
 
-const {Option, OptGroup} = AutoComplete
+const {Option, OptGroup} = AutoComplete;
 
 const renderTitle = title => (
     <span>
@@ -44,10 +44,7 @@ const options = [
         label: renderTitle('Solutions'),
         options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
     },
-    {
-        label: renderTitle('Articles'),
-        options: [renderItem('AntDesign design language', 100000)],
-    },
+
 ];
 
 
@@ -65,7 +62,7 @@ const SearchInput = () => {
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search size ="large" placeholder="Search everything"/>
+                <Input.Search size ="large" placeholder="Search everything" enterButton />
             </AutoComplete>
         </div>
     );

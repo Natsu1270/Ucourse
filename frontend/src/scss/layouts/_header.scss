@@ -29,10 +29,10 @@
 				.header-item {
 					a {
 						text-decoration: none;
-						font-size: 1.6rem;
+						font-size: 1.8rem;
 						font-weight: 500;
-						color: $color-grey-dark-2;
-						text-transform: uppercase;
+						color: #1890ff;
+						text-transform: capitalize;
 					}
 				}
 			}
@@ -92,7 +92,7 @@
 		z-index: 1000;
 		transform: translateY(7rem);
 		transition: transform 500ms ease, background 500ms ease, box-shadow 500ms ease;
-		box-shadow: 0 1rem 3rem rgba($theme-font-color, 0.15);
+		box-shadow: 0 1rem 2rem rgba($theme-font-color, 0.1);
  		.header-content {
 			.cs-navbar {
 				.cs-navbar-item {

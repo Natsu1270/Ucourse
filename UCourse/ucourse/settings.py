@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'knox',
     'corsheaders',
     'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
     'django_extensions',
     'django_filters',
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'exams',
     'lessons',
     'resources',
+    'tags',
 
 ]
 
@@ -158,7 +160,7 @@ REST_KNOX = {
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'localhost:8000'
+        'hosts': 'elasticsearch:9200'
     },
 }
 

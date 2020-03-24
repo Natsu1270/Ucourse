@@ -3,10 +3,10 @@ import aboutImg from '../../assets/about.png'
 
 const AboutPage = () => {
     return (
-        <section className="section section--about cs-about">
+        <section className="section-10 section--about cs-about">
             <h2 className="title--big text-center">About us</h2>
             <div className="row slide">
-                <div className="col-md-6 cs-about--text">
+                <div className="col-md-6 cs-about--text cs-about--left bradius mt-3">
                     <span className="cs-about--text__main">A piece of history</span>
                     <p></p>
                     <p className="cs-about--text__sub">Được hình thành vào 11/2019, Trung tâm đào tạo trực

@@ -13,7 +13,7 @@ const ProfileMenu = ({ match }) => {
     }))
 
     return (
-        <div className="profile-menu">
+        <div className="profile-menu bradius" >
             <Card  >
                 <Meta
                     avatar={

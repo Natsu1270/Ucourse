@@ -8,7 +8,7 @@ import banner from '../../assets/banner.png'
 const HomePage = ({ currentUser }) => {
     const dispatch = useDispatch()
     return (
-        <section className="section section-banner" id="cs-banner">
+        <section className="section-10 section-banner" id="cs-banner">
             <div className="banner-content">
                 <div className="banner-content-left">
                     <div className="container">

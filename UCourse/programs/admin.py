@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Program
+from .models import Program, Field
 
 
 class ProgramAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class ProgramAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Program, ProgramAdmin)
+admin.site.register(Field)

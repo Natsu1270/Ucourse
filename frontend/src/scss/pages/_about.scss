@@ -13,6 +13,11 @@
 			text-align: justify;
 		}
 	}
+
+	&--left {
+		background-color: $white-color;
+		padding: 3rem 5rem;
+	}
 }
 
 .img-area {

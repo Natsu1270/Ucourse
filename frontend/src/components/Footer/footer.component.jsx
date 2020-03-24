@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import logo from '../../assets/temp-logo.png'
+
 
 const Footer = () => {
     return (
@@ -10,11 +12,11 @@ const Footer = () => {
                 <div className="row">
 
                     <div className="col-md-6 mt-md-0 mt-3">
-                        <h1 className="text-white">CSourse</h1>
+                        <h1 className="text-white">UCourse</h1>
                         <br />
                         <p className="text-white ">Learn online, ear certificates</p>
                         <div className="img-fluid align-center mt-3 mb-3 footer-logo">
-                            <img src="" width="200px" alt="logo" />
+                            <img src={logo} width="200px" alt="logo" />
                         </div>
                     </div>
 
@@ -22,7 +24,7 @@ const Footer = () => {
 
                     <div className="col-md-3 mb-md-0 mb-3 mt-2">
 
-                        <h5 className="text-uppercase">TRỢ GIÚP</h5>
+                        <h5 className="text-uppercase text-white">TRỢ GIÚP</h5>
                         <br />
 
                         <ul className="list-unstyled">
@@ -44,7 +46,7 @@ const Footer = () => {
 
                     <div className="col-md-3 mb-md-0 mb-3 mt-2">
 
-                        <h5 className="text-uppercase">KẾT NỐI VỚI CHÚNG TÔI</h5>
+                        <h5 className="text-uppercase text-white">KẾT NỐI VỚI CHÚNG TÔI</h5>
                         <br />
                         <ul className="list-unstyled">
                             <li>
@@ -66,7 +68,7 @@ const Footer = () => {
             </div>
 
             <div className="footer-copyright text-center py-3">©2019 Copyright:
-                <Link to="#">CsourceTraining.com</Link>
+                <Link to="/"> UCOURSE</Link>
             </div>
         </footer>
 

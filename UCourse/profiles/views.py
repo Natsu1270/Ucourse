@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
 from api.permissions import IsOwnerOrReadOnly
 from api.utils import uc_response
@@ -8,11 +8,12 @@ from .serializers import ProfileSerializer
 
 class ProfileAPI(generics.ListCreateAPIView):
     permission_classes = [
-        permissions.IsAuthenticated,
-        IsOwnerOrReadOnly
+        permissions.IsAuthenticatedOrReadOnly,
     ]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name',]
 
 
 class ProfileDetailAPI(generics.RetrieveUpdateDestroyAPIView):

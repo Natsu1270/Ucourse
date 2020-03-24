@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth']
+    whitelist: ['auth','profile']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
