@@ -1,6 +1,8 @@
 import React from 'react'
 import {Input, AutoComplete} from "antd";
 import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {simpleSearchStart} from "../../redux/Search/search.actions";
 
 
 const {Option, OptGroup} = AutoComplete;
@@ -49,7 +51,7 @@ const options = [
 
 
 const SearchInput = () => {
-
+    const dispatch = useDispatch()
     return (
         <div className="certain-category-search-wrapper" style={{width: 400}}>
             <AutoComplete
@@ -62,7 +64,11 @@ const SearchInput = () => {
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search size ="large" placeholder="Search everything"  />
+                <Input.Search size ="large"
+                              placeholder="Search everything"
+                              onPressEnter={
+                                  (e) => dispatch(simpleSearchStart(e.target.value))
+                              } />
             </AutoComplete>
         </div>
     );
