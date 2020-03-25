@@ -1,0 +1,52 @@
+.sub-banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: -12rem;
+  z-index: 100;
+
+  &__container {
+    background-color: $white-color;
+    width: 70%;
+    box-shadow: 0 25px 90px rgba(50, 33, 83, .08);
+
+    &--items {
+      height: 25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      list-style: none;
+    }
+
+    &--item {
+      width: 30%;
+      text-align: center;
+
+      &--num {
+        font-size: 6rem;
+        font-weight: 700;
+        color: #01C9F5;
+      }
+
+      &--text {
+        font-size: 2.5rem;
+        color: #051441;
+        font-weight: 600;
+        margin-top: -3rem;
+      }
+
+      &--small {
+        font-size: 1.6rem;
+        color: $color-grey-dark-3;
+      }
+
+      &:not(:last-child) {
+        border-right: 1px solid $color-grey-light-2;
+      }
+
+
+    }
+
+  }
+}
