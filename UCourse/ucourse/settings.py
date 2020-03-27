@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'corsheaders',
-    'django_elasticsearch_dsl',
-    'django_elasticsearch_dsl_drf',
+    # 'django_elasticsearch_dsl',
+    # 'django_elasticsearch_dsl_drf',
     'django_extensions',
     'django_filters',
 

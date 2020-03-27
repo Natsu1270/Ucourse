@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status, exceptions
+from rest_framework import generics, permissions, status, exceptions, views
 from rest_framework.response import Response
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
@@ -80,6 +80,32 @@ class LoginAPI(generics.GenericAPIView):
             "message": "Login successfully",
             "status_code": 200
         }, status=status.HTTP_200_OK)
+
+
+class HandleSocialLoginAPI(views.APIView):
+
+    def post(self, request):
+        serializer = serializers.HandleSocialAccount(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data['email']
+        username = serializer.validated_data['username']
+        social_uid = serializer.validated_data['uid']
+        user_queryset = get_user_model().objects.filter(social_uid=social_uid)
+        if len(user_queryset) == 0:
+            user = get_user_model().objects.create_student(email=email, username=username, social_uid=social_uid)
+        else:
+            user = user_queryset.first()
+        return Response({
+            "data": {
+                "user": serializers.UserSerializer(user).data,
+                "token": AuthToken.objects.create(user)[1]
+            },
+            "result": True,
+            "message": "Login successfully",
+            "status_code": 200
+        }, status=status.HTTP_200_OK)
+
+
 
 
 class UpdateAccountAPI(generics.UpdateAPIView):

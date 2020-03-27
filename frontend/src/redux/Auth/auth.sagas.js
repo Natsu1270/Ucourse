@@ -83,7 +83,14 @@ export function* onLogout() {
 export function* signInWithGoogle() {
     try {
         const { user } = yield auth.signInWithPopup(googleProvider)
-        yield put(AuthAction.googleSignInSuccess(user))
+        const { uid, displayName, photoURL, email, phoneNumber } = user
+        const username = displayName
+        const { data } = yield call(AuthService.handleSocialLoginAPI, {
+            uid,
+            username,
+            email
+        })
+        yield put(AuthAction.loginSuccess(data))
     } catch (err) {
         yield put(AuthAction.loginFail(err.response))
     }

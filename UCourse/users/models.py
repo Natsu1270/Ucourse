@@ -47,6 +47,9 @@ class UserManager(BaseUserManager):
         user = self.create_user(
             email=email, password=password, username=username)
         user.role = Role.objects.filter(code='SD').first()
+        if extra_fields.get('social_uid'):
+            user.social_uid = extra_fields.get('social_uid')
+            user.is_social_account = True
         user.save(using=self._db)
         student_profile = Student.objects.create(user=user)
         student_profile.is_student = True
@@ -71,6 +74,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     email = models.EmailField(max_length=255, unique=True)
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    social_uid = models.CharField(max_length=255, unique=True, db_index=True, null=True, blank=True)
+    is_social_account = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)

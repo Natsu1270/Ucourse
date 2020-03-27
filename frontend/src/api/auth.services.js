@@ -28,6 +28,15 @@ export function loginAPI(authParams) {
     })
 }
 
+export function handleSocialLoginAPI(authParams) {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        url: `${AUTH_API_URL}social`,
+        data: authParams
+    })
+}
+
 export function logoutAPI(token) {
     return axios.request({
         headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` },
