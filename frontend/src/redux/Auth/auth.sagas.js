@@ -1,5 +1,7 @@
 import { takeLatest, takeEvery, put, call, all } from 'redux-saga/effects';
 import AuthActionTypes from './auth.types';
+import ProfileActionTypes from "../Profile/profile.types";
+import {getProfileSuccess, clearCurrentProfile} from '../Profile/profile.actions'
 import * as AuthAction from './auth.actions'
 import * as AuthService from '../../api/auth.services'
 import {
@@ -90,6 +92,7 @@ export function* signInWithGoogle() {
             username,
             email
         })
+
         yield put(AuthAction.loginSuccess(data))
     } catch (err) {
         yield put(AuthAction.loginFail(err.response))

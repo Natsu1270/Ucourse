@@ -2,7 +2,7 @@ import SearchActionTypes from "./search.types";
 
 const initState = {
   isSearching: false,
-  searchResult: {},
+  searchResult: null,
   errorResponse: null
 };
 

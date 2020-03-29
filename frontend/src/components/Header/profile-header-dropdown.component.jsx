@@ -1,9 +1,12 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import {useSelector} from "react-redux";
 import {Dropdown, Avatar, Card, Menu, Typography} from 'antd'
+import {userProfileSelector} from "../../redux/Profile/profile.selects";
 
 
 const ProfileHeaderDropdown = (props) => {
+    const userProfile = useSelector(state=>userProfileSelector(state))
     const {Text} = Typography
     const {Meta} = Card;
     const styles = {
@@ -12,7 +15,7 @@ const ProfileHeaderDropdown = (props) => {
     const cardStyles = {
         boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0.2rem 1rem',
         width: 150, height: 50,
-        backgroundColor: '#fff'
+        backgroundColor: 'rgba(134,233,239,0.5)'
     };
     const bodyStyles = {
         backgroundColor: '#33b5e5'
@@ -36,15 +39,15 @@ const ProfileHeaderDropdown = (props) => {
     const username = props.currentUser.username ? props.currentUser.username : props.currentUser.displayName
     return (
         <Dropdown overlay={menu} placement="bottomCenter">
-            <Card style={cardStyles}
+            <Card style={cardStyles} bordered={false}
                   size='small'>
                 <Meta
                     style={{display:"flex",alignItems:"center"}}
                     avatar={
                         <Avatar
-                            src={props.currentUser.avatar || props.currentUser.photoURL}/>
+                            src={userProfile.avatar || props.currentUser.photoURL}/>
                     }
-                    title={<span className=''>{username}</span>}
+                    title={<span className='text-white'>{username}</span>}
                 />
             </Card>
         </Dropdown>

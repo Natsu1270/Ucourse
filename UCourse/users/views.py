@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, status, exceptions, views
 from rest_framework.response import Response
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
+from profiles.models import Profile
+from profiles.serializers import ProfileSerializer
 from . import serializers
 
 
@@ -91,14 +93,18 @@ class HandleSocialLoginAPI(views.APIView):
         username = serializer.validated_data['username']
         social_uid = serializer.validated_data['uid']
         user_queryset = get_user_model().objects.filter(social_uid=social_uid)
+        first_login = False
+        profile = None
         if len(user_queryset) == 0:
             user = get_user_model().objects.create_student(email=email, username=username, social_uid=social_uid)
+            first_login = True
         else:
             user = user_queryset.first()
         return Response({
             "data": {
                 "user": serializers.UserSerializer(user).data,
-                "token": AuthToken.objects.create(user)[1]
+                "token": AuthToken.objects.create(user)[1],
+                "first_login": first_login,
             },
             "result": True,
             "message": "Login successfully",

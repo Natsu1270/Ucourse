@@ -1,5 +1,6 @@
 from rest_framework.views import exception_handler
 from tags.models import SearchKeyWord
+from rest_framework.parsers import FileUploadParser
 
 
 def uc_exception_handle(exc, context):
@@ -36,3 +37,7 @@ def create_search_keyword(keyword):
         search_key = search_key.first()
         search_key.count = search_key.count + 1
         search_key.save()
+
+
+class ImageUploadParser(FileUploadParser):
+    media_type = 'image/*'

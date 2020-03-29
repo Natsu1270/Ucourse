@@ -15,6 +15,10 @@ export const getProfileFail = (err) => ({
     payload: err
 })
 
+export const clearCurrentProfile = () => ({
+    type: ProfileActionTypes.CLEAR_CURRENT_PROFILE
+})
+
 export const updateProfileStart = (params) => ({
     type: ProfileActionTypes.UPDATE_PROFILE_START,
     payload: params

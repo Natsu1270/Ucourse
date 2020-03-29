@@ -24,12 +24,12 @@ const ProfilePage = ({ match }) => {
     return (
         <div className='profile-page section'>
             <Router>
-                <ProfileMenu currentUser={currentUser} match={match} />
+                <ProfileMenu currentUser={currentUser} userProfile={userProfile} match={match} />
                 <Route exact path={match.url}>
                     <ProfileSetting profile={userProfile} isLoading={isProfileLoading} token={token} />
                 </Route>
                 <Route exact path={`${match.url}/account`}>
-                    <AccountSetting currentUser={currentUser} token={token} />
+                    <AccountSetting userProfile={userProfile}  currentUser={currentUser} token={token} />
                 </Route>
 
 

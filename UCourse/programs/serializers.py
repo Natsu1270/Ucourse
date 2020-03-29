@@ -23,7 +23,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code',
+            'id', 'name', 'code', 'icon',
             'status', 'field', 'created_date',
             'short_description', 'full_description', 'created_date', 'created_by',
             'created_by_name', 'modified_date'

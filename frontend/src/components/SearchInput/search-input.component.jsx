@@ -1,6 +1,6 @@
 import React from 'react'
 import {Input, AutoComplete} from "antd";
-import {Link} from "react-router-dom";
+import {Link, useHistory } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {simpleSearchStart} from "../../redux/Search/search.actions";
 
@@ -52,6 +52,7 @@ const options = [
 
 const SearchInput = () => {
     const dispatch = useDispatch()
+    let history = useHistory();
     return (
         <div className="certain-category-search-wrapper" style={{width: 400}}>
             <AutoComplete
@@ -67,7 +68,7 @@ const SearchInput = () => {
                 <Input.Search size ="large"
                               placeholder="Search everything"
                               onPressEnter={
-                                  (e) => dispatch(simpleSearchStart(e.target.value))
+                                  (e) => history.push(`/search?query=${e.target.value}`)
                               } />
             </AutoComplete>
         </div>

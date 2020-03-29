@@ -19,6 +19,7 @@ import AuthRoute from "./components/Common/auth-route.component";
 import {getProfileStart} from "./redux/Profile/profile.actions";
 
 const AboutPage = React.lazy(() => import('./pages/AboutPage/about.page'))
+const SearchPage = React.lazy(() => import('./pages/SearchPage/search.page'))
 
 function App() {
     const dispatch = useDispatch()
@@ -43,6 +44,7 @@ function App() {
                         <Route exact path="/about" component={AboutPage}/>
                         <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
                         <PrivateRoute path="/profile" component={ProfilePage}/>
+                        <Route path="/search" component={SearchPage} />
                     </Suspense>
                 </Switch>
                 <Footer/>

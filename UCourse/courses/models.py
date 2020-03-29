@@ -2,20 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
-from programs.models import Program,Field
-
-
-class CourseDetail(models.Model):
-    verbose_name = models.CharField(max_length=255)
-    short_description = models.CharField(max_length=255, blank=True)
-    full_description = models.TextField(blank=True, null=True)
-    benefits = models.TextField(
-        help_text=_('What you will learn'), blank=True, null=True
-    )
-    open_date = models.DateField(blank=True, null=True)
-
-    def __str__(self):
-        return self.course.title
+from programs.models import Program, Field
 
 
 class Course(models.Model):
@@ -44,9 +31,9 @@ class Course(models.Model):
 
     title = models.CharField(max_length=50)
     code = models.CharField(max_length=50, unique=True)
+    icon = models.ImageField(blank=True, null=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
-    course_detail = models.OneToOneField(CourseDetail, on_delete=models.CASCADE, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
@@ -74,4 +61,15 @@ class Course(models.Model):
         self.created_by_name = user.email
 
 
+class CourseDetail(models.Model):
+    verbose_name = models.CharField(max_length=255)
+    short_description = models.CharField(max_length=255, blank=True)
+    full_description = models.TextField(blank=True, null=True)
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True)
+    benefits = models.TextField(
+        help_text=_('What you will learn'), blank=True, null=True
+    )
+    open_date = models.DateField(blank=True, null=True)
 
+    def __str__(self):
+        return self.course.title

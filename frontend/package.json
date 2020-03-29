@@ -5,6 +5,7 @@
   "proxy": "http://127.0.0.1:8000/",
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
+    "@emotion/core": "^10.0.28",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
@@ -16,6 +17,7 @@
     "axios": "^0.19.2",
     "firebase": "^7.9.3",
     "moment": "^2.24.0",
+    "query-string": "^6.11.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-icons": "^3.9.0",
@@ -23,6 +25,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "react-spinners": "^0.8.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",

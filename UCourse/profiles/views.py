@@ -1,9 +1,11 @@
 from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from api.permissions import IsOwnerOrReadOnly
 from api.utils import uc_response
 from .models import Profile
 from .serializers import ProfileSerializer
+from api.utils import ImageUploadParser
 
 
 class ProfileAPI(generics.ListCreateAPIView):
@@ -23,6 +25,7 @@ class ProfileDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     ]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+    parser_classes = [MultiPartParser]
 
     def get_object(self):
         try:

@@ -8,7 +8,7 @@ import { getBase64, beforeUpload } from '../../../utils/File/file.utils'
 import { updateAccountStart } from '../../../redux/Auth/auth.actions'
 import { Empt2Undefined } from '../../../utils/File/common.utils'
 
-const AccountSetting = ({ currentUser, token }) => {
+const AccountSetting = ({ currentUser, token, userProfile }) => {
     const dispatch = useDispatch()
     const [isUploading, setIsUploading] = React.useState(false)
     const [imgUrl, setImgUrl] = React.useState(null)
@@ -89,15 +89,20 @@ const AccountSetting = ({ currentUser, token }) => {
                         src={
                             isUploading ? '' :
                                 imgUrl ? imgUrl :
-                                    currentUser.avatar ? currentUser.avatar : currentUser.photoURL}
+                                    userProfile.avatar ? userProfile.avatar : currentUser.photoURL}
                     >
                         {isUploading ? <Spin indicator={antIcon} /> : null}
                     </Avatar>
                     <Upload
                         name="avatar"
                         beforeUpload={beforeUpload}
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture"
+                        action="/api/profile/"
+                        method="PUT"
+                        headers={
+                            {
+                                "Authorization": `Token ${token}`
+                            }
+                        }
                         onChange={handleChange}
                         showUploadList={false}
                     >

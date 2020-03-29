@@ -9,6 +9,7 @@ import {Button, Spin, Layout} from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import logo from '../../assets/temp-logo.png'
+import {clearCurrentProfile} from "../../redux/Profile/profile.actions";
 
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
@@ -30,7 +31,10 @@ const Header = ({token, currentUser}) => {
         setStick(window.pageYOffset > 50)
     }
 
-    const handleLogout = () => dispatch(logoutStart(token))
+    const handleLogout = () => {
+        dispatch(logoutStart(token))
+        dispatch(clearCurrentProfile())
+    }
 
     return (
         <header className={`cs-main-header ${stick ? ' cs-header-fixed' : ''}`} id="main-header">

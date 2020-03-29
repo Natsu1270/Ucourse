@@ -18,7 +18,7 @@ class SearchAPI(views.APIView):
         programs = Program.objects.all()
         create_search_keyword(query)
         if query:
-            courses = courses.filter(Q(title__icontains=query) | Q(course_detail__verbose_name__icontains=query))
+            courses = courses.filter(Q(title__icontains=query))
             programs = programs.filter(name__icontains=query)
         data = {
             "courses": CourseSerializer(instance=courses, many=True).data,

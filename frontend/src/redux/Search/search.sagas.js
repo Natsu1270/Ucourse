@@ -7,7 +7,7 @@ import * as SearchService from '../../api/search.services'
 export function* simpleSearch({payload}) {
     try {
         let {data} = yield call(SearchService.simpleSearch, payload)
-        yield put(SearchActions.simpleSearchSuccess(data))
+        yield put(SearchActions.simpleSearchSuccess(data.data))
     } catch (err) {
         yield put(SearchActions.simpleSearchFail(err.response))
     }

@@ -1,0 +1,28 @@
+
+.search-result {
+  padding: 5rem;
+  background-color: $white-color;
+  &--title {
+    border-bottom: 1px solid #0000000f;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+
+    &__small {
+      font-size: 1.6rem;
+      color: $color-grey-dark-3;
+    }
+  }
+  &--programs {
+    margin-bottom: 5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+    grid-column-gap: 3rem;
+    grid-row-gap: 2rem;
+  }
+
+  &--courses {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 2rem;
+  }
+}
