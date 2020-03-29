@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from programs.models import Program, Field
+from tags.models import Tag
 
 
 class Course(models.Model):
@@ -43,6 +44,7 @@ class Course(models.Model):
         limit_choices_to={'role_id': 2},
     )
     field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+    tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)
     created_by = models.ForeignKey(

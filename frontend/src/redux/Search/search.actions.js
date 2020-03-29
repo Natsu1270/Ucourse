@@ -30,3 +30,12 @@ export const advanceSearchFail = (err) => ({
     type: SearchActionTypes.ADVANCE_SEARCH_FAIL,
     payload: err
 });
+
+export const getPoplularKeywordsStart = () => ({
+    type: SearchActionTypes.GET_POPULAR_KEYWORDS_START,
+})
+
+export const getPoplularKeywordsSuccess = (keywords) => ({
+    type: SearchActionTypes.GET_POPULAR_KEYWORDS_SUCCESS,
+    payload: keywords
+})

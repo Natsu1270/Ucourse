@@ -1,26 +1,25 @@
-import React from 'react'
-import {Input, AutoComplete} from "antd";
-import {Link, useHistory } from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {simpleSearchStart} from "../../redux/Search/search.actions";
+import React, { useEffect } from 'react'
+import { Input, AutoComplete } from "antd";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createStructuredSelector } from 'reselect'
+import { getPoplularKeywordsStart } from '../../redux/Search/search.actions'
 
+import { getPopularSearchKeywordsAPI } from '../../api/search.services'
+import { isFetchingKeywordsSelector, popularKeywordsSelector } from '../../redux/Search/search.selects';
 
-const {Option, OptGroup} = AutoComplete;
 
 const renderTitle = title => (
     <span>
-    {title}
-        <a
+        {title}
+        <span
             style={{
                 float: 'right',
             }}
-            href="https://www.google.com/search?q=antd"
-            target="_blank"
-            rel="noopener noreferrer"
         >
-      more
-    </a>
-  </span>
+            counts
+    </span>
+    </span>
 );
 
 const renderItem = (title, count) => ({
@@ -33,43 +32,61 @@ const renderItem = (title, count) => ({
             }}
         >
             {title}
+            <span>
+                {count}
+            </span>
         </div>
     ),
 });
 
-const options = [
-    {
-        label: renderTitle('Libraries'),
-        options: [renderItem('AntDesign', 10000), renderItem('AntDesign UI', 10600)],
-    },
-    {
-        label: renderTitle('Solutions'),
-        options: [renderItem('AntDesign UI FAQ', 60100), renderItem('AntDesign FAQ', 30010)],
-    },
-
-];
 
 
-const SearchInput = () => {
+
+const SearchInput = ({ width, value }) => {
     const dispatch = useDispatch()
     let history = useHistory();
+    const { popularKeywords, isFetchingKeywords } = useSelector(createStructuredSelector({
+        popularKeywords: popularKeywordsSelector,
+        isFetchingKeywords: isFetchingKeywordsSelector
+    }))
+
+    let keywords = []
+    if (!isFetchingKeywords && popularKeywords) {
+        popularKeywords.forEach(keyword => keywords.push(renderItem(keyword.name, keyword.count)))
+    }
+
+    const options = [
+        {
+            label: renderTitle('Popular searches'),
+            options: keywords,
+        },
+
+    ];
+
+    useEffect(() => {
+        dispatch(getPoplularKeywordsStart())
+    }, [dispatch])
+
+
+
     return (
-        <div className="certain-category-search-wrapper" style={{width: 400}}>
+        <div className="certain-category-search-wrapper" style={{ width: width }}>
             <AutoComplete
                 className="certain-category-search"
+                defaultValue={value}
                 dropdownClassName="certain-category-search-dropdown"
                 dropdownMatchSelectWidth={false}
-                dropdownStyle={{width: 300}}
-                size="large"
-                style={{width: '100%'}}
+                dropdownStyle={{ width: 300 }}
+                style={{ width: '100%' }}
+                size="middle"
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search size ="large"
-                              placeholder="Search everything"
-                              onPressEnter={
-                                  (e) => history.push(`/search?query=${e.target.value}`)
-                              } />
+                <Input.Search size="large"
+                    placeholder="Search everything"
+                    onPressEnter={
+                        (e) => history.push(`/search?query=${e.target.value}`)
+                    } />
             </AutoComplete>
         </div>
     );

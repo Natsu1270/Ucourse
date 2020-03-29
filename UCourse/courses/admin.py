@@ -5,7 +5,7 @@ from .models import Course, CourseDetail
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'code', 'level', 'status')
     list_filter = ('level', 'status')
-    list_display_links = ('__str__','code')
+    list_display_links = ('__str__', 'code')
     search_fields = ('title', 'code')
     ordering = ('id',)
     readonly_fields = ('created_by', 'created_by_name', 'created_date', 'updated_date')

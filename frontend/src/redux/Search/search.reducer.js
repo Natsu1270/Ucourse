@@ -1,12 +1,14 @@
 import SearchActionTypes from "./search.types";
 
 const initState = {
-  isSearching: false,
-  searchResult: null,
-  errorResponse: null
+    isSearching: false,
+    searchResult: null,
+    errorResponse: null,
+    popularKeywords: null,
+    isFetchingKeywords: false,
 };
 
-const searchReducer = (state=initState, action) => {
+const searchReducer = (state = initState, action) => {
     switch (action.type) {
         case SearchActionTypes.SIMPLE_SEARCH_START:
         case SearchActionTypes.ADVANCE_SEARCH_START:
@@ -31,6 +33,19 @@ const searchReducer = (state=initState, action) => {
                 isSearching: false,
                 errorResponse: action.payload
             };
+
+        case SearchActionTypes.GET_POPULAR_KEYWORDS_START:
+            return {
+                ...state,
+                isFetchingKeywords: true
+            }
+
+        case SearchActionTypes.GET_POPULAR_KEYWORDS_SUCCESS:
+            return {
+                ...state,
+                isFetchingKeywords: false,
+                popularKeywords: action.payload
+            }
 
         default:
             return state;

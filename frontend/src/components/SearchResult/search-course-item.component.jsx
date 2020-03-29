@@ -14,10 +14,26 @@ const SearchCourseItem = ({img, title, author, level, open_date, rate}) => {
                         {title}
                     </div>
                     <ul className="search-course-card__body--content--info">
-                        <li className="search-course-card__body--content--info__item">by {author} </li>
-                        <li className="search-course-card__body--content--info__item">{level}</li>
-                        <li className="search-course-card__body--content--info__item">{open_date}</li>
-                        <li className="search-course-card__body--content--info__item">{rate}</li>
+                        <li className="search-course-card__body--content--info__item item-author">
+                            <span className="text--const">
+                                by {author}
+                            </span>
+                        </li>
+                        <li className="search-course-card__body--content--info__item">
+                            <span className="text--const">
+                                {level}
+                            </span>
+                        </li>
+                        <li className="search-course-card__body--content--info__item">
+                            <span className="text--const">
+                                {open_date}
+                            </span>
+                        </li>
+                        <li className="search-course-card__body--content--info__item">
+                            <span className="text--const">
+                                {rate}
+                            </span>
+                        </li>
                     </ul>
                 </div>
 

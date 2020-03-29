@@ -16,6 +16,7 @@ class SearchAPI(views.APIView):
         query = request.query_params.get('query', None)
         courses = Course.objects.all()
         programs = Program.objects.all()
+        query = query.strip()
         create_search_keyword(query)
         if query:
             courses = courses.filter(Q(title__icontains=query))

@@ -40,13 +40,13 @@ const Header = ({token, currentUser}) => {
         <header className={`cs-main-header ${stick ? ' cs-header-fixed' : ''}`} id="main-header">
             <div className="header-content">
                 <nav className="navbar navbar-extend-lg cs-navbar">
-                    <Link to="/" className="navbar-brand cs-logo text--main__bigger bold">
+                    <Link to="/" className="navbar-brand cs-logo text--main bold">
                         UCourse
                     </Link>
                     <div className="navbar_supported cs-navbar-item">
                         <ul className="navbar-nav">
                             <li className="header-item navbar-nav--search">
-                                <SearchInput />
+                                <SearchInput width={400} />
                             </li>
                             <li className="header-item nav-item">
                                 <Link to="/about">About</Link>

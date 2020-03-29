@@ -4,16 +4,17 @@ from django.contrib.auth.models import update_last_login
 
 from roles.serializers import RoleSerializer
 from roles.models import Role
-from profiles.models import Profile
+from profiles.serializers import ProfileSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, read_only=True)
     role = RoleSerializer(many=False, read_only=True)
+    user_profile = ProfileSerializer(read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'password', 'is_social_account',
+        fields = ('id', 'username', 'email', 'password', 'is_social_account', 'user_profile',
                   'date_joined', 'is_active', 'role')
         extra_kwargs = {'password': {'write_only': True}, }
         read_only_fields = ('id', 'date_joined', 'is_active',)

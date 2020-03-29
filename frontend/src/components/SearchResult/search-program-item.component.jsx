@@ -2,7 +2,7 @@ import React from 'react'
 import {Avatar} from "antd";
 
 
-const SearchProgramItem = ({img, title, num_course, level}) => {
+const SearchProgramItem = ({img, title, num_course,}) => {
     return (
         <div className="search-program-card">
             <div className="search-program-card__body">
@@ -12,8 +12,9 @@ const SearchProgramItem = ({img, title, num_course, level}) => {
                         {title}
                     </div>
                     <ul className="search-program-card__body--content--info">
-                        <li className="search-program-card__body--content--info__item">{num_course} Courses</li>
-                        <li className="search-program-card__body--content--info__item">{level} Level</li>
+                        <li className="search-program-card__body--content--info__item">
+                            <span className="text--variable">{num_course}</span> <span className="text--const">Courses</span>
+                        </li>
                     </ul>
                 </div>
 

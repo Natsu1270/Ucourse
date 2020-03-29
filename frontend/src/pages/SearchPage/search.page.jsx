@@ -10,6 +10,9 @@ import HashLoader from "react-spinners/HashLoader";
 
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
 import SearchCourseItem from "../../components/SearchResult/search-course-item.component";
+import SearchCourses from "../../components/SearchResult/search-courses.component";
+import SearchPrograms from "../../components/SearchResult/search-programs.component";
+import SearchInput from "../../components/SearchInput/search-input.component";
 
 
 const CourseSearchPage = ({location}) => {
@@ -32,35 +35,15 @@ const CourseSearchPage = ({location}) => {
     `;
     return (
         <div className="section section-filter-course mb-5">
-            <div className="search-result">
-                {!isSearching && searchResult ?
-                    (<div className="search-result--p">
-                        {
-                            searchResult.programs.length ? (
-                                <div className="search-result--p">
-                                    <h1 className="search-result--title">Programs <span
-                                        className="search-result--title__small">  {searchResult.programs.length} results </span>
-                                    </h1>
-                                    <div className="search-result--programs">
+            <div className="search-filter">
 
-                                        {
-                                            searchResult.programs.map(program => {
-                                                return (
-                                                    <SearchProgramItem
-                                                        key={program.code}
-                                                        img={program.icon}
-                                                        title={program.name}
-                                                        num_course={0}
-                                                        level={program.level}
-                                                    />
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                            ) : <span/>
-                        }
-                    </div>) : <HashLoader
+            </div>
+            <div className="search-result">
+                <div className="search-result--search-bar">
+                    <SearchInput width={'100%'} value={query} />
+                </div>
+                {!isSearching && searchResult ?
+                    <SearchPrograms programs={searchResult.programs} /> : <HashLoader
                         css={override}
                         size={40}
                         color={"#01C9F5"}
@@ -68,34 +51,7 @@ const CourseSearchPage = ({location}) => {
                     />
                 }
                 {!isSearching && searchResult ?
-                    (<div className="search-result--c">
-                        {
-                            searchResult.courses.length ? (
-                                <div className="search-result--c">
-                                    <h1 className="search-result--title">Courses <span
-                                        className="search-result--title__small">  {searchResult.courses.length} results </span>
-                                    </h1>
-                                    <div className="search-result--courses">
-                                        {
-                                            searchResult.courses.map(course => {
-                                                return (
-                                                    <SearchCourseItem
-                                                        key={course.code}
-                                                        title={course.title}
-                                                        img={course.icon}
-                                                        author={"natsu"}
-                                                        level={course.level}
-                                                        open_date={1}
-                                                        rate={1}
-                                                    />
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                            ) : <span/>
-                        }
-                    </div>) : <HashLoader
+                    <SearchCourses courses={searchResult.courses} /> : <HashLoader
                         css={override}
                         size={40}
                         color={"#01C9F5"}

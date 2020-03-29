@@ -13,9 +13,9 @@ const ProfileHeaderDropdown = (props) => {
         textDecoration: 'none'
     };
     const cardStyles = {
-        boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0.2rem 1rem',
-        width: 150, height: 50,
-        backgroundColor: 'rgba(134,233,239,0.5)'
+        boxShadow: 'rgba(0, 0, 0, 0.1) 0px 0.2rem 1rem',
+        width: 120, height: 40,
+        backgroundColor: 'rgba(0,0,0,0.1)'
     };
     const bodyStyles = {
         backgroundColor: '#33b5e5'
@@ -44,7 +44,7 @@ const ProfileHeaderDropdown = (props) => {
                 <Meta
                     style={{display:"flex",alignItems:"center"}}
                     avatar={
-                        <Avatar
+                        <Avatar size={24}
                             src={userProfile.avatar || props.currentUser.photoURL}/>
                     }
                     title={<span className='text-white'>{username}</span>}

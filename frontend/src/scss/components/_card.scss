@@ -17,6 +17,7 @@
 			padding: 2rem;
 			&--title {
 				font-size: 2rem;
+				font-weight: 500;
 			}
 			&--info {
 				list-style: none;
@@ -45,19 +46,29 @@
 
 		}
 		&--content {
+			width: 100%;
 			padding-left: 2rem;
 			&--title {
 				font-size: 2rem;
+				font-weight: 500;
+
 			}
 			&--info {
 				list-style: none;
 				&__item {
 					display: inline-block;
-					padding-right: 1.5rem;
+					padding-right: 5rem;
+					font-size: 1.6rem;
+					width: 15%;
 				}
+
 			}
 		}
 	}
+}
+
+.item-author {
+	width: 25%;
 }
 
 .course-card {

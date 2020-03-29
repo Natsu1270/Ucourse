@@ -2,6 +2,11 @@
 .search-result {
   padding: 5rem;
   background-color: $white-color;
+
+  &--search-bar {
+    margin-bottom: 4rem;
+  }
+
   &--title {
     border-bottom: 1px solid #0000000f;
     padding-bottom: 1rem;

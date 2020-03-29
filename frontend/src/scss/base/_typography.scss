@@ -9,6 +9,14 @@ body {
 }
 
 .text {
+	&--variable {
+		font-size: 1.6rem;
+	}
+
+	&--const {
+		font-size: 1.5rem;
+		color: $color-grey-dark-3;
+	}
 	&--info {
 		font-size: $info-font-size;
 		font-weight: 500;
