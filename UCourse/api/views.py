@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from api.utils import uc_response, create_search_keyword
 from courses.models import Course
 from programs.models import Program
-from courses.serializers import CourseSerializer
-from programs.serializers import ProgramSerializer
+from courses.serializers import CourseSearchSerializer
+from programs.serializers import ProgramSearchSerializer
 
 
 class SearchAPI(views.APIView):
@@ -22,8 +22,8 @@ class SearchAPI(views.APIView):
             courses = courses.filter(Q(title__icontains=query))
             programs = programs.filter(name__icontains=query)
         data = {
-            "courses": CourseSerializer(instance=courses, many=True).data,
-            "programs": ProgramSerializer(instance=programs, many=True).data
+            "courses": CourseSearchSerializer(instance=courses, many=True).data,
+            "programs": ProgramSearchSerializer(instance=programs, many=True).data
         }
 
         return Response(uc_response(data=data,result=True,error=None, message='OK',status_code=200),status=status.HTTP_200_OK)

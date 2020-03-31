@@ -3,8 +3,20 @@ from .models import Course, CourseDetail
 from users.serializers import UserSerializer
 
 
+class CourseDetailSerializer(serializers.ModelSerializer):
+    course = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = CourseDetail
+        fields = [
+            'verbose_name', 'course', 'short_description',
+            'full_description', 'benefits', 'open_date'
+        ]
+
+
 class CourseSerializer(serializers.ModelSerializer):
-    course_detail = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    course_detail = CourseDetailSerializer(many=False, read_only=True)
     program = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
     teacher = UserSerializer(many=True, read_only=True)
@@ -22,13 +34,15 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only_fields = ('created_date','updated_date', 'created_by')
 
 
-class CourseDetailSerializer(serializers.ModelSerializer):
-    course = CourseSerializer(many=False)
+class CourseSearchSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
+    teacher = UserSerializer(many=True, read_only=True)
+    level = serializers.CharField(source='get_level_display')
 
     class Meta:
-        model = CourseDetail
+        model = Course
         fields = [
-            'verbose_name', 'course', 'short_description',
-            'full_description', 'benefits', 'open_date'
+            'id', 'title', 'code', 'icon',
+            'level', 'status', 'teacher', 'field'
         ]
-        read_only_fields = ['course']

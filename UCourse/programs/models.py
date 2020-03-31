@@ -35,3 +35,8 @@ class Program(models.Model):
     def set_created_by(self, user):
         self.created_by = user
         self.created_by_name = user.email
+
+    @property
+    def courses_count(self):
+        return self.program_course.count()
+
