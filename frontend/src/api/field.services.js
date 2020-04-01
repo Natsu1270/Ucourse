@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const FIELD_API_URL = '/field/';
+const FIELD_API_URL = '/api/field/';
 
 export const getFieldsAPI = () => {
     return axios.request({

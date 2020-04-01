@@ -7,8 +7,8 @@ import {onGetPopularSearchKeywords, onSimpleSearch} from "../Search/search.sagas
 
 export function* getFields() {
     try {
-        let {data} = yield call(getFieldsAPI)
-        yield put(FieldActions.getFieldSuccess(data))
+        let {data} = yield call(getFieldsAPI);
+        yield put(FieldActions.getFieldSuccess(data.data))
     } catch (err) {
         yield put(FieldActions.getFieldFail(err.response))
     }
@@ -20,8 +20,8 @@ export function* onGetFields() {
 
 export function* getFieldDetail({payload}) {
     try {
-        let {data} = yield call(getFieldDetailAPI, payload)
-        yield put(FieldActions.getFieldDetailSuccess(data))
+        let {data} = yield call(getFieldDetailAPI, payload);
+        yield put(FieldActions.getFieldDetailSuccess(data.data))
     } catch (err) {
         yield put(FieldActions.getFieldDetailFail(err.response))
     }
