@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Course, CourseDetail
-from users.serializers import UserSerializer
+from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
     course_detail = CourseDetailSerializer(many=False, read_only=True)
     program = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
-    teacher = UserSerializer(many=True, read_only=True)
+    teacher = ProfileSerializer(many=True, read_only=True)
     tags = serializers.StringRelatedField(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
 
@@ -37,7 +37,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class CourseSearchSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field = serializers.StringRelatedField(read_only=True)
-    teacher = UserSerializer(many=True, read_only=True)
+    teacher = TeacherProfileSearchSerializer(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
 
     class Meta:

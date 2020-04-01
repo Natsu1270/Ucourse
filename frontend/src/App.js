@@ -45,6 +45,7 @@ function App() {
                         <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
                         <PrivateRoute path="/profile" component={ProfilePage}/>
                         <Route path="/search" component={SearchPage} />
+                        <Route path="/field" component={}
                     </Suspense>
                 </Switch>
                 <Footer/>

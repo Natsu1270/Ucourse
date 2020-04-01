@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 from django.utils import timezone
 from tags.models import Tag
 
@@ -7,10 +8,15 @@ from tags.models import Tag
 class Field(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True)
+    slug = models.SlugField(unique=True)
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Field, self).save(*args, **kwargs)
 
 
 class Program(models.Model):
@@ -18,7 +24,7 @@ class Program(models.Model):
     code = models.CharField(max_length=50, unique=True)
     status = models.BooleanField(default=True)
     icon = models.ImageField(blank=True, null=True)
-    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+    field = models.ForeignKey(Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
     short_description = models.CharField(max_length=255)
     full_description = models.TextField(blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='program_tags', blank=True)

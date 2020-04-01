@@ -20,7 +20,7 @@ const SearchCourses = ({courses}) =>
                                     key={course.code}
                                     title={course.title}
                                     img={course.icon}
-                                    author={course.teacher[0].user_profile.fullname}
+                                    author={course.teacher[0].fullname}
                                     level={course.level}
                                     open_date={1}
                                     rate={1}

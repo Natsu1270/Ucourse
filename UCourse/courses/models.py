@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from programs.models import Program, Field
 from tags.models import Tag
+from profiles.models import Profile
 
 
 class Course(models.Model):
@@ -38,12 +39,12 @@ class Course(models.Model):
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        Profile,
         related_name='teacher_course',
         blank=True,
-        limit_choices_to={'role_id': 2},
+        limit_choices_to={'is_teacher': True},
     )
-    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+    field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)

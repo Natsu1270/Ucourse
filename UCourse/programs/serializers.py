@@ -3,21 +3,6 @@ from .models import Program, Field
 from courses.serializers import CourseSerializer
 
 
-class FieldSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    programs = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    courses = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    field = serializers.StringRelatedField(read_only=True)
-    tags = serializers.StringRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model = Field
-        fields = [
-            'id', 'name', 'code', 'programs', 'courses', 'field', 'tags', 'created_date'
-        ]
-        read_only_fields = ('created_date',)
-
-
 class ProgramSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
@@ -48,3 +33,26 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
         ]
 
 
+class FieldSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    field_programs = ProgramSerializer(many=True, read_only=True)
+    field_courses = CourseSerializer(many=True, read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Field
+        fields = [
+            'id', 'name', 'code', 'field_programs', 'field_courses', 'field', 'created_date'
+        ]
+        read_only_fields = ('created_date',)
+
+
+class FieldMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    slug = serializers.SlugField(read_only=True)
+
+    class Meta:
+        model = Field
+        fields = [
+            'id', 'name', 'code', 'slug'
+        ]

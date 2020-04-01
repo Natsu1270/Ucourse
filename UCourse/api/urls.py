@@ -7,5 +7,6 @@ urlpatterns = [
     path('profile/', include('profiles.urls')),
     path('courses/', include('courses.urls')),
     path('tags/', include('tags.urls')),
-    path('search/', SearchAPI.as_view())
+    path('search/', SearchAPI.as_view()),
+    path('field/', include('programs.field_urls'))
 ]
