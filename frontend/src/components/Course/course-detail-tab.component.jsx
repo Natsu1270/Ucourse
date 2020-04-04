@@ -1,8 +1,24 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
 const CourseDetailTab = ({course}) => {
+
+    const [tabStick, setTabStick] = useState(false)
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+        return () => {
+            window.removeEventListener('scroll', () => handleScroll)
+        }
+    }, []);
+
+    const handleScroll = () => {
+        setTabStick(window.pageYOffset > 400)
+    };
+
     return (
-        <section className="section-10 section-course-tab" id="cs-course-tab">
+        <section
+            className={`pd-5 section-course-tab ${tabStick ? 'section-course-tab__fixed': ''}`}
+            id="cs-course-tab">
             <ul className="course-tab">
                 <li className="course-tab__address" id="tab-overview">
                     <a href="#cs-course-overview"

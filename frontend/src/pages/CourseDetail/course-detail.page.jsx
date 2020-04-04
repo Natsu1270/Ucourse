@@ -15,12 +15,15 @@ import CourseDetailComponents from "../../components/Course/course-detail-compon
 import CourseDetailTeacher from "../../components/Course/course-detail-teacher.component";
 import CourseDetailReview from "../../components/Course/course-detail-review.component";
 import CourseDetailRelated from "../../components/Course/course-detail-related.component";
+import Constants from "../../constants";
+import HashLoader from "react-spinners/HashLoader";
 
 const CourseDetail = () => {
     const dispatch = useDispatch();
     const {slug} = useParams();
     useEffect(() => {
         dispatch(fetchCourseDetailStart(slug))
+        window.scrollTo(0,0)
     }, []);
     const {course, isFetching, errorResponse} = useSelector(createStructuredSelector({
         course: courseDetailSelector,
@@ -59,7 +62,11 @@ const CourseDetail = () => {
 
                     <CourseDetailRelated course={course} />
 
-                </div>) : <Spin/>
+                </div>) : <HashLoader
+                css={Constants.SPINNER_STYLE}
+                size={40}
+                color={"#01C9F5"}
+                loading={true}/>
             }
         </div>
     )

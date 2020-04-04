@@ -1,16 +1,18 @@
 from rest_framework import serializers
-from .models import Course, CourseDetail
+from .models import Course, CourseDetail, Skill
 from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
     course = serializers.StringRelatedField(read_only=True)
+    skills = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         model = CourseDetail
         fields = [
             'verbose_name', 'course', 'short_description',
-            'full_description', 'benefits', 'open_date'
+            'full_description', 'benefits', 'open_date', 'end_date',
+            'skills'
         ]
 
 
@@ -46,3 +48,11 @@ class CourseSearchSerializer(serializers.ModelSerializer):
             'id', 'title', 'code', 'icon', 'slug',
             'level', 'status', 'teacher', 'field'
         ]
+
+
+class SkillSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Skill
+        fields = ['id', 'name', 'code']

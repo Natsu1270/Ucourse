@@ -1,33 +1,69 @@
-import React from 'react'
+import React, {useState} from 'react'
+import Truncate from 'react-truncate'
+import {formatDate, parseHtml} from "../../utils/text.utils";
+import Constants from "../../constants";
+
 
 const CourseDetailOverview = ({course}) => {
+
+    const [expanded, setExpand] = useState(false)
+    const [truncated, setTruncate] = useState(false)
+
+    const handleTruncate = (trunc) => {
+        if (truncated !== trunc) {
+            setTruncate(trunc)
+        }
+    }
+    const toggleLines = (event) => {
+        event.preventDefault();
+        setExpand(!expanded);
+    }
     return (
-        <section className="mt-10 section-10 section-course-overview" id="cs-course-overview">
+        <section className="mt-10 section-course-overview" id="cs-course-overview">
             <div className="section-course-overview__content">
                 <h2 className="text--main section-course-overview__header" id="cs-course-overview">
                     Course overview
                 </h2>
                 <span className="text--sub section-course-overview__description">
-                        This Specialization builds on the success of the Python for Everybody course and will introduce fundamental programming concepts including data structures, networked application program interfaces, and databases, using the Python programming language. In the Capstone Project, you’ll use the technologies learned throughout the Specialization to design and create your own applications for data retrieval, processing, and visualization.
+                        <Truncate
+                            lines={!expanded && 5}
+                            ellipsis={(
+                                <span>... <a href='#' onClick={toggleLines}>{'more'}</a></span>
+                            )}
+                            onTruncate={handleTruncate}
+                        >
+                            {parseHtml(course.course_detail.full_description)}
+                        </Truncate>
+                    {!truncated && expanded && (
+                        <span> <a href='#' onClick={toggleLines}>{'less'}</a></span>
+                    )}
                 </span>
                 <div className="section-course-overview__right">
                     <div className="section-course-overview__right--items">
                         <div className="section-course-overview__right--item">
-                            <span className="section-course-overview__right--item__ico" />
+                            <span className="section-course-overview__right--item__ico"/>
                             <div className="section-course-overview__right--item__text">
                                 {course.level}
                             </div>
                         </div>
                         <div className="section-course-overview__right--item">
-                                <span className="section-course-overview__right--item__ico">
+                            <span className="section-course-overview__right--item__ico">
 
-                                </span>
+                            </span>
                             <div className="section-course-overview__right--item__text">
-                                {course.level}
+                                {formatDate(course.course_detail.open_date, Constants.MMM_Do_YYYY)}
                             </div>
                         </div>
-                        <div className="section-course-overview__right--item"></div>
-                        <div className="section-course-overview__right--item"></div>
+                        <div className="section-course-overview__right--item">
+                            <span className="section-course-overview__right--item__ico">
+
+                            </span>
+                            <div className="section-course-overview__right--item__text">
+                                {formatDate(course.course_detail.end_date, Constants.MMM_Do_YYYY)}
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div className="section-course-overview__detail">
@@ -36,12 +72,9 @@ const CourseDetailOverview = ({course}) => {
                         <div className="section-course-overview__detail-item">
 
                             <div className="section-course-overview__detail-text">
-                                Understand fundamental programming concepts such as data structures
-                            </div>
-                        </div>
-                        <div className="section-course-overview__detail-item">
-                            <div className="section-course-overview__detail-text">
-                                Explain the basics of programming computers using Python
+                                {
+                                    parseHtml(course.course_detail.benefits)
+                                }
                             </div>
                         </div>
                     </div>

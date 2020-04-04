@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.text import slugify
+from ckeditor.fields import RichTextField
+
 from programs.models import Program, Field
 from tags.models import Tag
 from profiles.models import Profile
@@ -70,15 +72,29 @@ class Course(models.Model):
         super(Course, self).save(*args, **kwargs)
 
 
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class CourseDetail(models.Model):
     verbose_name = models.CharField(max_length=255)
     short_description = models.CharField(max_length=255, blank=True)
-    full_description = models.TextField(blank=True, null=True)
+    full_description = RichTextField(blank=True, null=True)
     course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='course_detail', null=True)
-    benefits = models.TextField(
+    benefits = RichTextField(
         help_text=_('What you will learn'), blank=True, null=True
     )
+    skills = models.ManyToManyField(Skill, related_name='course_skills')
+
     open_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.course.title
+
+
+

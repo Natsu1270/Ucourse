@@ -21,11 +21,10 @@ const Header = ({token, currentUser}) => {
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
-        // dispatch(loadUserStart(token))
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
-    }, [dispatch, token]);
+    }, []);
 
     const handleScroll = () => {
         setStick(window.pageYOffset > 50)

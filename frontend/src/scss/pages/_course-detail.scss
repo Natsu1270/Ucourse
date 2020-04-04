@@ -11,30 +11,7 @@
 
 .section-course-banner {
 	background: $site-linear;
-	height:40rem;
-	.cs-nav-breadcrumb {
-		&__item-active {
-			background: #e3f9f21f;
-			padding: 0.3rem;
-			}
-		ol {
-			background: none;
-			padding-left: 0;
-			padding-top: 3rem;
-			li {
-				color: white;
-				a {
-					color: white;
-
-				}
-			}
-			.breadcrumb-item + .breadcrumb-item::before {
-				content: '>';
-				color: white;
-			}
-
-		}
-	}
+	height:30rem;
 
 	.cs-btn {
 		&,
@@ -44,6 +21,8 @@
 		}
 	}
 	.course-banner {
+		align-items: center;
+		height: 100%;
 		.course-detail {
 			width: 60%;
 			margin-top: 3rem;
@@ -61,11 +40,10 @@
 		}
 
 		.course-avatar {
-			width: 30%;
+			width: 40%;
 			img {
 				width: 100%;
 			}
-			margin-bottom: 40px;
 		}
 	}
 }
@@ -74,7 +52,7 @@
 	background-color: #ffffff;
 	border-bottom: 1px solid lightgrey;
 	height: 7rem;
-	transition: all 0.2s ease;
+	transition: transform 0.2s ease;
 	.course-tab {
 		list-style: none;
 		margin-bottom: 0;
@@ -138,7 +116,9 @@
 
 	&__fixed {
 		position: fixed;
+		padding: 0 16rem;
 		top: -5rem;
+		left: 0;
 		background: #ffffff;
 		width: 100%;
 		z-index: 1000;
@@ -286,69 +266,10 @@
 		margin-bottom: 5rem;
 	}
 	&__tabs {
-		input[name="tab-control"] {
-    		display: none;
-  		}
+		background-color: $white-color;
+
 		box-shadow: $shadow-light;
-		padding: 2rem 1rem;
-		&--indexes {
-			list-style-type: none;
-			margin-right: 5rem;
-			display: flex;
-			flex-direction: row;
-			justify-content: space-around;
-		}
-
-		&--index {
-			cursor: pointer;
-		}
-
-		&--label {
-			cursor: pointer;
-			span {
-				font-size: 1.6rem;
-			}
-		}
-
-		&--content {
-
-			padding: 2rem 4rem;
-			section {
-				display: none;
-				animation: {
-					name: tabContent;
-					direction: normal;
-					duration: 0.3s;
-					timing-function: ease-in-out;
-					iteration-count: 1;
-				  }
-			}
-		}
-
-		&--slider {
-		position: relative;
-		width: 5rem;
-		transition: all 0.33s cubic-bezier(0.38, 0.8, 0.32, 1.07);
-		.indicator {
-		  position: relative;
-		  width: 5rem;
-		  max-width: 100%;
-		  margin: 0 auto;
-		  height: 0.2rem;
-		  background: #007bff;
-		  border-radius: 1px;
-		}
-
-  }
-
-		input[name="tab-control"] {
-			@include tabs {
-				> label {
-					border-bottom: 3px solid $theme-font-color;
-					transform: scale(1.1);
-				}
-			}
-		}
+		padding: 2rem 3rem;
 	}
 }
 
@@ -466,6 +387,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			.review-item {
+				background-color: $white-color;
 				margin-right: 5rem;
 				width: 28%;
 				border-radius: 0.8rem;

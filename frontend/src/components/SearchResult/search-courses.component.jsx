@@ -18,10 +18,13 @@ const SearchCourses = ({courses}) => {
                                 courses.map(course => {
                                     return (
                                         <SearchCourseItem
+                                            onClick = {() =>
+                                            {
+                                                history.push(`/courses/${course.slug}`)
+                                            }}
                                             key={course.code}
                                             title={course.title}
                                             img={course.icon}
-                                            slug={course.slug}
                                             author={course.teacher[0].fullname}
                                             level={course.level}
                                             open_date={1}

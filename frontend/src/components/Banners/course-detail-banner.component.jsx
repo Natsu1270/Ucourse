@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 const CourseDetailBanner = ({course}) => {
 
     return (
-        <section className="section-10 section-course-banner" id="cs-course-banner">
+        <section className="pd-5 section-course-banner" id="cs-course-banner">
             <div className="course-banner d-flex justify-content-start">
                 <div className="course-detail">
                     <h1 className="text--main text--main__bigger text-white">
@@ -31,7 +31,7 @@ const CourseDetailBanner = ({course}) => {
                     </div>
                 </div>
                 <div className="course-avatar">
-                    <img src={course.icon} className="img-thumbnail rounded" alt=""/>
+                    <img src={course.icon} className="" alt=""/>
                 </div>
             </div>
         </section>

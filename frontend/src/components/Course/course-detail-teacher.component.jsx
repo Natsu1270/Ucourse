@@ -3,7 +3,7 @@ import React from 'react'
 const CourseDetailTeacher = ({course}) => {
 
     return (
-        <section className="mt-10 section-10 section-course-tutors" id="cs-course-tutors">
+        <section className="mt-10 section-course-tutors" id="cs-course-tutors">
             <h2 className="text--main section-course-tutors__header" id="cs-course-overview">
                 Instructors
             </h2>

@@ -1,8 +1,13 @@
-import React from 'react';
-import SearchProgramItem from './search-program-item.component';
+import React from 'react'
+import {useHistory} from 'react-router-dom'
+import SearchProgramItem from './search-program-item.component'
 
 
-const SearchPrograms = ({programs}) =>  (<div className='search-result--p'>
+const SearchPrograms = ({programs}) =>  {
+
+    const history = useHistory();
+
+    return (<div className='search-result--p'>
         {
             programs.length ? (
                 <div className='search-result--p'>
@@ -15,6 +20,7 @@ const SearchPrograms = ({programs}) =>  (<div className='search-result--p'>
                             programs.map(program => {
                                 return (
                                     <SearchProgramItem
+                                        onClick={()=>history.push(`/programs/${program.slug}`)}
                                         key={program.code}
                                         img={program.icon}
                                         title={program.name}
@@ -29,5 +35,6 @@ const SearchPrograms = ({programs}) =>  (<div className='search-result--p'>
             ) : <span/>
         }
     </div>)
+}
 
 export default SearchPrograms

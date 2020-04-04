@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # 'django_elasticsearch_dsl_drf',
     'django_extensions',
     'django_filters',
+    'ckeditor',
 
     'api',
     'users',
@@ -170,9 +171,14 @@ USE_I18N = True
 
 TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'ucourse/static')
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+
 
 DEFAULT_AVATAR = 'account/profile/avatar/default-avatar.png'
 
@@ -181,3 +187,9 @@ DEFAULT_AVATAR_URL = os.path.join(MEDIA_ROOT, DEFAULT_AVATAR)
 AUTHENTICATION_BACKENDS = ['users.model_backend.UcourseModelBackend']
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+    },
+}

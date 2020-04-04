@@ -2,9 +2,9 @@ import React from 'react'
 import {Avatar} from "antd";
 
 
-const SearchProgramItem = ({img, title, num_course,slug}) => {
+const SearchProgramItem = ({img, title, num_course, onClick}) => {
     return (
-        <div className="search-program-card" onClick={()=>window.location.href=`/programs/${slug}`}>
+        <div className="search-program-card" onClick={onClick}>
             <div className="search-program-card__body">
                 <Avatar size={64} src={img} />
                 <div className="search-program-card__body--content">

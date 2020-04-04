@@ -40,8 +40,6 @@ const renderItem = (title, count) => ({
 });
 
 
-
-
 const SearchInput = ({ width, value }) => {
     const dispatch = useDispatch();
     let history = useHistory();
