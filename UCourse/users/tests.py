@@ -12,6 +12,7 @@ REGISTER_URL = reverse('users:register')
 LOGIN_URL = reverse('users:login')
 LOGOUT_URL = reverse('users:knox-logout')
 USER_DETAIL_URL = reverse('users:user-detail')
+USER_UPDATE_URL = reverse('users:user-update')
 
 
 class UserModelTests(TestCase):
@@ -106,3 +107,34 @@ class PublicUserAPITest(TestCase):
         res = self.client.post(LOGIN_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class PrivateUserAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            email='test@gmail.com', username='test', password='1212')
+        self.client.force_authenticate(user=self.user)
+
+    def test_retrieve_user_detail(self):
+        """Test retrieve user detail"""
+        res = self.client.get(USER_DETAIL_URL)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['username'], self.user.username)
+        self.assertFalse(res.data['is_social_account'])
+
+    def test_update_user(self):
+        payload = {'username': 'testtest',
+                   'email': 'testtest@gmail.com',
+                   'old_password': '1212',
+                   'password': 'qwqw'}
+
+        res = self.client.patch(USER_UPDATE_URL, payload)
+
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.username, payload['username'])
+        self.assertEqual(self.user.email, payload['email'])
+        self.assertTrue(self.user.check_password(payload['password']))
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
