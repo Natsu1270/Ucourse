@@ -11,8 +11,6 @@ import {isSignupPanelActiveSelector} from "../../redux/UI/ui.selects";
 const LoginAndRegisterPage = () => {
     const {
         isSignupFormActive,
-        currentUser,
-        errMessage,
         isLoading
     } = useSelector(createStructuredSelector(
         {

@@ -1,6 +1,16 @@
+.course-detail {
+	&__breadcrumb {
+		padding: 1rem 1rem;
+		background-color: white;
+		a {
+			text-decoration: none;
+			font-size: 1.6rem;
+		}
+	}
+}
+
 .section-course-banner {
-	margin-top: 18vh;
-	background: $theme-linear-color;
+	background: $site-linear;
 	height:40rem;
 	.cs-nav-breadcrumb {
 		&__item-active {

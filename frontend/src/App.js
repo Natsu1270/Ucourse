@@ -1,4 +1,4 @@
-import React, {Suspense, useEffect} from 'react'
+import React, {lazy, Suspense, useEffect} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import {createStructuredSelector} from 'reselect'
@@ -8,7 +8,7 @@ import Header from "./components/Header/header.component";
 import Footer from "./components/Footer/footer.component";
 import HomePage from "./pages/HomePage/home.page";
 import ProfilePage from "./pages/ProfilePage/profile.page";
-import {tokenSelector, currentUserSelector, isLoadUserLoadingSelector} from './redux/Auth/auth.selects'
+import {tokenSelector, currentUserSelector} from './redux/Auth/auth.selects'
 
 
 import 'antd/dist/antd.css'
@@ -18,33 +18,46 @@ import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import {getProfileStart} from "./redux/Profile/profile.actions";
 
-const AboutPage = React.lazy(() => import('./pages/AboutPage/about.page'))
-const SearchPage = React.lazy(() => import('./pages/SearchPage/search.page'))
+const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
+const SearchPage = lazy(() => import('./pages/SearchPage/search.page'));
+const FieldPage = lazy(() => import('./pages/FieldPage/field.page'));
+const FieldDetailPage = lazy(() => import('./pages/FieldPage/field-detail.page'));
+const ProgramDetail = lazy(() => import ('./pages/ProgramDetail/program-detail.page'));
+const CourseDetail = lazy(() => import('./pages/CourseDetail/course-detail.page'));
+
 
 function App() {
-    const dispatch = useDispatch()
+
+    const dispatch = useDispatch();
     const {token, currentUser} = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
-    }))
+    }));
+
     useEffect(() => {
         if (currentUser && token) {
             dispatch(getProfileStart(token))
         }
-    }, [dispatch, currentUser, token])
+    }, [dispatch, currentUser, token]);
+
+
     return (
         <Router>
             <div className="App">
-                <Header token={token} currentUser={currentUser} />
+                <Header token={token} currentUser={currentUser}/>
                 <Switch>
                     <Route exact path="/">
                         <HomePage currentUser={currentUser}/>
                     </Route>
-                    <Suspense fallback={Spin}>
+                    <Suspense fallback={<Spin />}>
                         <Route exact path="/about" component={AboutPage}/>
                         <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
                         <PrivateRoute path="/profile" component={ProfilePage}/>
-                        <Route path="/search" component={SearchPage} />
+                        <Route path="/search" component={SearchPage}/>
+                        <Route exact path="/field" component={FieldPage}/>
+                        <Route path="/field/:slug" component={FieldDetailPage}/>
+                        <Route path="/programs/:slug" component={ProgramDetail} />
+                        <Route path="/courses/:slug" component={CourseDetail} />
                     </Suspense>
                 </Switch>
                 <Footer/>

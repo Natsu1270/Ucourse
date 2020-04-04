@@ -60,6 +60,10 @@ class Profile(models.Model):
     def fullname(self):
         return self.first_name + ' ' + self.last_name
 
+    @property
+    def email(self):
+        return self.user.email
+
 
 class TeacherManager(models.Manager):
     def get_queryset(self):

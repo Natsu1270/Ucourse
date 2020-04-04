@@ -14,5 +14,11 @@ class ProgramAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class FieldAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "code")
+    search_fields = ("name", "code")
+    readonly_fields = ("created_date", "slug")
+
+
 admin.site.register(Program, ProgramAdmin)
-admin.site.register(Field)
+admin.site.register(Field, FieldAdmin)

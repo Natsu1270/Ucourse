@@ -43,14 +43,14 @@ const renderItem = (title, count) => ({
 
 
 const SearchInput = ({ width, value }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     let history = useHistory();
     const { popularKeywords, isFetchingKeywords } = useSelector(createStructuredSelector({
         popularKeywords: popularKeywordsSelector,
         isFetchingKeywords: isFetchingKeywordsSelector
-    }))
+    }));
 
-    let keywords = []
+    let keywords = [];
     if (!isFetchingKeywords && popularKeywords) {
         popularKeywords.forEach(keyword => keywords.push(renderItem(keyword.name, keyword.count)))
     }
@@ -65,7 +65,7 @@ const SearchInput = ({ width, value }) => {
 
     useEffect(() => {
         dispatch(getPoplularKeywordsStart())
-    }, [dispatch])
+    }, [dispatch]);
 
 
 
@@ -78,11 +78,11 @@ const SearchInput = ({ width, value }) => {
                 dropdownMatchSelectWidth={false}
                 dropdownStyle={{ width: 300 }}
                 style={{ width: '100%' }}
-                size="middle"
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search size="large"
+                <Input.Search
+                    size="large"
                     placeholder="Search everything"
                     onPressEnter={
                         (e) => history.push(`/search?query=${e.target.value}`)

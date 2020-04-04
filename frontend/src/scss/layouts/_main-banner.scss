@@ -11,7 +11,7 @@
 	position: relative;
 	z-index: 1;
 	height: 90rem;
-	background-image: linear-gradient(270deg,#01C9F5 0%,#048dfd 100.44%);
+	background-image: $site-linear;
 	.banner-content {
 		.banner-content-left {
 			position: absolute;

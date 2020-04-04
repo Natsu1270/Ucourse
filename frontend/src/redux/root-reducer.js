@@ -5,6 +5,7 @@ import uiReducer from './UI/ui.reducers'
 import courseReducer from './Course/course.reducers'
 import profileReducer from './Profile/profile.reducer'
 import searchReducer from './Search/search.reducer'
+import fieldReducer from './Field/field.reducer'
 
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     course: courseReducer,
     profile: profileReducer,
     search: searchReducer,
+    field: fieldReducer,
 });
 
 export default rootReducer

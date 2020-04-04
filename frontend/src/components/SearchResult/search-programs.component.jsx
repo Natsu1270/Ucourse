@@ -18,7 +18,8 @@ const SearchPrograms = ({programs}) =>  (<div className='search-result--p'>
                                         key={program.code}
                                         img={program.icon}
                                         title={program.name}
-                                        num_course={program.program_course.length}
+                                        slug={program.slug}
+                                        num_course={program.courses_count}
                                     />
                                 )
                             })

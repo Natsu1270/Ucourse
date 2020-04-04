@@ -2,8 +2,10 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.utils.text import slugify
 from programs.models import Program, Field
 from tags.models import Tag
+from profiles.models import Profile
 
 
 class Course(models.Model):
@@ -32,18 +34,19 @@ class Course(models.Model):
 
     title = models.CharField(max_length=50)
     code = models.CharField(max_length=50, unique=True)
-    icon = models.ImageField(blank=True, null=True)
+    icon = models.ImageField(upload_to='courses/icon', blank=True, null=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        Profile,
         related_name='teacher_course',
         blank=True,
-        limit_choices_to={'role_id': 2},
+        limit_choices_to={'is_teacher': True},
     )
-    field = models.ForeignKey(Field, on_delete=models.SET_NULL, null=True)
+    field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)
@@ -62,12 +65,16 @@ class Course(models.Model):
         self.created_by = user
         self.created_by_name = user.email
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Course, self).save(*args, **kwargs)
+
 
 class CourseDetail(models.Model):
     verbose_name = models.CharField(max_length=255)
     short_description = models.CharField(max_length=255, blank=True)
     full_description = models.TextField(blank=True, null=True)
-    course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True)
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='course_detail', null=True)
     benefits = models.TextField(
         help_text=_('What you will learn'), blank=True, null=True
     )
