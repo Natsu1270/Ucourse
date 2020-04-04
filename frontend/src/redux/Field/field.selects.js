@@ -12,9 +12,26 @@ export const fieldDetailSelector = createSelector(
     field => field.fieldDetail
 );
 
+export const fieldProgramsSelector = createSelector(
+    [fieldDetailSelector],
+    fieldDetail => fieldDetail.field_programs ?
+        fieldDetail.field_programs : []
+);
+
+export const fieldCoursesSelector = createSelector(
+    [fieldDetailSelector],
+    fieldDetail => fieldDetail.field_courses ?
+        fieldDetail.field_courses : []
+);
+
 export const isFetchingSelector = createSelector(
     [fieldSelector],
     field => field.isFetching
+);
+
+export const isFetchingDetailSelector = createSelector(
+    [fieldSelector],
+    field => field.isFetchingDetail
 );
 
 export const errorResponseSelector = createSelector(

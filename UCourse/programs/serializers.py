@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Program, Field
-from courses.serializers import CourseSerializer
+from courses.serializers import CourseSerializer, CourseSearchSerializer
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'program_course',
+            'id', 'name', 'code', 'icon', 'slug', 'program_course',
             'status', 'field', 'created_date',
             'short_description', 'full_description', 'created_date', 'created_by',
             'created_by_name', 'modified_date'
@@ -28,15 +28,15 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon',
+            'id', 'name', 'code', 'icon', 'slug',
             'courses_count', 'status', 'field'
         ]
 
 
 class FieldSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    field_programs = ProgramSerializer(many=True, read_only=True)
-    field_courses = CourseSerializer(many=True, read_only=True)
+    field_programs = ProgramSearchSerializer(many=True, read_only=True)
+    field_courses = CourseSearchSerializer(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -54,5 +54,5 @@ class FieldMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = [
-            'id', 'name', 'code', 'slug'
+            'id', 'name', 'code', 'slug', 'icon'
         ]

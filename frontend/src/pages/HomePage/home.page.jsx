@@ -14,6 +14,6 @@ const HomePage = ({ currentUser }) => {
             <SubBanner />
         </main>
     )
-}
+};
 
 export default HomePage

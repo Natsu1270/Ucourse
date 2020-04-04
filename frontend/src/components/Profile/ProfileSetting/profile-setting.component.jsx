@@ -10,7 +10,7 @@ import WithSpinner from "../../Hocs/with-spinner.component";
 import {updateProfileStart} from "../../../redux/Profile/profile.actions";
 
 const ProfileSetting = ({profile, isLoading, token}) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const [form] = Form.useForm();
     const initFormValues = {
         first_name: profile.first_name,

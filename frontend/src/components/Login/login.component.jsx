@@ -1,10 +1,9 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {loginStart, googleSignInStart} from "../../redux/Auth/auth.actions";
 import {Input, Spin, Form} from 'antd'
 import {UserOutlined, UnlockOutlined, LoadingOutlined} from '@ant-design/icons'
-import {FormattedMessage} from 'react-intl'
 
 
 const Login = (props) => {

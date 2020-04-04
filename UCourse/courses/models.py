@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.utils.text import slugify
 from programs.models import Program, Field
 from tags.models import Tag
 from profiles.models import Profile
@@ -33,9 +34,10 @@ class Course(models.Model):
 
     title = models.CharField(max_length=50)
     code = models.CharField(max_length=50, unique=True)
-    icon = models.ImageField(blank=True, null=True)
+    icon = models.ImageField(upload_to='courses/icon', blank=True, null=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
@@ -62,6 +64,10 @@ class Course(models.Model):
     def set_created_by(self, user):
         self.created_by = user
         self.created_by_name = user.email
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Course, self).save(*args, **kwargs)
 
 
 class CourseDetail(models.Model):

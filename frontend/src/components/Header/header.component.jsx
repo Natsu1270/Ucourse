@@ -16,8 +16,8 @@ const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-
 
 const Header = ({token, currentUser}) => {
     // load token and get current user if logged in
-    const [stick, setStick] = useState(false)
-    const dispatch = useDispatch()
+    const [stick, setStick] = useState(false);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
@@ -25,16 +25,16 @@ const Header = ({token, currentUser}) => {
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
-    }, [dispatch, token])
+    }, [dispatch, token]);
 
     const handleScroll = () => {
         setStick(window.pageYOffset > 50)
-    }
+    };
 
     const handleLogout = () => {
         dispatch(logoutStart(token))
         dispatch(clearCurrentProfile())
-    }
+    };
 
     return (
         <header className={`cs-main-header ${stick ? ' cs-header-fixed' : ''}`} id="main-header">
@@ -52,7 +52,7 @@ const Header = ({token, currentUser}) => {
                                 <Link to="/about">About</Link>
                             </li>
                             <li className="header-item nav-item">
-                                <Link to="/explore">Explore</Link>
+                                <Link to="/field">Explore</Link>
                             </li>
 
                             {

@@ -23,6 +23,7 @@ class CourseListView(generics.ListCreateAPIView):
 
 
 class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = "slug"
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     permission_classes = [

@@ -1,26 +1,25 @@
 import React, {useEffect} from 'react'
 import {createStructuredSelector} from 'reselect';
 import {useSelector} from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import {fieldsSelector, isFetchingSelector, errorResponseSelector} from '../../redux/Field/field.selects'
-import HashLoader from "react-spinners/HashLoader";
-import Constants from "../../constants";
+import HashLoader from 'react-spinners/HashLoader';
+import Constants from '../../constants';
 
-import { Card } from 'antd'
+import FieldCard from './field-card.component';
 
-
-const FieldOverview = ({match}) => {
+const FieldOverview = () => {
     const history = useHistory();
+    const location = useLocation();
     const {fields, isFetching, errorResponse} = useSelector(createStructuredSelector({
         fields: fieldsSelector,
         isFetching: isFetchingSelector,
         errorResponse: errorResponseSelector
     }));
 
-    const { Meta } = Card;
 
     return (
-        <div className="page field-overview section-10">
+        <div className="field-overview">
             {isFetching ? <HashLoader
                 css={Constants.SPINNER_STYLE}
                 size={40}
@@ -28,15 +27,13 @@ const FieldOverview = ({match}) => {
                 loading={true}/> : <div className="field-overview--cats">
                 {
                     fields.map(field => (
-                        <Card
-                            onClick={() => history.push(`${match.path}/${field.slug}`)}
-                            hoverable
-                            style={{width: 580}}
-                            cover={<img alt="example"
-                                        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"/>}
+                        <FieldCard
+                            key={field.id}
+                            handleClick={() => history.push(`${location.pathname}/${field.slug}`)}
+                            name={field.name}
+                            icon={field.icon}
                         >
-                            <Meta title={field.name} description="www.instagram.com"/>
-                        </Card>
+                        </FieldCard>
                     ))
                 }
             </div>

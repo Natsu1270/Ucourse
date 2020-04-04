@@ -6,7 +6,7 @@
   z-index: 1000;
   transition: background 800ms ease, box-shadow 500ms ease;
   font-size: 1.5rem;
-  background-image: linear-gradient(270deg,#01C9F5 0%,#048dfd 100.44%);
+  background-image: $site-linear;
 
   .header-content {
     .cs-navbar {

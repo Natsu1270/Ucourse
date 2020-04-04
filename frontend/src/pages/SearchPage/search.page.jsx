@@ -8,24 +8,22 @@ import {isSearchingSelector, searchResultSelector} from '../../redux/Search/sear
 import {css} from "@emotion/core";
 import HashLoader from "react-spinners/HashLoader";
 
-import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
-import SearchCourseItem from "../../components/SearchResult/search-course-item.component";
 import SearchCourses from "../../components/SearchResult/search-courses.component";
 import SearchPrograms from "../../components/SearchResult/search-programs.component";
 import SearchInput from "../../components/SearchInput/search-input.component";
 
 
 const CourseSearchPage = ({location}) => {
-    const dispatch = useDispatch()
-    const queryValues = queryString.parse(location.search)
-    const query = queryValues.query
+    const dispatch = useDispatch();
+    const queryValues = queryString.parse(location.search);
+    const query = queryValues.query;
     const {isSearching, searchResult} = useSelector(createStructuredSelector({
         isSearching: isSearchingSelector,
         searchResult: searchResultSelector
-    }))
+    }));
     useEffect(() => {
         dispatch(simpleSearchStart(query))
-    }, [dispatch, query])
+    }, [dispatch, query]);
 
 
     const override = css`

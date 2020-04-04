@@ -15,7 +15,7 @@ export function* getFields() {
 }
 
 export function* onGetFields() {
-    yield takeEvery(FieldActionTypes.GET_FIELD_START, getFields)
+    yield takeLatest(FieldActionTypes.GET_FIELD_START, getFields)
 }
 
 export function* getFieldDetail({payload}) {

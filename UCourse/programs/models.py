@@ -9,6 +9,7 @@ class Field(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True)
     slug = models.SlugField(unique=True)
+    icon = models.ImageField(upload_to='field/icon', blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -23,7 +24,8 @@ class Program(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=50, unique=True)
     status = models.BooleanField(default=True)
-    icon = models.ImageField(blank=True, null=True)
+    icon = models.ImageField(upload_to='programs/icon', blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     field = models.ForeignKey(Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
     short_description = models.CharField(max_length=255)
     full_description = models.TextField(blank=True, null=True)
@@ -42,7 +44,10 @@ class Program(models.Model):
         self.created_by = user
         self.created_by_name = user.email
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Program, self).save(*args, **kwargs)
+
     @property
     def courses_count(self):
         return self.program_course.count()
-

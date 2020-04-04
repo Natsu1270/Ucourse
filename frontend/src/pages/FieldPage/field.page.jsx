@@ -1,28 +1,20 @@
-import React, { useEffect, lazy, Suspense } from 'react'
-import { Route } from 'react-router-dom'
+import React, {useEffect, lazy, Suspense} from 'react'
+import {useDispatch} from 'react-redux';
+import {getFieldStart} from '../../redux/Field/field.actions';
 
-import HashLoader from 'react-spinners/HashLoader'
-import Constants from "../../constants";
-import {useDispatch} from "react-redux";
-import {getFieldStart} from "../../redux/Field/field.actions";
-const FieldOverview = lazy(() => import('../../components/Field/field-overview.component'));
+const FieldOverview = lazy(() => import('../../components/Field/field-overview.component')) ;
 const FieldDetailPage = lazy(() => import('./field-detail.page'));
 
 
-const FieldPage = ({match}) => {
+const FieldPage = () => {
     const dispatch = useDispatch();
-    useEffect(() => dispatch(getFieldStart()), [dispatch]);
+    useEffect(() => {
+        dispatch(getFieldStart())
+    }, []);
 
     return (
-        <div className="field-page">
-            <Suspense fallback={<HashLoader
-                css={Constants.SPINNER_STYLE}
-                size={40}
-                color={"#01C9F5"}
-                loading={true}/>}>
-                <Route exact path={match.path} component={FieldOverview} />
-                <Route path={`${match.path}/:slug`} component={FieldDetailPage} />
-            </Suspense>
+        <div className='field-page page section-10'>
+            <FieldOverview />
         </div>
     )
 };
