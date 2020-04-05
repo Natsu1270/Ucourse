@@ -89,6 +89,7 @@ class CourseDetail(models.Model):
         help_text=_('What you will learn'), blank=True, null=True
     )
     skills = models.ManyToManyField(Skill, related_name='course_skills')
+    pre_requisites = RichTextField(blank=True, null=True)
 
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)

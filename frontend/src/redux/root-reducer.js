@@ -6,12 +6,14 @@ import courseReducer from './Course/course.reducers'
 import profileReducer from './Profile/profile.reducer'
 import searchReducer from './Search/search.reducer'
 import fieldReducer from './Field/field.reducer'
+import programReducer from './Program/program.reducers'
 
 
 const rootReducer = combineReducers({
     auth: authReducer,
     ui: uiReducer,
     course: courseReducer,
+    program: programReducer,
     profile: profileReducer,
     search: searchReducer,
     field: fieldReducer,

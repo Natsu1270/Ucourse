@@ -111,7 +111,7 @@
   .header-content {
     .cs-navbar {
       .cs-logo {
-        color: #051441;
+        color: $theme-font-color;
       }
 
       .cs-navbar-item {
@@ -126,7 +126,7 @@
             text-decoration: none;
             font-size: 1.8rem;
             font-weight: 500;
-            color: #051441;
+            color: $theme-font-color;
             text-transform: capitalize;
           }
         }

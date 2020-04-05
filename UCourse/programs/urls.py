@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import FieldDetailAPI, FieldListAPI
+from .views import ProgramListAPI, ProgramDetailAPI
 
 urlpatterns = [
-    path('/', FieldListAPI.as_view(), name="field-list"),
-    path('/<str:slug>', FieldDetailAPI.as_view(), name="field-detail")
+    path('', ProgramListAPI.as_view(), name="program-list"),
+    path('<str:slug>', ProgramDetailAPI.as_view(), name="program-detail")
 ]

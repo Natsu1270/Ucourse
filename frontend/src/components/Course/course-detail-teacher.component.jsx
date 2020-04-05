@@ -4,7 +4,7 @@ const CourseDetailTeacher = ({course}) => {
 
     return (
         <section className="mt-10 section-course-tutors" id="cs-course-tutors">
-            <h2 className="text--main section-course-tutors__header" id="cs-course-overview">
+            <h2 className="text--main section-header" id="cs-course-overview">
                 Instructors
             </h2>
             <div className="section-course-tutors--content">

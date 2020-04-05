@@ -17,7 +17,24 @@ class ProgramSerializer(serializers.ModelSerializer):
             'short_description', 'full_description', 'created_date', 'created_by',
             'created_by_name', 'modified_date'
         ]
-        read_only_fields = ('created_date', 'modified_date', 'created_by', 'created_by_name')
+        read_only_fields = ('created_date', 'modified_date',
+                            'created_by', 'created_by_name')
+
+
+class ProgramDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
+    program_course = CourseSearchSerializer(many=True, read_only=True)
+    courses_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Program
+        fields = [
+            'id', 'name', 'code', 'icon', 'slug',
+            'program_course', 'benefits', 'pre_requisites',
+            'courses_count', 'status', 'field',
+            'short_description', 'full_description'
+        ]
 
 
 class ProgramSearchSerializer(serializers.ModelSerializer):

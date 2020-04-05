@@ -50,9 +50,16 @@ const CourseDetail = () => {
 
                     <CourseDetailBanner course={course} />
 
-                    <CourseDetailTab course={course} />
+                    <CourseDetailTab course={course} isProgram={false} />
 
-                    <CourseDetailOverview course={course} />
+                    <CourseDetailOverview
+                        full_description={course.course_detail.full_description}
+                        open_date={course.course_detail.open_date}
+                        end_date={course.course_detail.end_date}
+                        level={course.level}
+                        benefits={course.course_detail.benefits}
+                        skills={course.course_detail.skills}
+                    />
 
                     <CourseDetailComponents course={course} />
 

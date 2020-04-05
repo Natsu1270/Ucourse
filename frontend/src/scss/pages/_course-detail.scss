@@ -10,7 +10,7 @@
 }
 
 .section-course-banner {
-	background: $site-linear;
+	//background: $site-linear;
 	height:30rem;
 
 	.cs-btn {
@@ -54,12 +54,19 @@
 	height: 7rem;
 	transition: transform 0.2s ease;
 	.course-tab {
-		list-style: none;
-		margin-bottom: 0;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
 		height: 100%;
+
+		&__items {
+			margin-bottom: 0;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			list-style: none;
+			width: 70%;
+		}
 		&__address {
 			margin-right: 5rem;
 			align-self: stretch;
@@ -79,7 +86,7 @@
 		&__address::after {
 			content: "";
 			position: absolute;
-			bottom: 0;
+			bottom: -1rem;
 			left: 0;
 			height: 5px;
 			width: 100%;
@@ -94,7 +101,7 @@
 
 
 		&__btn {
-			flex: 0 0 37.5%;
+			//flex: 0 0 37.5%;
 			display: flex;
 			justify-content: flex-end;
 			align-items: center;
@@ -128,6 +135,20 @@
 	}
 }
 
+.section-course-prequire {
+	&__body {
+		padding: 2rem 3rem;
+		background-color: $white-color;
+		box-shadow: $shadow-light;
+
+	}
+	span {
+		font-size: 1.7rem;
+		p {
+			margin-bottom: 0;
+		}
+	}
+}
 
 .section-course-overview {
 	&__content {
@@ -140,7 +161,7 @@
 			"detail detail right"
 			"skill skill right"
 			;
-		grid-gap: 3rem;
+		grid-column-gap: 3rem;
 
 		@include responsive(tab-port) {
 			grid-template-areas:
@@ -156,7 +177,7 @@
 
 	&__header {
 		grid-area: header;
-		margin-bottom: 1rem;
+		margin-bottom: 4rem;
 	}
 
 	&__description {
@@ -206,14 +227,6 @@
 		box-shadow: $shadow-light;
 		padding: 3rem 2rem;
 
-		&-items {
-			padding: 2rem 3rem;
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
-			grid-column-gap: 3rem;
-			grid-row-gap: 2rem;
-		}
-
 		&-item {
 			display: flex;
 			justify-content: flex-start;
@@ -227,7 +240,16 @@
 		}
 
 		&-text {
-			font-size: 1.2rem;
+			font-size: 1.6rem;
+			width: 100%;
+			ul {
+				list-style: none;
+				padding: 2rem 3rem;
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+				grid-column-gap: 3rem;
+				grid-row-gap: 1.5rem;
+			}
 		}
 	}
 
@@ -262,9 +284,6 @@
 
 
 .section-course-components {
-	&__header {
-		margin-bottom: 5rem;
-	}
 	&__tabs {
 		background-color: $white-color;
 
@@ -275,9 +294,6 @@
 
 
 .section-course-tutors {
-	&__header {
-		margin-bottom: 5rem;
-	}
 	&--content {
 		//background-image: linear-gradient(to right bottom, $theme-font-color-light, $theme-green-color);
 		&__main {
@@ -333,9 +349,6 @@
 
 
 .section-course-review {
-	&__header {
-		margin-bottom: 5rem;
-	}
 	&--feedback {
 		.feedback-rating {
 			display: flex;
@@ -429,11 +442,11 @@
 
 
 .section-course-related {
-	&__header {
-		margin-bottom: 5rem;
-	}
 	&__content {
 		position: relative;
 	}
 }
 
+.section-header {
+	margin-bottom: 4rem;
+}

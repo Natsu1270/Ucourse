@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 from django.utils import timezone
+from ckeditor.fields import RichTextField
 from tags.models import Tag
 
 
@@ -26,9 +27,12 @@ class Program(models.Model):
     status = models.BooleanField(default=True)
     icon = models.ImageField(upload_to='programs/icon', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    field = models.ForeignKey(Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
+    field = models.ForeignKey(
+        Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
     short_description = models.CharField(max_length=255)
-    full_description = models.TextField(blank=True, null=True)
+    full_description = RichTextField(blank=True, null=True)
+    benefits = RichTextField(blank=True, null=True)
+    pre_requisites = RichTextField(blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='program_tags', blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(

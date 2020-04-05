@@ -8,6 +8,7 @@ const FieldDetailPage = ({match}) => {
     const { slug } = useParams();
     const dispatch = useDispatch();
     useEffect(()=> {
+        window.scrollTo(0,0)
         dispatch(getFieldDetailStart(slug))
     }, []);
 

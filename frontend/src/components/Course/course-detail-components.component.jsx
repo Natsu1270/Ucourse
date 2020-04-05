@@ -7,7 +7,7 @@ const CourseDetailComponents = ({course}) => {
     return (
         <section className="mt-10 section-course-components" id="cs-course-components">
             <div className="section-course-components__content">
-                <h2 className="text--main section-course-components__header" id="cs-course-overview">
+                <h2 className="text--main section-header" id="cs-course-overview">
                     Components
                 </h2>
                 <div className="section-course-components__tabs">

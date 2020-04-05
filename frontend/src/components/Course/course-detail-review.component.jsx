@@ -4,7 +4,7 @@ const CourseDetailReview = ({course}) => {
 
     return (
         <section className="mt-10 section-course-review" id="cs-course-review">
-            <h2 className="text--main section-course-review__header">
+            <h2 className="text--main section-header">
                 Reviews
             </h2>
             <div className="section-course-review--feedback">
