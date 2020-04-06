@@ -1,5 +1,10 @@
 from django.contrib import admin
 from .models import Program, Field
+from courses.models import Course
+
+
+class CourseInline(admin.TabularInline):
+    model = Course.program.through
 
 
 class ProgramAdmin(admin.ModelAdmin):
@@ -7,6 +12,7 @@ class ProgramAdmin(admin.ModelAdmin):
     list_filter = ("status",)
     search_fields = ("name", "code")
     readonly_fields = ("created_by", "created_date", "created_by_name", "modified_date")
+    inlines = [CourseInline]
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:

@@ -54,8 +54,8 @@ const CourseDetail = () => {
 
                     <CourseDetailOverview
                         full_description={course.course_detail.full_description}
-                        open_date={course.course_detail.open_date}
-                        end_date={course.course_detail.end_date}
+                        open_date={course.open_date}
+                        end_date={course.end_date}
                         level={course.level}
                         benefits={course.course_detail.benefits}
                         skills={course.course_detail.skills}

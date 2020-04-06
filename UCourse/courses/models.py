@@ -40,6 +40,8 @@ class Course(models.Model):
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    open_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
@@ -91,8 +93,7 @@ class CourseDetail(models.Model):
     skills = models.ManyToManyField(Skill, related_name='course_skills')
     pre_requisites = RichTextField(blank=True, null=True)
 
-    open_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+
 
     def __str__(self):
         return self.course.title

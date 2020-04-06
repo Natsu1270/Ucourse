@@ -91,7 +91,7 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                     </div>
                 </div> : <span />}
                 {
-                    skills ? (<div className="section-course-overview__skill">
+                    skills ? (<div className="section-course-overview__skill mt-5">
                         <h3>Skill you will earn</h3>
                         <ul className="section-course-overview__skill--sets">
                             {

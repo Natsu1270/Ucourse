@@ -17,6 +17,9 @@ const CourseDetailBanner = ({course}) => {
         <section style={s} className="pd-5 section-course-banner" id="cs-course-banner" >
             <div className="course-banner d-flex justify-content-start" >
                 <div className="course-detail">
+                    <h4 className="text--sub__smaller text-white">
+                        COURSE
+                    </h4>
                     <h1 className="text--main text--main__bigger text-white">
                         {course.course_detail.verbose_name}
                     </h1>
@@ -29,7 +32,7 @@ const CourseDetailBanner = ({course}) => {
                         </Link>
                         <div className="course-info">
                             <p className="text-white text--sub">
-                                Khoá học bắt đầu vào : {formatDate(course.course_detail.open_date, Constants.MMM_Do_YYYY)}
+                                Khoá học bắt đầu vào : {formatDate(course.open_date, Constants.MMM_Do_YYYY)}
                             </p>
                             <p className="text-white text--sub">
                                 Giảng viên : {course.teacher[0].fullname}

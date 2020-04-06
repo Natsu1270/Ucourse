@@ -8,11 +8,15 @@ export function slugifyString(str) {
     })
 };
 
-export function formatDate(date,pattern) {
-    return moment(date).format(pattern);
+export function formatDate(date, pattern) {
+    if (date) {
+        return moment(date).format(pattern);
+    }
 }
 
 export function parseHtml(content) {
-    return parse(content)
+    if (content) {
+        return parse(content)
+    }
 }
 

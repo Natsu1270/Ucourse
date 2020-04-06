@@ -11,8 +11,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
         model = CourseDetail
         fields = [
             'verbose_name', 'course', 'short_description',
-            'full_description', 'benefits', 'open_date', 'end_date',
-            'skills'
+            'full_description', 'benefits', 'skills'
         ]
 
 
@@ -28,8 +27,8 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'icon', 'slug',
-            'level', 'status', 'course_detail', 'program',
+            'id', 'title', 'code', 'icon', 'slug', 'open_date',
+            'end_date', 'level', 'status', 'course_detail', 'program',
             'teacher', 'field', 'tags', 'created_date', 'updated_date',
             'created_by'
         ]
@@ -45,7 +44,8 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'icon', 'slug',
+            'id', 'title', 'code',
+            'icon', 'slug', 'open_date', 'end_date',
             'level', 'status', 'teacher', 'field'
         ]
 

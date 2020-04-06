@@ -18,6 +18,9 @@ const ProgramDetailBanner = ({program}) => {
         <section style={s} className="pd-5 section-course-banner" id="cs-course-banner">
             <div className="course-banner d-flex justify-content-start">
                 <div className="course-detail">
+                    <h4 className="text--sub__smaller text-white">
+                        PROGRAM
+                    </h4>
                     <h1 className="text--main text--main__bigger text-white">
                         {program.name}
                     </h1>

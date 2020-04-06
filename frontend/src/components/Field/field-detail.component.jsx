@@ -7,6 +7,7 @@ import HashLoader from "react-spinners/HashLoader";
 import SearchInput from "../SearchInput/search-input.component";
 import SearchPrograms from "../SearchResult/search-programs.component";
 import SearchCourses from "../SearchResult/search-courses.component";
+import CourseCards from "../Course/course-cards.component";
 
 const FieldDetail = () => {
 
@@ -30,7 +31,10 @@ const FieldDetail = () => {
                             <SearchInput width={'100%'}/>
                         </div>
                             <SearchPrograms programs={fieldDetail.field_programs}/>
-                            <SearchCourses courses={fieldDetail.field_courses}/>
+                        {
+                            fieldDetail.field_courses.length ?
+                                <CourseCards courses={fieldDetail.field_courses}/> : <span />
+                        }
                     </div>
                 )
             }

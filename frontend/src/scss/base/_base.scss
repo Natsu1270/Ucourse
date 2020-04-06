@@ -118,3 +118,27 @@ button, input {
 	text-transform: uppercase;
 	color: $theme-font-color;
 }
+
+.white-bg {
+	background-color: $white-color;
+}
+
+.dis-flex-start {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.dis-flex-between {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.dis-grid-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+	grid-column-gap: 2rem;
+}

@@ -14,12 +14,14 @@ import ProgramDetailBanner from "../../components/Program/program-detail-banner.
 import CourseDetailTab from "../../components/Course/course-detail-tab.component";
 import CourseDetailOverview from "../../components/Course/course-detail-overview.component";
 import ProgramDetailPrequire from "../../components/Program/program-detail-prequire.component";
+import ProgramDetailComponents from "../../components/Program/program-detail-componenets.component";
 
 const ProgramDetailPage = () => {
 
     const dispatch = useDispatch()
     const {slug} = useParams()
     useEffect(() => {
+        window.scrollTo(0,0)
         dispatch(fetchProgramDetailStart(slug))
     }, [])
 
@@ -54,6 +56,8 @@ const ProgramDetailPage = () => {
                             num_course={program.courses_count}
                         />
                         <ProgramDetailPrequire prequire={program.pre_requisites} />
+                        <ProgramDetailComponents courses={program.program_course} />
+
                     </div> : <HashLoader
                         css={Constants.SPINNER_STYLE}
                         size={40}

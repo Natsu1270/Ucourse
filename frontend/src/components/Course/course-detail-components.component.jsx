@@ -23,7 +23,7 @@ const CourseDetailComponents = ({course}) => {
                             <section>
                                 <h2>Installing and Using Python</h2>
                                 <span className="text--sub">
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quas adipisci a accusantium eius ut voluptatibus ad impedit nulla, ipsa qui. Quasi temporibus eos commodi aliquid impedit amet, similique nulla.
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quas adipisci a accusantium eius ut voluptatibus ad impedit nulla, ipsa qui. Quasi temporibus eos commodi aliquid impedit amet, similique nulla.
                                 </span>
                             </section>
                         </TabPane>

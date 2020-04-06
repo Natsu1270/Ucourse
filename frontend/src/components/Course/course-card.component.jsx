@@ -1,30 +1,33 @@
 import React from 'react'
+import { Card } from 'antd'
+import CourseCardSub from "./course-card-sub.component";
 
-const CourseCard = ({course}) => {
-
+const CourseCard = ({course, onClick}) => {
+    const coverStyle = {
+        width: '100%',
+        height: '14rem',
+        backgroundImage : `url(${course.icon})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: 'cover'
+    }
+    const {Meta} = Card
     return (
-        <div className="course-card">
-            <div className="course-card--side course-card--side__front">
-                <div className="card-avatar">
-                    <img src={course.icon} alt=""/>
-                </div>
-                <div className="card-body">
-                    <div className="card-title">
-                        <a href="" className="text--sub__bigger">
-                            {course.title}
-                        </a>
-                    </div>
-                    <hr/>
-                    <p className="text--sub">{course.level}</p>
-                    <div className="row course-rating-score">
-                        <div className="col-lg-12">
-                            <div className="star-rating">
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div className="course-card mb-5">
+            <Card
+                onClick={onClick}
+                hoverable
+                style={{width: 240}}
+                cover={<div style={coverStyle} />}
+            >
+                <Meta title={course.title} description={
+                    <CourseCardSub
+                        teacher={course.teacher[0].fullname}
+                        level={course.level}
+                        open_date={course.open_date}
+                    /> }
+                />
+            </Card>
         </div>
     )
 }
