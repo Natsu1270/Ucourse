@@ -31,11 +31,36 @@ export const advanceSearchFail = (err) => ({
     payload: err
 });
 
-export const getPoplularKeywordsStart = () => ({
+export const getPopularKeywordsStart = () => ({
     type: SearchActionTypes.GET_POPULAR_KEYWORDS_START,
 })
 
-export const getPoplularKeywordsSuccess = (keywords) => ({
+export const getPopularKeywordsSuccess = (keywords) => ({
     type: SearchActionTypes.GET_POPULAR_KEYWORDS_SUCCESS,
     payload: keywords
+})
+
+export const updateSearchFilterField = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_FIELD,
+    payload: filter
+})
+
+export const updateSearchFilterLevel = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_LEVEL,
+    payload: filter
+})
+
+export const updateSearchFilterRating = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_RATING,
+    payload: filter
+})
+
+export const updateSearchFilterDate = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_DATE,
+    payload: filter
+})
+
+export const updateSearchFilterTeacher = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_TEACHER,
+    payload: filter
 })

@@ -1,4 +1,5 @@
 import SearchActionTypes from "./search.types";
+import {updateFilter} from "./search.utils";
 
 const initState = {
     isSearching: false,
@@ -6,6 +7,11 @@ const initState = {
     errorResponse: null,
     popularKeywords: null,
     isFetchingKeywords: false,
+    searchFilterField: null,
+    searchFilterLevel: null,
+    searchFilterRating: null,
+    searchFilterTeacher: null,
+    searchFilterDate: null,
 };
 
 const searchReducer = (state = initState, action) => {
@@ -46,6 +52,34 @@ const searchReducer = (state = initState, action) => {
                 isFetchingKeywords: false,
                 popularKeywords: action.payload
             }
+
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_FIELD:
+            return {
+                ...state,
+                searchFilterField: action.payload
+            }
+
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_LEVEL:
+            return {
+                ...state,
+                searchFilterLevel: action.payload
+            }
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_RATING:
+            return {
+                ...state,
+                searchFilterRating: action.payload
+            }
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_DATE:
+            return {
+                ...state,
+                searchFilterDate: action.payload
+            }
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_TEACHER:
+            return {
+                ...state,
+                searchFilterTeacher: action.payload
+            }
+
 
         default:
             return state;

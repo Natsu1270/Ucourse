@@ -3,7 +3,7 @@ import { Input, AutoComplete } from "antd";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from 'reselect'
-import { getPoplularKeywordsStart } from '../../redux/Search/search.actions'
+import { getPopularKeywordsStart } from '../../redux/Search/search.actions'
 
 import { getPopularSearchKeywordsAPI } from '../../api/search.services'
 import { isFetchingKeywordsSelector, popularKeywordsSelector } from '../../redux/Search/search.selects';
@@ -62,7 +62,7 @@ const SearchInput = ({ width, value }) => {
     ];
 
     useEffect(() => {
-        dispatch(getPoplularKeywordsStart())
+        dispatch(getPopularKeywordsStart())
     }, [dispatch]);
 
 

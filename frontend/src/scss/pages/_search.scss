@@ -1,7 +1,10 @@
-
+.search-filter {
+  width: 20%;
+  align-self: flex-start;
+}
 .search-result {
   padding:0 10rem;
-
+  width: 75%;
   &--search-bar {
     margin-bottom: 4rem;
   }

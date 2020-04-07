@@ -31,9 +31,23 @@ export function* onUpdateProfile() {
     yield takeLatest(ProfileActionTypes.UPDATE_PROFILE_START, updateProfile)
 }
 
+export function* getListTeacher() {
+    try {
+        let {data} = yield call(ProfileServices.getListTeacherAPI)
+        yield put(ProfileActions.getListTeacherSuccess(data.data))
+    } catch (err) {
+        yield put(ProfileActions.getListTeacherFail(err.response))
+    }
+}
+
+export function* onGetListTeacher() {
+    yield takeLatest(ProfileActionTypes.GET_LIST_TEACHER_START, getListTeacher)
+}
+
 export function* profileSaga() {
     yield all([
         call(onGetProfile),
         call(onUpdateProfile),
+        call(onGetListTeacher),
     ])
 }

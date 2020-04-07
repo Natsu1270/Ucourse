@@ -20,7 +20,7 @@ export function* onSimpleSearch() {
 export function* getPopularSearchKeywords() {
     try {
         let { data } = yield call(SearchService.getPopularSearchKeywordsAPI)
-        yield put(SearchActions.getPoplularKeywordsSuccess(data.data))
+        yield put(SearchActions.getPopularKeywordsSuccess(data.data))
     } catch (err) {
         console.log(err)
     }

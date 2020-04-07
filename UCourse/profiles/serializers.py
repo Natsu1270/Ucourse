@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Profile
+from .models import Profile, Teacher
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -17,9 +17,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class TeacherProfileSearchSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     fullname = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
 
     class Meta:
-        model = Profile
-        fields = ('fullname', 'email')
+        model = Teacher
+        fields = ('id', 'fullname', 'email')

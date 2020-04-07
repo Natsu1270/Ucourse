@@ -3,13 +3,15 @@ import ProfileActionTypes from "./profile.types";
 const initState = {
     userProfile: {},
     isLoading: false,
-    errorResponse: null
+    errorResponse: null,
+    teacherList: []
 }
 
 const profileReducer = (state = initState, action) => {
     switch (action.type) {
         case ProfileActionTypes.GET_PROFILE_START:
         case ProfileActionTypes.UPDATE_PROFILE_START:
+        case ProfileActionTypes.GET_LIST_TEACHER_START:
             return {
                 ...state,
                 isLoading: true,
@@ -22,8 +24,16 @@ const profileReducer = (state = initState, action) => {
                 userProfile: action.payload,
                 errorResponse: null
             }
+
+        case ProfileActionTypes.GET_LIST_TEACHER_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                teacherList: action.payload
+            }
         case ProfileActionTypes.GET_PROFILE_FAIL:
         case ProfileActionTypes.UPDATE_PROFILE_FAIL:
+        case ProfileActionTypes.GET_LIST_TEACHER_FAIL:
             return {
                 ...state,
                 isLoading: false,

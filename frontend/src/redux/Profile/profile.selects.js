@@ -16,3 +16,8 @@ export const profileErrorSelector = createSelector(
     [profileSelector],
     profile => profile.errorResponse
 )
+
+export const teacherListSelector = createSelector(
+    [profileSelector],
+    profile => profile.teacherList
+)
