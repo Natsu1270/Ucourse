@@ -11,6 +11,7 @@ class Field(models.Model):
     code = models.CharField(max_length=10, unique=True)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='field/icon', blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

@@ -52,29 +52,71 @@ const CourseSearchPage = ({location}) => {
 
     useEffect(() => {
         if (!isSearching) {
-            setCourses(searchCourses)
+            setCourses(searchCourses);
             setPrograms(searchPrograms)
         }
+    }, [isSearching]);
+
+    useEffect(() => {
+        let filterCourses = [];
+        let filterPrograms = [];
         if (filterField && filterField.length) {
-            setCourses(courses.filter(course => filterField.includes(slugifyString(course.field))))
-            setPrograms(programs.filter(program => filterField.includes(slugifyString(program.field))))
+            filterCourses = searchCourses.filter(course => filterField.includes(slugifyString(course.field)));
+            filterPrograms = searchPrograms.filter(program => filterField.includes(slugifyString(program.field)))
+        } else {
+            filterCourses = searchCourses;
+            filterPrograms = searchPrograms
         }
         if (filterLevel && filterLevel.length) {
-            setCourses(courses.filter(course => filterLevel.includes(course.level)))
+            filterCourses = filterCourses.filter(course => filterLevel.includes(course.level))
         }
         if (filterTeacher && filterTeacher.length) {
-            setCourses(courses.filter(course => filterTeacher.includes(course.teacher[0].email)))
+           filterCourses = filterCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
         }
-    }, [isSearching, filterField, filterLevel, filterTeacher])
+        setCourses(filterCourses);
+        setPrograms(filterPrograms)
+    }, [filterField]);
 
+    useEffect(() => {
+        let filterCourses = [];
+        if (filterLevel && filterLevel.length) {
+            filterCourses = searchCourses.filter(course => filterLevel.includes(course.level))
+        } else {
+            filterCourses = searchCourses
+        }
+        if (filterField && filterField.length) {
+            filterCourses = filterCourses.filter(course => filterField.includes(course.field))
+        }
+        if (filterTeacher && filterTeacher.length) {
+            filterCourses = filterCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
+        }
+        setCourses(filterCourses)
+    }, [filterLevel]);
 
-    const {TabPane} = Tabs
+    useEffect(() => {
+        let filterCourses = [];
+
+        if (filterTeacher && filterTeacher.length) {
+            filterCourses = searchCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
+        } else {
+            filterCourses = searchCourses
+        }
+        if (filterLevel && filterLevel.length) {
+            filterCourses = filterCourses.filter(course => filterLevel.includes(course.level))
+        }
+        if (filterField && filterField.length) {
+            filterCourses = filterCourses.filter(course => filterField.includes(course.field))
+        }
+        setCourses(filterCourses)
+    }, [filterTeacher]);
+
+    const {TabPane} = Tabs;
 
 
     return (
-        <div className="section-5 section-filter-course dis-flex-start mb-5">
+        <div className="section-5 section-filter-course dis-flex-start-start mb-5">
             <div className="search-filter">
-                <h3 className="mb-5 text-center">Lọc kết quả</h3>
+                <h3 className="mb-5">Lọc kết quả</h3>
                 <SearchFilter/>
             </div>
             <div className="search-result">
@@ -102,6 +144,6 @@ const CourseSearchPage = ({location}) => {
 
         </div>
     )
-}
+};
 
 export default CourseSearchPage

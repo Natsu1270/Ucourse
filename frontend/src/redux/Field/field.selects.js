@@ -9,7 +9,7 @@ export const fieldsSelector = createSelector(
 
 export const fieldDetailSelector = createSelector(
     [fieldSelector],
-    field => field.fieldDetail
+    field => field.fieldDetail ? field.fieldDetail : {}
 );
 
 export const fieldProgramsSelector = createSelector(
