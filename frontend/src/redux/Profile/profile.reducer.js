@@ -4,7 +4,7 @@ const initState = {
     userProfile: {},
     isLoading: false,
     errorResponse: null,
-    teacherList: []
+    teacherList: null
 }
 
 const profileReducer = (state = initState, action) => {

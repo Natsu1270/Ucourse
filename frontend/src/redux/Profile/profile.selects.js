@@ -19,5 +19,5 @@ export const profileErrorSelector = createSelector(
 
 export const teacherListSelector = createSelector(
     [profileSelector],
-    profile => profile.teacherList
+    profile => profile.teacherList ? profile.teacherList : []
 )

@@ -59,7 +59,7 @@ class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = [
-            'id', 'name', 'code', 'field_programs', 'field_courses', 'field', 'created_date'
+            'id', 'name', 'code', 'icon', 'description', 'field_programs', 'field_courses', 'field', 'created_date'
         ]
         read_only_fields = ('created_date',)
 
@@ -71,5 +71,5 @@ class FieldMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = [
-            'id', 'name', 'code', 'slug', 'icon'
+            'id', 'name', 'code', 'slug', 'icon', 'description'
         ]

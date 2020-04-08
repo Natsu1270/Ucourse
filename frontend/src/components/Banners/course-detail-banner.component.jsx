@@ -12,7 +12,7 @@ const CourseDetailBanner = ({course}) => {
         ),
         url(${course.icon}) no-repeat center center / cover`,
 
-    }
+    };
     return (
         <section style={s} className="pd-5 section-course-banner" id="cs-course-banner" >
             <div className="course-banner d-flex justify-content-start" >

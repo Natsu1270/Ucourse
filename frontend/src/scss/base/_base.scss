@@ -135,6 +135,13 @@ button, input {
 	flex-wrap: wrap;
 }
 
+.dis-flex-start-start{
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
 .dis-flex-between {
 	display: flex;
 	justify-content: space-between;

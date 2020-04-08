@@ -5,3 +5,9 @@
     grid-gap: 3rem;
   }
 }
+
+.field-detail {
+  &__content {
+    width: 100%;
+  }
+}
