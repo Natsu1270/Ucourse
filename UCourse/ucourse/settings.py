@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'lessons',
     'resources',
     'tags',
+    'questions'
 
 ]
 

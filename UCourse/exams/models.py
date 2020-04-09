@@ -2,63 +2,18 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
-from django.utils.translation import gettext as _
 
 from lessons.models import Lesson
 from courses.models import Course
+from questions.models import Question
 
-
-class Question(models.Model):
-
-    MULTI_CHOICE = "mc"
-    TRUE_FALSE = "tf"
-    TEXT = "tx"
-
-    TYPE_CHOICES = [
-        (MULTI_CHOICE, _("Multi choices")),
-        (TRUE_FALSE, _("True false")),
-        (TEXT, _("Paragraph text question")),
-    ]
-
-    name = models.CharField(max_length=255, blank=True)
-    code = models.CharField(max_length=10, unique=True)
-    content = models.TextField()
-    level = models.IntegerField(
-        verbose_name=_("Level of difficult of the question"), blank=True, null=True
-    )
-    question_type = models.CharField(
-        max_length=2, choices=TYPE_CHOICES, default=MULTI_CHOICE
-    )
-
-    status = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return "{0} - {1}".format(self.name, self.content[:5])
-
-
-class Answer(models.Model):
-    code = models.CharField(max_length=10, unique=True)
-    content = models.TextField()
-    question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name="answers"
-    )
-    is_right = models.BooleanField(default=False, blank=True, null=True)
-    status = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return "{0} - {1}".format(self.code, self.content[:5])
 
 class Exam(models.Model):
-
-    PRE_COURSE_TEST = "pc"
     LESSON_TEST = "lt"
     MIDDLE_COURSE_TEST = "mc"
     FINAL_COURSE_TEST = "fc"
 
     EXAM_TYPE_CHOICES = [
-        (PRE_COURSE_TEST, "PreCourse Test"),
         (LESSON_TEST, "Regular Lesson Test"),
         (MIDDLE_COURSE_TEST, "Middle Course Test"),
         (FINAL_COURSE_TEST, "Final Course Test"),
@@ -100,4 +55,27 @@ class Exam(models.Model):
         self.modified_by_name = user.email
 
 
+class AbilityTest(models.Model):
+    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, unique=True)
+    courses = models.ManyToManyField(Course, related_name='ability_tests')
+    time = models.IntegerField()
+    status = models.BooleanField(default=True)
+    num_questions = models.IntegerField(default=10, blank=True, null=True)
 
+    created_date = models.DateTimeField(default=timezone.now)
+    created_by = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='ability_creator'
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class UserAbilityTest(models.Model):
+    ability_tests = models.ForeignKey(
+        AbilityTest, related_name='ability_user_test', on_delete=models.SET_NULL, null=True)
+    users = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='user_ability_test', on_delete=models.SET_NULL, null=True)
+    date_taken = models.DateTimeField(default=timezone.now)
+    result = models.IntegerField(null=True, blank=True)
