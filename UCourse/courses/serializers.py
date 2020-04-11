@@ -23,13 +23,14 @@ class CourseSerializer(serializers.ModelSerializer):
     teacher = ProfileSerializer(many=True, read_only=True)
     tags = serializers.StringRelatedField(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
+    ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Course
         fields = [
             'id', 'title', 'code', 'icon', 'slug', 'open_date',
             'end_date', 'level', 'status', 'course_detail', 'program',
-            'teacher', 'field', 'tags', 'created_date', 'updated_date',
+            'teacher', 'field', 'tags', 'ability_test', 'created_date', 'updated_date',
             'created_by'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')

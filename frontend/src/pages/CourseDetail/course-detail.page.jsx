@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, lazy, Suspense} from 'react'
 import {useSelector, useDispatch} from 'react-redux';
 import {Link, useParams} from 'react-router-dom'
 
@@ -22,7 +22,7 @@ const CourseDetail = () => {
     const dispatch = useDispatch();
     const {slug} = useParams();
     useEffect(() => {
-        dispatch(fetchCourseDetailStart(slug))
+        dispatch(fetchCourseDetailStart(slug));
         window.scrollTo(0,0)
     }, []);
     const {course, isFetching, errorResponse} = useSelector(createStructuredSelector({

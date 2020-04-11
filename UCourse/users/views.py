@@ -112,8 +112,6 @@ class HandleSocialLoginAPI(views.APIView):
         }, status=status.HTTP_200_OK)
 
 
-
-
 class UpdateAccountAPI(generics.UpdateAPIView):
     serializer_class = serializers.UpdateAccountSerializer
     permission_classes = (permissions.IsAuthenticated,)

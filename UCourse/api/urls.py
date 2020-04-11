@@ -10,4 +10,6 @@ urlpatterns = [
     path('search/', SearchAPI.as_view()),
     path('field/', include('programs.field_urls')),
     path('programs/', include('programs.urls')),
+    path('exams/', include('exams.urls')),
+    path('ability-tests/', include('exams.at_urls')),
 ]
