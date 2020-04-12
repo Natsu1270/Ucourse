@@ -20,3 +20,7 @@ export function parseHtml(content) {
     }
 }
 
+
+export function secondToTime(secs) {
+    return moment.utc(secs * 1000).format('HH:mm:ss')
+}

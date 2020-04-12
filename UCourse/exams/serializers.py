@@ -33,29 +33,33 @@ class UserResponseSerializer(serializers.ModelSerializer):
 class UserAbilityTestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
-    ability_test = serializers.PrimaryKeyRelatedField(queryset=AbilityTest.objects.all())
+    ability_test = serializers.PrimaryKeyRelatedField(
+        queryset=AbilityTest.objects.all())
     questions = QuestionSerializer(many=True, read_only=True)
     user_responses = UserResponseSerializer(many=True, required=False)
+    duration = serializers.IntegerField(required=False)
 
     class Meta:
         model = UserAbilityTest
         fields = [
             'id', 'user', 'ability_test',
             'date_taken', 'questions', 'result',
-            'user_responses',
+            'user_responses', 'duration'
         ]
 
     def create(self, validated_data):
         ability_test = validated_data['ability_test']
         user = validated_data['user']
-        user_ability_test = UserAbilityTest.objects.gen_test(user=user, ability_test=ability_test)
+        user_ability_test = UserAbilityTest.objects.gen_test(
+            user=user, ability_test=ability_test)
         return user_ability_test
 
 
 class UserAbilityTestMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
-    ability_test = serializers.PrimaryKeyRelatedField(queryset=AbilityTest.objects.all())
+    ability_test = serializers.PrimaryKeyRelatedField(
+        queryset=AbilityTest.objects.all())
     questions = serializers.StringRelatedField(many=True, read_only=True)
     user_responses = UserResponseSerializer(many=True, required=False)
 
@@ -66,5 +70,3 @@ class UserAbilityTestMinSerializer(serializers.ModelSerializer):
             'date_taken', 'questions', 'result',
             'user_responses',
         ]
-
-

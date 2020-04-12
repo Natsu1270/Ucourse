@@ -118,6 +118,10 @@ class UserAbilityTest(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(self.ability_test.name, self.user)
 
+    @property
+    def duration(self):
+        return self.ability_test.duration
+
 
 class UserResponse(models.Model):
     choice = models.ForeignKey(Choice, related_name='user_responses', on_delete=models.CASCADE)

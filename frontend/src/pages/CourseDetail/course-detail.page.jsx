@@ -18,6 +18,8 @@ import CourseDetailRelated from "../../components/Course/course-detail-related.c
 import Constants from "../../constants";
 import HashLoader from "react-spinners/HashLoader";
 
+const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
+
 const CourseDetail = () => {
     const dispatch = useDispatch();
     const {slug} = useParams();
@@ -68,6 +70,8 @@ const CourseDetail = () => {
                     <CourseDetailReview course={course} />
 
                     <CourseDetailRelated course={course} />
+
+                    <AbilityTest />
 
                 </div>) : <HashLoader
                 css={Constants.SPINNER_STYLE}
