@@ -17,6 +17,7 @@ import {Spin} from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import {getProfileStart} from "./redux/Profile/profile.actions";
+import AbilityTest from "./components/AbilityTest/ability-test.component";
 
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
 const SearchPage = lazy(() => import('./pages/SearchPage/search.page'));

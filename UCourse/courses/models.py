@@ -93,8 +93,6 @@ class CourseDetail(models.Model):
     skills = models.ManyToManyField(Skill, related_name='course_skills')
     pre_requisites = RichTextField(blank=True, null=True)
 
-
-
     def __str__(self):
         return self.course.title
 

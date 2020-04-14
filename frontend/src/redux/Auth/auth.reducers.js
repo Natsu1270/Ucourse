@@ -29,6 +29,7 @@ const authReducer = (state = initState, action) => {
         case AuthActionTypes.LOGIN_START:
         case AuthActionTypes.REGISTER_START:
         case AuthActionTypes.UPDATE_ACCOUNT_START:
+        case AuthActionTypes.LOGOUT_START:
             return {
                 ...state,
                 isLoading: true
@@ -69,6 +70,7 @@ const authReducer = (state = initState, action) => {
         case AuthActionTypes.LOGOUT_SUCCESS:
             return {
                 ...state,
+                isLoading: false,
                 userToken: null,
                 currentUser: null,
             }

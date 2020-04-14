@@ -11,7 +11,7 @@ export const fetchProgramsSuccess = (programs) => ({
 
 export const fetchProgramsFail = (err) => ({
     type: ProgramActionTypes.FETCH_PROGRAMS_FAIL,
-    payload: err.response
+    payload: err
 });
 
 
@@ -27,5 +27,5 @@ export const fetchProgramDetailSuccess = (program) => ({
 
 export const fetchProgramDetailFail = (err) => ({
     type: ProgramActionTypes.FETCH_PROGRAM_DETAIL_FAIL,
-    payload: err.response
+    payload: err
 });

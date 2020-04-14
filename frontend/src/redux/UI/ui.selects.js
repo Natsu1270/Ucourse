@@ -1,13 +1,18 @@
 import { createSelector } from 'reselect'
 
-const uiSelector = state => state.ui
+const uiSelector = state => state.ui;
 
 export const isRLModalActiveSelector = createSelector(
     [uiSelector],
     ui => ui.isRLModalActive
-)
+);
 
 export const isSignupPanelActiveSelector = createSelector(
     [uiSelector],
     ui => ui.isSignupPanelActive
-)
+);
+
+export const isAbilityTestModalActiveSelector = createSelector(
+    [uiSelector],
+    ui => ui.isAbilityTestModalActive
+);

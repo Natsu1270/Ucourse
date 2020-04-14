@@ -1,10 +1,10 @@
 import React from 'react'
-import {Link} from "react-router-dom";
-import {Avatar} from "antd";
-import {formatDate} from "../../utils/text.utils";
+import { Link } from "react-router-dom";
+import { Avatar } from "antd";
+import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
 
-const CourseDetailBanner = ({course}) => {
+const CourseDetailBanner = ({ course, courseDetail, teachers }) => {
     const s = {
         background: `linear-gradient(
           rgba(0, 0, 0, 0.2), 
@@ -21,10 +21,10 @@ const CourseDetailBanner = ({course}) => {
                         COURSE
                     </h4>
                     <h1 className="text--main text--main__bigger text-white">
-                        {course.course_detail.verbose_name}
+                        {courseDetail.verbose_name}
                     </h1>
                     <p className="course-description text--sub text--sub__bigger mt-4">
-                        {course.course_detail.short_description}
+                        {courseDetail.short_description}
                     </p>
                     <div className="d-flex enroll-area mt-5">
                         <Link to="" className="cs-btn cs-btn--animated cs-btn--banner cs-btn--white">
@@ -35,7 +35,7 @@ const CourseDetailBanner = ({course}) => {
                                 Khoá học bắt đầu vào : {formatDate(course.open_date, Constants.MMM_Do_YYYY)}
                             </p>
                             <p className="text-white text--sub">
-                                Giảng viên : {course.teacher[0].fullname}
+                                Giảng viên : {teachers[0] ? teachers[0].fullname : ''}
                             </p>
                             <p className="text-white text--sub">
                                 Điểm đánh giá: {course.rate_score}

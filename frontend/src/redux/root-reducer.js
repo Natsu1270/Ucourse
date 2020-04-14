@@ -7,6 +7,7 @@ import profileReducer from './Profile/profile.reducer'
 import searchReducer from './Search/search.reducer'
 import fieldReducer from './Field/field.reducer'
 import programReducer from './Program/program.reducers'
+import abilityTestReducer from './AbilityTest/abilityTest.reducer'
 
 
 const rootReducer = combineReducers({
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     profile: profileReducer,
     search: searchReducer,
     field: fieldReducer,
+    abilityTest: abilityTestReducer,
 });
 
 export default rootReducer

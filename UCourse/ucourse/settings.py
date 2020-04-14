@@ -180,7 +180,6 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 
-
 DEFAULT_AVATAR = 'account/profile/avatar/default-avatar.png'
 
 DEFAULT_AVATAR_URL = os.path.join(MEDIA_ROOT, DEFAULT_AVATAR)
@@ -192,5 +191,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
+        'extraPlugins': ','.join(
+            [
+                'codesnippet',
+            ]),
     },
+
 }
