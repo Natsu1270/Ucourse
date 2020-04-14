@@ -32,3 +32,8 @@ export const atDurationSelector = createSelector(
     [userAbilityTestSelector],
     user_ability_test => user_ability_test ? user_ability_test.duration : 0
 )
+
+export const uatIdSelector = createSelector(
+    [userAbilityTestSelector],
+    user_ability_test => user_ability_test ? user_ability_test.id : -1
+)

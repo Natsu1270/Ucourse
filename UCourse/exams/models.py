@@ -112,6 +112,7 @@ class UserAbilityTest(models.Model):
     date_taken = models.DateTimeField(default=timezone.now)
     questions = models.ManyToManyField(Question, related_name='ability_questions')
     result = models.IntegerField(null=True, blank=True)
+    user_responses = models.ManyToManyField(Choice, related_name='responses_users')
 
     objects = UserAbilityTestManager()
 
@@ -124,8 +125,7 @@ class UserAbilityTest(models.Model):
 
 
 class UserResponse(models.Model):
-    choice = models.ForeignKey(Choice, related_name='user_responses', on_delete=models.CASCADE)
-    chosen_time = models.DateTimeField(default=timezone.now)
+    choice = models.ForeignKey(Choice, related_name='user_res', on_delete=models.CASCADE)
     user_ability_test = models.ForeignKey(
-        UserAbilityTest, related_name='user_responses', on_delete=models.CASCADE)
+        UserAbilityTest, related_name='user_r', on_delete=models.CASCADE)
 

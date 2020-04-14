@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Exam, AbilityTest, UserAbilityTest, UserResponse
+from .models import Exam, AbilityTest, UserAbilityTest, UserResponse, Choice
 from questions.serializers import QuestionMinSerializer, QuestionSerializer
 
 
@@ -26,7 +26,7 @@ class UserResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserResponse
         fields = [
-            'id', 'choice', 'chosen_time', 'user_ability_test'
+            'id', 'choice', 'user_ability_test'
         ]
 
 
@@ -36,7 +36,9 @@ class UserAbilityTestSerializer(serializers.ModelSerializer):
     ability_test = serializers.PrimaryKeyRelatedField(
         queryset=AbilityTest.objects.all())
     questions = QuestionSerializer(many=True, read_only=True)
-    user_responses = UserResponseSerializer(many=True, required=False)
+    user_responses = serializers.PrimaryKeyRelatedField(
+        many=True, required=False, queryset=Choice.objects.all()
+    )
     duration = serializers.IntegerField(required=False)
 
     class Meta:

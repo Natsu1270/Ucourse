@@ -23,7 +23,7 @@ class AbilityTestAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'code', 'course')
     list_filter = ('status', 'course')
     readonly_fields = ('created_date', 'created_by')
-    inlines = [UserTakenInline]
+    # inlines = [UserTakenInline]
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -31,5 +31,11 @@ class AbilityTestAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-admin.site.register(UserAbilityTest)
+@admin.register(UserAbilityTest)
+class UserAbilityTestAdmin(admin.ModelAdmin):
+    list_display = ('id', '__str__', 'date_taken', 'result')
+    readonly_fields = ('date_taken', 'user_responses')
+    ordering = ('date_taken', )
+
+
 admin.site.register(UserResponse)

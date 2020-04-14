@@ -22,6 +22,9 @@
     }
 
     &__content {
+        background-color: white;
+            padding: 4rem;
+            box-shadow: 0 0.5rem 1rem rgba($color: #000000, $alpha: 0.04);
         &--carousel {
             background-color: white;
             padding: 4rem;

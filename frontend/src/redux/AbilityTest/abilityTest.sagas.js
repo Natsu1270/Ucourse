@@ -6,7 +6,7 @@ import * as AbilityTestServices from '../../api/abilityTest.services'
 
 export function* genAbilityTest({payload}) {
     try {
-        let { data } = yield call(AbilityTestServices.generateAbilityTest, payload);
+        let { data } = yield call(AbilityTestServices.generateAbilityTestAPI, payload);
         yield put(AbilityTestActions.genAbilityTestSuccess(data.data))
     } catch (err) {
         yield put(AbilityTestActions.genAbilityTestFail(err.response))
@@ -17,8 +17,22 @@ export function* onGenAbilityTest() {
     yield takeLatest(AbilityTestTypes.GENERATE_ABILITY_TEST_START, genAbilityTest)
 }
 
+export function* submitAbilityTest({payload}) {
+    try {
+        let { data } = yield call(AbilityTestServices.submitAbilityTestAPI, payload);
+        yield put(AbilityTestActions.submitAbilityTestSuccess())
+    } catch (err) {
+        yield put(AbilityTestActions.submitAbilityTestFail(err.response))
+    }
+}
+
+export function* onSubmitAbilityTest() {
+    yield takeLatest(AbilityTestTypes.SUBMIT_ABILITY_TEST_START, submitAbilityTest)
+}
+
 export function* abilityTestSaga() {
     yield all([
-        call(onGenAbilityTest)
+        call(onGenAbilityTest),
+        call(onSubmitAbilityTest)
     ])
 }

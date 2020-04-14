@@ -7,7 +7,7 @@ import {
     generatedAbilityTestSelector,
     isGeneratingAbilityTestSelector,
     atDurationSelector,
-    atQuestionsSelector
+    atQuestionsSelector, uatIdSelector
 } from "../../redux/AbilityTest/abilityTest.selects";
 import { toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import AbilityTestForm from './ability-test-form.component';
@@ -22,12 +22,14 @@ const AbilityTest = () => {
         isGenerating,
         duration,
         questions,
+        uATid,
     } = useSelector(createStructuredSelector({
         isModalActive: isAbilityTestModalActiveSelector,
         generatedAbilityTest: generatedAbilityTestSelector,
         isGenerating: isGeneratingAbilityTestSelector,
         duration: atDurationSelector,
         questions: atQuestionsSelector,
+        uATid: uatIdSelector,
     }));
 
     const dispatch = useDispatch();
@@ -41,16 +43,21 @@ const AbilityTest = () => {
     const style = {
         backgroundColor: '#ffffff',
         paddingBottom: 0,
-        top: 20
+        top: 20,
+        maxHeight: '90vh',
+        overflowY: 'scroll'
+
     }
 
     return (
         <Modal
             title="Bài kiểm tra năng lực"
             visible={isModalActive}
+            closable={true}
             onOk={close}
+            onCancel={close}
             footer={[
-                <Button type="danger" onClick={close}>
+                <Button key={1} type="danger" onClick={close}>
                     Hủy
                 </Button>,
             ]}
@@ -61,7 +68,9 @@ const AbilityTest = () => {
             {
                 isGenerating ? <Skeleton active /> : <AbilityTestForm
                     duration={duration}
-                    questions={questions} />
+                    questions={questions}
+                    uATId={uATid}
+                />
             }
         </Modal>
     )
