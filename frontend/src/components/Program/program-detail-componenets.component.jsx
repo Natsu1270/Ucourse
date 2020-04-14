@@ -1,9 +1,11 @@
 import React from 'react'
-
+import {useHistory} from 'react-router-dom'
 import {Collapse} from 'antd'
 import CourseCard from "../Course/course-card.component";
 
 const ProgramDetailComponents = ({courses}) => {
+
+    const history = useHistory()
 
     const {Panel} = Collapse
     const bgCourses = courses.filter(course => course.level === 'Beginner')
@@ -22,8 +24,10 @@ const ProgramDetailComponents = ({courses}) => {
                             <Panel key="1" style={{fontSize: '2rem'}} header="Beginner" className="white-bg">
                                 <div className="dis-flex-start pl-5">
                                     {
-                                        bgCourses.map(course => <div className="mr-5">
-                                            <CourseCard course={course}/>
+                                        bgCourses.map(course => <div className="mr-5" key={course.code}>
+                                            <CourseCard
+                                                onClick={()=>history.push(`/courses/${course.slug}`)}
+                                                course={course}/>
                                         </div>)
                                     }
                                 </div>

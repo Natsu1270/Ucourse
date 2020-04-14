@@ -1,0 +1,15 @@
+.section-program-banner {
+  height: 40rem;
+  .program-banner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    &__content {
+      display: flex;
+      justify-content: center;
+      align-items: start;
+
+
+    }
+  }
+}

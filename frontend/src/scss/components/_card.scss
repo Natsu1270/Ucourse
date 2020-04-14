@@ -63,17 +63,8 @@
 	}
 }
 
-.item-author {
-	width: 25%;
-}
 
 
-.more {
-	display: none;
-	&:checked ~ .course-card {
-		transform: rotateY(180deg);
-	}
-}
 
 .field-card {
 	height: 26rem;
@@ -111,5 +102,13 @@
 	}
 	&__others {
 
+	}
+}
+
+.course-cards {
+	&__items {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
+		grid-column-gap: 2rem;
 	}
 }
