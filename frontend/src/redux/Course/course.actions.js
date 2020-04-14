@@ -41,5 +41,5 @@ export const fetchCourseDetailSuccess = (course) => ({
 
 export const fetchCourseDetailFail = (err) => ({
     type: CourseActionTypes.FETCH_COURSE_DETAIL_FAIL,
-    payload: err.response
+    payload: err
 });

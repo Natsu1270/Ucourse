@@ -3,7 +3,7 @@ import ProgramActionTypes from './program.types'
 const initState = {
     programs: {},
     isFetching: false,
-    errResponse: null,
+    errorResponse: null,
     programDetail: null,
 };
 
@@ -32,7 +32,7 @@ const programReducer = (state = initState, action) => {
             return {
                 ...state,
                 isFetching: false,
-                errResponse: action.payload
+                errorResponse: action.payload
             };
 
         default:

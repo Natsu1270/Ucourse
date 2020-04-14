@@ -12,6 +12,8 @@ import {
 import { toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import AbilityTestForm from './ability-test-form.component';
 
+import { Button } from 'antd'
+
 const AbilityTest = () => {
 
     const {
@@ -39,13 +41,19 @@ const AbilityTest = () => {
     const style = {
         backgroundColor: '#ffffff',
         paddingBottom: 0,
+        top: 20
     }
 
     return (
         <Modal
             title="Bài kiểm tra năng lực"
             visible={isModalActive}
-            onCancel={close}
+            onOk={close}
+            footer={[
+                <Button type="danger" onClick={close}>
+                    Hủy
+                </Button>,
+            ]}
             style={style}
             width={800}
             bodyStyle={bodyStyle}

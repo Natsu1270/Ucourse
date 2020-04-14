@@ -3,9 +3,12 @@ import moment from 'moment';
 import parse from 'html-react-parser'
 
 export function slugifyString(str) {
-    return slugify(str, {
-        lower: true
-    })
+    if (str) {
+        return slugify(str, {
+            lower: true
+        })
+    }
+
 };
 
 export function formatDate(date, pattern) {

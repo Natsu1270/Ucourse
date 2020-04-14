@@ -1,7 +1,7 @@
 import { takeLatest, takeEvery, put, call, all } from 'redux-saga/effects';
 import AuthActionTypes from './auth.types';
 import ProfileActionTypes from "../Profile/profile.types";
-import {getProfileSuccess, clearCurrentProfile} from '../Profile/profile.actions'
+import { getProfileSuccess, clearCurrentProfile } from '../Profile/profile.actions'
 import * as AuthAction from './auth.actions'
 import * as AuthService from '../../api/auth.services'
 import {
@@ -68,7 +68,7 @@ export function* logout({ payload }) {
     try {
         if (payload) {
             yield call(AuthService.logoutAPI, payload)
-            localStorage.removeItem('token')
+            localStorage.clear()
         } else {
             yield auth.signOut()
         }

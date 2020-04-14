@@ -191,12 +191,10 @@ CORS_ORIGIN_ALLOW_ALL = True
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-    },
-    'special': {
-        'toolbar': 'Special', 'toolbar_Special':
+        'extraPlugins': ','.join(
             [
-                ['Bold'], ['CodeSnippet'],
-            ], 'extraPlugins': 'codesnippet',
+                'codesnippet',
+            ]),
+    },
 
-    }
 }

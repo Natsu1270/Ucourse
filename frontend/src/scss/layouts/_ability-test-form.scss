@@ -13,9 +13,10 @@
         
         &--info {
             margin-bottom: 0;
+            color: rgba($color: #000000, $alpha: 0.7);
         }
         &--progress {
-            width: 60%;
+            width: 40%;
             margin: 1rem auto;
         }
     }
@@ -28,8 +29,27 @@
 
         }
 
-        &--questions {
-
+        &--question {
+            &__header {
+                font-size: 2rem;
+                font-weight: 500;
+                color: #00c6d1;
+                span {
+                    margin-right: 5px;
+                }
+                p,h3,pre,h1,h2,span {
+                    margin-bottom: 0;
+                }
+            }
         }
+    }
+}
+
+.radio-choice {
+    span:first-child {
+        align-self: center;
+    }
+    span:nth-child(2) {
+        font-size: 1.6rem;
     }
 }

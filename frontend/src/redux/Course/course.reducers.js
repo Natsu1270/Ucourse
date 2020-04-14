@@ -3,7 +3,7 @@ import CourseActionTypes from './course.types'
 const initState = {
     courses: {},
     isFetching: false,
-    errResponse: null,
+    errorResponse: null,
     courseDetail: null,
 };
 
@@ -32,7 +32,7 @@ const courseReducer = (state = initState, action) => {
             return {
                 ...state,
                 isFetching: false,
-                errResponse: action.payload
+                errorResponse: action.payload
             };
 
         default:
