@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
+from django.db.models import Q
 from .models import AbilityTest, UserAbilityTest
 from . import serializers
 
@@ -31,7 +32,8 @@ class UserAbilityTestPrivateListAPI(generics.ListAPIView):
     serializer_class = serializers.UserAbilityTestMinSerializer
 
     def get_queryset(self):
-        queryset = UserAbilityTest.objects.all().filter(user=self.request.user)
+        queryset = UserAbilityTest.objects.filter(
+            Q(user=self.request.user) & Q(result__isnull=False)).order_by('-id')
         return queryset
 
 
@@ -51,7 +53,8 @@ class GenerateUserAbilityTestAPI(generics.CreateAPIView):
         user = request.user
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        user_ability_test = serializer.save(user=user, ability_test=data['ability_test'])
+        user_ability_test = serializer.save(
+            user=user, ability_test=data['ability_test'])
         return Response({
             "data": {
                 "user_ability_test": self.get_serializer(user_ability_test).data,
@@ -60,8 +63,3 @@ class GenerateUserAbilityTestAPI(generics.CreateAPIView):
             "message": "Login successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
-
-
-
-
-

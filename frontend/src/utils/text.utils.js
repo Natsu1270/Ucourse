@@ -17,6 +17,7 @@ export function formatDate(date, pattern) {
     }
 }
 
+
 export function parseHtml(content) {
     if (content) {
         return parse(content)

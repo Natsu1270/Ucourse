@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const ABILITY_TEST_URL = '/api/ability-tests';
 
-export const generateAbilityTestAPI = ({ability_test, token}) => {
+export const generateAbilityTestAPI = ({ ability_test, token }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -10,11 +10,11 @@ export const generateAbilityTestAPI = ({ability_test, token}) => {
         },
         method: 'POST',
         url: `${ABILITY_TEST_URL}/create`,
-        data: {ability_test : ability_test}
+        data: { ability_test: ability_test }
     })
 };
 
-export const submitAbilityTestAPI = ({user_responses, result, token, id}) => {
+export const submitAbilityTestAPI = ({ user_responses, result, token, id }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -22,11 +22,11 @@ export const submitAbilityTestAPI = ({user_responses, result, token, id}) => {
         },
         method: 'PATCH',
         url: `${ABILITY_TEST_URL}/users/${id}`,
-        data: {user_responses, result}
+        data: { user_responses, result }
     })
 }
 
-export const getListAbilityTestAPI = ({token}) => {
+export const getListAbilityTestAPI = (token) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',

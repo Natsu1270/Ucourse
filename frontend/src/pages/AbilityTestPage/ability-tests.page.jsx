@@ -4,7 +4,8 @@ import {createStructuredSelector} from "reselect";
 import {abilityTestsSelector, isGeneratingAbilityTestSelector} from "../../redux/AbilityTest/abilityTest.selects";
 import {getAbilityTestStart} from "../../redux/AbilityTest/abilityTest.actions";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
-import {Skeleton} from "antd";
+import {Skeleton, Timeline} from "antd";
+import AbilityTestCard from "../../components/AbilityTest/ability-test-card.component";
 
 const AbilityTestPage = () => {
     const dispatch = useDispatch()
@@ -19,12 +20,22 @@ const AbilityTestPage = () => {
     }, [])
 
     return (
-        <div className="ability-test-page">
-            FUCK
+        <div className="ability-test-page page section-10">
             {
-                isFetching ? <Skeleton active /> : abilityTests.map(test=>
-                    <p>{test.ability_test} {test.result}</p>
-                )
+                isFetching ? <Skeleton active/> :
+                    <Timeline>
+                        {
+                            abilityTests.map((test, index) =>
+                                <Timeline.Item key={test.id}>
+                                    <AbilityTestCard
+                                        index={index+1}
+                                        date={test.date_taken}
+                                        icon={test.course.icon}
+                                        result={test.result}
+                                        name={test.course.title}/>
+                                </Timeline.Item>)
+                        }
+                    </Timeline>
             }
         </div>
     )

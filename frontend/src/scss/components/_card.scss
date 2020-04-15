@@ -112,3 +112,25 @@
 		grid-column-gap: 2rem;
 	}
 }
+
+.ability-test-card {
+	background-color: $white-color;
+	padding: 2rem 5rem;
+	//box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+	cursor: pointer;
+	transition: all 0.1s ease-in-out;
+	&:hover {
+		transform: translateY(-0.5rem) scale(1.05);
+	}
+
+	span {
+		color: rgba(0,0,0,0.6);
+		font-size: 1.8rem;
+		font-weight: 600;
+	}
+
+}
+
+.odd-card {
+	background-color: #80c6ff1c;
+}

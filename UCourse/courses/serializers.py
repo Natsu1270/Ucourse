@@ -51,6 +51,14 @@ class CourseSearchSerializer(serializers.ModelSerializer):
         ]
 
 
+class CourseMinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = [
+            'title', 'icon', 'status'
+        ]
+
+
 class SkillSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 

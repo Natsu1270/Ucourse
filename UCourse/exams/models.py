@@ -123,6 +123,10 @@ class UserAbilityTest(models.Model):
     def duration(self):
         return self.ability_test.duration
 
+    @property
+    def course(self):
+        return self.ability_test.course
+
 
 class UserResponse(models.Model):
     choice = models.ForeignKey(Choice, related_name='user_res', on_delete=models.CASCADE)
