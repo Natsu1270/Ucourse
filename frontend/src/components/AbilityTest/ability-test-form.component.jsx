@@ -31,8 +31,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
 
     useEffect(() => {
         if (timer === 0) {
-            // dispatch(submitAbilityTestStart({token, result, user_responses, id: uATId}))
-            setIsFinish(true)
+            form.submit()
         } else {
             setTimeout(() => {
                 setTimer(timer - 1)
@@ -93,7 +92,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
         const isUnCompleted = valuesList.some(choice => choice === undefined)
         const result = calResult(values)
         setResult(result)
-        if (isUnCompleted) {
+        if (isUnCompleted && timer !== 0) {
             unDoneNotification(result, user_responses)
         } else {
             dispatch(submitAbilityTestStart({token, result, user_responses, id: uATId}))

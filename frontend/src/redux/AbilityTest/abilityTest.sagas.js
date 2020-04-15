@@ -30,9 +30,23 @@ export function* onSubmitAbilityTest() {
     yield takeLatest(AbilityTestTypes.SUBMIT_ABILITY_TEST_START, submitAbilityTest)
 }
 
+export function* getAbilityTests({payload}) {
+    try {
+        let {data} = yield  call(AbilityTestServices.getListAbilityTestAPI, payload)
+        yield put(AbilityTestActions.getAbilityTestSuccess(data.data))
+    } catch (err) {
+        yield put(AbilityTestActions.getAbilityTestFail(err.response))
+    }
+}
+
+export function* onGetAbilityTests() {
+    yield takeLatest(AbilityTestTypes.GET_ABILITY_TEST_START, getAbilityTests)
+}
+
 export function* abilityTestSaga() {
     yield all([
         call(onGenAbilityTest),
-        call(onSubmitAbilityTest)
+        call(onSubmitAbilityTest),
+        call(onGetAbilityTests)
     ])
 }

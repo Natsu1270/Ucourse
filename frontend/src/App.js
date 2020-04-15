@@ -25,7 +25,7 @@ const FieldPage = lazy(() => import('./pages/FieldPage/field.page'));
 const FieldDetailPage = lazy(() => import('./pages/FieldPage/field-detail.page'));
 const ProgramDetail = lazy(() => import ('./pages/ProgramDetail/program-detail.page'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail/course-detail.page'));
-
+const AbilityTestPage = lazy(() => import('./pages/AbilityTestPage/ability-tests.page'));
 
 function App() {
 
@@ -59,6 +59,7 @@ function App() {
                         <Route path="/field/:slug" component={FieldDetailPage}/>
                         <Route path="/programs/:slug" component={ProgramDetail} />
                         <Route path="/courses/:slug" component={CourseDetail} />
+                        <Route exact path="/ability-tests" component={AbilityTestPage} />
                     </Suspense>
                 </Switch>
                 <Footer/>

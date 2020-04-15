@@ -36,7 +36,12 @@ const ProfileHeaderDropdown = (props) => {
             </Menu.Item>
             <Menu.Item>
                 <Link to="/my-courses" style={styles}>
-                    My Courses
+                    Khoá học của tôi
+                </Link>
+            </Menu.Item>
+            <Menu.Item>
+                <Link to="/ability-tests" style={styles}>
+                    Tổng hợp
                 </Link>
             </Menu.Item>
             <Menu.Item>

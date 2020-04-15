@@ -1,9 +1,16 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {parseHtml, secondToTime} from "../../utils/text.utils";
 import {Button, Form, Radio} from "antd";
 import {CheckCircleTwoTone} from '@ant-design/icons'
+import hljs from "highlight.js";
 
 const AbilityTestResult = ({questions, responses, result}) => {
+
+    useEffect(() => {
+        document.querySelectorAll("pre code").forEach(block => {
+            hljs.highlightBlock(block)
+        })
+    }, [])
 
     const formItemLayout = {
         labelCol: {span: 4},

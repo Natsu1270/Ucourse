@@ -25,3 +25,14 @@ export const submitAbilityTestAPI = ({user_responses, result, token, id}) => {
         data: {user_responses, result}
     })
 }
+
+export const getListAbilityTestAPI = ({token}) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'GET',
+        url: `${ABILITY_TEST_URL}/my`
+    })
+}

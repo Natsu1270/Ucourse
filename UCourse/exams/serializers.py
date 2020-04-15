@@ -60,8 +60,7 @@ class UserAbilityTestSerializer(serializers.ModelSerializer):
 class UserAbilityTestMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True)
-    ability_test = serializers.PrimaryKeyRelatedField(
-        queryset=AbilityTest.objects.all())
+    ability_test = serializers.StringRelatedField()
     questions = serializers.StringRelatedField(many=True, read_only=True)
     user_responses = UserResponseSerializer(many=True, required=False)
 

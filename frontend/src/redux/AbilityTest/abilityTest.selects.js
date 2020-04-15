@@ -7,6 +7,11 @@ export const generatedAbilityTestSelector = createSelector(
     abilityTest => abilityTest.generatedAbilityTest
 );
 
+export const abilityTestsSelector = createSelector(
+    [abilityTestSelector],
+    abilityTest => abilityTest.abilityTestList  ? abilityTest.abilityTestList : []
+)
+
 export const isGeneratingAbilityTestSelector = createSelector(
     [abilityTestSelector],
     abilityTest => abilityTest.isGenerating

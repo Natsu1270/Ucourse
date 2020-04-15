@@ -26,6 +26,15 @@ class UserAbilityTestListAPI(generics.ListAPIView):
     queryset = UserAbilityTest.objects.all().order_by('-date_taken')
 
 
+class UserAbilityTestPrivateListAPI(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.UserAbilityTestMinSerializer
+
+    def get_queryset(self):
+        queryset = UserAbilityTest.objects.all().filter(user=self.request.user)
+        return queryset
+
+
 class UserAbilityTestDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = serializers.UserAbilityTestSerializer
