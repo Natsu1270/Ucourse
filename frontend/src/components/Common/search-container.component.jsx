@@ -3,19 +3,15 @@ import {useSelector} from "react-redux";
 import {isSearchingSelector} from "../../redux/Search/search.selects";
 import Constants from "../../constants";
 import HashLoader from "react-spinners/HashLoader";
+import {Skeleton} from "antd";
 
 const SearchContainer = ({component: Component, ...others}) => {
     const isSearching = useSelector(state => isSearchingSelector(state))
     if (isSearching) {
-        return <HashLoader
-            css={Constants.SPINNER_STYLE}
-            size={40}
-            color={"#01C9F5"}
-            loading={true}
-        />
+        return <Skeleton active avatar paragraph={{rows: 4}} />
     } else {
         return <Component {...others}/>
     }
-}
+};
 
 export default SearchContainer

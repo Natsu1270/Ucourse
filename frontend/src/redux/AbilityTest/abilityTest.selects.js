@@ -25,20 +25,20 @@ export const errorResponseSelector = createSelector(
 export const userAbilityTestSelector = createSelector(
     [generatedAbilityTestSelector],
     generatedAbilityTest => generatedAbilityTest ? generatedAbilityTest.user_ability_test : {}
-)
+);
 
 
 export const atQuestionsSelector = createSelector(
     [userAbilityTestSelector],
-    user_ability_test => user_ability_test ? user_ability_test.questions : []
-)
+    user_ability_test => user_ability_test.questions ? user_ability_test.questions : []
+);
 
 export const atDurationSelector = createSelector(
     [userAbilityTestSelector],
     user_ability_test => user_ability_test ? user_ability_test.duration : 0
-)
+);
 
 export const uatIdSelector = createSelector(
     [userAbilityTestSelector],
     user_ability_test => user_ability_test ? user_ability_test.id : -1
-)
+);

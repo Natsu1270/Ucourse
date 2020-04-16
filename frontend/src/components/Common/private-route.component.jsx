@@ -10,7 +10,7 @@ import {currentUserSelector} from "../../redux/Auth/auth.selects";
 const PrivateRoute = ({component: Component, ...others}) => {
     const {currentUser} = useSelector(createStructuredSelector({
         currentUser: currentUserSelector,
-    }))
+    }));
     const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
 
     return (

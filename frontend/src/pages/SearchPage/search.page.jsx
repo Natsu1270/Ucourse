@@ -120,10 +120,14 @@ const CourseSearchPage = ({location}) => {
                 <SearchFilter/>
             </div>
             <div className="search-result">
-                <div className="search-result--search-bar">
-
-                    <SearchInput width={'100%'} value={query}/>
+                <div className="search-result__title">
+                    <span className='text--main'>Kết quả tìm kiếm cho từ khóa: </span>
+                    <span className='search-result__title--query'><q>{query}</q></span>
                 </div>
+                {/*<div className="search-result--search-bar">*/}
+
+                {/*    <SearchInput width={'100%'} value={query}/>*/}
+                {/*</div>*/}
                 <Tabs defaultActiveKey="1">
                     <TabPane tab="Tất cả" key="1">
                         <SearchContainer component={SearchPrograms} programs={programs}/>

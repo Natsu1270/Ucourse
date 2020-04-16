@@ -41,7 +41,7 @@ class UserAbilityTestSerializer(serializers.ModelSerializer):
         many=True, required=False, queryset=Choice.objects.all()
     )
     duration = serializers.IntegerField(required=False)
-    course = CourseMinSerializer()
+    course = CourseMinSerializer(required=False)
 
     class Meta:
         model = UserAbilityTest

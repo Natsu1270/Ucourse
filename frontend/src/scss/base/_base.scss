@@ -85,18 +85,11 @@ button, input {
 	padding-right: 12rem;
 }
 
-.page {
-	position: relative;
-}
 
 .mt-10 {
 	margin-top: 10rem;
 }
 
-.fancybox-is-open .fancybox-bg {
-	opacity: .7;
-	backdrop-filter: blur(10px);
-}
 
 .behind-spinner {
 	filter: brightness(50%);
@@ -109,6 +102,11 @@ button, input {
 
 .page {
 	margin-top: 20vh;
+	position: relative;
+
+	&__content {
+		background-color: white;
+	}
 }
 
 .pd-5 {

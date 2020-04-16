@@ -47,7 +47,7 @@ const AbilityTest = () => {
         maxHeight: '90vh',
         overflowY: 'scroll'
 
-    }
+    };
 
     return (
         <Modal

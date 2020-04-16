@@ -17,8 +17,8 @@ import {Spin} from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import {getProfileStart} from "./redux/Profile/profile.actions";
-import AbilityTest from "./components/AbilityTest/ability-test.component";
 
+const Page404NotFound = lazy(()=> import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
 const SearchPage = lazy(() => import('./pages/SearchPage/search.page'));
 const FieldPage = lazy(() => import('./pages/FieldPage/field.page'));
@@ -51,15 +51,18 @@ function App() {
                         <HomePage currentUser={currentUser}/>
                     </Route>
                     <Suspense fallback={<Spin />}>
-                        <Route exact path="/about" component={AboutPage}/>
-                        <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
-                        <PrivateRoute path="/profile" component={ProfilePage}/>
-                        <Route path="/search" component={SearchPage}/>
-                        <Route exact path="/field" component={FieldPage}/>
-                        <Route path="/field/:slug" component={FieldDetailPage}/>
-                        <Route path="/programs/:slug" component={ProgramDetail} />
-                        <Route path="/courses/:slug" component={CourseDetail} />
-                        <Route exact path="/ability-tests" component={AbilityTestPage} />
+                        <Switch>
+                            <Route exact path="/about" component={AboutPage}/>
+                            <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
+                            <PrivateRoute path="/profile" component={ProfilePage}/>
+                            <Route exact path="/search" component={SearchPage}/>
+                            <Route exact path="/field" component={FieldPage}/>
+                            <Route path="/field/:slug" component={FieldDetailPage}/>
+                            <Route path="/programs/:slug" component={ProgramDetail} />
+                            <Route path="/courses/:slug" component={CourseDetail} />
+                            <Route exact path="/ability-tests" component={AbilityTestPage} />
+                            <Route component={Page404NotFound} />
+                        </Switch>
                     </Suspense>
                 </Switch>
                 <Footer/>

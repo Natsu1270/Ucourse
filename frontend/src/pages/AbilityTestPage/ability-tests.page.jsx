@@ -21,8 +21,11 @@ const AbilityTestPage = () => {
 
     return (
         <div className="ability-test-page page section-10">
+            <h3 className="text--main text-center">
+                Các bài thi kiểm tra năng lực đã thực hiện
+            </h3>
             {
-                isFetching ? <Skeleton active/> :
+                isFetching ? <Skeleton avatar paragraph={{rows:8}} active/> :
                     <Timeline>
                         {
                             abilityTests.map((test, index) =>

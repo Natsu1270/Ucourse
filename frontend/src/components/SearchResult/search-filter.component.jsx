@@ -65,7 +65,7 @@ const SearchFilter = () => {
 
     return (
         <Collapse>
-            <Panel key="1" header="Lĩnh vực">
+            <Panel key="1" header="Lĩnh vực" className='white-bg'>
                 {
                     isFetching ? <Spin/> :
                         <Checkbox.Group style={{width: '100%'}} onChange={onChangeField}>
@@ -79,7 +79,7 @@ const SearchFilter = () => {
                         </Checkbox.Group>
                 }
             </Panel>
-            <Panel key="2" header="Cấp độ">
+            <Panel key="2" header="Cấp độ" className='white-bg'>
                 <Checkbox.Group style={{width: '100%'}} onChange={onChangeLevel}>
                     <Row>
                         {levelOptions.map(level => (
@@ -91,10 +91,10 @@ const SearchFilter = () => {
 
                 </Checkbox.Group>
             </Panel>
-            <Panel key="3" header="Thời gian mở">
+            <Panel key="3" header="Thời gian mở" className='white-bg'>
                 <RangePicker format={Constants.DD_MM_YYYY}/>
             </Panel>
-            <Panel key="4" header="Điểm đánh giá">
+            <Panel key="4" header="Điểm đánh giá" className='white-bg'>
                 <Checkbox.Group style={{width: '100%'}} onChange={onChangeRate}>
                     <Row>
                         {rateOptions.map(rate => (
@@ -106,7 +106,7 @@ const SearchFilter = () => {
 
                 </Checkbox.Group>
             </Panel>
-            <Panel key="5" header="Giảng viên">
+            <Panel key="5" header="Giảng viên" className='white-bg'>
                 {
                     isLoading ? <Spin/> :
                         <Checkbox.Group style={{width: '100%'}} onChange={onChangeTeacher}>

@@ -9,7 +9,8 @@ const FieldDetailPage = lazy(() => import('./field-detail.page'));
 const FieldPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getFieldStart())
+        dispatch(getFieldStart());
+        window.scrollTo(0,0)
     }, []);
 
     return (

@@ -5,19 +5,20 @@ import CourseCardSub from "./course-card-sub.component";
 const CourseCard = ({course, onClick}) => {
     const coverStyle = {
         width: '100%',
-        height: '14rem',
+        height: '17rem',
         backgroundImage : `url(${course.icon})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: 'cover'
-    }
-    const {Meta} = Card
+    };
+    const {Meta} = Card;
     return (
-        <div className="course-card mb-5">
+        <div className="mb-5">
             <Card
+                className="course-card"
                 onClick={onClick}
                 hoverable
-                style={{width: 240}}
+                style={{width: 280, borderRadius:'1.3rem', overflow:'hidden'}}
                 cover={<div style={coverStyle} />}
             >
                 <Meta title={course.title} description={
