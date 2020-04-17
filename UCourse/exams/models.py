@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 
-from lessons.models import Lesson
 from courses.models import Course
 from questions.models import Question, Choice, QuestionKit
 
@@ -26,8 +25,6 @@ class Exam(models.Model):
     questions = models.ManyToManyField(Question, related_name="question_exams")
     max_score = models.FloatField(max_length=3)
     pass_score = models.FloatField(max_length=3)
-
-    lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, null=True)
 
     course = models.ForeignKey(
         Course, on_delete=models.SET_NULL, related_name="input_exam", null=True

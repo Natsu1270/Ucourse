@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-from lessons.models import Lesson
 
 
 class Resource(models.Model):
@@ -20,8 +19,6 @@ class Resource(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True)
     icon = models.ImageField(upload_to='resource/icon', null=True, blank=True)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, null=True)
-    is_lesson_resource = models.BooleanField(default=True)
     info = models.TextField(blank=True, null=True)
     resource_type = models.CharField(max_length=10, choices=LESSON_MATERIAL_TYPES)
     content = models.FileField(upload_to='resource/upload/%Y/%m/%d/')

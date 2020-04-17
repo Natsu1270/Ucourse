@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'programs',
     'course_homes',
     'exams',
-    'lessons',
     'resources',
     'tags',
     'questions'

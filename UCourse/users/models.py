@@ -86,3 +86,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    @property
+    def is_student(self):
+        return self.role.code == 'SD'
