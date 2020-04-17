@@ -67,19 +67,23 @@
 
 
 .field-card {
+	overflow: hidden;
+	border-radius: 1.5rem;
 	height: 26rem;
+	transition: all 0.2s ease-in-out;
+box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+	&:hover {
+			box-shadow: 0 1rem 2rem rgba(0,0,0,0.4);
+			transform:  scale(1.02);
+		}
 	&__body {
 		height: 100%;
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: cover;
 		position: relative;
-		transition: all 0.2s ease-in-out;
 		box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.2);
-		&:hover {
-			box-shadow: 0 1rem 2rem rgba(0,0,0,0.4);
-			transform:  scale(1.02);
-		}
+
 
 		&--title {
 			background-color: rgba(0,0,0,0.3);

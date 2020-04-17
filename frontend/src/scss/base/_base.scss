@@ -101,9 +101,9 @@ button, input {
 }
 
 .page {
-	margin-top: 20vh;
+	margin-top: 15vh;
 	position: relative;
-
+	min-height: 80vh;
 	&__content {
 		background-color: white;
 	}

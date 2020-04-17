@@ -29,7 +29,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'code', 'icon', 'slug', 'open_date',
-            'end_date', 'level', 'status', 'course_detail', 'program',
+            'end_date', 'level', 'fee_type', 'status', 'course_detail', 'program',
             'teacher', 'field', 'tags', 'ability_test', 'created_date', 'updated_date',
             'created_by'
         ]
@@ -45,7 +45,7 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code',
+            'id', 'title', 'code', 'fee_type',
             'icon', 'slug', 'open_date', 'end_date',
             'level', 'status', 'teacher', 'field'
         ]

@@ -7,6 +7,7 @@
   transition: background 800ms ease, box-shadow 500ms ease;
   font-size: 1.5rem;
   background-image: $site-linear;
+  box-shadow: $small-box-shadow-black;
 
   .header-content {
     .cs-navbar {
@@ -19,8 +20,8 @@
         flex-grow: 1;
 
         .navbar-nav {
-          &--search {
-            flex: 0 0 65%;
+          &__text {
+            flex: 0 0 50%;
           }
 
           .nav-item {
@@ -96,45 +97,45 @@
   }
 }
 
-.cs-main-header.cs-header-fixed {
-  position: fixed;
-  width: 100%;
-  top: -7rem;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  z-index: 1000;
-  transform: translateY(7rem);
-  transition: transform 500ms ease, background 500ms ease, box-shadow 500ms ease;
-  box-shadow: 0 1rem 2rem rgba($theme-font-color, 0.1);
-
-  .header-content {
-    .cs-navbar {
-      .cs-logo {
-        color: $theme-font-color;
-      }
-
-      .cs-navbar-item {
-        .navbar-nav {
-          .cs-action-btn {
-
-          }
-        }
-
-        .header-item {
-          a {
-            text-decoration: none;
-            font-size: 1.8rem;
-            font-weight: 500;
-            color: $theme-font-color;
-            text-transform: capitalize;
-          }
-        }
-      }
-    }
-
-  }
-}
+//.cs-main-header.cs-header-fixed {
+//  position: fixed;
+//  width: 100%;
+//  //top: -7rem;
+//  left: 0;
+//  right: 0;
+//  background: #ffffff;
+//  z-index: 1000;
+//  //transform: translateY(7rem);
+//  transition: transform 500ms ease, background 500ms ease, box-shadow 500ms ease;
+//  box-shadow: 0 1rem 2rem rgba($theme-font-color, 0.1);
+//
+//  .header-content {
+//    .cs-navbar {
+//      .cs-logo {
+//        color: $theme-font-color;
+//      }
+//
+//      .cs-navbar-item {
+//        .navbar-nav {
+//          .cs-action-btn {
+//
+//          }
+//        }
+//
+//        .header-item {
+//          a {
+//            text-decoration: none;
+//            font-size: 1.8rem;
+//            font-weight: 500;
+//            color: $theme-font-color;
+//            text-transform: capitalize;
+//          }
+//        }
+//      }
+//    }
+//
+//  }
+//}
 
 .cs-header-replaced {
   transform: translateY(-20rem);

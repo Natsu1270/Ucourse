@@ -31,7 +31,7 @@ const ProfileHeaderDropdown = (props) => {
         <Menu>
             <Menu.Item>
                 <Link to="/profile" style={styles}>
-                    Profile Settings
+                    Thông tin cá nhân
                 </Link>
             </Menu.Item>
             <Menu.Item>

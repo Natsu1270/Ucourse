@@ -34,11 +34,20 @@ class Course(models.Model):
         (INACTIVE, 'Inactive'),
     ]
 
+    FREE = 'free'
+    PAID = 'paid'
+
+    FEE_TYPE_CHOICES = [
+        (FREE, 'Free'),
+        (PAID, 'Paid')
+    ]
+
     title = models.CharField(max_length=50)
     code = models.CharField(max_length=50, unique=True)
     icon = models.ImageField(upload_to='courses/icon', blank=True, null=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
+    fee_type = models.CharField(max_length=10, choices=FEE_TYPE_CHOICES, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)

@@ -13,19 +13,18 @@ const MainBanner = ({currentUser}) => {
                 <div className="banner-content-left">
                     <div className="container">
                         <div className="banner-slogan">
-                            <h1 id="main-slogan">Learn online earn <p className="title--big main-slogan--text">Certificates</p></h1>
+                            <h1 id="main-slogan">Học trực tuyến dành <p className="title--big main-slogan--text">Chứng chỉ</p></h1>
                         </div>
                         <div className="banner-description mt-5" id="main-slogan-des">
-                            <h5>Develop your skills through online courses, certificates and diplomas offered by the
-                                best universities and companies in the world</h5>
+                            <h5>Website học trực tuyến với các chương trình và khóa học chất lượng, cung cấp chứng chỉ sau khi hoàn thành khóa học</h5>
                         </div>
                         {
                             currentUser ? (
                                 <Link to="/explore" className="cs-btn cs-btn--animated cs-btn--banner" id="main-btn">
-                                    Explore Now
+                                    Khám phá
                                 </Link>) : (
                                 <a href="#" className="cs-btn cs-btn--animated cs-btn--banner" id="main-btn" onClick={()=> dispatch(showRLModal())}>
-                                    Register Now
+                                    Đăng ký
                                 </a>)
                         }
 

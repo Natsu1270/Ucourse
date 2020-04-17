@@ -8,10 +8,10 @@ const AboutPage = () => {
 
     return (
         <section className="section-10 section--about cs-about">
-            <h2 className="title--big text-center">About us</h2>
+            <h2 className="title--big text-center">Giới thiệu</h2>
             <div className="row slide">
                 <div className="col-md-6 cs-about--text cs-about--left bradius mt-3">
-                    <span className="cs-about--text__main">A piece of history</span>
+                    <span className="cs-about--text__main">Thông tin</span>
                     <p></p>
                     <p className="cs-about--text__sub">Được hình thành vào 11/2019, Trung tâm đào tạo trực
                         tyến <b>Csource</b> đã và đang đạt được những thành công
@@ -23,7 +23,7 @@ const AboutPage = () => {
                         tới tất cả các
                         đối tượng và lứa tuổi có nhu cầu nâng cao kiến thức về lĩnh vực công nghệ thông tin. </p>
                     <br/>
-                    <span className="cs-about--text__main">Our vision</span>
+                    <span className="cs-about--text__main">Tầm nhìn</span>
                     <p className="cs-about--text__sub"><b>Csource</b> kết hợp 2 hình thức đào tạo: Đào tạo tập trung và
                         mua
                         bán khóa học trực tuyến bằng cách cung

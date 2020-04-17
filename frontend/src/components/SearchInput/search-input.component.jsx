@@ -81,7 +81,7 @@ const SearchInput = ({ width, value }) => {
             >
                 <Input.Search
                     size="large"
-                    placeholder="Search everything"
+                    placeholder="Tìm kiếm"
                     onPressEnter={
                         (e) => history.push(`/search?query=${e.target.value}`)
                     } />

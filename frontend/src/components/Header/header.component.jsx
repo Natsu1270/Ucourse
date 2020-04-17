@@ -44,16 +44,19 @@ const Header = ({token, currentUser}) => {
                     </Link>
                     <div className="navbar_supported cs-navbar-item">
                         <ul className="navbar-nav">
-                            <li className="header-item navbar-nav--search">
-                                <SearchInput width={400} />
-                            </li>
-                            <li className="header-item nav-item">
-                                <Link to="/about">About</Link>
-                            </li>
-                            <li className="header-item nav-item">
-                                <Link to="/field">Explore</Link>
-                            </li>
 
+                            <li className='navbar-nav__text'>
+                                <li className="header-item nav-item">
+                                    <Link to="/field">Khám phá</Link>
+                                </li>
+                                <li className="header-item nav-item">
+                                    <Link to="/about">Giới Thiệu</Link>
+                                </li>
+
+                            </li>
+                            <li className="header-item navbar-nav--search">
+                                <SearchInput width={400}/>
+                            </li>
                             {
                                 currentUser ? (
                                     <li className="nav-item active-nav">
@@ -62,11 +65,12 @@ const Header = ({token, currentUser}) => {
                                 ) : (
                                     <li className="nav-item active-nav" id="logout-btn">
                                         {stick ? <Button type="primary" onClick={() => dispatch(showRLModal())}>
-                                            Get Started
-                                        </Button> :
-                                        <Button className="nav-item--btn" ghost onClick={() => dispatch(showRLModal())}>
-                                            Get Started
-                                        </Button>}
+                                                Get Started
+                                            </Button> :
+                                            <Button className="nav-item--btn" ghost
+                                                    onClick={() => dispatch(showRLModal())}>
+                                                Get Started
+                                            </Button>}
                                     </li>
                                 )
                             }
