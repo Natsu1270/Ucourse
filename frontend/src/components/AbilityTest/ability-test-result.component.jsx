@@ -10,7 +10,7 @@ const AbilityTestResult = ({questions, responses, result}) => {
         document.querySelectorAll("pre code").forEach(block => {
             hljs.highlightBlock(block)
         })
-    }, [])
+    }, []);
 
     const formItemLayout = {
         labelCol: {span: 4},
@@ -25,7 +25,7 @@ const AbilityTestResult = ({questions, responses, result}) => {
 
     const renderChoice = (question, choice) => {
         if (responses[question.id] === choice.id) {
-            if (choice.is_answer) {
+            if (question.answers.includes(choice.id)) {
                 return (
                     <Radio defaultChecked key={choice.id} style={{...radioStyle, backgroundColor: '#66ff6675'}} className='radio-choice'
                            value={choice.id}>
@@ -38,7 +38,7 @@ const AbilityTestResult = ({questions, responses, result}) => {
                         {parseHtml(choice.content)}
                     </Radio>)
             }
-        } else if (choice.is_answer) {
+        } else if (question.answers.includes(choice.id)) {
             return (
                 <Radio key={choice.id}  style={{...radioStyle, backgroundColor: '#66ff6675'}} className='radio-choice'
                        value={choice.id}>

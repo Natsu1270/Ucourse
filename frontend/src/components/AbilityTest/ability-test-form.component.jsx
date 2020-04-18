@@ -12,14 +12,14 @@ import AbilityTestResult from "./ability-test-result.component";
 
 const AbilityTestForm = ({duration, questions, uATId}) => {
 
-    const dispatch = useDispatch()
-    const [timer, setTimer] = useState(duration)
-    const [isFinish, setIsFinish] = useState(false)
-    const [result, setResult] = useState(0)
-    const [response, setResponse] = useState(null)
-    const carouselRef = useRef()
-    const [index, setIndex] = useState(0)
-    const [form] = Form.useForm()
+    const dispatch = useDispatch();
+    const [timer, setTimer] = useState(duration);
+    const [isFinish, setIsFinish] = useState(false);
+    const [result, setResult] = useState(0);
+    const [response, setResponse] = useState(null);
+    const carouselRef = useRef();
+    const [index, setIndex] = useState(0);
+    const [form] = Form.useForm();
     const token = useSelector(state => tokenSelector(state));
 
 
@@ -27,17 +27,17 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
         document.querySelectorAll("pre code").forEach(block => {
             hljs.highlightBlock(block)
         })
-    }, [])
+    }, []);
 
     useEffect(() => {
         if (timer === 0) {
             form.submit()
-        } else {
+        } else if (!isFinish) {
             setTimeout(() => {
                 setTimer(timer - 1)
             }, 1000)
         }
-    }, [timer])
+    }, [timer]);
 
 
     const formItemLayout = {
@@ -47,25 +47,25 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
 
     const nextQuestion = () => {
         carouselRef.current.next()
-    }
+    };
 
     const prevQuestion = () => {
         carouselRef.current.prev()
-    }
+    };
 
     const be4Change = (prev, next) => {
         setIndex(next)
-    }
+    };
 
     const unDoneNotification = (result, user_responses) => {
-        const key = `open${Date.now()}`
+        const key = `open${Date.now()}`;
         const btn = (<div>
             <Button className="mr-2" danger size="small" onClick={() => {
-                notification.close(key)
+                notification.close(key);
                 const params = {
                     token, result, user_responses, id: uATId
-                }
-                dispatch(submitAbilityTestStart(params))
+                };
+                dispatch(submitAbilityTestStart(params));
                 setIsFinish(true)
             }}>
                 Xác nhận
@@ -73,7 +73,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
             <Button type="primary" size="small" onClick={() => notification.close(key)}>
                 Huỷ
             </Button>
-        </div>)
+        </div>);
         notification.open({
             message: 'Xác nhận',
             description: 'Một số câu hỏi chưa được trả lời, bạn vẫn muốn submit?',
@@ -81,45 +81,44 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
             key,
             duration: null
         })
-    }
+    };
 
 
     const onFinish = (values) => {
-        console.log('responses: ', values)
-        setResponse(values)
-        const user_responses = Object.values(values).filter(c => c)
-        const valuesList = Object.values(values)
-        const isUnCompleted = valuesList.some(choice => choice === undefined)
-        const result = calResult(values)
-        setResult(result)
+        console.log('responses: ', values);
+        setResponse(values);
+        const user_responses = Object.values(values).filter(c => c);
+        const valuesList = Object.values(values);
+        const isUnCompleted = valuesList.some(choice => choice === undefined);
+        const result = calResult(values);
+        setResult(result);
         if (isUnCompleted && timer !== 0) {
             unDoneNotification(result, user_responses)
         } else {
-            dispatch(submitAbilityTestStart({token, result, user_responses, id: uATId}))
+            dispatch(submitAbilityTestStart({token, result, user_responses, id: uATId}));
             setIsFinish(true)
         }
-    }
+    };
 
     const submitForm = () => {
         form.submit()
-    }
+    };
 
     const calResult = response => {
-        const choices = Object.values(response)
-        let answers = []
-        let score = 0
+        const choices = Object.values(response);
+        let answers = [];
+        let score = 0;
 
         questions.forEach(question => {
-            const answer = question.choices.find(choice => choice.is_answer === true)
-            answer ? answers.push(answer.id) : answers.push(-1)
-        })
+            answers.push(question.answers[0])
+        });
         choices.forEach((c, index) => {
             if (c === answers[index]) {
                 score += 1
             }
-        })
+        });
         return score
-    }
+    };
 
 
     const radioStyle = {
@@ -129,7 +128,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
     };
 
 
-    const timeToPercentage = time => time / duration * 100
+    const timeToPercentage = time => time / duration * 100;
 
     if (isFinish) {
         return <AbilityTestResult result={result} questions={questions} responses={response}/>
@@ -217,6 +216,6 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
             </div>
         )
     }
-}
+};
 
 export default AbilityTestForm

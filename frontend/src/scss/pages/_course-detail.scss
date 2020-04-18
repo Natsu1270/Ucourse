@@ -182,6 +182,11 @@
 	&__description {
 		grid-area: description;
 		text-align: justify;
+		background-color: white;
+		margin-bottom: 4rem;
+		padding: 2rem 4rem;
+		box-shadow: $shadow-light;
+
 	}
 
 	&__right {
@@ -296,10 +301,9 @@
 	&--content {
 		//background-image: linear-gradient(to right bottom, $theme-font-color-light, $theme-green-color);
 		&__main {
-			background-image: linear-gradient(105deg, rgba(255,255,255,0.95) 0%,
-				rgba(255,255,255,0.95) 60%, rgba($theme-font-color, 0.3) 60%),
-			url(../../assets/c1.jpg);
+			background-position: center;
 			background-size: 100%;
+			background-repeat: no-repeat;
 			border-radius: 3px;
 			padding: 6rem 6rem 6rem 9rem;
 			font-size: 1.6rem;

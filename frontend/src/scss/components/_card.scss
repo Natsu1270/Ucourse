@@ -51,11 +51,18 @@
 			}
 			&--info {
 				list-style: none;
+				display: flex;
+				justify-content: flex-start;
+				align-items: flex-end;
+				margin-bottom: 0;
 				&__item {
 					display: inline-block;
 					padding-right: 5rem;
 					font-size: 1.6rem;
 					width: 15%;
+				}
+				.item-author {
+					width: 25%;
 				}
 
 			}

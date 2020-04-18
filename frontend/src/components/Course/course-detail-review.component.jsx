@@ -5,7 +5,7 @@ const CourseDetailReview = ({course}) => {
     return (
         <section className="mt-10 section-course-review" id="cs-course-review">
             <h2 className="text--main section-header">
-                Reviews
+                Đánh giá từ học viên
             </h2>
             <div className="section-course-review--feedback">
                 <h3 className="text--sub__bigger2 text--sub__600 mb-5">Student feedback</h3>

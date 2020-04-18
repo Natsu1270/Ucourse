@@ -33,7 +33,7 @@ class QuestionKitAdmin(admin.ModelAdmin):
 
 @admin.register(Choice)
 class ChoiceAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'question', 'get_short_content')
+    list_display = ('__str__', 'get_short_content')
 
     def get_short_content(self, obj):
         if len(obj.content) > 50:

@@ -15,7 +15,7 @@ const MainBanner = ({currentUser}) => {
                         <div className="banner-slogan">
                             <h1 id="main-slogan">Học trực tuyến dành <p className="title--big main-slogan--text">Chứng chỉ</p></h1>
                         </div>
-                        <div className="banner-description mt-5" id="main-slogan-des">
+                        <div className="banner-description" id="main-slogan-des">
                             <h5>Website học trực tuyến với các chương trình và khóa học chất lượng, cung cấp chứng chỉ sau khi hoàn thành khóa học</h5>
                         </div>
                         {

@@ -4,13 +4,13 @@ from .models import Question, QuestionKit, Choice
 
 class ChoiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    question = serializers.PrimaryKeyRelatedField(read_only=True)
+    questions = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Choice
         fields = [
-            'id', 'content', 'question',
-            'is_answer', 'status', 'created_date'
+            'id', 'content', 'questions',
+            'status', 'created_date'
         ]
 
 
@@ -18,13 +18,15 @@ class QuestionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     question_kits = serializers.StringRelatedField(many=True, read_only=True)
     choices = ChoiceSerializer(many=True, read_only=True)
+    answers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Question
         fields = [
-            'id', 'name', 'code', 'content', 'question_type',
+            'id', 'name', 'code', 'content',
+            'choices', 'answers', 'question_type',
             'difficult_level', 'score', 'status',
-            'question_kits', 'choices', 'created_date'
+            'question_kits', 'created_date'
         ]
 
 

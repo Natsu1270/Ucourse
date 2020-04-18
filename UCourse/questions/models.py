@@ -6,6 +6,15 @@ from django.conf import settings
 from courses.models import Skill
 
 
+class Choice(models.Model):
+    content = RichTextField()
+    status = models.BooleanField(default=True)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.content[:50]
+
+
 class Question(models.Model):
     MULTI_CHOICE = "mc"
     TRUE_FALSE = "tf"
@@ -29,6 +38,8 @@ class Question(models.Model):
     name = models.CharField(max_length=255, blank=True)
     code = models.CharField(max_length=10, unique=True)
     content = RichTextField()
+    choices = models.ManyToManyField(Choice, related_name='questions')
+    answers = models.ManyToManyField(Choice, related_name='ans_questions')
     question_type = models.CharField(
         max_length=2, choices=TYPE_CHOICES, default=MULTI_CHOICE
     )
@@ -45,20 +56,6 @@ class Question(models.Model):
 
     def set_created_by(self, user):
         self.created_by = user
-
-
-class Choice(models.Model):
-    code = models.CharField(max_length=10, unique=True)
-    content = RichTextField()
-    question = models.ForeignKey(
-        Question, on_delete=models.CASCADE, related_name="choices"
-    )
-    is_answer = models.BooleanField(default=False, blank=True, null=True)
-    status = models.BooleanField(default=True)
-    created_date = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.code
 
 
 class QuestionKit(models.Model):

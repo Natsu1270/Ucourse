@@ -73,12 +73,10 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError('Incorrect email or password')
 
 
-
 class HandleSocialAccount(serializers.Serializer):
     email = serializers.CharField()
     username = serializers.CharField(required=False)
     uid = serializers.CharField(required=True)
-
 
 
 class UpdateAccountSerializer(serializers.Serializer):

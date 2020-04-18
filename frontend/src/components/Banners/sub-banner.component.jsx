@@ -8,23 +8,23 @@ const SubBanner = () => {
                 <ul className="sub-banner__container--items">
                     <li className="sub-banner__container--item">
                         <p className="sub-banner__container--item--num">30</p>
-                        <p className="sub-banner__container--item--text">Programs</p>
+                        <p className="sub-banner__container--item--text">Chương trình học</p>
                         <p className="sub-banner__container--item--small">
-                            Complete learning path
+                            Chương trình học toàn diện
                         </p>
                     </li>
                     <li className="sub-banner__container--item">
                         <p className="sub-banner__container--item--num">100</p>
-                        <p className="sub-banner__container--item--text">Courses</p>
+                        <p className="sub-banner__container--item--text">Khóa học</p>
                         <p className="sub-banner__container--item--small">
-                            Individual course and certificate
+                            Các khóa học
                         </p>
                     </li>
                     <li className="sub-banner__container--item">
                         <p className="sub-banner__container--item--num">20</p>
-                        <p className="sub-banner__container--item--text">Teachers</p>
+                        <p className="sub-banner__container--item--text">Giảng viên</p>
                         <p className="sub-banner__container--item--small">
-                            Experienced teachers in many fields
+                            Các giảng viên hàng đầu
                         </p>
                     </li>
                 </ul>

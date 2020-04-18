@@ -8,7 +8,6 @@ from courses.models import Course
 
 class CourseHome(models.Model):
     course = models.OneToOneField(Course, on_delete=models.CASCADE)
-    code = models.CharField(max_length=10)
     status = models.BooleanField(default=True)
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_homes')
     maximum_number = models.IntegerField(null=True, blank=True)
@@ -16,7 +15,7 @@ class CourseHome(models.Model):
     modified_date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return '{0} - {1}'.format(self.course.title, self.code)
+        return self.course.title
 
 
 class LearningTopic(models.Model):
@@ -67,7 +66,6 @@ class TopicAsset(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     learning_topic = models.ForeignKey(LearningTopic, related_name='topic_assets', on_delete=models.CASCADE)
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)

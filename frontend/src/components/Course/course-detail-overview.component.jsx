@@ -29,20 +29,20 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
         <section ref={overviewRef} className="mt-10 section-course-overview" id="cs-course-overview">
             <div className="section-course-overview__content">
                 <h2 className="text--main section-header" id="cs-course-overview">
-                    Course overview
+                   Tổng quan khóa học
                 </h2>
                 <span className="text--sub__bigger section-course-overview__description">
                     <Truncate
                         lines={!expanded && 3}
                         ellipsis={(
-                            <span>... <p className='toggle-text' onClick={toggleLines}>Show all <ArrowDownOutlined /></p></span>
+                            <span>... <p className='toggle-text' onClick={toggleLines}>Hiện thêm<ArrowDownOutlined /></p></span>
                         )}
                         onTruncate={handleTruncate}
                     >
                         {parseHtml(full_description)}
                     </Truncate>
                     {!truncated && expanded && (
-                        <span> <p className='toggle-text' onClick={toggleLinesAndScrollback}>Show less <ArrowUpOutlined /></p></span>
+                        <span> <p className='toggle-text' onClick={toggleLinesAndScrollback}>Ẩn bớt<ArrowUpOutlined /></p></span>
                     )}
                 </span>
                 <div className="section-course-overview__right">
@@ -78,7 +78,7 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                     </div>
                 </div>
                 { benefits ?  <div className="section-course-overview__detail">
-                    <h3>What you will learn</h3>
+                    <h3>Bạn sẽ học được từ khóa học</h3>
                     <div className="section-course-overview__detail-items">
                         <div className="section-course-overview__detail-item">
 
@@ -92,7 +92,7 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                 </div> : <span />}
                 {
                     skills ? (<div className="section-course-overview__skill mt-5">
-                        <h3>Skill you will earn</h3>
+                        <h3>Các kỹ năng sẽ đạt được</h3>
                         <ul className="section-course-overview__skill--sets">
                             {
                                 skills.map(skill => <Skill key={skill} skill={skill} />)

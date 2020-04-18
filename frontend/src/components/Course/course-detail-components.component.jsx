@@ -8,7 +8,7 @@ const CourseDetailComponents = ({course}) => {
         <section className="mt-10 section-course-components" id="cs-course-components">
             <div className="section-course-components__content">
                 <h2 className="text--main section-header" id="cs-course-overview">
-                    Components
+                    Chương trình học
                 </h2>
                 <div className="section-course-components__tabs">
 

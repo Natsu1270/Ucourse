@@ -36,9 +36,6 @@ const CourseDetailTab = ({ course, isProgram }) => {
     };
 
 
-
-
-
     return (
         <section
             className={`pd-5 section-course-tab ${tabStick ? 'section-course-tab__fixed' : ''}`}
@@ -47,26 +44,26 @@ const CourseDetailTab = ({ course, isProgram }) => {
                 <ul className="course-tab__items">
                     <li className="course-tab__address" id="tab-overview">
                         <a href="#cs-course-overview"
-                            className="course-tab__address--link">Overview</a>
+                            className="course-tab__address--link">Tổng quan</a>
                     </li>
                     <li className="course-tab__address" id="tab-components">
                         <a href="#cs-course-components"
-                            className="course-tab__address--link">Components</a>
+                            className="course-tab__address--link">Chương trình</a>
                     </li>
                     {
                         isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
                             <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Instructors</a>
+                                className="course-tab__address--link">Giảng viên</a>
                         </li>
                     }
                     <li className="course-tab__address" id="tab-review">
                         <a href="#cs-course-review"
-                            className="course-tab__address--link">Reviews</a>
+                            className="course-tab__address--link">Đánh giá học viên</a>
                     </li>
                     {
                         isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
                             <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Instructors</a>
+                                className="course-tab__address--link">Giảng viên</a>
                         </li>
                     }
                 </ul>
@@ -79,7 +76,7 @@ const CourseDetailTab = ({ course, isProgram }) => {
                         okText="Xác nhận"
                         cancelText="Hủy">
                         <a href="#"
-                            className="cs-btn cs-btn--animated"> Test năng lực</a>
+                            className="cs-btn cs-btn--animated">Kiểm tra năng lực</a>
                     </Popconfirm>
 
                 </div>

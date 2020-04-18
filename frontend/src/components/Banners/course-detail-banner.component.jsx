@@ -18,7 +18,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers }) => {
             <div className="course-banner d-flex justify-content-start" >
                 <div className="course-detail">
                     <h4 className="text--sub__smaller text-white">
-                        COURSE
+                        Khóa học
                     </h4>
                     <h1 className="text--main text--main__bigger text-white">
                         {courseDetail.verbose_name}
