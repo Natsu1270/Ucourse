@@ -8,7 +8,7 @@ from users.serializers import UserSerializer
 class CourseHomeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course = CourseMinSerializer(read_only=True)
-    students = UserSerializer(many=True, read_only=True)
+    students = UserSerializer(many=True)
 
     class Meta:
         model = CourseHome
@@ -16,6 +16,22 @@ class CourseHomeSerializer(serializers.ModelSerializer):
             'id', 'course', 'status', 'students',
             'maximum_number', 'created_date', 'modified_date'
         ]
+
+
+class CourseHomeMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course = CourseMinSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'course', 'status',
+        ]
+
+
+class RegisterCourseSerializer(serializers.Serializer):
+    course_id = serializers.IntegerField()
+
 
 
 class LearningTopicSerializer(serializers.ModelSerializer):

@@ -12,4 +12,5 @@ urlpatterns = [
     path('programs/', include('programs.urls')),
     path('exams/', include('exams.urls')),
     path('ability-tests/', include('exams.at_urls')),
+    path('course-home/', include('course_homes.urls')),
 ]

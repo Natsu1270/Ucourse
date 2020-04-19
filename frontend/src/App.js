@@ -17,6 +17,7 @@ import {Spin, Layout} from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import {getProfileStart} from "./redux/Profile/profile.actions";
+import {fetchMyCoursesStart} from "./redux/CourseHome/course-home.actions";
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
@@ -37,7 +38,8 @@ function App() {
 
     useEffect(() => {
         if (currentUser && token) {
-            dispatch(getProfileStart(token))
+            dispatch(getProfileStart(token));
+            dispatch(fetchMyCoursesStart(token))
         }
     }, [dispatch, currentUser, token]);
 

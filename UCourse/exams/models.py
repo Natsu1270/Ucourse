@@ -9,12 +9,12 @@ import random
 
 
 class Exam(models.Model):
-    LESSON_TEST = "lt"
+    LESSON_QUIZ = "lt"
     MIDDLE_COURSE_TEST = "mc"
     FINAL_COURSE_TEST = "fc"
 
     EXAM_TYPE_CHOICES = [
-        (LESSON_TEST, "Regular Lesson Test"),
+        (LESSON_QUIZ, "Regular Lesson Quiz"),
         (MIDDLE_COURSE_TEST, "Middle Course Test"),
         (FINAL_COURSE_TEST, "Final Course Test"),
     ]
@@ -25,32 +25,24 @@ class Exam(models.Model):
     questions = models.ManyToManyField(Question, related_name="question_exams")
     max_score = models.FloatField(max_length=3)
     pass_score = models.FloatField(max_length=3)
-
-    course = models.ForeignKey(
-        Course, on_delete=models.SET_NULL, related_name="input_exam", null=True
-    )
     status = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_creator'
     )
-    created_by_name = models.CharField(max_length=255, blank=True, null=True)
     modified_by = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_modifier'
     )
-    modified_by_name = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
     def set_created_by(self, user):
         self.created_by = user
-        self.created_by_name = user.email
 
     def set_modified_by(self, user):
         self.modified_by = user
-        self.modified_by_name = user.email
 
 
 class AbilityTest(models.Model):
@@ -61,7 +53,8 @@ class AbilityTest(models.Model):
     num_questions = models.IntegerField(default=10, blank=True, null=True)
     course = models.OneToOneField(Course, related_name='ability_test', on_delete=models.CASCADE, blank=True, null=True)
     taken_users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, through='UserAbilityTest', related_name='ability_tests')
+        settings.AUTH_USER_MODEL, through='UserAbilityTest', related_name='ability_tests'
+    )
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='ability_creator'

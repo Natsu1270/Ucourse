@@ -10,7 +10,7 @@ class UserTakenInline(admin.TabularInline):
 class ExamAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'code', 'exam_type')
     list_filter = ('status', 'exam_type',)
-    readonly_fields = ('created_date', 'created_by', 'created_by_name', 'modified_by', 'modified_by_name')
+    readonly_fields = ('created_date', 'created_by', 'modified_by')
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:

@@ -74,7 +74,7 @@ class TopicAsset(models.Model):
     info = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return '{0} - {1}'.format(self.name, self.file_type)
 
     @property
     def upload_path(self):

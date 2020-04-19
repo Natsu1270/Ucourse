@@ -2,8 +2,6 @@ from rest_framework import generics, permissions, status, exceptions, views
 from rest_framework.response import Response
 from knox.models import AuthToken
 from django.contrib.auth import get_user_model
-from profiles.models import Profile
-from profiles.serializers import ProfileSerializer
 from . import serializers
 
 
@@ -12,7 +10,6 @@ class UserListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         return get_user_model().objects.all()
-
 
 
 class UserAPI(generics.RetrieveUpdateDestroyAPIView):

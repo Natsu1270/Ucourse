@@ -8,6 +8,7 @@ import searchReducer from './Search/search.reducer'
 import fieldReducer from './Field/field.reducer'
 import programReducer from './Program/program.reducers'
 import abilityTestReducer from './AbilityTest/abilityTest.reducer'
+import courseHomeReducer from './CourseHome/course-home.reducer'
 
 
 const rootReducer = combineReducers({
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
     search: searchReducer,
     field: fieldReducer,
     abilityTest: abilityTestReducer,
+    courseHome: courseHomeReducer,
 });
 
 export default rootReducer

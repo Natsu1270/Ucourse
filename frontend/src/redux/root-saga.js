@@ -7,6 +7,7 @@ import { fieldSaga } from './Field/field.saga'
 import { courseSaga } from './Course/course.sagas'
 import { programSaga } from './Program/program.sagas'
 import { abilityTestSaga } from './AbilityTest/abilityTest.sagas'
+import courseHomeSaga from './CourseHome/course-home.sagas'
 
 export default function* rootSaga() {
     yield all([
@@ -17,5 +18,6 @@ export default function* rootSaga() {
         call(courseSaga),
         call(programSaga),
         call(abilityTestSaga),
+        call(courseHomeSaga),
     ])
 }

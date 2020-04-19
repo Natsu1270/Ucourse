@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showRLModal, toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import { genAbilityTestStart } from "../../redux/AbilityTest/abilityTest.actions";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
+import {myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
 
 const CourseDetailTab = ({ course, isProgram }) => {
 
@@ -11,9 +12,13 @@ const CourseDetailTab = ({ course, isProgram }) => {
 
     const dispatch = useDispatch();
     const token = useSelector(state => tokenSelector(state));
+    const myCourses = useSelector(state => myCourseHomesSelector(state));
+    const isMyCourse = () => {
+        return myCourses.find(c => c.id === course.id)
+    };
 
     useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
@@ -68,7 +73,9 @@ const CourseDetailTab = ({ course, isProgram }) => {
                     }
                 </ul>
                 <div className="course-tab__btn">
-                    <a href="#" className="cs-btn cs-btn--animated">Đăng ký ngay</a>
+                    <a href="#" className="cs-btn cs-btn--animated">{
+                        isMyCourse() ? 'Tiếp tục khóa học':'Đăng ký ngay'
+                    }</a>
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"

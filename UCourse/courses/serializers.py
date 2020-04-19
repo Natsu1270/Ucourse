@@ -24,6 +24,7 @@ class CourseSerializer(serializers.ModelSerializer):
     tags = serializers.StringRelatedField(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
     ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
+    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Course
@@ -31,7 +32,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'id', 'title', 'code', 'icon', 'slug', 'open_date',
             'end_date', 'level', 'fee_type', 'status', 'course_detail', 'program',
             'teacher', 'field', 'tags', 'ability_test', 'created_date', 'updated_date',
-            'created_by'
+            'created_by', 'course_home'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')
 
