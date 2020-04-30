@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
@@ -7,6 +7,11 @@ import {useSelector} from "react-redux";
 import {isLoadingSelector} from "../../redux/CourseHome/course-home.selects";
 
 const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister }) => {
+
+    const history = useHistory();
+    const gotoCourseLearn = () => {
+        history.push(`${Constants.COURSE_HOME_LINK}/${course.slug}`)
+    }
     const isRegistering = useSelector(state => isLoadingSelector(state));
     const s = {
         background: `linear-gradient(
@@ -30,7 +35,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                         {courseDetail.short_description}
                     </p>
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={own ? undefined : handleRegister} className="register-btn cs-btn--animated">
+                        <Button to="#" onClick={own ? gotoCourseLearn : handleRegister} className="register-btn cs-btn--animated">
                             {isRegistering ? Constants.SPIN_ICON : own ? 'Tiếp tục học' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">

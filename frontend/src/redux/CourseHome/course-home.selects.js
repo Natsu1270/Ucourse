@@ -31,3 +31,8 @@ export const courseInfoSelector = createSelector(
     [courseHomeDetailSelector],
     courseHomeDetail => courseHomeDetail.course_info ? courseHomeDetail.course_info : ''
 )
+
+export const courseHomeTopicsSelector = createSelector(
+    [courseHomeDetailSelector],
+    courseHomeDetail => courseHomeDetail.learning_topics ? courseHomeDetail.learning_topics : []
+)

@@ -1,0 +1,41 @@
+.private-home {
+    &--title {
+        font-size: 4rem;
+        border-bottom: 1px solid lightgrey;
+        padding-bottom: 2rem;
+    }
+
+    &__learning {
+
+        &--link {
+            transition: all 0.2s ease-in-out;
+            &:hover {
+                box-shadow: 0 5px 8px rgba(0,0,0,0.05);
+                transform: translateY(-0.5rem);
+            }
+            display: inline-block;
+            a {
+                color: white;
+                text-decoration: none;
+            }
+            padding: 0.3rem 1rem;
+            margin-top: 3rem;
+            font-size: 1.8rem;
+            background-color: #01C9F5;
+        }
+
+        &--programs {
+        }
+
+        &--courses {
+            padding-top: 2rem;
+
+            &--items {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+        }
+    }
+}

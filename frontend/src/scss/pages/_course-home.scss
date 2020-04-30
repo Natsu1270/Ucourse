@@ -1,4 +1,5 @@
 .course-home {
+    background-color: white;
     .course-home-sider {
        min-height: 100vh;
         margin-bottom: 1rem;
@@ -25,4 +26,15 @@
 
 .course-home-info {
     font-size: 1.8rem;
+}
+
+.course-topic {
+    margin-bottom: 2rem;
+    border: 1px solid lightgrey;
+    padding: 1rem 2rem;
+    //box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+
+    &__header {
+        padding-bottom: 1rem;
+    }
 }

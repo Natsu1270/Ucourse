@@ -26,6 +26,10 @@ const Constants = {
     TEACHER: 'teacher',
     SPIN_ICON: spin,
     SPIN_ICON_WHITE: spinWhite,
+    COURSE_HOME_LINK: '/learn',
+    VIDEO_FILE_TYPE: 'video',
+    DOCUMENT_FILE_TYPE: 'document',
+    COURSES_DETAIL_LINK: '/courses'
 };
 
 export default Constants

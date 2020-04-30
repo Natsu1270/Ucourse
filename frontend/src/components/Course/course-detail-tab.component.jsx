@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showRLModal, toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import { genAbilityTestStart } from "../../redux/AbilityTest/abilityTest.actions";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
+import { useHistory } from 'react-router-dom';
 import {isLoadingSelector, myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
 import Constants from "../../constants";
 
@@ -11,6 +12,7 @@ const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
 
     const [tabStick, setTabStick] = useState(false);
 
+    const history = useHistory();
     const dispatch = useDispatch();
     const token = useSelector(state => tokenSelector(state));
     const myCourses = useSelector(state => myCourseHomesSelector(state));
@@ -42,6 +44,10 @@ const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
         }
 
     };
+
+    const gotoCourseLearn = () => {
+        history.push(`${Constants.COURSE_HOME_LINK}/${course.slug}`)
+    }
 
 
     return (
@@ -77,12 +83,17 @@ const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
                 </ul>
                 <div className="course-tab__btn">
                     {
-                        isRegistering ? <Button type="primary" className="cs-btn-tab">
-                                            {Constants.SPIN_ICON_WHITE}
-                                       </Button> :
-                        isMyCourse() ? <Button type="primary" className="cs-btn-tab">
-                                            Tiếp tục khóa học
-                                       </Button> :
+                        isRegistering ?
+                            <Button type="primary" className="cs-btn-tab">
+                                {Constants.SPIN_ICON_WHITE}
+                            </Button> :
+                            isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
+                                Đăng ký ngay
+                            </Button> :
+                        isMyCourse() ?
+                            <Button type="primary" className="cs-btn-tab" onClick={gotoCourseLearn} >
+                                Tiếp tục khóa học
+                            </Button> :
                             <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
                                 Đăng ký ngay
                             </Button>

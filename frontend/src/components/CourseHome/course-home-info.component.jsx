@@ -4,7 +4,7 @@ import {Skeleton} from "antd";
 
 const CourseHomeInfo = ({courseInfo, isLoading}) => {
     return (
-        <section className="section-10 section-learn course-home-info">
+        <section className="section-5 section-learn course-home-info">
             {isLoading ? <Skeleton active /> : parseHtml(courseInfo) }
         </section>
     )
