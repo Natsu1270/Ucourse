@@ -9,13 +9,19 @@ from courses.models import Course
 class CourseHome(models.Model):
     course = models.OneToOneField(Course, on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
-    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_homes')
+    slug = models.SlugField(null=True, blank=True)
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_homes', blank=True)
     maximum_number = models.IntegerField(null=True, blank=True)
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
+    course_info = RichTextField(blank=True, null=True)
 
     def __str__(self):
         return self.course.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.course.title)
+        super(CourseHome, self).save(*args, **kwargs)
 
 
 class LearningTopic(models.Model):

@@ -41,6 +41,10 @@ body {
   transition: $null-transition;
 }
 
+.content {
+	min-height: 100vh;
+}
+
 // clear bootstrap input effects.
 textarea:focus,
 textarea.form-control:focus,
@@ -109,6 +113,11 @@ button, input {
 	}
 }
 
+.page-2 {
+	margin-top: 8vh;
+
+}
+
 .pd-5 {
 	padding: 0 5rem;
 }
@@ -151,4 +160,10 @@ button, input {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
 	grid-column-gap: 2rem;
+}
+
+.section-learn {
+	width: 100%;
+	background-color: white;
+	padding-top: 6rem;
 }

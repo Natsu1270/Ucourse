@@ -27,6 +27,7 @@ const FieldDetailPage = lazy(() => import('./pages/FieldPage/field-detail.page')
 const ProgramDetail = lazy(() => import ('./pages/ProgramDetail/program-detail.page'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail/course-detail.page'));
 const AbilityTestPage = lazy(() => import('./pages/AbilityTestPage/ability-tests.page'));
+const CourseHomePage = lazy(() => import('./pages/CourseHome/course-home.page'));
 
 function App() {
 
@@ -54,20 +55,25 @@ function App() {
                         <Route exact path="/">
                             <HomePage currentUser={currentUser}/>
                         </Route>
-                        <Suspense fallback={<Spin/>}>
-                            <Switch>
-                                <Route exact path="/about" component={AboutPage}/>
-                                <AuthRoute exact path="/auth" component={LoginAndRegisterPage} redirectTo="/profile"/>
-                                <PrivateRoute path="/profile" component={ProfilePage}/>
-                                <Route exact path="/search" component={SearchPage}/>
-                                <Route exact path="/field" component={FieldPage}/>
-                                <Route path="/field/:slug" component={FieldDetailPage}/>
-                                <Route path="/programs/:slug" component={ProgramDetail}/>
-                                <Route path="/courses/:slug" component={CourseDetail}/>
-                                <Route exact path="/ability-tests" component={AbilityTestPage}/>
-                                <Route component={Page404NotFound}/>
-                            </Switch>
-                        </Suspense>
+                        <Content className="content">
+                            <Suspense fallback={<Spin/>}>
+                                <Switch>
+                                    <Route exact path="/about" component={AboutPage}/>
+                                    <AuthRoute exact path="/auth" component={LoginAndRegisterPage}
+                                               redirectTo="/profile"/>
+                                    <PrivateRoute path="/profile" component={ProfilePage}/>
+                                    <Route exact path="/search" component={SearchPage}/>
+                                    <Route exact path="/field" component={FieldPage}/>
+                                    <Route path="/field/:slug" component={FieldDetailPage}/>
+                                    <Route path="/programs/:slug" component={ProgramDetail}/>
+                                    <Route path="/courses/:slug" component={CourseDetail}/>
+                                    <Route exact path="/ability-tests" component={AbilityTestPage}/>
+                                    <PrivateRoute path="/learn/:slug" component={CourseHomePage} />
+                                    <Route component={Page404NotFound}/>
+
+                                </Switch>
+                            </Suspense>
+                        </Content>
                     </Switch>
                     <Footer/>
                 </Layout>

@@ -36,7 +36,7 @@ const Register = (props) => {
                 {...layout}
                 onFinish={handleFormSubmit}
                 id="signup-form">
-                <h1 className="cs-account-form__title1">Create Account</h1>
+                <h1 className="cs-account-form__title1">Tạo tài khoản</h1>
                 <div className="social-container">
                     <button type="button" className="social social--fb">
                         <i className="fab fa-facebook-f" />
@@ -51,7 +51,7 @@ const Register = (props) => {
                 <div className="alert alert-danger alert-signup" role="alert">
                     <span className="error-message" id="signup-err-msg" />
                 </div>
-                <span className="text--sub__bigger">or use your email for registration</span>
+                <span className="text--sub__bigger">hoặc sử dụng email để đăng ký</span>
                 <div className="form-group">
                     <Form.Item
                         label="Username"
@@ -90,7 +90,7 @@ const Register = (props) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
+                        label="Mật khẩu"
                         name="password"
                         rules={[
                             {
@@ -106,7 +106,7 @@ const Register = (props) => {
 
                 </div>
                 <button className="cs-form-btn" type="submit" name="signup">
-                    {props.isLoading ? <Spin indicator={spinIcon} /> : 'Register'}
+                    {props.isLoading ? <Spin indicator={spinIcon} /> : 'Đăng ký'}
                 </button>
             </Form>
         </div>

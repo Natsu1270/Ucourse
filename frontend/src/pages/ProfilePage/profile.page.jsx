@@ -30,7 +30,6 @@ const ProfilePage = ({match}) => {
                     <AccountSetting userProfile={userProfile} currentUser={currentUser} token={token}/>
                 </Route>
 
-
             </Router>
         </div>
     )

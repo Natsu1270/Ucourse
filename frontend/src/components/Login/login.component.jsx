@@ -8,7 +8,7 @@ import {UserOutlined, UnlockOutlined, LoadingOutlined} from '@ant-design/icons'
 
 const Login = (props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const layout = {
         labelCol: {
             span: 10,
@@ -19,7 +19,7 @@ const Login = (props) => {
     };
     const buttonItemLayout = {
         wrapperCol: {span: 24, offset: 8}
-    }
+    };
 
 
     const handleFormSubmit = (values) => {
@@ -27,7 +27,7 @@ const Login = (props) => {
             username: values['username'],
             password: values['password']
         }))
-    }
+    };
 
     const spinIcon = <LoadingOutlined style={{fontSize: 24, color: "#fff"}} spin/>;
 
@@ -35,11 +35,10 @@ const Login = (props) => {
         <div className="form-container sign-in-container" id="login-container">
             <Form
                 {...layout}
-                // layout='vertical'
                 onFinish={handleFormSubmit}
                 id="login-form"
             >
-                <h1 className="cs-account-form__title1">Log In</h1>
+                <h1 className="cs-account-form__title1">Đăng nhập</h1>
                 <div className="social-container">
                     <button type="button" className="social social--fb">
                         <i className="fab fa-facebook-f"/>
@@ -53,12 +52,12 @@ const Login = (props) => {
                         <i className="fab fa-github"/>
                     </button>
                 </div>
-                <span className="text--sub__bigger">or use your account</span>
+                <span className="text--sub__bigger">hoặc sử dụng tài khoản</span>
 
 
                 <div className="form-group">
                     <Form.Item
-                        label="Username or email"
+                        label="Username/email"
                         name="username"
                         rules={[
                             {
@@ -76,7 +75,7 @@ const Login = (props) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="Password"
+                        label="Mật khẩu"
                         name="password"
                         rules={[
                             {
@@ -90,15 +89,15 @@ const Login = (props) => {
                                         placeholder="Password"/>
                     </Form.Item>
                     <Form.Item {...buttonItemLayout}>
-                        <Link to="#"><span className="text--sub">Forgot your password?</span></Link>
+                        <Link to="#"><span className="text--sub">Quên mật khẩu?</span></Link>
                     </Form.Item>
                 </div>
                 <button className="cs-form-btn" type="submit" name="login" id="btn-login">
-                    {props.isLoading ? <Spin indicator={spinIcon}/> : 'LOG IN'}
+                    {props.isLoading ? <Spin indicator={spinIcon}/> : 'Đăng Nhập'}
                 </button>
             </Form>
         </div>
     );
-}
+};
 
 export default Login;

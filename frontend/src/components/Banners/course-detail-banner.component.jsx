@@ -1,10 +1,13 @@
 import React from 'react'
 import { Link } from "react-router-dom";
-import { Avatar } from "antd";
+import { Button } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
+import {useSelector} from "react-redux";
+import {isLoadingSelector} from "../../redux/CourseHome/course-home.selects";
 
-const CourseDetailBanner = ({ course, courseDetail, teachers }) => {
+const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister }) => {
+    const isRegistering = useSelector(state => isLoadingSelector(state));
     const s = {
         background: `linear-gradient(
           rgba(0, 0, 0, 0.2), 
@@ -27,9 +30,9 @@ const CourseDetailBanner = ({ course, courseDetail, teachers }) => {
                         {courseDetail.short_description}
                     </p>
                     <div className="d-flex enroll-area mt-5">
-                        <Link to="" className="cs-btn cs-btn--animated cs-btn--banner cs-btn--white">
-                            Đăng ký học
-                        </Link>
+                        <Button to="#" onClick={own ? undefined : handleRegister} className="register-btn cs-btn--animated">
+                            {isRegistering ? Constants.SPIN_ICON : own ? 'Tiếp tục học' : 'Đăng ký học'}
+                        </Button>
                         <div className="course-info">
                             <p className="text-white text--sub">
                                 Khoá học bắt đầu vào : {formatDate(course.open_date, Constants.MMM_Do_YYYY)}

@@ -35,3 +35,12 @@ class UserCourseHomeListAPI(generics.ListAPIView):
 
     def get_queryset(self):
         return CourseHome.objects.filter(students__in=[self.request.user])
+
+
+class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'slug'
+    serializer_class = serializers.CourseHomeSerializer
+    queryset = CourseHome.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]

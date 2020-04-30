@@ -14,7 +14,9 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {
             "fields": (
-                'username', 'email', 'password', 'role', 'social_uid','is_social_account', 'is_staff', 'is_superuser', 'date_joined', 'last_login'
+                'username', 'email', 'password', 'role', 'social_uid',
+                'is_social_account', 'is_staff',
+                'is_superuser', 'date_joined', 'last_login'
             ),
         }),
     )

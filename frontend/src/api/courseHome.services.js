@@ -25,3 +25,14 @@ export const fetchMyCourseHomesAPI = ({token}) => {
         url: `${API_URL}/my`,
     })
 };
+
+export const getCourseHomeDetailAPI = ({slug, token}) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'GET',
+        url: `${API_URL}/${slug}`
+    })
+}

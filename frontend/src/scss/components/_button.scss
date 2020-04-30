@@ -24,7 +24,6 @@
 		transition: transform 0.2s ease;
 		&:hover {
 			transform: translateY(-3px);
-			color: #ffffff;
 		}
 		&:active {
 			transform: translateY(-1px);
@@ -56,3 +55,6 @@
 	}
 }
 
+.cs-btn-tab {
+
+}

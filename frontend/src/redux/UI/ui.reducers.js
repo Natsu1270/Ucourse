@@ -4,6 +4,7 @@ const initState = {
     isRLModalActive: false,
     isSignupPanelActive: false,
     isAbilityTestModalActive: false,
+    registerResultModal: false,
 };
 
 const uiReducer = (state = initState, action) => {
@@ -31,6 +32,9 @@ const uiReducer = (state = initState, action) => {
                 ...state,
                 isAbilityTestModalActive: !state.isAbilityTestModalActive
             };
+
+        case UIActionTypes.TOGGLE_REGISTER_COURSE_MODAL:
+            return {...state, registerResultModal: !state.registerResultModal};
 
         default:
             return state

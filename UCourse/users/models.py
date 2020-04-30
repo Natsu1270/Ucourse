@@ -8,7 +8,7 @@ from django.contrib.auth import validators
 from django.utils.translation import gettext as _
 from django.utils import timezone
 from roles.models import Role
-from profiles.models import Teacher, Student
+from profiles.models import Teacher, Student, Profile
 
 
 class UserManager(BaseUserManager):
@@ -89,3 +89,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_student(self):
         return self.role.code == 'SD'
+

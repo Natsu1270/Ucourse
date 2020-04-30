@@ -21,3 +21,7 @@ export const switchRLForm = () => {
 export const toggleAbilityTestModal = () => ({
     type: UIActionTypes.TOGGLE_ABILITY_TEST_MODAL
 });
+
+export const toggleRegisterCourseModal = () => ({
+    type: UIActionTypes.TOGGLE_REGISTER_COURSE_MODAL
+});

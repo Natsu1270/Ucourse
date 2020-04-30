@@ -16,3 +16,8 @@ export const isAbilityTestModalActiveSelector = createSelector(
     [uiSelector],
     ui => ui.isAbilityTestModalActive
 );
+
+export const registerCourseModalSelector = createSelector(
+    [uiSelector],
+    ui => ui.registerResultModal
+);

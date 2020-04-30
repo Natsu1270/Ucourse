@@ -10,12 +10,12 @@ export const courseDetailSelector = createSelector(
 export const courseTeacherSelector = createSelector(
     [courseDetailSelector],
     courseDetail => courseDetail.teacher ? courseDetail.teacher : []
-)
+);
 
 export const courseDetailDetailSelector = createSelector(
     [courseDetailSelector],
     courseDetail => courseDetail.course_detail ? courseDetail.course_detail : {}
-)
+);
 
 export const isFetchingSelector = createSelector(
     [courseSelector],

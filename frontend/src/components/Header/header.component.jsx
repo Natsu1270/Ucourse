@@ -44,7 +44,7 @@ const Header = ({token, currentUser}) => {
                         ) : (
                             <li className="nav-item active-nav" id="logout-btn">
                                 <Button type="primary" onClick={() => dispatch(showRLModal())}>
-                                    Get Started
+                                    Đăng ký
                                 </Button>
                             </li>
                         )

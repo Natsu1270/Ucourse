@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { Popconfirm, message } from "antd";
+import { Popconfirm, message, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { showRLModal, toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import { genAbilityTestStart } from "../../redux/AbilityTest/abilityTest.actions";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
-import {myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
+import {isLoadingSelector, myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
+import Constants from "../../constants";
 
-const CourseDetailTab = ({ course, isProgram }) => {
+const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
 
     const [tabStick, setTabStick] = useState(false);
 
     const dispatch = useDispatch();
     const token = useSelector(state => tokenSelector(state));
     const myCourses = useSelector(state => myCourseHomesSelector(state));
+    const isRegistering = useSelector(state => isLoadingSelector(state));
+
     const isMyCourse = () => {
         return myCourses.find(c => c.id === course.id)
     };
@@ -73,17 +76,26 @@ const CourseDetailTab = ({ course, isProgram }) => {
                     }
                 </ul>
                 <div className="course-tab__btn">
-                    <a href="#" className="cs-btn cs-btn--animated">{
-                        isMyCourse() ? 'Tiếp tục khóa học':'Đăng ký ngay'
-                    }</a>
+                    {
+                        isRegistering ? <Button type="primary" className="cs-btn-tab">
+                                            {Constants.SPIN_ICON_WHITE}
+                                       </Button> :
+                        isMyCourse() ? <Button type="primary" className="cs-btn-tab">
+                                            Tiếp tục khóa học
+                                       </Button> :
+                            <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
+                                Đăng ký ngay
+                            </Button>
+                    }
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"
                         onConfirm={confirm}
                         okText="Xác nhận"
                         cancelText="Hủy">
-                        <a href="#"
-                            className="cs-btn cs-btn--animated">Kiểm tra năng lực</a>
+                        <Button
+                            type="primary"
+                            className="ml-3 cs-btn-tab">Kiểm tra năng lực</Button>
                     </Popconfirm>
 
                 </div>

@@ -1,0 +1,28 @@
+.course-home {
+    .course-home-sider {
+       min-height: 100vh;
+        margin-bottom: 1rem;
+        //background-color: #001529;
+        h3 {
+            text-align: center;
+            padding-bottom: 2rem;
+        }
+
+        padding: 5rem 0rem;
+
+        .ant-menu-item {
+            font-size: 1.7rem;
+            font-weight: 500;
+            padding-left: 2rem !important;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+    }
+}
+
+.course-home-info {
+    font-size: 1.8rem;
+}

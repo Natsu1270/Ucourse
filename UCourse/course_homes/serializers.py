@@ -5,45 +5,8 @@ from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer
 
 
-class CourseHomeSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    course = CourseMinSerializer(read_only=True)
-    students = UserSerializer(many=True)
-
-    class Meta:
-        model = CourseHome
-        fields = [
-            'id', 'course', 'status', 'students',
-            'maximum_number', 'created_date', 'modified_date'
-        ]
-
-
-class CourseHomeMinSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    course = CourseMinSerializer(read_only=True)
-
-    class Meta:
-        model = CourseHome
-        fields = [
-            'id', 'course', 'status',
-        ]
-
-
 class RegisterCourseSerializer(serializers.Serializer):
     course_id = serializers.IntegerField()
-
-
-
-class LearningTopicSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
-
-    class Meta:
-        model = LearningTopic
-        fields = [
-            'id', 'name', 'code', 'course_home',
-            'status'
-        ]
 
 
 class TopicAssetSerializer(serializers.ModelSerializer):
@@ -57,6 +20,20 @@ class TopicAssetSerializer(serializers.ModelSerializer):
             'file', 'file_type', 'status',
             'icon', 'info'
         ]
+
+
+class LearningTopicSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
+    topic_assets = TopicAssetSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = LearningTopic
+        fields = [
+            'id', 'name', 'code', 'course_home', 'topic_assets',
+            'status'
+        ]
+
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -84,4 +61,31 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'assignment', 'student',
             'status', 'attachment', 'modified_date'
+        ]
+
+
+class CourseHomeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course = CourseMinSerializer(read_only=True)
+    students = UserSerializer(many=True)
+    learning_topics = LearningTopicSerializer(many=True, read_only=True)
+    slug = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'course', 'status', 'students', 'slug',
+            'learning_topics', 'course_info',
+            'maximum_number', 'created_date', 'modified_date'
+        ]
+
+
+class CourseHomeMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course = CourseMinSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'course', 'status',
         ]

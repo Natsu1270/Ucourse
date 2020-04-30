@@ -31,10 +31,25 @@ export function* onFetchMyCourses() {
 }
 
 
+export function* getCourseHomeDetail({payload}) {
+    try {
+        let {data} = yield call(CourseHomeServices.getCourseHomeDetailAPI, payload);
+        yield put(CourseHomeActions.getCourseHomeDetailSuccess(data.data))
+    } catch (err) {
+        yield put(CourseHomeActions.getCourseHomeDetailFail(err.response))
+    }
+}
+
+export function* onGetCourseHomeDetail() {
+    yield takeLatest(CourseHomeTypes.GET_COURSE_HOME_DETAIL_START, getCourseHomeDetail)
+}
+
+
 export default function* courseHomeSaga() {
     yield all([
         call(onRegisterCourse),
         call(onFetchMyCourses),
+        call(onGetCourseHomeDetail)
     ])
 }
 
