@@ -1,5 +1,12 @@
 .profile-setting {
+  &__title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 3.5rem;
+  }
+  border-radius: 1rem;
   width: 70%;
   padding: 5rem 0;
   background-color: $white-color;
+  box-shadow: $shadow-light;
 }

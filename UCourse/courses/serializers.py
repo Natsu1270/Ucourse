@@ -56,7 +56,7 @@ class CourseMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'title', 'slug', 'icon', 'status'
+            'id', 'title', 'slug', 'icon', 'status'
         ]
 
 

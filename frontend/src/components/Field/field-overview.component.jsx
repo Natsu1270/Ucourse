@@ -9,6 +9,7 @@ import Constants from '../../constants';
 import FieldCard from './field-card.component';
 
 import ErrorBoundary from '../ErrorBoundary/error-boundary.component'
+import {Skeleton} from "antd";
 
 const FieldOverview = () => {
     const history = useHistory();
@@ -32,11 +33,7 @@ const FieldOverview = () => {
 
     return (
         <div className="field-overview">
-            {isFetching ? <HashLoader
-                css={Constants.SPINNER_STYLE}
-                size={40}
-                color={"#01C9F5"}
-                loading={true} /> : <div className="field-overview--cats">
+            {isFetching ? <Skeleton active/> : <div className="field-overview--cats">
                     {
                         <ErrorBoundary
                             errResponse={errorResponse}

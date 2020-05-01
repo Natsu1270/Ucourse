@@ -21,6 +21,7 @@ import {fetchMyCoursesStart} from "./redux/CourseHome/course-home.actions";
 import {myCourseHomesSelector} from "./redux/CourseHome/course-home.selects";
 import PrivateCourseRoute from "./components/Common/private-course-route.component";
 import PrivateHomePage from "./pages/HomePage/private-home.page";
+import {getAllStart} from "./redux/Home/home.actions";
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
@@ -44,7 +45,8 @@ function App() {
     useEffect(() => {
         if (currentUser && token) {
             dispatch(getProfileStart(token));
-            dispatch(fetchMyCoursesStart(token))
+            dispatch(fetchMyCoursesStart(token));
+            dispatch(getAllStart());
         }
     }, [dispatch, currentUser, token]);
 
@@ -59,7 +61,7 @@ function App() {
                         <Route exact path="/">
                             {
                                 currentUser ?
-                                    <PrivateHomePage courses={myCourses} programs={[]} /> :
+                                    <PrivateHomePage ownCourses={myCourses} ownPrograms={[]} /> :
                                     <HomePage currentUser={currentUser}/>
                             }
                         </Route>

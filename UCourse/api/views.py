@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from rest_framework import views,status
+from rest_framework import views, status
 from rest_framework.response import Response
 
 from api.utils import uc_response, create_search_keyword
@@ -26,5 +26,22 @@ class SearchAPI(views.APIView):
             "programs": ProgramSearchSerializer(instance=programs, many=True).data
         }
 
-        return Response(uc_response(data=data,result=True,error=None, message='OK',status_code=200),status=status.HTTP_200_OK)
+        return Response(
+            uc_response(data=data, result=True, error=None, message='OK', status_code=200),
+            status=status.HTTP_200_OK)
 
+
+class GetAllAPI(views.APIView):
+
+    def get(self, request):
+
+        courses = Course.objects.all()
+        programs = Program.objects.all()
+        data = {
+            "courses": CourseSearchSerializer(instance=courses, many=True).data,
+            "programs": ProgramSearchSerializer(instance=programs, many=True).data
+        }
+
+        return Response(
+            uc_response(data=data, result=True, error=None, message='OK', status_code=200),
+            status=status.HTTP_200_OK)

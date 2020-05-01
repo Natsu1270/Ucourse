@@ -9,6 +9,7 @@ import fieldReducer from './Field/field.reducer'
 import programReducer from './Program/program.reducers'
 import abilityTestReducer from './AbilityTest/abilityTest.reducer'
 import courseHomeReducer from './CourseHome/course-home.reducer'
+import homeReducer from "./Home/home.reducer";
 
 
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     field: fieldReducer,
     abilityTest: abilityTestReducer,
     courseHome: courseHomeReducer,
+    home: homeReducer,
 });
 
 export default rootReducer

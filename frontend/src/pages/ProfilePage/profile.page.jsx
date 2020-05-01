@@ -20,17 +20,22 @@ const ProfilePage = ({match}) => {
     }));
 
     return (
-        <div className='profile-page section'>
-            <Router>
-                <ProfileMenu currentUser={currentUser} userProfile={userProfile} match={match}/>
-                <Route exact path={match.url}>
-                    <ProfileSetting profile={userProfile} isLoading={isProfileLoading} token={token}/>
-                </Route>
-                <Route exact path={`${match.url}/account`}>
-                    <AccountSetting userProfile={userProfile} currentUser={currentUser} token={token}/>
-                </Route>
+        <div className="profile-page section">
+            <h3 className="text--main profile-page--title">
+                Quản lý thông tin cá nhân
+            </h3>
+            <div className='profile-page--body'>
+                <Router>
+                    <ProfileMenu currentUser={currentUser} userProfile={userProfile} match={match}/>
+                    <Route exact path={match.url}>
+                        <ProfileSetting profile={userProfile} isLoading={isProfileLoading} token={token}/>
+                    </Route>
+                    <Route exact path={`${match.url}/account`}>
+                        <AccountSetting userProfile={userProfile} currentUser={currentUser} token={token}/>
+                    </Route>
 
-            </Router>
+                </Router>
+            </div>
         </div>
     )
 }

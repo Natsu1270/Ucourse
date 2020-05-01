@@ -5,7 +5,14 @@ import { Dropdown, Avatar, Card, Menu, Typography } from 'antd'
 import { userProfileSelector } from "../../redux/Profile/profile.selects";
 import { isLoadingSelector } from '../../redux/Auth/auth.selects';
 import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import {
+    LoadingOutlined,
+    UserOutlined,
+    SettingOutlined,
+    AppstoreOutlined,
+    LogoutOutlined,
+    ReadOutlined} from "@ant-design/icons";
+
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -31,23 +38,23 @@ const ProfileHeaderDropdown = (props) => {
         <Menu>
             <Menu.Item>
                 <Link to="/profile" style={styles}>
-                    Thông tin cá nhân
+                   <UserOutlined /> Thông tin cá nhân
                 </Link>
             </Menu.Item>
             <Menu.Item>
                 <Link to="/my-courses" style={styles}>
-                    Khoá học của tôi
+                    <ReadOutlined /> Khoá học của tôi
                 </Link>
             </Menu.Item>
             <Menu.Item>
                 <Link to="/ability-tests" style={styles}>
-                    Tổng hợp
+                    <AppstoreOutlined /> Tổng hợp
                 </Link>
             </Menu.Item>
             <Menu.Item>
                 <Text type="danger" disabled={isLoading} onClick={props.handleLogout}>
                     {
-                        isLoading ? <Spin indicator={antIcon} /> : 'Logout'
+                        isLoading ? <Spin indicator={antIcon} /> : <span><LogoutOutlined /> Logout</span>
                     }
                 </Text>
             </Menu.Item>

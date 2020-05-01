@@ -7,6 +7,10 @@
 
     &__learning {
 
+        &--item {
+            box-shadow: 0 0.5rem 0.8rem rgba(0,0,0,0.07);
+        }
+
         &--link {
             transition: all 0.2s ease-in-out;
             &:hover {
@@ -37,5 +41,12 @@
                 flex-wrap: wrap;
             }
         }
+    }
+
+    &__suggest {
+        padding-top: 2rem;
+        display: grid;
+        grid-gap: 3rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
 }

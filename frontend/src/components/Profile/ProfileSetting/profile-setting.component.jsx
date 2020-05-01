@@ -51,6 +51,9 @@ const ProfileSetting = ({profile, isLoading, token}) => {
 
     return (
         <div className="profile-setting">
+            <h3 className="text--main profile-setting__title">
+                Thông tin cá nhân
+            </h3>
             <Form
                 {...layout}
                 form={form}

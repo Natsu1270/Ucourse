@@ -1,19 +1,30 @@
 import React from 'react'
 import {Avatar, List} from 'antd'
+import {useHistory} from 'react-router-dom'
 import videoAvatar from '../../assets/video-file.png';
 import documentAvatar from '../../assets/pdf.png';
 import Constants from "../../constants";
 
 const CourseHomeTopic = ({topic}) => {
+    const history = useHistory()
+
+    function gotoLecture(assetId, fileUrl, type) {
+        if (type === Constants.VIDEO_FILE_TYPE) {
+            history.push(`lecture/${topic.id}/${assetId}`)
+        } else {
+            window.open(fileUrl, '_blank')
+        }
+    }
 
     const topicAssets = topic.topic_assets.map(
         asset => ({
-                title: asset.name,
-                icon: asset.icon,
-                info: asset.info,
-                file_type: asset.file_type,
-                content: asset.file
-            })
+            id: asset.id,
+            title: asset.name,
+            icon: asset.icon,
+            info: asset.info,
+            file_type: asset.file_type,
+            content: asset.file
+        })
     )
 
     const assetAvatar = (icon, type) => {
@@ -31,9 +42,9 @@ const CourseHomeTopic = ({topic}) => {
                     itemLayout="horizontal"
                     dataSource={topicAssets}
                     renderItem={item => (
-                        <List.Item>
+                        <List.Item className="course-topic__content--item" onClick={() => gotoLecture(item.id,item.content,item.file_type)}>
                             <List.Item.Meta
-                                avatar={<Avatar src={assetAvatar(item.icon, item.file_type)} />}
+                                avatar={<Avatar src={assetAvatar(item.icon, item.file_type)}/>}
                                 title={item.title}
                                 description={item.info}
                             />

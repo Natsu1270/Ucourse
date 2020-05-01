@@ -71,6 +71,9 @@ const AccountSetting = ({ currentUser, token, userProfile }) => {
 
     return (
         <div className="profile-setting">
+            <h3 className="text--main profile-setting__title">
+                Cài đặt tài khoản
+            </h3>
             <Form
                 {...layout}
                 form={form}

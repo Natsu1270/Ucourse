@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {Layout, Menu, Skeleton} from "antd";
 import {Link, useHistory} from 'react-router-dom';
 import {HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined} from '@ant-design/icons'
+import Constants from "../../constants";
 
 const CourseHomeSider = ({isLoading, course, match}) => {
 
@@ -23,7 +24,7 @@ const CourseHomeSider = ({isLoading, course, match}) => {
                className="course-home-sider">
             <h3 className="text--main">
                 {isLoading ?
-                    <Skeleton active paragraph={{rows: 2}}/> : collapsed ? <LaptopOutlined/> : course.title
+                    Constants.SPIN_ICON_WHITE : collapsed ? <LaptopOutlined/> : course.title
                 }
             </h3>
             <Menu

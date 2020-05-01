@@ -1,4 +1,9 @@
 .profile-menu {
+  &__content {
+    box-shadow: $shadow-light;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
   width: 30rem;
   margin-right: 5rem;
 }

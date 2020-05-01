@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Breadcrumb } from "antd";
+import {Breadcrumb, Skeleton} from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { useParams } from 'react-router-dom'
 
@@ -62,11 +62,7 @@ const ProgramDetailPage = () => {
             {
                 !isFetching ?
                     <ErrorBoundary errResponse={errorResponse} comp={programDetailComp} />
-                    : <HashLoader
-                        css={Constants.SPINNER_STYLE}
-                        size={40}
-                        color={"#01C9F5"}
-                        loading={true} />
+                    : <Skeleton active avatar />
             }
         </div>
     )

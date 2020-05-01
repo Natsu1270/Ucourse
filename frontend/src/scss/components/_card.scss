@@ -1,6 +1,10 @@
 .search-program-card {
+	cursor: pointer;
 	background-color: $white-color;
 	box-shadow: $small-box-shadow-black;
+	&:hover {
+		box-shadow: $shadow-light;
+	}
  	&__body {
 		width: 100%;
 		height: 8rem;
@@ -120,7 +124,7 @@ box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
 	&__items {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
-		grid-column-gap: 2rem;
+		grid-gap: 3rem;
 	}
 }
 

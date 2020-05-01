@@ -19,6 +19,7 @@ import CourseHomeSchedule from "../../components/CourseHome/course-home-schedule
 import CourseHomeGrades from "../../components/CourseHome/course-home-grades.component";
 import CourseHomeForums from "../../components/CourseHome/course-home-forums.component";
 import Constants from "../../constants";
+import CourseHomeLecture from "../../components/CourseHome/course-home-lecture.component";
 
 
 const CourseHomePage = ({myCourses}) => {
@@ -70,6 +71,9 @@ const CourseHomePage = ({myCourses}) => {
                 </Route>
                 <Route exact path={`${match.url}/forums`}>
                     <CourseHomeForums/>
+                </Route>
+                <Route exact path={`${match.url}/lecture/:topic/:assetId`}>
+                    <CourseHomeLecture topics={topics} isLoading={isLoading} />
                 </Route>
             </Router>
         </Layout>

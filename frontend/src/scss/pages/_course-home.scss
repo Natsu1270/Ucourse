@@ -1,5 +1,5 @@
 .course-home {
-    background-color: white;
+    background-color: white !important;
     .course-home-sider {
        min-height: 100vh;
         margin-bottom: 1rem;
@@ -33,7 +33,11 @@
     border: 1px solid lightgrey;
     padding: 1rem 2rem;
     //box-shadow: 0 3px 5px rgba(0,0,0,0.05);
-
+    &__content {
+        &--item {
+            cursor: pointer;
+        }
+    }
     &__header {
         padding-bottom: 1rem;
     }
