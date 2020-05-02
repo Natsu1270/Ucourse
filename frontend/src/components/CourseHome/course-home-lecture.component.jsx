@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 import {Skeleton} from "antd";
-import Plyr from '../Common/video-player.component';
+import VideoPlayer from "../Common/video.component";
 import 'plyr/dist/plyr.css'
-
 
 const CourseHomeLecture = ({topics, isLoading}) => {
     const {topic, assetId} = useParams();
@@ -20,7 +19,7 @@ const CourseHomeLecture = ({topics, isLoading}) => {
                             {lecture.name}
                         </h3>
                         <div className="course-lecture--video">
-                            <Plyr videoUrl={lecture.file}/>
+                            <VideoPlayer videoUrl={lecture.file} videoId={lecture.id} />
                         </div>
                     </div>
             }

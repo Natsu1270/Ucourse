@@ -35,10 +35,9 @@
             padding-top: 2rem;
 
             &--items {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+                grid-gap: 2rem;
             }
         }
     }

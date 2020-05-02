@@ -1,6 +1,6 @@
-import React, {useEffect, lazy, Suspense} from 'react'
+import React, {useEffect, lazy, Suspense, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux';
-import {Link, useParams} from 'react-router-dom'
+import {Link, useParams, useHistory} from 'react-router-dom'
 
 import {fetchCourseDetailStart} from '../../redux/Course/course.actions'
 import {Breadcrumb, Modal, Skeleton, Spin, Result, Button} from 'antd'
@@ -27,16 +27,16 @@ import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
 import {registerCourseModalSelector} from "../../redux/UI/ui.selects";
 import {toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
+import Constants from "../../constants";
 
 const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
 
 const CourseDetail = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const {slug} = useParams();
-    useEffect(() => {
-        dispatch(fetchCourseDetailStart(slug));
-        window.scrollTo(0, 0)
-    }, []);
+    const [ownCourse, setOwnCourse] = useState(false);
+
     const {
         course, courseDetail, teachers,
         isFetching, errorResponse, myCourses,
@@ -54,13 +54,28 @@ const CourseDetail = () => {
     }));
 
     const isMyCourse = () => {
-        return myCourses.some(c => c.id === course.id)
+        let isOwn = myCourses.some(c => c.id === course.id)
+        setOwnCourse(isOwn)
     };
+
+    useEffect(() => {
+        dispatch(fetchCourseDetailStart(slug));
+        window.scrollTo(0, 0)
+    }, []);
+
+    useEffect(() => {
+        if (Object.keys(course).length > 0) {
+            isMyCourse()
+        }
+    }, [course])
+
+
 
     const handleRegister = () => {
         dispatch(registerCourseStart({course_id: course.id, token}))
         if (!errorRegister) {
             dispatch(toggleRegisterCourseModal())
+            setOwnCourse(true)
         }
     };
 
@@ -81,12 +96,12 @@ const CourseDetail = () => {
             <CourseDetailBanner
                 courseDetail={courseDetail}
                 course={course}
-                own={isMyCourse()}
+                own={ownCourse}
                 teachers={teachers}
                 handleRegister={handleRegister}
             />
 
-            <CourseDetailTab course={course} isProgram={false} handleRegister={handleRegister}/>
+            <CourseDetailTab isOwn={ownCourse} course={course} isProgram={false} handleRegister={handleRegister}/>
 
             <CourseDetailOverview
                 full_description={courseDetail.full_description}
@@ -119,7 +134,10 @@ const CourseDetail = () => {
                     title="Đăng ký khóa học thành công!"
                     subTitle={`Bạn đã đăng ký khóa học ${course.title} thành công`}
                     extra={[
-                        <Button type="primary" key="console">
+                        <Button
+                            type="primary"
+                            key="console"
+                            onClick={() => window.open(`${Constants.COURSE_HOME_LINK}/${course.slug}`, '_self')}>
                             Truy cập khóa học
                         </Button>,
                         <Button key="buy" onClick={() => dispatch(toggleRegisterCourseModal())}>Đóng</Button>,

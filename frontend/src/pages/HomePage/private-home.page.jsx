@@ -28,16 +28,6 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
     const suggestCourses = courses.filter(course => !ownCourseIds.includes(course.id))
     const suggestPrograms = programs.filter(program => !ownPrograms.includes(program))
 
-
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        arrows: true
-    };
-
     return (
         <main className="private-home page section-10">
             <h3 className="text--main private-home--title">

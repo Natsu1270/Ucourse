@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import {isLoadingSelector, myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
 import Constants from "../../constants";
 
-const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
+const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
 
     const [tabStick, setTabStick] = useState(false);
 
@@ -90,7 +90,7 @@ const CourseDetailTab = ({ course, isProgram, handleRegister }) => {
                             isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
                                 Đăng ký ngay
                             </Button> :
-                        isMyCourse() ?
+                        isOwn ?
                             <Button type="primary" className="cs-btn-tab" onClick={gotoCourseLearn} >
                                 Tiếp tục khóa học
                             </Button> :
