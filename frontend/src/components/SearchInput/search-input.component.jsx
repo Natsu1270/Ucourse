@@ -17,7 +17,7 @@ const renderTitle = title => (
                 float: 'right',
             }}
         >
-            counts
+            Lượt
     </span>
     </span>
 );
@@ -55,7 +55,7 @@ const SearchInput = ({ width, value }) => {
 
     const options = [
         {
-            label: renderTitle('Popular searches'),
+            label: renderTitle('Tìm kiếm phổ biến'),
             options: keywords,
         },
 

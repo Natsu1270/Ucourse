@@ -5,7 +5,7 @@ import Constants from "../../constants";
 import { ArrowDownOutlined, ArrowUpOutlined, ThunderboltOutlined, ClockCircleOutlined, DeploymentUnitOutlined } from '@ant-design/icons'
 import Skill from "./skill.component";
 
-const CourseDetailOverview = ({full_description, open_date, end_date, level, benefits, skills, num_course }) => {
+const CourseDetailOverview = ({full_description, open_date, end_date, level, benefits, skills, num_course, isLoading }) => {
     const overviewRef = useRef();
     const [expanded, setExpand] = useState(false);
     const [truncated, setTruncate] = useState(false);
@@ -31,20 +31,23 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                 <h2 className="text--main section-header" id="cs-course-overview">
                    Tổng quan khóa học
                 </h2>
-                <span className="text--sub__bigger section-course-overview__description">
-                    <Truncate
-                        lines={!expanded && 3}
-                        ellipsis={(
-                            <span>... <p className='toggle-text' onClick={toggleLines}>Hiện thêm<ArrowDownOutlined /></p></span>
+                {
+                    isLoading ? Constants.SPIN_ICON :
+                    <span className="text--sub__bigger section-course-overview__description">
+                        <Truncate
+                            lines={!expanded && 3}
+                            ellipsis={(
+                                <span>... <p className='toggle-text' onClick={toggleLines}>Hiện thêm<ArrowDownOutlined /></p></span>
+                            )}
+                            onTruncate={handleTruncate}
+                        >
+                            {parseHtml(full_description)}
+                        </Truncate>
+                        {!truncated && expanded && (
+                            <span> <p className='toggle-text' onClick={toggleLinesAndScrollback}>Ẩn bớt<ArrowUpOutlined /></p></span>
                         )}
-                        onTruncate={handleTruncate}
-                    >
-                        {parseHtml(full_description)}
-                    </Truncate>
-                    {!truncated && expanded && (
-                        <span> <p className='toggle-text' onClick={toggleLinesAndScrollback}>Ẩn bớt<ArrowUpOutlined /></p></span>
-                    )}
-                </span>
+                    </span>
+                }
                 <div className="section-course-overview__right">
                     <div className="section-course-overview__right--items">
                         <div className="section-course-overview__right--item">

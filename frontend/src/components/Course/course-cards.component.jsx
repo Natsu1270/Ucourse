@@ -9,7 +9,6 @@ const CourseCards = ({courses}) => {
 
     return (
         <div className="course-cards">
-            <h1 className='search-result--title'>Courses </h1>
             <div className="course-cards__items">
                 {
                     courses.map(course => <CourseCard key={course.code}

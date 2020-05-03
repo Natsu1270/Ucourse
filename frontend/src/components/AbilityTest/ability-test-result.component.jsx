@@ -20,7 +20,8 @@ const AbilityTestResult = ({questions, responses, result}) => {
     const radioStyle = {
         display: 'flex',
         whiteSpace: 'normal',
-        marginTop: '2rem'
+        marginTop: '2rem',
+        borderRadius: '0.5rem'
     };
 
     const renderChoice = (question, choice) => {

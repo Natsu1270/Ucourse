@@ -1,12 +1,12 @@
 import React from 'react'
 import { useHistory } from "react-router-dom";
-import { Button } from "antd";
+import { Button, Skeleton } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
 import {useSelector} from "react-redux";
 import {isLoadingSelector} from "../../redux/CourseHome/course-home.selects";
 
-const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister }) => {
+const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister, isLoading }) => {
 
     const history = useHistory();
     const gotoCourseLearn = () => {
@@ -29,10 +29,10 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                         Khóa học
                     </h4>
                     <h1 className="text--main text--main__bigger text-white">
-                        {courseDetail.verbose_name}
+                        {isLoading ? Constants.SPIN_ICON : courseDetail.verbose_name}
                     </h1>
                     <p className="course-description text--sub text--sub__bigger mt-4">
-                        {courseDetail.short_description}
+                        {isLoading ? <Skeleton active />:courseDetail.short_description}
                     </p>
                     <div className="d-flex enroll-area mt-5">
                         <Button to="#" onClick={own ? gotoCourseLearn : handleRegister} className="register-btn cs-btn--animated">

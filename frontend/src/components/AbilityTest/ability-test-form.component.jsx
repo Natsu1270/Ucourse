@@ -124,7 +124,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
     const radioStyle = {
         display: 'flex',
         whiteSpace: 'normal',
-        marginTop: '2rem'
+        marginTop: '2rem',
     };
 
 
@@ -191,9 +191,7 @@ const AbilityTestForm = ({duration, questions, uATId}) => {
 
                                             <Form.Item
                                                 name={question.id}
-
                                                 label="">
-
                                                 <Radio.Group>
                                                     {
                                                         question.choices.map(choice => (

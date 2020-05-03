@@ -37,7 +37,7 @@ const AbilityTest = () => {
     const close = (e) => dispatch(toggleAbilityTestModal());
 
     const bodyStyle = {
-        backgroundColor: '#f8f8f9'
+        backgroundColor: '#f8f8f9',
     }
 
     const style = {
@@ -45,12 +45,12 @@ const AbilityTest = () => {
         paddingBottom: 0,
         top: 20,
         maxHeight: '90vh',
-        overflowY: 'scroll'
 
     };
 
     return (
         <Modal
+            className="ability-test-model"
             title="Bài kiểm tra năng lực"
             visible={isModalActive}
             closable={true}

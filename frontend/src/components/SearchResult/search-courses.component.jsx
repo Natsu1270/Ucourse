@@ -10,8 +10,8 @@ const SearchCourses = ({courses}) => {
             {
                 courses.length ? (
                     <div className="search-result--c">
-                        <h1 className="search-result--title">Courses <span
-                            className="search-result--title__small">  {courses.length} results </span>
+                        <h1 className="search-result--title">Khóa học <span
+                            className="search-result--title__small">  {courses.length} Kết quả </span>
                         </h1>
                         <div className="search-result--courses">
                             {

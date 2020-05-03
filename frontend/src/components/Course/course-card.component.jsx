@@ -6,6 +6,7 @@ const CourseCard = ({course, onClick}) => {
     const coverStyle = {
         width: '100%',
         height: '17rem',
+        minWidth: '25rem',
         backgroundImage: `url(${course.icon})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',

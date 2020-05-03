@@ -99,6 +99,7 @@ const CourseDetail = () => {
                 own={ownCourse}
                 teachers={teachers}
                 handleRegister={handleRegister}
+                isLoading={isFetching}
             />
 
             <CourseDetailTab isOwn={ownCourse} course={course} isProgram={false} handleRegister={handleRegister}/>
@@ -110,6 +111,7 @@ const CourseDetail = () => {
                 level={course.level}
                 benefits={courseDetail.benefits}
                 skills={courseDetail.skills}
+                isLoading={isFetching}
             />
 
             <CourseDetailComponents course={course}/>
@@ -150,14 +152,7 @@ const CourseDetail = () => {
 
     return (
         <div className="page section-10 course-detail">
-            {
-                !isFetching ? <ErrorBoundary comp={courseDetailComp} errResponse={errorResponse}/> : (
-                    <div className="skeleton">
-                        <Skeleton active avatar paragraph={{rows: 6}}/>
-                        <Skeleton active paragraph={{rows: 4}}/>
-                    </div>
-                )
-            }
+            <ErrorBoundary comp={courseDetailComp} errResponse={errorResponse}/>
         </div>
     )
 };

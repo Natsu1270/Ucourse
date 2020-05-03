@@ -6,6 +6,9 @@ const CourseHomeSchedule = ({topics, isLoading}) => {
 
     return (
         <section className="section-5 page-2">
+            <h3 className="text--main mb-5">
+                Chủ đề học
+            </h3>
             {
                 isLoading ? (
                     <div>

@@ -35,17 +35,24 @@ const FieldDetail = () => {
                 <HomeOutlined />
             </Breadcrumb.Item>
             <Breadcrumb.Item href="/field">
-                Field
+                Lĩnh vực
         </Breadcrumb.Item>
         </Breadcrumb>
 
-        <FieldDetailBanner title={fieldDetail.name}
+        <FieldDetailBanner
+            title={fieldDetail.name}
             description={fieldDetail.description}
-            photo={fieldDetail.icon} />
+            photo={fieldDetail.icon}
+            isLoading={isFetchingDetail}
+        />
         <Tabs defaultActiveKey="1">
             <TabPane tab="Tất cả" key="1">
+                <h1 className='search-result--title'>
+                    Chương trình học 
+                </h1>
                 <FieldContainer component={SearchPrograms} programs={programs} />
-                <FieldContainer component={CourseCards} courses={courses} />
+                <h1 className='search-result--title'>Khóa học</h1>
+                <FieldContainer component={CourseCards} courses={courses} isCourses={true} />
             </TabPane>
 
             <TabPane tab="Chương trình học" key="2">
@@ -60,12 +67,7 @@ const FieldDetail = () => {
 
     return (
         <div className="section-10 page field-detail">
-            {
-                isFetchingDetail ?
-                    <Skeleton active avatar paragraph={{ rows: 8 }} /> :
-                    <ErrorBoundary errResponse={errorResponse} comp={fieldDetailComp} />
-
-            }
+            <ErrorBoundary errResponse={errorResponse} comp={fieldDetailComp} />
         </div>
     )
 };

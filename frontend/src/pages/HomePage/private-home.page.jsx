@@ -7,7 +7,7 @@ import {Avatar, Card, Carousel, Skeleton} from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import {homeCoursesSelector, homeProgramsSelector, isGettingSelector} from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
-
+import HomeCourseCard from "./home-course-card"
 
 const PrivateHomePage = ({ownCourses, ownPrograms}) => {
 
@@ -34,15 +34,15 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                 Trong tiến trình
             </h3>
             <section className="private-home__learning">
-
-                {
-                    isLoadingLearnings ?
-                        <Skeleton active avatar paragraph={{rows: 4}}/> :
-                        programs.length ?
-                            (<div className="private-home__learning--programs">
-                                <h3 className="text--main private-home__learning--header">
+            <h3 className="text--main private-home__learning--header">
                                     Chương trình học
                                 </h3>
+                {
+                    isLoadingLearnings ?
+                        <Skeleton active avatar paragraph={{rows: 2}}/> :
+                        programs.length ?
+                            (<div className="private-home__learning--programs">
+                                
                                 <div className="private-home__learning--programs--items">
                                     {
                                         ownPrograms.map(program => (
@@ -54,35 +54,27 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                                 </div>
                             </div>) : null
                 }
-                {
-                    isLoadingLearnings ?
-                        <Skeleton active avatar paragraph={{rows: 4}}/> :
+                
                         (<div className="private-home__learning--courses">
                             <h3 className="text--main private-home__learning--header">
                                 Khóa học
                             </h3>
-                            <div className="private-home__learning--courses--items">
+                    {
+                        isLoadingLearnings ?
+                            <div className="d-flex">
+                                <Skeleton active avatar />
+                                <Skeleton active avatar />
+                                <Skeleton active avatar />
+                            </div> : <div className="private-home__learning--courses--items">
                                 {
                                     ownCourses.map(course => (
-                                        <Card className="private-home__learning--item"
-                                              onClick={() => history.push(`learn/${course.course.slug}`)}
-                                              style={{width: 400, marginTop: 16}}
-                                              hoverable>
-                                            <Meta
-                                                avatar={
-                                                    <Avatar
-                                                        size={48}
-                                                        src={course.course.icon}/>
-                                                }
-                                                title={course.course.title}
-                                                description={course.course.status}
-                                            />
-                                        </Card>
+                                        <HomeCourseCard course={course} onClick={() => history.push(`learn/${course.course.slug}`)} />
                                     ))
                                 }
                             </div>
+                    }
+                            
                         </div>)
-                }
                 <div className="private-home__learning--link">
                     <Link to='/my-courses'>
                         Xem tất cả &rarr;

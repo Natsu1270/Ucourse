@@ -11,9 +11,7 @@ const SearchPrograms = ({programs}) =>  {
         {
             programs.length ? (
                 <div className='search-result--p'>
-                    <h1 className='search-result--title'>Programs <span
-                        className='search-result--title__small'>  {programs.length} results </span>
-                    </h1>
+                    
                     <div className='search-result--programs'>
 
                         {

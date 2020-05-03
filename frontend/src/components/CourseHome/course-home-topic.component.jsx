@@ -1,8 +1,8 @@
 import React from 'react'
 import {Avatar, List} from 'antd'
 import {useHistory} from 'react-router-dom'
-import videoAvatar from '../../assets/video-file.png';
-import documentAvatar from '../../assets/pdf.png';
+import videoAvatar from '../../assets/file.png';
+import documentAvatar from '../../assets/word.png';
 import Constants from "../../constants";
 
 const CourseHomeTopic = ({topic}) => {

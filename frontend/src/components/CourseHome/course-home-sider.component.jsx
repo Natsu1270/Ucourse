@@ -20,7 +20,7 @@ const CourseHomeSider = ({isLoading, course, match}) => {
         <Sider collapsible
                collapsed={collapsed}
                onCollapse={onCollapse}
-               width={300}
+               width={280}
                className="course-home-sider">
             <h3 className="text--main">
                 {isLoading ?
