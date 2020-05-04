@@ -30,7 +30,7 @@ class LearningTopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = LearningTopic
         fields = [
-            'id', 'name', 'code', 'course_home', 'topic_assets',
+            'id', 'name', 'code', 'info', 'course_home', 'topic_assets',
             'status'
         ]
 

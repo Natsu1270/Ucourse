@@ -3,7 +3,11 @@
   width: 20%;
   align-self: flex-start;
   h3 {
+    font-weight: 600;
+    font-size: 2rem;
+    color: $theme-green-color;
     background-color: white;
+    border: 1px solid lightgrey;
     text-align: center;
     padding: 2.2rem 0;
     border-radius: 4px;
@@ -16,6 +20,7 @@
 
   &__title {
     background-color: white;
+    border: 1px solid lightgrey;
     text-align: center;
     margin-bottom: 2rem;
     padding: 1rem;

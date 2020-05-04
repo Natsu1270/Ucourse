@@ -29,16 +29,26 @@
 
 .course-topic {
     margin-bottom: 2rem;
-    border: 1px solid lightgrey;
+    border: 1px solid rgba(#65c9f6, 0.4);
+    border-radius: 0.8rem;
     padding: 1rem 2rem;
     //box-shadow: 0 3px 5px rgba(0,0,0,0.05);
     &__content {
         &--item {
             cursor: pointer;
+            .ant-list-item-meta-title {
+                font-weight: 600;
+            }
         }
     }
     &__header {
         padding-bottom: 1rem;
         font-size: 2.6rem;
+    }
+}
+
+.course-lecture {
+    &--title {
+        font-weight: 500;
     }
 }

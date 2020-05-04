@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
 import Constants from "../../constants";
+import {parseHtml} from "../../utils/text.utils"
 
 const CourseHomeTopic = ({topic}) => {
     const history = useHistory()
@@ -37,6 +38,9 @@ const CourseHomeTopic = ({topic}) => {
             <h3 className="course-topic__header text--main">
                 {topic.name}
             </h3>
+            <span className="course-topic__info">
+                {parseHtml(topic.info)}
+            </span>
             <div className="course-topic__content">
                 <List
                     itemLayout="horizontal"

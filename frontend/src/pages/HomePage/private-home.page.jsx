@@ -41,7 +41,7 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                     isLoadingLearnings ?
                         <Skeleton active avatar paragraph={{rows: 2}}/> :
                         programs.length ?
-                            (<div className="private-home__learning--programs">
+                            <div className="private-home__learning--programs">
                                 
                                 <div className="private-home__learning--programs--items">
                                     {
@@ -52,10 +52,10 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                                         ))
                                     }
                                 </div>
-                            </div>) : null
+                            </div> : null
                 }
                 
-                        (<div className="private-home__learning--courses">
+                        <div className="private-home__learning--courses">
                             <h3 className="text--main private-home__learning--header">
                                 Khóa học
                             </h3>
@@ -74,7 +74,7 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                             </div>
                     }
                             
-                        </div>)
+                        </div>
                 <div className="private-home__learning--link">
                     <Link to='/my-courses'>
                         Xem tất cả &rarr;
