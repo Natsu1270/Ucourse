@@ -57,7 +57,7 @@ const CourseHomePage = ({myCourses}) => {
         return <Redirect to={`${Constants.COURSES_DETAIL_LINK}/${slug}`} />
     }
     return (
-        <Layout className="course-home page-2">
+        <Layout className="course-home">
             <Router>
                 <CourseHomeSider course={course} isLoading={isLoading} match={match}/>
                 <Route exact path={match.url}>

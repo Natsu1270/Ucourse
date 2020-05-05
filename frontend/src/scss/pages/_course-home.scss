@@ -9,7 +9,7 @@
             padding-bottom: 2rem;
         }
 
-        padding: 5rem 0rem;
+        padding: 12vh 0rem;
 
         .ant-menu-item {
             font-size: 1.7rem;
@@ -33,6 +33,17 @@
     border-radius: 0.8rem;
     padding: 1rem 2rem;
     //box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+    &__info {
+        font-size: 1.6rem;
+        padding: 2rem;
+        background-color: rgba($theme-green-color, 0.05);
+    border-radius: 0.8rem;
+
+        ul {
+            padding-left: 3rem;
+        }
+    }
+
     &__content {
         &--item {
             cursor: pointer;

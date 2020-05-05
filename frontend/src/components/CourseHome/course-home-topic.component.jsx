@@ -38,9 +38,9 @@ const CourseHomeTopic = ({topic}) => {
             <h3 className="course-topic__header text--main">
                 {topic.name}
             </h3>
-            <span className="course-topic__info">
+            {topic.info ? <div className="course-topic__info">
                 {parseHtml(topic.info)}
-            </span>
+            </div> : null} 
             <div className="course-topic__content">
                 <List
                     itemLayout="horizontal"
