@@ -4,6 +4,7 @@ from django.conf import settings
 
 from courses.models import Course
 from questions.models import Question, Choice, QuestionKit
+from course_homes.models import LearningTopic
 
 import random
 
@@ -23,7 +24,18 @@ class Exam(models.Model):
     code = models.CharField(max_length=10, unique=True, db_index=True)
     exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES)
     questions = models.ManyToManyField(Question, related_name="question_exams")
-    max_score = models.FloatField(max_length=3)
+    students = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='student_exams',
+        through='StudentExam'
+    )
+    topic = models.ForeignKey(
+        LearningTopic,
+        related_name="topic_exams",
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+    duration = models.IntegerField(blank=True, null=True)
     pass_score = models.FloatField(max_length=3)
     status = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -44,6 +56,37 @@ class Exam(models.Model):
     def set_modified_by(self, user):
         self.modified_by = user
 
+
+class StudentExam(models.Model):
+    exam = models.ForeignKey(
+        Exam, related_name='student_exams', on_delete=models.SET_NULL, null=True
+    )
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='exam_students', on_delete=models.SET_NULL, null=True
+    )
+    date_taken = models.DateTimeField(default=timezone.now)
+    result = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return '{0}-{1}'.format(self.user, self.exam.name)
+    
+    @property
+    def duration(self):
+        return self.exam.duration
+
+    @property
+    def topic(self):
+        return self.exam.topic
+    
+
+class QuestionResponse(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice)
+    student_exam = models.ForeignKey(
+        StudentExam,
+        related_name='responses',
+        on_delete=models.SET_NULL, null=True)
+    
 
 class AbilityTest(models.Model):
     name = models.CharField(max_length=255)

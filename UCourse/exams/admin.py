@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Exam, AbilityTest, UserAbilityTest, UserResponse
+from .models import Exam, StudentExam, AbilityTest, UserAbilityTest, UserResponse
 
 
 class UserTakenInline(admin.TabularInline):
@@ -16,6 +16,13 @@ class ExamAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.set_created_by(request.user)
         super().save_model(request, obj, form, change)
+
+
+@admin.register(StudentExam)
+class StudentExamAdmin(admin.ModelAdmin):
+    list_display = ('id', '__str__', 'date_taken', 'result')
+    readonly_fields = ('date_taken',)
+    ordering = ('date_taken', )
 
 
 @admin.register(AbilityTest)
