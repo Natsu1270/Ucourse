@@ -1,9 +1,52 @@
 from rest_framework import serializers
 
-from .models import Exam, AbilityTest, UserAbilityTest, UserResponse, Choice
+from .models import Exam, StudentExam, AbilityTest, UserAbilityTest, UserResponse, Choice
 from questions.serializers import QuestionMinSerializer, QuestionSerializer
 from courses.serializers import CourseMinSerializer
 
+
+class ExamSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam_type = serializers.CharField(source='get_exam_type_display')
+    questions = QuestionSerializer(many=True, read_only=True)
+    students = serializers.StringRelatedField(many=True, read_only=True)
+    topic = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Exam
+        fields = [
+            'id', 'code', 'name',
+            'exam_type', 'questions', 'students',
+            'topic', 'duration', 'pass_score',
+            'status'
+        ]
+
+class ExamShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam_type = serializers.CharField(source='get_exam_type_display')
+
+    class Meta:
+        model = Exam
+        fields = [
+            'id', 'code', 'name',
+            'exam_type', 'duration', 'pass_score',
+            'status'
+        ]
+
+class StudentExamSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam = serializers.StringRelatedField(read_only=True)
+    student = serializers.StringRelatedField(read_only=True)
+    duration = serializers.IntegerField(read_only=True)
+    topic = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = StudentExam
+        fields = [
+            'id', 'exam', 'student',
+            'date_taken', 'result', 'duration',
+            'topic'
+        ]
 
 class AbilityTestSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

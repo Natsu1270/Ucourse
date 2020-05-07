@@ -7,7 +7,7 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <section className="section-10 section--about cs-about">
+        <section className="section-10 page section--about cs-about">
             <h2 className="title--big text-center">Giới thiệu</h2>
             <div className="row slide">
                 <div className="col-md-6 cs-about--text cs-about--left bradius mt-3">

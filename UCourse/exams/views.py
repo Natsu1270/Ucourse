@@ -1,8 +1,46 @@
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import AbilityTest, UserAbilityTest
+from .models import AbilityTest, UserAbilityTest, Exam, StudentExam
 from . import serializers
+from api.utils import uc_response
+
+
+class ExamDetailAPI(generics.RetrieveAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = serializers.ExamSerializer
+    queryset = Exam.objects.all()
+
+
+class StudentExamListAPI(generics.ListAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = serializers.StudentExamSerializer
+    queryset = StudentExam.objects.all()
+
+
+class StudentExamPrivateListAPI(generics.ListAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = serializers.StudentExamSerializer
+
+    def get_queryset(self):
+        exam = self.request.query_params['exam_id']
+        queryset = StudentExam.objects.filter(
+            Q(student=self.request.user) & Q(exam=exam)).order_by('-id')
+        return queryset
+
+
+class StudentExamDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = serializers.StudentExamSerializer
+    queryset = StudentExam.objects.all()
 
 
 class AbilityTestListAPI(generics.ListCreateAPIView):

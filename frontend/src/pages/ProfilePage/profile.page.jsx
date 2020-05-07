@@ -20,7 +20,7 @@ const ProfilePage = ({match}) => {
     }));
 
     return (
-        <div className="profile-page section">
+        <div className="profile-page page section">
             <h3 className="text--main profile-page--title">
                 Quản lý thông tin cá nhân
             </h3>

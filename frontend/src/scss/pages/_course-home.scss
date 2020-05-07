@@ -1,15 +1,17 @@
 .course-home {
     background-color: white !important;
     .course-home-sider {
+        .ant-layout-sider-trigger {
+            top: 6.5rem
+        }
        min-height: 100vh;
-        margin-bottom: 1rem;
         //background-color: #001529;
         h3 {
             text-align: center;
             padding-bottom: 2rem;
         }
 
-        padding: 12vh 0rem;
+        padding: 20vh 0rem;
 
         .ant-menu-item {
             font-size: 1.7rem;

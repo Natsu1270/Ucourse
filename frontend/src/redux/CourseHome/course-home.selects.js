@@ -37,3 +37,7 @@ export const courseHomeTopicsSelector = createSelector(
     courseHomeDetail => courseHomeDetail.learning_topics ? courseHomeDetail.learning_topics : []
 )
 
+export const topicExamsSelector = createSelector(
+    [courseHomeTopicsSelector],
+    learningTopics => learningTopics.topic_exams ? learningTopics.topic_exams : []
+)

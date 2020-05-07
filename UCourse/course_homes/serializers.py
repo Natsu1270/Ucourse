@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
 from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer
-
+from exams.serializers import ExamSerializer, ExamShowSerializer
 
 class RegisterCourseSerializer(serializers.Serializer):
     course_id = serializers.IntegerField()
@@ -26,12 +26,14 @@ class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course_home = serializers.PrimaryKeyRelatedField(read_only=True)
     topic_assets = TopicAssetSerializer(many=True, read_only=True)
+    topic_exams = ExamShowSerializer(many=True, read_only=True)
+
 
     class Meta:
         model = LearningTopic
         fields = [
             'id', 'name', 'code', 'info', 'course_home', 'topic_assets',
-            'status'
+             'topic_exams','status'
         ]
 
 
@@ -41,6 +43,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
     learning_topic = serializers.PrimaryKeyRelatedField(read_only=True)
     students = serializers.StringRelatedField(many=True, read_only=True)
     created_by = serializers.StringRelatedField(read_only=True)
+
 
     class Meta:
         model = Assignment
@@ -70,12 +73,12 @@ class CourseHomeSerializer(serializers.ModelSerializer):
     students = UserSerializer(many=True)
     learning_topics = LearningTopicSerializer(many=True, read_only=True)
     slug = serializers.CharField(read_only=True)
-
+    
     class Meta:
         model = CourseHome
         fields = [
             'id', 'course', 'status', 'students', 'slug',
-            'learning_topics', 'course_info',
+            'learning_topics', 'course_info', 
             'maximum_number', 'created_date', 'modified_date'
         ]
 

@@ -3,6 +3,7 @@ import {Avatar, List} from 'antd'
 import {useHistory} from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
+import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
 import {parseHtml} from "../../utils/text.utils"
 
@@ -25,6 +26,14 @@ const CourseHomeTopic = ({topic}) => {
             info: asset.info,
             file_type: asset.file_type,
             content: asset.file
+        })
+    )
+
+    const topicQuizes = topic.topic_exams.map(
+        quiz => ({
+            id : quiz.id,
+            title: quiz.name,
+            info: quiz.info
         })
     )
 
@@ -55,6 +64,22 @@ const CourseHomeTopic = ({topic}) => {
                         </List.Item>
                     )}
                 />
+                {
+                    topicQuizes.length > 0 ?
+                    <List
+                    itemLayout="horizontal"
+                    dataSource={topicQuizes}
+                    renderItem={item => (
+                        <List.Item className="course-topic__content--item" onClick={() => gotoLecture(item.id,item.content,item.file_type)}>
+                            <List.Item.Meta
+                                avatar={<Avatar src={quizIcon}/>}
+                                title={item.title}
+                                description={item.info}
+                            />
+                        </List.Item>
+                    )}
+                /> : null
+                }
             </div>
         </div>
     )

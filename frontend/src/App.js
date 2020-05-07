@@ -5,7 +5,7 @@ import {createStructuredSelector} from 'reselect'
 
 import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/login-register.page";
 import Header from "./components/Header/header.component";
-// import Footer from "./components/Footer/footer.component";
+import Footer from "./components/Footer/footer.component";
 import HomePage from "./pages/HomePage/home.page";
 import ProfilePage from "./pages/ProfilePage/profile.page";
 import {tokenSelector, currentUserSelector} from './redux/Auth/auth.selects'
@@ -87,7 +87,7 @@ function App() {
                             </Suspense>
                         </Content>
                     </Switch>
-                    {/*<Footer/>*/}
+                    <Footer/>
                 </Layout>
             </div>
         </Router>

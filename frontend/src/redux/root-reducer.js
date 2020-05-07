@@ -10,6 +10,7 @@ import programReducer from './Program/program.reducers'
 import abilityTestReducer from './AbilityTest/abilityTest.reducer'
 import courseHomeReducer from './CourseHome/course-home.reducer'
 import homeReducer from "./Home/home.reducer";
+import examReducer from "./Exam/exam.reducer";
 
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     abilityTest: abilityTestReducer,
     courseHome: courseHomeReducer,
     home: homeReducer,
+    exam: examReducer,
 });
 
 export default rootReducer
