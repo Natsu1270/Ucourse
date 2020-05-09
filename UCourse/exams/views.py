@@ -26,12 +26,12 @@ class StudentExamPrivateListAPI(generics.ListAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    serializer_class = serializers.StudentExamSerializer
+    serializer_class = serializers.StudentExamShowSerializer
 
     def get_queryset(self):
         exam = self.request.query_params['exam_id']
         queryset = StudentExam.objects.filter(
-            Q(student=self.request.user) & Q(exam=exam)).order_by('-id')
+            Q(student=self.request.user) & Q(exam_id=exam)).order_by('-id')
         return queryset
 
 
@@ -41,6 +41,30 @@ class StudentExamDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     ]
     serializer_class = serializers.StudentExamSerializer
     queryset = StudentExam.objects.all()
+
+
+class SubmitExamAPI(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.StudentExamSubmitSerializer
+    queryset = StudentExam.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        student = request.user
+        responses = request.data['responses']
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        student_exam = serializer.save(
+            student=student, exam=data['exam'], result=data['result'], responses=responses
+        )
+        return Response({
+            "data": {
+                "studentExam": self.get_serializer(student_exam).data,
+            },
+            "result": True,
+            "message": "Submit exam successfully",
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
 
 
 class AbilityTestListAPI(generics.ListCreateAPIView):
@@ -98,6 +122,6 @@ class GenerateUserAbilityTestAPI(generics.CreateAPIView):
                 "user_ability_test": self.get_serializer(user_ability_test).data,
             },
             "result": True,
-            "message": "Login successfully",
+            "message": "Generated test successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)

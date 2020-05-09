@@ -65,3 +65,39 @@
         font-weight: 500;
     }
 }
+
+.exam-list {
+    &--title {
+        padding: 1rem;
+        background-color: rgba(#01C9F5, 0.05);
+        margin-bottom: 2rem;
+        border-radius: 1rem;
+        h3 {
+            span {
+                margin-left: 1rem;
+                font-size: 1.6rem;
+                font-weight: 400;
+                font-style: italic;
+                color: darkgrey;
+            }
+        }
+    }
+
+    &--info {
+        &__content {
+            list-style: none;
+            li {
+                font-size: 1.6rem;
+            }
+        }
+    }
+    button {
+        margin: 0 auto;
+    }
+}
+
+.exam_drawer {
+    .ant-drawer-content-wrapper {
+        width: 100% !important;
+    }
+}

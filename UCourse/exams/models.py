@@ -68,7 +68,7 @@ class StudentExam(models.Model):
     result = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return '{0}-{1}'.format(self.user, self.exam.name)
+        return '{0}-{1}-{2}'.format(self.student, self.exam.name, self.date_taken)
     
     @property
     def duration(self):
@@ -86,6 +86,9 @@ class QuestionResponse(models.Model):
         StudentExam,
         related_name='responses',
         on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return '{0}-{1}'.format(self.student_exam, self.question)
     
 
 class AbilityTest(models.Model):

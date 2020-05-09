@@ -18,6 +18,10 @@ const CourseHomeTopic = ({topic}) => {
         }
     }
 
+    function gotoExam(exam_id) {
+        history.push(`exams/${exam_id}`)
+    }
+
     const topicAssets = topic.topic_assets.map(
         asset => ({
             id: asset.id,
@@ -70,7 +74,7 @@ const CourseHomeTopic = ({topic}) => {
                     itemLayout="horizontal"
                     dataSource={topicQuizes}
                     renderItem={item => (
-                        <List.Item className="course-topic__content--item" onClick={() => gotoLecture(item.id,item.content,item.file_type)}>
+                        <List.Item className="course-topic__content--item" onClick={() => gotoExam(item.id)}>
                             <List.Item.Meta
                                 avatar={<Avatar src={quizIcon}/>}
                                 title={item.title}

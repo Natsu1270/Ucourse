@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Exam, StudentExam, AbilityTest, UserAbilityTest, UserResponse
-
+from .models import Exam, StudentExam, AbilityTest, UserAbilityTest, UserResponse, QuestionResponse
 
 class UserTakenInline(admin.TabularInline):
     model = AbilityTest.taken_users.through
@@ -46,3 +45,4 @@ class UserAbilityTestAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserResponse)
+admin.site.register(QuestionResponse)

@@ -1,0 +1,26 @@
+.exam-detail {
+    p {
+        margin-bottom: 0;
+    }
+    padding: 3rem 18rem;
+    &--info {
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid lightgrey;
+    }
+
+    &--title {
+        margin-bottom: 2rem;
+    }
+
+    &--content {
+        padding-top: 2rem;
+        &--question {
+            &__header {
+                font-size: 2rem;
+                span {
+                    margin-right: 1rem;
+                }
+            }
+        }
+    }
+}
