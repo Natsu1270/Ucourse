@@ -11,6 +11,7 @@ import {
 import {Skeleton, Button, Drawer, Empty} from 'antd'
 import {secondToTime} from "../../utils/text.utils";
 import ExamDetail from "./exam-detail.component";
+import ExamHistoryTable from "./exam-history-table.component";
 
 const PrivateExamList = ({token}) => {
 
@@ -45,25 +46,15 @@ const PrivateExamList = ({token}) => {
 
                 }
             </div>
-            <div className="exam-list--info">
-                <h2 className="exam-list--info__title theme-color">
-                    Thông tin bài kiểm tra:
-                </h2>
-                {
-                    isProcessing ? <Skeleton active/> :
-                    <ul className="exam-list--info__content">
-                        <li>Số câu hỏi: {examDetail.questions ? examDetail.questions.length : null}</li>
-                        <li>Thời gian: {secondToTime(examDetail.duration)}</li>
-                    </ul>
-                }
-            </div>
             {
                 isProcessing ? <Skeleton active/> :
                     <div className="exam-list--items">
-                        <h2 className="exam-list--items__title theme-color">
+                        <h2 className="exam-list--items__title theme-color mb-5">
                             Lịch sử làm bài
                         </h2>
-                        {studentExams.length ? null : <Empty description="Không có lịch sử làm bài"/>}
+                        {studentExams.length ?
+                            <ExamHistoryTable exams={studentExams} />
+                            : <Empty description="Không có lịch sử làm bài"/>}
                     </div>
             }
             <Button type="primary" onClick={() => setShowExam(true)}>Làm bài</Button>

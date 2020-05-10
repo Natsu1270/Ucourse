@@ -19,11 +19,13 @@ class Question(models.Model):
     MULTI_CHOICE = "mc"
     TRUE_FALSE = "tf"
     TEXT = "tx"
+    CHECK_BOX = "cb"
 
     TYPE_CHOICES = [
         (MULTI_CHOICE, _("Multi choices")),
         (TRUE_FALSE, _("True false")),
         (TEXT, _("Paragraph text question")),
+        (CHECK_BOX, _("Checkbox choices")),
     ]
     EASY = "e"
     MEDIUM = "m"

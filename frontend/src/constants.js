@@ -18,7 +18,7 @@ const Constants = {
     DEFAULT_BIRTHDAY_PICK: '1996/01/01',
     // SPINNER_STYLE: override,
     MMM_Do_YYYY: 'MMM Do YY',
-    MMM_Do__YY__TIME: 'MMM Do YY HH:mm',
+    MMM_Do__YY__TIME: 'MMM-Do-YY HH:mm',
     DD_MM_YYYY: 'DD-MM-YYYY',
     FIELD: 'field',
     LEVEL: 'level',

@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'exams',
     'resources',
     'tags',
-    'questions'
+    'questions',
+    'forums',
 
 ]
 

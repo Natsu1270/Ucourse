@@ -23,7 +23,7 @@ const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course
 const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-home-grades.component"))
 const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-home-forums.component"))
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
-const PrivateExamList = lazy(() => import("../../components/CourseHome/private-exam-list.component"))
+const PrivateExamList = lazy(() => import("../../components/Exam/private-exam-list.component"))
 
 const CourseHomePage = ({myCourses}) => {
 

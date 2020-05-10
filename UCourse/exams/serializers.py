@@ -104,9 +104,7 @@ class StudentExamSubmitSerializer(serializers.ModelSerializer):
 
 class StudentExamShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    exam = serializers.PrimaryKeyRelatedField(
-        queryset=Exam.objects.all()
-    )
+    exam = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = StudentExam

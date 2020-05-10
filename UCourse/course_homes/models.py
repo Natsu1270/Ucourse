@@ -130,3 +130,5 @@ class StudentAssignment(models.Model):
     @property
     def upload_ass_path(self):
         return 'courses/home/' + self.assignment.learning_topic.course_slug + self.assignment.learning_topic.slug
+
+
