@@ -17,7 +17,7 @@ class ForumSerializer(ModelSerializer):
 
 class ThreadSerializer(ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    forum = serializers.IntegerField(read_only=True)
+    forum = serializers.PrimaryKeyRelatedField(read_only=True)
     created_by = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -53,11 +53,12 @@ class ReplyResponseSerializer(ModelSerializer):
 
 class ThreadResponseDetailSerializer(ModelSerializer):
     replies = serializers.SerializerMethodField()
+    is_parent = serializers.BooleanField()
 
     class Meta:
         model = ThreadResponse
         fields = [
-            'id', 'content', 'timestamp', 'replies'
+            'id', 'content', 'timestamp', 'replies', 'is_parent'
         ]
 
     def get_replies(self, obj):

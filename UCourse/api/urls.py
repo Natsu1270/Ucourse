@@ -13,5 +13,6 @@ urlpatterns = [
     path('exams/', include('exams.urls')),
     path('ability-tests/', include('exams.at_urls')),
     path('course-home/', include('course_homes.urls')),
-    path('all/', GetAllAPI.as_view())
+    path('all/', GetAllAPI.as_view()),
+    path('forums/', include('forums.urls')),
 ]
