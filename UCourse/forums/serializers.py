@@ -6,13 +6,17 @@ from .models import Forum, Thread, ThreadResponse
 class ForumSerializer(ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course_home = serializers.PrimaryKeyRelatedField(read_only=True)
+    thread_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Forum
         fields = [
-            'id', 'name', 'info',
+            'id', 'name', 'info', 'thread_count',
             'course_home', 'status', 'created_date'
         ]
+
+    def get_thread_count(self, obj):
+        return obj.threads.count()
 
 
 class ThreadSerializer(ModelSerializer):
@@ -63,5 +67,5 @@ class ThreadResponseDetailSerializer(ModelSerializer):
 
     def get_replies(self, obj):
         if obj.is_parent:
-            return ReplyResponseSerializer(obj.children(),many=True).data
+            return ReplyResponseSerializer(obj.children(), many=True).data
         return None

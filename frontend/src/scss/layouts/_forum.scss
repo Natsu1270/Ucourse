@@ -1,0 +1,24 @@
+.forum {
+    &--subtitle {
+        color: darkgrey;
+    }
+    &--content {
+        &__list {
+            width: 50%;
+            .ant-list-item {
+                cursor: pointer;
+                span {
+                    font-size: 1.7rem;
+                }
+                transition: all 0.1s ease-in-out;
+                &:hover {
+                    background-color: rgba($theme-green-color, 0.05);
+                }
+            }
+        }
+    }
+}
+
+.forum-item {
+    width: 100%;
+}

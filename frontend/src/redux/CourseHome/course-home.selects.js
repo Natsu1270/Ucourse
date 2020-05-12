@@ -41,3 +41,8 @@ export const topicExamsSelector = createSelector(
     [courseHomeTopicsSelector],
     learningTopics => learningTopics.topic_exams ? learningTopics.topic_exams : []
 )
+
+export const forumsSelector = createSelector(
+    [courseHomeDetailSelector],
+    courseHomeDetail => courseHomeDetail.forums ? courseHomeDetail.forums : []
+)

@@ -13,7 +13,7 @@ import {
     courseHomeDetailSelector, courseInfoSelector,
     isLoadingSelector,
     ofCourseSelector,
-    courseHomeTopicsSelector,
+    courseHomeTopicsSelector, forumsSelector,
 } from "../../redux/CourseHome/course-home.selects";
 import CourseHomeSider from "../../components/CourseHome/course-home-sider.component";
 import CourseHomeInfo from "../../components/CourseHome/course-home-info.component";
@@ -43,6 +43,7 @@ const CourseHomePage = ({myCourses}) => {
         course,
         courseInfo,
         topics,
+        forums
     } = useSelector(createStructuredSelector({
         token: tokenSelector,
         courseHomeDetail: courseHomeDetailSelector,
@@ -50,6 +51,7 @@ const CourseHomePage = ({myCourses}) => {
         course: ofCourseSelector,
         courseInfo: courseInfoSelector,
         topics: courseHomeTopicsSelector,
+        forums: forumsSelector
     }))
 
     useEffect(() => {
@@ -74,7 +76,7 @@ const CourseHomePage = ({myCourses}) => {
                         <CourseHomeGrades/>
                     </Route>
                     <Route exact path={`${match.url}/forums`}>
-                        <CourseHomeForums/>
+                        <CourseHomeForums forums={forums} isLoading={isLoading}/>
                     </Route>
 
                 </Suspense>

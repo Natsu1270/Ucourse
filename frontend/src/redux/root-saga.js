@@ -10,6 +10,7 @@ import { abilityTestSaga } from './AbilityTest/abilityTest.sagas'
 import courseHomeSaga from './CourseHome/course-home.sagas'
 import homeSaga from "./Home/home.sagas"
 import examSaga from './Exam/exam.sagas'
+import forumSaga from './Forum/forum.sagas'
 
 export default function* rootSaga() {
     yield all([
@@ -23,5 +24,6 @@ export default function* rootSaga() {
         call(courseHomeSaga),
         call(homeSaga),
         call(examSaga),
+        call(forumSaga),
     ])
 }

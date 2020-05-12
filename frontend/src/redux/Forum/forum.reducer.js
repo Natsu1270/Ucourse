@@ -35,6 +35,9 @@ const forumReducer = (state = initState, action) => {
         case ForumTypes.GET_THREADS_FAIL:
         case ForumTypes.GET_THREAD_DETAIL_FAIL:
             return {...state, isGetting: false, errorResponse: action.payload}
+
+        default:
+            return state
     }
 }
 
