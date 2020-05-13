@@ -12,6 +12,11 @@ export const forumDetailSelector = createSelector(
     forum => forum.forumDetail ? forum.forumDetail : {}
 )
 
+export const forumThreadsSelector = createSelector(
+    [forumDetailSelector],
+    forumDetail => forumDetail.threads ? forumDetail.threads : []
+)
+
 export const threadsSelector = createSelector(
     [forumSelector],
     forum => forum.threads ? forum.threads : []

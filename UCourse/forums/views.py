@@ -22,7 +22,7 @@ class ForumDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    serializer_class = serializers.ForumSerializer
+    serializer_class = serializers.ForumDetailSerializer
     queryset = Forum.objects.all()
 
 

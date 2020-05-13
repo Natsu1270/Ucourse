@@ -1,12 +1,15 @@
 import React, {useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {List, Skeleton} from "antd";
+import {useHistory, useRouteMatch} from 'react-router-dom'
 import {getForumsStart} from "../../redux/Forum/forum.actions";
 import {createStructuredSelector} from "reselect";
 import {errorResponseSelector, forumsSelector, isGettingSelector} from "../../redux/Forum/forum.selects";
 
 const CourseHomeForums = ({forums, isLoading}) => {
 
+    const history = useHistory()
+    const match = useRouteMatch();
 
     const renderItem = (item) => (
         <div className="dis-flex-between forum-item">
@@ -17,7 +20,7 @@ const CourseHomeForums = ({forums, isLoading}) => {
 
     return (
         <section className="section-5 page-2 forum">
-            <h4 className="text--main forum--title mt-5">
+            <h4 className="text--main forum--title mb-5">
                 Diễn đàn thảo luận
             </h4>
             <h3 className="forum--subtitle mb-5">
@@ -31,7 +34,12 @@ const CourseHomeForums = ({forums, isLoading}) => {
                             size="large"
                             bordered
                             dataSource={forums}
-                            renderItem={item => <List.Item>{renderItem(item)}</List.Item>}
+                            renderItem={
+                                item =>
+                                    <List.Item onClick={() => history.push(`${match.url}/${item.id}`)}>
+                                        {renderItem(item)}
+                                    </List.Item>
+                            }
                         />
                 }
             </div>

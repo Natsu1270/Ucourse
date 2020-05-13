@@ -33,6 +33,19 @@ class ThreadSerializer(ModelSerializer):
         ]
 
 
+class ForumDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
+    threads = ThreadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Forum
+        fields = [
+            'id', 'name', 'info', 'threads',
+            'course_home', 'status', 'created_date'
+        ]
+
+
 class ThreadResponseSerializer(ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     thread = serializers.PrimaryKeyRelatedField(read_only=True)

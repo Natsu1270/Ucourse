@@ -18,6 +18,7 @@ import {
 import CourseHomeSider from "../../components/CourseHome/course-home-sider.component";
 import CourseHomeInfo from "../../components/CourseHome/course-home-info.component";
 import Constants from "../../constants"
+import ForumDetail from "../../components/Forum/forum-detail.component";
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
 const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-home-grades.component"))
@@ -85,6 +86,9 @@ const CourseHomePage = ({myCourses}) => {
                 </Route>
                 <Route exact path={`${match.url}/exams/:exam_id`}>
                     <PrivateExamList token={token}/>
+                </Route>
+                <Route exact path={`${match.url}/forums/:forum_id`}>
+                    <ForumDetail token={token} />
                 </Route>
             </Router>
         </Layout>
