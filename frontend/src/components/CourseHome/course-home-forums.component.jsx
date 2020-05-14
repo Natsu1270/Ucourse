@@ -13,19 +13,20 @@ const CourseHomeForums = ({forums, isLoading}) => {
 
     const renderItem = (item) => (
         <div className="dis-flex-between forum-item">
-            <span>{item.name}</span>
+            <span className="b-500 forum-item--title">{item.name}</span>
             <span>{item.thread_count} chủ đề &rarr;</span>
         </div>
     )
 
     return (
         <section className="section-5 page-2 forum">
-            <h4 className="text--main forum--title mb-5">
+            <h4 className="text--main forum--title mb-3">
                 Diễn đàn thảo luận
             </h4>
             <h3 className="forum--subtitle mb-5">
                 Thảo luận, hỗ trợ về các chủ đề trong quá trình học
             </h3>
+            
             <div className="forum--content">
                 {
                     isLoading ? <Skeleton active paragraph={{rows: 4}}/> :

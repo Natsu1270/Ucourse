@@ -4,7 +4,7 @@ from django.contrib.auth.models import update_last_login
 
 from roles.serializers import RoleSerializer
 from roles.models import Role
-from profiles.serializers import ProfileSerializer
+from profiles.serializers import ProfileSerializer, ProfileMinSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,6 +29,15 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class UserMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False, read_only=True)
+    user_profile = ProfileMinSerializer(read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ('id', 'username', 'email', 'user_profile')
 
 
 class RegisterSerializer(serializers.ModelSerializer):

@@ -157,6 +157,11 @@ button, input {
 	flex-wrap: wrap;
 }
 
+.dis-flex-col {
+	display: flex;
+	flex-direction: column;
+}
+
 .dis-grid-cards {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));

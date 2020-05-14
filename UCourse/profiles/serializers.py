@@ -16,6 +16,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'created_date')
 
 
+class ProfileMinSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField(read_only=True)
+    email = serializers.EmailField(read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'fullname', 'avatar', 'email')
+
+
 class TeacherProfileSearchSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     fullname = serializers.CharField(read_only=True)

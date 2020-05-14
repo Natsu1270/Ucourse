@@ -7,9 +7,6 @@
             width: 80%;
             .ant-list-item {
                 cursor: pointer;
-                span {
-                    font-size: 1.7rem;
-                }
                 transition: all 0.1s ease-in-out;
                 &:hover {
                     background-color: rgba($theme-green-color, 0.05);
@@ -21,4 +18,13 @@
 
 .forum-item {
     width: 100%;
+    &--title {
+        font-weight: 600;
+        color: black;
+        font-size: 1.8rem;
+    }
+
+    &--text {
+        font-size: 1.6rem;
+    }
 }
