@@ -18,7 +18,9 @@ import {
 import CourseHomeSider from "../../components/CourseHome/course-home-sider.component";
 import CourseHomeInfo from "../../components/CourseHome/course-home-info.component";
 import Constants from "../../constants"
+import Forums from "../../components/Forum/forums.component";
 import ForumDetail from "../../components/Forum/forum-detail.component";
+import ThreadDetail from "../../components/Forum/thread-detail.component";
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
 const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-home-grades.component"))
@@ -31,7 +33,6 @@ const CourseHomePage = ({myCourses}) => {
     const dispatch = useDispatch();
     const {slug} = useParams();
     const match = useRouteMatch();
-    const history = useHistory();
 
     const isMyCourse = () => {
         return myCourses.find(course => course.course.slug === slug)
@@ -77,9 +78,14 @@ const CourseHomePage = ({myCourses}) => {
                         <CourseHomeGrades/>
                     </Route>
                     <Route exact path={`${match.url}/forums`}>
-                        <CourseHomeForums forums={forums} isLoading={isLoading}/>
+                        <Forums forums={forums} isLoading={isLoading}/>
                     </Route>
-
+                    <Route exact path={`${match.url}/forums/:forum_id`}>
+                        <ForumDetail token={token}/>
+                    </Route>
+                    <Route exact path={`${match.url}/forums/:forum_id/threads/:thread_id`}>
+                        <ThreadDetail token={token}/>
+                    </Route>
                 </Suspense>
                 <Route exact path={`${match.url}/lecture/:topic/:assetId`}>
                     <CourseHomeLecture topics={topics} isLoading={isLoading}/>
@@ -87,9 +93,7 @@ const CourseHomePage = ({myCourses}) => {
                 <Route exact path={`${match.url}/exams/:exam_id`}>
                     <PrivateExamList token={token}/>
                 </Route>
-                <Route exact path={`${match.url}/forums/:forum_id`}>
-                    <ForumDetail token={token} />
-                </Route>
+
             </Router>
         </Layout>
     )

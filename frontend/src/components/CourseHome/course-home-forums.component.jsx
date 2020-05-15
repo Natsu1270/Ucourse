@@ -1,50 +1,44 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {List, Skeleton} from "antd";
-import {useHistory, useRouteMatch} from 'react-router-dom'
-import {getForumsStart} from "../../redux/Forum/forum.actions";
+import {BrowserRouter as Router, Route, useRouteMatch, Switch} from 'react-router-dom'
 import {createStructuredSelector} from "reselect";
-import {errorResponseSelector, forumsSelector, isGettingSelector} from "../../redux/Forum/forum.selects";
+import {
+    isLoadingSelector,
+    forumsSelector
+} from "../../redux/CourseHome/course-home.selects";
+import Forums from "../Forum/forums.component";
+import ForumDetail from "../Forum/forum-detail.component";
+import {tokenSelector} from "../../redux/Auth/auth.selects";
+import ThreadDetail from "../Forum/thread-detail.component";
+import Page404NotFound from "../../pages/404.page";
 
-const CourseHomeForums = ({forums, isLoading}) => {
+const CourseHomeForums = () => {
 
-    const history = useHistory()
     const match = useRouteMatch();
+    const {
+        token,
+        isLoading,
+        forums
+    } = useSelector(createStructuredSelector({
+        token: tokenSelector,
+        isLoading: isLoadingSelector,
+        forums: forumsSelector
+    }))
 
-    const renderItem = (item) => (
-        <div className="dis-flex-between forum-item">
-            <span className="b-500 forum-item--title">{item.name}</span>
-            <span>{item.thread_count} chủ đề &rarr;</span>
-        </div>
-    )
 
     return (
-        <section className="section-5 page-2 forum">
-            <h4 className="text--main forum--title mb-3">
-                Diễn đàn thảo luận
-            </h4>
-            <h3 className="forum--subtitle mb-5">
-                Thảo luận, hỗ trợ về các chủ đề trong quá trình học
-            </h3>
-            
-            <div className="forum--content">
-                {
-                    isLoading ? <Skeleton active paragraph={{rows: 4}}/> :
-                        <List
-                            className="forum--content__list"
-                            size="large"
-                            bordered
-                            dataSource={forums}
-                            renderItem={
-                                item =>
-                                    <List.Item onClick={() => history.push(`${match.url}/${item.id}`)}>
-                                        {renderItem(item)}
-                                    </List.Item>
-                            }
-                        />
-                }
-            </div>
-        </section>
+        <Router>
+            <Route exact path={match.url}>
+                <Forums forums={forums} isLoading={isLoading}/>
+            </Route>
+            <Route exact path={`${match.url}/:forum_id`}>
+                <ForumDetail token={token}/>
+            </Route>
+            <Route path={`${match.url}/:forum_id/threads/:thread_id`}>
+                <ThreadDetail/>
+            </Route>
+
+        </Router>
     )
 };
 

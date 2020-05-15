@@ -50,8 +50,9 @@ export const getThreadDetailStart = (params) => ({
     payload: params
 });
 
-export const getThreadDetailSuccess = () => ({
-    type: ForumTypes.GET_FORUM_DETAIL_SUCCESS,
+export const getThreadDetailSuccess = (threadDetail) => ({
+    type: ForumTypes.GET_THREAD_DETAIL_SUCCESS,
+    payload: threadDetail
 });
 
 export const getThreadDetailFail = (err) => ({

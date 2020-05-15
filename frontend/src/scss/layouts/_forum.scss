@@ -1,30 +1,52 @@
 .forum {
     &--subtitle {
-        color: darkgrey;
+        color: black;
     }
+
     &--content {
         &__list {
-            width: 80%;
+            width: 90%;
+
             .ant-list-item {
                 cursor: pointer;
                 transition: all 0.1s ease-in-out;
+
                 &:hover {
                     background-color: rgba($theme-green-color, 0.05);
                 }
             }
         }
+
+
+    }
+
+    &--list-header {
+        font-size: 1.8rem;
+        color: black;
+    }
+
+    &--tag {
+        font-size: 1.5rem;
+        padding: 0.3rem 0.8rem;
+        cursor: pointer;
     }
 }
 
 .forum-item {
     width: 100%;
+
     &--title {
         font-weight: 600;
         color: black;
-        font-size: 1.8rem;
+        font-size: 1.9rem;
     }
 
     &--text {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
+        width: 65%;
     }
+}
+
+.forum-detail {
+
 }

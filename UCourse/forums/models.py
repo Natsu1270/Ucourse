@@ -24,7 +24,7 @@ class Forum(models.Model):
 class Thread(models.Model):
     name = models.CharField(max_length=255)
     forum = models.ForeignKey(Forum, related_name='threads', on_delete=models.CASCADE)
-    info = RichTextField(blank=True, null=True)
+    content = RichTextField(blank=True, null=True)
     status = models.BooleanField(default=True)
     view = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)

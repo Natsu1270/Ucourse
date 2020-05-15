@@ -41,7 +41,7 @@ class ThreadSerializer(ModelSerializer):
         model = Thread
         fields = [
             'id', 'name', 'forum',
-            'info', 'status', 'view', 'reply_count', 'last_reply',
+            'content', 'status', 'view', 'reply_count', 'last_reply',
             'created_date', 'created_by'
         ]
 
