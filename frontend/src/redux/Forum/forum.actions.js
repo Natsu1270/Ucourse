@@ -59,3 +59,17 @@ export const getThreadDetailFail = (err) => ({
     type: ForumTypes.GET_THREAD_DETAIL_FAIL,
     payload: err
 });
+
+export const createThreadsStart = (params) => ({
+    type: ForumTypes.CREATE_THREADS_START,
+    payload: params
+});
+
+export const createThreadsSuccess = () => ({
+    type: ForumTypes.CREATE_THREADS_SUCCESS,
+});
+
+export const createThreadsFail = (err) => ({
+    type: ForumTypes.CREATE_THREADS_FAIL,
+    payload: err
+});

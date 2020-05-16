@@ -37,6 +37,22 @@ class ThreadListAPI(generics.ListCreateAPIView):
         queryset = Thread.objects.filter(forum_id=forum)
         return queryset
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        thread = serializer.save(
+            created_by=request.user, forum=data['forum'], name=data['name'],
+            content=data['content']
+        )
+
+        return Response({
+            "data": {},
+            "result": True,
+            "message": "Submit exam successfully",
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
+
 
 class ThreadDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [

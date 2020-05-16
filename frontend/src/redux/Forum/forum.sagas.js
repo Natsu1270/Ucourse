@@ -57,11 +57,25 @@ export function* onGetThreadDetail() {
     yield takeLatest(ForumTypes.GET_THREAD_DETAIL_START, getThreadDetail)
 }
 
+export function* createThread({payload}) {
+     try {
+        let { data } = yield call(ForumServices.createThreadAPI, payload)
+        yield put(ForumActions.createThreadsSuccess())
+    } catch (err) {
+        yield put(ForumActions.createThreadsFail(err.response))
+    }
+}
+
+export function* onCreateThread() {
+    yield takeLatest(ForumTypes.CREATE_THREADS_START, createThread)
+}
+
 export default function* forumSaga() {
     yield all([
         call(onGetForums),
         call(onGetForumDetail),
         call(onGetThreads),
         call(onGetThreadDetail),
+        call(onCreateThread)
     ])
 }

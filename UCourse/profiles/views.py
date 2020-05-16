@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status, filters
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser
+from rest_framework.parsers import MultiPartParser, JSONParser
 from api.permissions import IsOwnerOrReadOnly
 from api.utils import uc_response
 from .models import Profile, Teacher
@@ -25,7 +25,7 @@ class ProfileDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     ]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser, JSONParser]
 
     def get_object(self):
         try:

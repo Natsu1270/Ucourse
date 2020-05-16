@@ -50,3 +50,40 @@
 .forum-detail {
 
 }
+
+.thread {
+    &--header {
+        &__title {
+            font-size: 1.9rem;
+            font-weight: 500;
+        }
+    }
+
+    &--user {
+        color: #048dfd;
+    }
+
+    &--description {
+        &__content {
+            color: rgba(black, 0.7);
+            font-size: 1.6rem;
+        }
+    }
+
+    &--modal {
+        .ant-modal-header {
+            background-color: rgba(lightgrey, 0.2);
+        }
+
+        .ant-modal-footer {
+            background-color: rgba(lightgrey, 0.2);
+        }
+
+        width: 80%;
+        padding-bottom: 0
+    }
+
+    &--form {
+
+    }
+}

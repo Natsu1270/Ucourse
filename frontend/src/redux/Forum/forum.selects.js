@@ -27,6 +27,11 @@ export const threadDetailSelector = createSelector(
     forum => forum.threadDetail ? forum.threadDetail : {}
 )
 
+export const threadRepliesSelector = createSelector(
+    [threadDetailSelector],
+    threadDetail => threadDetail.thread_replies ? threadDetail.thread_replies: []
+)
+
 export const isGettingSelector = createSelector(
     [forumSelector],
     forum => forum.isGetting

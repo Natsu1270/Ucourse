@@ -16,52 +16,15 @@ class ForumSerializer(ModelSerializer):
             'course_home', 'status', 'created_date'
         ]
 
-    def get_thread_count(self, obj):
+    @staticmethod
+    def get_thread_count(obj):
         return obj.threads.count()
-
-
-class ThreadSerializer(ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    forum = serializers.PrimaryKeyRelatedField(read_only=True)
-    created_by = UserMinSerializer(read_only=True)
-    reply_count = serializers.SerializerMethodField()
-    last_reply = serializers.SerializerMethodField()
-
-    def get_reply_count(self, obj):
-        return obj.thread_replies.count()
-
-    def get_last_reply(self, obj):
-        query = obj.thread_replies.all().order_by('timestamp').last()
-        user = UserMinSerializer(query.created_by)
-        data = {"created_by": user.data, "timestamp": query.timestamp}
-
-        return data
-
-    class Meta:
-        model = Thread
-        fields = [
-            'id', 'name', 'forum',
-            'content', 'status', 'view', 'reply_count', 'last_reply',
-            'created_date', 'created_by'
-        ]
-
-
-class ForumDetailSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
-    threads = ThreadSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Forum
-        fields = [
-            'id', 'name', 'info', 'threads',
-            'course_home', 'status', 'created_date'
-        ]
 
 
 class ThreadResponseSerializer(ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     thread = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    created_by = UserMinSerializer(read_only=True)
 
     class Meta:
         model = ThreadResponse
@@ -101,7 +64,49 @@ class ThreadResponseDetailSerializer(ModelSerializer):
             'id', 'content', 'timestamp', 'replies', 'is_parent'
         ]
 
-    def get_replies(self, obj):
+    @staticmethod
+    def get_replies(obj):
         if obj.is_parent:
             return ReplyResponseSerializer(obj.children(), many=True).data
         return None
+
+
+class ThreadSerializer(ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    forum = serializers.PrimaryKeyRelatedField(queryset=Forum.objects.all())
+    created_by = UserMinSerializer(read_only=True, required=False)
+    reply_count = serializers.SerializerMethodField(read_only=True, required=False)
+    last_reply = serializers.SerializerMethodField(read_only=True, required=False)
+    thread_replies = ThreadResponseSerializer(many=True, read_only=True, required=False)
+
+    @staticmethod
+    def get_reply_count(obj):
+        return obj.thread_replies.count()
+
+    @staticmethod
+    def get_last_reply(obj):
+        query = obj.thread_replies.all().order_by('timestamp').last()
+        data = {"created_by": UserMinSerializer(query.created_by).data, "timestamp": query.timestamp} if query is not None else None
+
+        return data
+
+    class Meta:
+        model = Thread
+        fields = [
+            'id', 'name', 'forum', 'thread_replies',
+            'content', 'status', 'view', 'reply_count', 'last_reply',
+            'created_date', 'created_by'
+        ]
+
+
+class ForumDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
+    threads = ThreadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Forum
+        fields = [
+            'id', 'name', 'info', 'threads',
+            'course_home', 'status', 'created_date'
+        ]

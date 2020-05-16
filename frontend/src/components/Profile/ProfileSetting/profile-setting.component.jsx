@@ -46,7 +46,8 @@ const ProfileSetting = ({profile, isLoading, token}) => {
             'birthday': fieldValues['birthday'] ? fieldValues['birthday'].format('YYYY-MM-DD') : undefined,
         };
         console.log('Received values of form: ', values);
-        dispatch(updateProfileStart({...values, token}))
+
+        dispatch(updateProfileStart({...values,birth_date: values.birth_date.format('YYYY-MM-DD'), token}))
     };
 
     return (

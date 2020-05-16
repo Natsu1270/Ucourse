@@ -15,7 +15,7 @@ export const updateProfileAPI = (params) => {
     return axios.request({
         headers: {'Content-Type': 'application/json', 'Authorization': `Token ${token}`},
         method: 'PATCH',
-        url: `${PROFILE_API_URL}`,
+        url: `${PROFILE_API_URL}/`,
         data: params
     })
 }

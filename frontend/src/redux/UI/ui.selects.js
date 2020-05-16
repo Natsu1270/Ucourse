@@ -21,3 +21,8 @@ export const registerCourseModalSelector = createSelector(
     [uiSelector],
     ui => ui.registerResultModal
 );
+
+export const createThreadModalSelector = createSelector(
+    [uiSelector],
+    ui => ui.createThreadModal
+);

@@ -9,10 +9,21 @@ import {LoadingOutlined} from "@ant-design/icons";
 //         border-color: red;
 //     `;
 
-const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const antIconWhite = <LoadingOutlined style={{ fontSize: 24, color:'white' }} spin />;
-const spin = <Spin indicator={antIcon} />;
+const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
+const antIconWhite = <LoadingOutlined style={{fontSize: 24, color: 'white'}} spin/>;
+const spin = <Spin indicator={antIcon}/>;
 const spinWhite = <Spin indicator={antIconWhite}/>;
+
+const ckeditorConfigs = {
+        toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+        heading: {
+            options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+            ]
+        }
+}
 const Constants = {
     DATE_FORMAT: 'YYYY/MM/DD',
     DEFAULT_BIRTHDAY_PICK: '1996/01/01',
@@ -29,7 +40,8 @@ const Constants = {
     COURSE_HOME_LINK: '/learn',
     VIDEO_FILE_TYPE: 'video',
     DOCUMENT_FILE_TYPE: 'document',
-    COURSES_DETAIL_LINK: '/courses'
+    COURSES_DETAIL_LINK: '/courses',
+    CKEDITOR_CONFIGS: ckeditorConfigs
 };
 
 export default Constants

@@ -150,6 +150,7 @@ REST_FRAMEWORK = {
         'api.renderers.UcApiRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
 }
 
 REST_KNOX = {

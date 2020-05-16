@@ -51,3 +51,16 @@ export const getThreadDetailAPI = ({token, thread_id}) => {
         url: `${API_URL}/threads/${thread_id}`,
     })
 }
+
+export const createThreadAPI = ({params}) => {
+    const {token} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/threads`,
+        data: params
+    })
+}

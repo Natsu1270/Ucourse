@@ -5,6 +5,7 @@ const initState = {
     isSignupPanelActive: false,
     isAbilityTestModalActive: false,
     registerResultModal: false,
+    createThreadModal: false,
 };
 
 const uiReducer = (state = initState, action) => {
@@ -35,6 +36,9 @@ const uiReducer = (state = initState, action) => {
 
         case UIActionTypes.TOGGLE_REGISTER_COURSE_MODAL:
             return {...state, registerResultModal: !state.registerResultModal};
+
+        case UIActionTypes.TOGGLE_CREAT_THREAD_MODAL:
+            return {...state, createThreadModal: !state.createThreadModal}
 
         default:
             return state

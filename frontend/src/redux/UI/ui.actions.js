@@ -25,3 +25,7 @@ export const toggleAbilityTestModal = () => ({
 export const toggleRegisterCourseModal = () => ({
     type: UIActionTypes.TOGGLE_REGISTER_COURSE_MODAL
 });
+
+export const toggleCreateThreadModal = () => ({
+    type: UIActionTypes.TOGGLE_CREAT_THREAD_MODAL
+});

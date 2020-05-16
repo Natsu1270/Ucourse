@@ -28,3 +28,9 @@ export function parseHtml(content) {
 export function secondToTime(secs) {
     return moment.utc(secs * 1000).format('HH:mm:ss')
 }
+
+export function timeDiff(timestamp) {
+    if (timestamp) {
+        return moment(timestamp).fromNow()
+    }
+}

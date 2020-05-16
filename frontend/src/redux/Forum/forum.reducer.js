@@ -16,6 +16,7 @@ const forumReducer = (state = initState, action) => {
         case ForumTypes.GET_FORUM_DETAIL_START:
         case ForumTypes.GET_THREADS_START:
         case ForumTypes.GET_THREAD_DETAIL_START:
+        case ForumTypes.CREATE_THREADS_START:
             return {...state, isGetting: true}
 
         case ForumTypes.GET_FORUMS_SUCCESS:
@@ -30,10 +31,14 @@ const forumReducer = (state = initState, action) => {
         case ForumTypes.GET_THREAD_DETAIL_SUCCESS:
             return {...state, isGetting: false, threadDetail: action.payload}
 
+        case ForumTypes.CREATE_THREADS_SUCCESS:
+            return {...state, isGetting: false}
+
         case ForumTypes.GET_FORUMS_FAIL:
         case ForumTypes.GET_FORUM_DETAIL_FAIL:
         case ForumTypes.GET_THREADS_FAIL:
         case ForumTypes.GET_THREAD_DETAIL_FAIL:
+        case ForumTypes.CREATE_THREADS_FAIL:
             return {...state, isGetting: false, errorResponse: action.payload}
 
         default:
