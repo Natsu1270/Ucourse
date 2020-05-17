@@ -17,6 +17,11 @@ const forumReducer = (state = initState, action) => {
         case ForumTypes.GET_THREADS_START:
         case ForumTypes.GET_THREAD_DETAIL_START:
         case ForumTypes.CREATE_THREADS_START:
+        case ForumTypes.REPLY_THREAD_START:
+        case ForumTypes.DELETE_THREAD_START:
+        case ForumTypes.MODIFY_THREAD_START:
+        case ForumTypes.DELETE_THREAD_RESPONSE_START:
+        case ForumTypes.MODIFY_THREAD_RESPONSE_START:
             return {...state, isGetting: true}
 
         case ForumTypes.GET_FORUMS_SUCCESS:
@@ -32,6 +37,13 @@ const forumReducer = (state = initState, action) => {
             return {...state, isGetting: false, threadDetail: action.payload}
 
         case ForumTypes.CREATE_THREADS_SUCCESS:
+        case ForumTypes.DELETE_THREAD_SUCCESS:
+        case ForumTypes.MODIFY_THREAD_SUCCESS:
+        case ForumTypes.DELETE_THREAD_RESPONSE_SUCCESS:
+        case ForumTypes.MODIFY_THREAD_RESPONSE_SUCCESS:
+            return {...state, isGetting: false}
+
+        case ForumTypes.REPLY_THREAD_SUCCESS:
             return {...state, isGetting: false}
 
         case ForumTypes.GET_FORUMS_FAIL:
@@ -39,6 +51,11 @@ const forumReducer = (state = initState, action) => {
         case ForumTypes.GET_THREADS_FAIL:
         case ForumTypes.GET_THREAD_DETAIL_FAIL:
         case ForumTypes.CREATE_THREADS_FAIL:
+        case ForumTypes.REPLY_THREAD_FAIL:
+        case ForumTypes.DELETE_THREAD_FAIL:
+        case ForumTypes.MODIFY_THREAD_FAIL:
+        case ForumTypes.DELETE_THREAD_RESPONSE_FAIL:
+        case ForumTypes.MODIFY_THREAD_RESPONSE_FAIL:
             return {...state, isGetting: false, errorResponse: action.payload}
 
         default:

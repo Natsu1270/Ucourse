@@ -34,7 +34,7 @@ class ThreadListAPI(generics.ListCreateAPIView):
 
     def get_queryset(self):
         forum = self.request.query_params['forum_id']
-        queryset = Thread.objects.filter(forum_id=forum)
+        queryset = Thread.objects.filter(forum_id=forum).order_by('-created_date')
         return queryset
 
     def post(self, request, *args, **kwargs):
@@ -67,7 +67,28 @@ class ThreadResponseListAPI(generics.ListCreateAPIView):
         permissions.IsAuthenticated
     ]
     serializer_class = serializers.ThreadResponseSerializer
-    queryset = ThreadResponse.objects.all()
+
+    def get_queryset(self):
+        thread = self.request.query_params['thread_id']
+        queryset = ThreadResponse.objects.filter(thread_id=thread)
+        return queryset
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        response = serializer.save(
+            created_by=request.user, thread=data['thread'],
+            content=data['content']
+        )
+        return Response({
+            "data": {
+                "reply": self.get_serializer(response).data
+            },
+            "result": True,
+            "message": "Reply thread successfully",
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
 
 
 class ThreadResponseDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -76,4 +97,3 @@ class ThreadResponseDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     ]
     serializer_class = serializers.ThreadResponseDetailSerializer
     queryset = ThreadResponse.objects.all()
-

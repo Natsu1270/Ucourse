@@ -36,6 +36,9 @@ class Thread(models.Model):
     def set_created_by(self, user):
         self.created_by = user
 
+    class Meta:
+        ordering = ['-id']
+
 
 class ThreadResponse(models.Model):
     content = RichTextField()
@@ -65,4 +68,3 @@ class ThreadResponse(models.Model):
     @property
     def is_parent(self):
         return True if self.parent is None else False
-

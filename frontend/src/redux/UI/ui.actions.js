@@ -29,3 +29,7 @@ export const toggleRegisterCourseModal = () => ({
 export const toggleCreateThreadModal = () => ({
     type: UIActionTypes.TOGGLE_CREAT_THREAD_MODAL
 });
+
+export const toggleReplyThreadModal = () => ({
+    type: UIActionTypes.TOGGLE_REPLY_THREAD_MODAL
+});

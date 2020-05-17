@@ -47,7 +47,12 @@ const ProfileSetting = ({profile, isLoading, token}) => {
         };
         console.log('Received values of form: ', values);
 
-        dispatch(updateProfileStart({...values,birth_date: values.birth_date.format('YYYY-MM-DD'), token}))
+        dispatch(updateProfileStart(
+            {...values,
+                birth_date: values.birth_date ? values.birth_date.format('YYYY-MM-DD') : undefined,
+                token
+            }
+            ))
     };
 
     return (

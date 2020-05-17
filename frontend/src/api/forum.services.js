@@ -52,7 +52,7 @@ export const getThreadDetailAPI = ({token, thread_id}) => {
     })
 }
 
-export const createThreadAPI = ({params}) => {
+export const createThreadAPI = (params) => {
     const {token} = params
     return axios.request({
         headers: {
@@ -61,6 +61,69 @@ export const createThreadAPI = ({params}) => {
         },
         method: 'POST',
         url: `${API_URL}/threads`,
+        data: params
+    })
+}
+
+export const replyThreadAPI = (params) => {
+    const {token} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/responses`,
+        data: params
+    })
+}
+
+export const deleteThreadAPI = (params) => {
+    const {token, thread_id} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'DELETE',
+        url: `${API_URL}/threads/${thread_id}`,
+    })
+}
+
+export const modifyThreadAPI = (params) => {
+    const {token, thread_id} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'PUT',
+        url: `${API_URL}/threads/${thread_id}`,
+        data: params
+    })
+}
+
+export const deleteThreadResponseAPI = (params) => {
+    const {token, responseId} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'DELETE',
+        url: `${API_URL}/responses/${responseId}`,
+    })
+}
+
+export const modifyThreadResponseAPI = (params) => {
+    const {token, responseId} = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'PUT',
+        url: `${API_URL}/responses/${responseId}`,
         data: params
     })
 }

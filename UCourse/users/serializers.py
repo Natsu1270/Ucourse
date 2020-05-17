@@ -32,11 +32,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     user_profile = ProfileMinSerializer(read_only=True)
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email', 'user_profile')
+        fields = ('id', 'username', 'email', 'user_profile')
 
 
 class RegisterSerializer(serializers.ModelSerializer):

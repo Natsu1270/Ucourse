@@ -23,8 +23,8 @@ class ForumSerializer(ModelSerializer):
 
 class ThreadResponseSerializer(ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    thread = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
-    created_by = UserMinSerializer(read_only=True)
+    thread = serializers.PrimaryKeyRelatedField(queryset=Thread.objects.all(), required=False)
+    created_by = UserMinSerializer(read_only=True, required=False)
 
     class Meta:
         model = ThreadResponse

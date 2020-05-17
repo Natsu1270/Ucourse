@@ -61,7 +61,7 @@ const ForumDetail = ({token}) => {
                     }
                 />
             </Skeleton>
-            <ThreadModal token={token} forum_id={forum_id} />
+            <ThreadModal token={token} forum_id={forum_id} isCreate={true} />
         </section>
     )
 }

@@ -6,6 +6,7 @@ const initState = {
     isAbilityTestModalActive: false,
     registerResultModal: false,
     createThreadModal: false,
+    replyThreadModal: false,
 };
 
 const uiReducer = (state = initState, action) => {
@@ -39,6 +40,9 @@ const uiReducer = (state = initState, action) => {
 
         case UIActionTypes.TOGGLE_CREAT_THREAD_MODAL:
             return {...state, createThreadModal: !state.createThreadModal}
+
+        case UIActionTypes.TOGGLE_REPLY_THREAD_MODAL:
+            return {...state, replyThreadModal: !state.replyThreadModal}
 
         default:
             return state

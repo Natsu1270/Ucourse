@@ -26,3 +26,8 @@ export const createThreadModalSelector = createSelector(
     [uiSelector],
     ui => ui.createThreadModal
 );
+
+export const replyThreadModalSelector = createSelector(
+    [uiSelector],
+    ui => ui.replyThreadModal
+);

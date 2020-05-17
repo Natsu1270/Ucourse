@@ -5,7 +5,7 @@
 
     &--content {
         &__list {
-            width: 90%;
+            width: 100%;
 
             .ant-list-item {
                 cursor: pointer;
@@ -48,7 +48,7 @@
 }
 
 .forum-detail {
-
+    padding-bottom: 5rem;
 }
 
 .thread {
@@ -68,6 +68,10 @@
             color: rgba(black, 0.7);
             font-size: 1.6rem;
         }
+    }
+
+    &--reply-card {
+        border: 1px solid #d8d8d8;
     }
 
     &--modal {

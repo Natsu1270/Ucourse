@@ -73,3 +73,74 @@ export const createThreadsFail = (err) => ({
     type: ForumTypes.CREATE_THREADS_FAIL,
     payload: err
 });
+
+export const replyThreadStart = (params) => ({
+    type: ForumTypes.REPLY_THREAD_START,
+    payload: params
+});
+
+export const replyThreadSuccess = (reply) => ({
+    type: ForumTypes.REPLY_THREAD_SUCCESS,
+    payload: reply
+});
+
+export const replyThreadFail = (err) => ({
+    type: ForumTypes.REPLY_THREAD_FAIL,
+    payload: err
+});
+
+export const deleteThreadStart = (params) => ({
+    type: ForumTypes.DELETE_THREAD_START,
+    payload: params
+});
+
+export const deleteThreadSuccess = () => ({
+    type: ForumTypes.DELETE_THREAD_SUCCESS,
+});
+
+export const deleteThreadFail = (err) => ({
+    type: ForumTypes.DELETE_THREAD_FAIL,
+    payload: err
+});
+
+export const modifyThreadStart = (params) => ({
+    type: ForumTypes.MODIFY_THREAD_START,
+    payload: params
+});
+
+export const modifyThreadSuccess = () => ({
+    type: ForumTypes.MODIFY_THREAD_SUCCESS,
+});
+
+export const modifyThreadFail = (err) => ({
+    type: ForumTypes.MODIFY_THREAD_FAIL,
+    payload: err
+});
+
+export const deleteThreadResponseStart = (params) => ({
+    type: ForumTypes.DELETE_THREAD_RESPONSE_START,
+    payload: params
+});
+
+export const deleteThreadResponseSuccess = () => ({
+    type: ForumTypes.DELETE_THREAD_RESPONSE_SUCCESS,
+});
+
+export const deleteThreadResponseFail = (err) => ({
+    type: ForumTypes.DELETE_THREAD_FAIL,
+    payload: err
+});
+
+export const modifyResponseStart = (params) => ({
+    type: ForumTypes.MODIFY_THREAD_RESPONSE_START,
+    payload: params
+});
+
+export const modifyResponseSuccess = () => ({
+    type: ForumTypes.MODIFY_THREAD_RESPONSE_SUCCESS,
+});
+
+export const modifyResponseFail = (err) => ({
+    type: ForumTypes.MODIFY_THREAD_RESPONSE_FAIL,
+    payload: err
+});
