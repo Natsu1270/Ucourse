@@ -11,7 +11,7 @@ import {errorResponseSelector, isGettingSelector} from "../../redux/Forum/forum.
 import {modifyResponseStart, replyThreadStart} from "../../redux/Forum/forum.actions";
 import Constants from "../../constants";
 
-const ThreadResponseModal = ({token, thread_id, isCreate, responseId, content}) => {
+const ThreadResponseModal = ({token, thread_id, handleAddItem}) => {
 
     const dispatch = useDispatch()
 
@@ -28,18 +28,15 @@ const ThreadResponseModal = ({token, thread_id, isCreate, responseId, content}) 
     };
 
     const onFinish = (values) => {
-        if (isCreate) {
-            dispatch(replyThreadStart({token, thread: thread_id, content: editorState}))
-        } else {
-            dispatch(modifyResponseStart({token, thread:thread_id, responseId, content: editorState}))
-        }
+
+        handleAddItem(editorState)
+        dispatch(toggleReplyThreadModal())
         if (!isCreating && !errorResponse) {
             message.success(
-                isCreate ? "Đã gửi phản hồi": "Sửa thành công",
-                2,
+                "Đã gửi phản hồi",
+                1,
                 () => {
-                    dispatch(toggleReplyThreadModal())
-                     window.location.reload(false);
+                    // dispatch(toggleReplyThreadModal())
                 })
         } else {
             message.error(errorResponse)
@@ -89,7 +86,7 @@ const ThreadResponseModal = ({token, thread_id, isCreate, responseId, content}) 
                     >
                         <CKEditor
                             editor={ClassicEditor}
-                            data={content}
+                            data={editorState}
                             config={Constants.CKEDITOR_CONFIGS}
                             onInit={editor => {
                             }}

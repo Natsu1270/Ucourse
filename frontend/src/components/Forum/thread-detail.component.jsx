@@ -33,7 +33,7 @@ const ThreadDetail = ({token}) => {
 
             <ThreadDetailHeader token={token} thread_id={thread_id} threadDetail={threadDetail} />
             <ThreadResponses thread_id={thread_id} token={token}  user={user} threadReplies={threadReplies} isLoading={isLoading} />
-            <ThreadResponseModal isCreate={true} token={token} thread_id={thread_id}/>
+
         </section>
     )
 }

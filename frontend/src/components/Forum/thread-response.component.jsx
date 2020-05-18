@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Avatar, Button, Card, Dropdown, Menu, Skeleton} from "antd";
 import {toggleReplyThreadModal} from "../../redux/UI/ui.actions";
 import {parseHtml, timeDiff} from "../../utils/text.utils";
@@ -13,8 +13,10 @@ const ThreadResponse = ({token, threadId, reply, handleDelete, user, isLoading})
 
     const [editing, setEditing] = useState(false)
     const [editorState, setEditorState] = useState(null)
+    const [replyContent, setReplyContent] = useState(reply.content)
     const dispatch = useDispatch()
     const {Meta} = Card
+
 
     const menu = (
         <Menu>
@@ -72,17 +74,20 @@ const ThreadResponse = ({token, threadId, reply, handleDelete, user, isLoading})
                                     }}
                                 />
                                 <Button
+                                    disabled={!editorState}
                                     onClick={() => {
                                         dispatch(modifyResponseStart({
                                             token, thread_id: threadId, responseId: reply.id, content: editorState
                                         }))
+                                        setReplyContent(editorState)
+                                        setEditing(false)
                                     }}
                                     type="primary"
                                     className="mt-2 mr-2">Xong</Button>
                                 <Button type="dashed" className="mt-2" onClick={() => setEditing(false)}>Hủy</Button>
                             </div> :
                             <span className="text-info-normal ">
-                                {parseHtml(reply.content)}
+                                {parseHtml(replyContent)}
                             </span>}
                 />
             </Skeleton>

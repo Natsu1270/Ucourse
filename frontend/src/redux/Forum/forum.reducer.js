@@ -6,6 +6,8 @@ const initState = {
     threads: null,
     threadDetail: null,
 
+    replyThread: null,
+
     isGetting: false,
     errorResponse: null
 }
@@ -44,7 +46,7 @@ const forumReducer = (state = initState, action) => {
             return {...state, isGetting: false}
 
         case ForumTypes.REPLY_THREAD_SUCCESS:
-            return {...state, isGetting: false}
+            return {...state, isGetting: false, replyThread: action.payload}
 
         case ForumTypes.GET_FORUMS_FAIL:
         case ForumTypes.GET_FORUM_DETAIL_FAIL:
