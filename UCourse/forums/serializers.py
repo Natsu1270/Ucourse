@@ -56,7 +56,7 @@ class ReplyResponseSerializer(ModelSerializer):
 
 class ThreadResponseDetailSerializer(ModelSerializer):
     replies = serializers.SerializerMethodField()
-    is_parent = serializers.BooleanField()
+    is_parent = serializers.BooleanField(required=False)
 
     class Meta:
         model = ThreadResponse
