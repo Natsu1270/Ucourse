@@ -4,14 +4,39 @@ from django.conf import settings
 from django.utils.text import slugify
 from ckeditor.fields import RichTextField
 from courses.models import Course
+from profiles.models import Profile
 
 
 class CourseHome(models.Model):
-    course = models.OneToOneField(Course, on_delete=models.CASCADE)
-    status = models.BooleanField(default=True)
+    OPEN = 'open'
+    CLOSED = 'closed'
+    FULL = 'full'
+    # cannot register anymore
+    IN_PROGRESS = 'in progress'
+    COURSE_STATUS_CHOICES = [
+        (OPEN, 'Active'),
+        (CLOSED, 'Closed'),
+        (FULL, 'Full'),
+    ]
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='c_homes')
+    open_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    expected_date = models.DateField(blank=True, null=True)
+    # maximum days after open date
+    over_admission_days = models.IntegerField(blank=True, null=True)
+    teacher = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+        related_name='teacher_course',
+        limit_choices_to={'is_teacher': True},
+        blank=True,
+        null=True
+    )
     slug = models.SlugField(null=True, blank=True)
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_homes', blank=True)
     maximum_number = models.IntegerField(null=True, blank=True)
+    status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES, default=OPEN)
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
     course_info = RichTextField(blank=True, null=True)

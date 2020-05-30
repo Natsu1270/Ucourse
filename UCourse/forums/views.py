@@ -82,9 +82,7 @@ class ThreadResponseListAPI(generics.ListCreateAPIView):
             content=data['content']
         )
         return Response({
-            "data": {
-                "reply": self.get_serializer(response).data
-            },
+            "data": self.get_serializer(response).data,
             "result": True,
             "message": "Reply thread successfully",
             "status_code": 201

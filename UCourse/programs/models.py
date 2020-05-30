@@ -28,6 +28,7 @@ class Program(models.Model):
     status = models.BooleanField(default=True)
     icon = models.ImageField(upload_to='programs/icon', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    price = models.CharField(max_length=25, blank=True, null=True)
     field = models.ForeignKey(
         Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
     short_description = models.CharField(max_length=255)

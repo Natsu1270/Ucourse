@@ -25,12 +25,8 @@ class Course(models.Model):
 
     ACTIVE = 'active'
     INACTIVE = 'inactive'
-    CLOSED = 'closed'
-    FULL = 'full'
     COURSE_STATUS_CHOICES = [
         (ACTIVE, 'Active'),
-        (CLOSED, 'Closed'),
-        (FULL, 'Full'),
         (INACTIVE, 'Inactive'),
     ]
 
@@ -49,13 +45,14 @@ class Course(models.Model):
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
     fee_type = models.CharField(max_length=10, choices=FEE_TYPE_CHOICES, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    open_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+    price = models.CharField(max_length=25, blank=True, null=True)
+    # open_date = models.DateField(blank=True, null=True)
+    # end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     teacher = models.ManyToManyField(
         Profile,
-        related_name='teacher_course',
+        related_name='courses_tutors',
         blank=True,
         limit_choices_to={'is_teacher': True},
     )
