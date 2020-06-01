@@ -79,6 +79,10 @@ class Course(models.Model):
         self.slug = slugify(self.title)
         super(Course, self).save(*args, **kwargs)
 
+    @property
+    def course_home_count(self):
+        return self.c_homes.count()
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=255)

@@ -1,10 +1,11 @@
 from rest_framework import serializers
 
 from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
-from courses.serializers import CourseMinSerializer
+# from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer
 from exams.serializers import ExamSerializer, ExamShowSerializer
 from forums.serializers import ForumSerializer
+from profiles.serializers import ProfileMinSerializer
 
 
 class RegisterCourseSerializer(serializers.Serializer):
@@ -68,7 +69,7 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
 
 class CourseHomeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course = CourseMinSerializer(read_only=True)
+    course = serializers.PrimaryKeyRelatedField(read_only=True)
     students = UserSerializer(many=True)
     learning_topics = LearningTopicSerializer(many=True, read_only=True)
     slug = serializers.CharField(read_only=True)
@@ -85,10 +86,22 @@ class CourseHomeSerializer(serializers.ModelSerializer):
 
 class CourseHomeMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course = CourseMinSerializer(read_only=True)
+    course = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = CourseHome
         fields = [
             'id', 'course', 'status',
+        ]
+
+
+class CourseHomeShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    teacher = ProfileMinSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'status', 'open_date', 'end_date', 'expected_date',
+            'over_admission_days', 'teacher', 'maximum_number'
         ]

@@ -18,7 +18,7 @@ class CourseHome(models.Model):
         (CLOSED, 'Closed'),
         (FULL, 'Full'),
     ]
-
+    name = models.CharField(max_length=255, null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='c_homes')
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
@@ -33,7 +33,7 @@ class CourseHome(models.Model):
         blank=True,
         null=True
     )
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, unique=True)
     students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_homes', blank=True)
     maximum_number = models.IntegerField(null=True, blank=True)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES, default=OPEN)
@@ -42,10 +42,10 @@ class CourseHome(models.Model):
     course_info = RichTextField(blank=True, null=True)
 
     def __str__(self):
-        return self.course.title
+        return '{0} - {1}'.format(self.course.title, self.name)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.course.title)
+        self.slug = slugify(self.course.title + self.name)
         super(CourseHome, self).save(*args, **kwargs)
 
 
