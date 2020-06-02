@@ -11,13 +11,14 @@ import {
     errorResponseSelector,
     isFetchingSelector,
     courseDetailDetailSelector,
-    courseTeacherSelector,
+    courseClassesSelector,
 } from "../../redux/Course/course.selects";
 import {slugifyString} from "../../utils/text.utils";
 import CourseDetailBanner from "../../components/Banners/course-detail-banner.component";
 import CourseDetailTab from "../../components/Course/course-detail-tab.component";
 import CourseDetailOverview from "../../components/Course/course-detail-overview.component";
 import CourseDetailComponents from "../../components/Course/course-detail-components.component";
+import CourseClasses from "../../components/Course/course-classes.component";
 import CourseDetailTeacher from "../../components/Course/course-detail-teacher.component";
 import CourseDetailReview from "../../components/Course/course-detail-review.component";
 import CourseDetailRelated from "../../components/Course/course-detail-related.component";
@@ -38,19 +39,18 @@ const CourseDetail = () => {
     const [ownCourse, setOwnCourse] = useState(false);
 
     const {
-        course, courseDetail, teachers,
-        isFetching, errorResponse, myCourses,
-        token, registerCourseModal, errorRegister
+        course, courseDetail, isFetching, errorResponse, myCourses,
+        token, registerCourseModal, errorRegister, classes
     } = useSelector(createStructuredSelector({
         course: courseDetailSelector,
         courseDetail: courseDetailDetailSelector,
-        teachers: courseTeacherSelector,
         isFetching: isFetchingSelector,
         errorResponse: errorResponseSelector,
         myCourses: myCourseHomesSelector,
         token: tokenSelector,
         registerCourseModal: registerCourseModalSelector,
-        errorRegister: errorResponseRegisterCourseSelector
+        errorRegister: errorResponseRegisterCourseSelector,
+        classes: courseClassesSelector
     }));
 
     const isMyCourse = () => {
@@ -97,7 +97,6 @@ const CourseDetail = () => {
                 courseDetail={courseDetail}
                 course={course}
                 own={ownCourse}
-                teachers={teachers}
                 handleRegister={handleRegister}
                 isLoading={isFetching}
             />
@@ -114,13 +113,15 @@ const CourseDetail = () => {
                 isLoading={isFetching}
             />
 
-            <CourseDetailComponents course={course}/>
+            <CourseDetailComponents course={course} />
+            
+            <CourseClasses classes={classes} isLoading={isFetching} />
 
-            <CourseDetailTeacher teachers={teachers}/>
+            {/*<CourseDetailTeacher />*/}
 
-            <CourseDetailReview course={course}/>
+            {/*<CourseDetailReview course={course}/>*/}
 
-            <CourseDetailRelated course={course}/>
+            {/*<CourseDetailRelated course={course}/>*/}
 
             <AbilityTest/>
 

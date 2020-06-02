@@ -1,7 +1,20 @@
 from rest_framework import serializers
 from .models import Course, CourseDetail, Skill
-from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer
-from course_homes.serializers import CourseHomeMinSerializer, CourseHomeShowSerializer
+from course_homes.models import CourseHome
+from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer, ProfileMinSerializer
+
+
+class CourseHomeShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    teacher = ProfileMinSerializer(read_only=True)
+    full_name = serializers.CharField()
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'status', 'name', 'full_name', 'open_date', 'end_date', 'expected_date',
+            'over_admission_days', 'teacher', 'maximum_number'
+        ]
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -22,7 +35,6 @@ class CourseSerializer(serializers.ModelSerializer):
     course_detail = CourseDetailSerializer(many=False, read_only=True)
     program = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
-    teacher = ProfileSerializer(many=True, read_only=True)
     tags = serializers.StringRelatedField(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
     ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -33,7 +45,7 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'code', 'icon', 'slug', 'level',
             'fee_type', 'status', 'course_detail', 'program',
-            'teacher', 'field', 'tags', 'ability_test', 'created_date',
+            'field', 'tags', 'ability_test', 'created_date',
             'updated_date', 'created_by', 'c_homes'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')

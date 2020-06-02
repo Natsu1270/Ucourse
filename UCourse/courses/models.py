@@ -50,12 +50,6 @@ class Course(models.Model):
     # end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
-    teacher = models.ManyToManyField(
-        Profile,
-        related_name='courses_tutors',
-        blank=True,
-        limit_choices_to={'is_teacher': True},
-    )
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
     created_date = models.DateTimeField(default=timezone.now)

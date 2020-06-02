@@ -22,6 +22,7 @@ class CourseHome(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='c_homes')
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
+    register_date = models.DateField(blank=True, null=True)
     expected_date = models.DateField(blank=True, null=True)
     # maximum days after open date
     over_admission_days = models.IntegerField(blank=True, null=True)
@@ -47,6 +48,10 @@ class CourseHome(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.course.title + self.name)
         super(CourseHome, self).save(*args, **kwargs)
+
+    @property
+    def full_name(self):
+        return self.__str__()
 
 
 class LearningTopic(models.Model):

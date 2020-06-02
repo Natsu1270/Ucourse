@@ -24,7 +24,7 @@ const Header = ({token, currentUser}) => {
 
     return (
         <Header className='cs-main-header' id="main-header">
-            <ul className='cs-navbar' mode="horizontal" defaultSelectedKeys={['2']}>
+            <ul className='cs-navbar' mode="horizontal">
                 <li>
                     <Link to="/" className="cs-logo text--main bold">
                         UCourse
@@ -37,10 +37,11 @@ const Header = ({token, currentUser}) => {
                 <li className='header-search'>
                     <SearchInput width={400}/>
                 </li>
-                <li>
                     {
                         currentUser ? (
-                            <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout}/>
+                            <li>
+                                <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout}/>
+                            </li>
                         ) : (
                             <li className="nav-item active-nav" id="logout-btn">
                                 <Button type="primary" onClick={() => dispatch(showRLModal())}>
@@ -49,7 +50,6 @@ const Header = ({token, currentUser}) => {
                             </li>
                         )
                     }
-                </li>
             </ul>
             <Suspense fallback={<span/>}>
                 <RegisterOrLogin/>

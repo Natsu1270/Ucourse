@@ -64,22 +64,12 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                         <a href="#cs-course-components"
                             className="course-tab__address--link">Chương trình</a>
                     </li>
-                    {
-                        isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
-                            <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Giảng viên</a>
-                        </li>
-                    }
-                    <li className="course-tab__address" id="tab-review">
-                        <a href="#cs-course-review"
-                            className="course-tab__address--link">Đánh giá học viên</a>
-                    </li>
-                    {
-                        isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
-                            <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Giảng viên</a>
-                        </li>
-                    }
+
+                    {/*<li className="course-tab__address" id="tab-review">*/}
+                    {/*    <a href="#cs-course-review"*/}
+                    {/*        className="course-tab__address--link">Đánh giá học viên</a>*/}
+                    {/*</li>*/}
+
                 </ul>
                 <div className="course-tab__btn">
                     {

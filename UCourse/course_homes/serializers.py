@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
 # from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer
-from exams.serializers import ExamSerializer, ExamShowSerializer
+from exams.serializers import ExamShowSerializer
 from forums.serializers import ForumSerializer
 from profiles.serializers import ProfileMinSerializer
 
@@ -95,13 +95,4 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         ]
 
 
-class CourseHomeShowSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    teacher = ProfileMinSerializer(read_only=True)
 
-    class Meta:
-        model = CourseHome
-        fields = [
-            'id', 'status', 'open_date', 'end_date', 'expected_date',
-            'over_admission_days', 'teacher', 'maximum_number'
-        ]
