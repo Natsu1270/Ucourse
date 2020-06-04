@@ -8,7 +8,6 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {toggleReplyThreadModal} from "../../redux/UI/ui.actions";
 import {createStructuredSelector} from "reselect";
 import {errorResponseSelector, isGettingSelector} from "../../redux/Forum/forum.selects";
-import {modifyResponseStart, replyThreadStart} from "../../redux/Forum/forum.actions";
 import Constants from "../../constants";
 
 const ThreadResponseModal = ({token, thread_id, handleAddItem}) => {

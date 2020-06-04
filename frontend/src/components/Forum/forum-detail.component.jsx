@@ -10,7 +10,7 @@ import {
     forumThreadsSelector,
     isGettingSelector
 } from "../../redux/Forum/forum.selects";
-import {List, Skeleton, Button, Tag} from "antd";
+import {List, Skeleton, Button} from "antd";
 import ForumItem from "./forum-item.component";
 import {toggleCreateThreadModal} from "../../redux/UI/ui.actions";
 import ThreadModal from "./thread-modal.component";
@@ -24,7 +24,7 @@ const ForumDetail = ({token}) => {
 
     useEffect(() => {
         dispatch(getForumDetailStart({token, forum_id}))
-    }, [])
+    }, [dispatch])
 
     const {forumDetail, forumThreads, isGetting, errorResponse} = useSelector(createStructuredSelector({
         forumDetail: forumDetailSelector,

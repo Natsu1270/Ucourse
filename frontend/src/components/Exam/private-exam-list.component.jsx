@@ -9,7 +9,6 @@ import {
     isProcessingSelector, examDetailSelector
 } from '../../redux/Exam/exam.selects'
 import {Skeleton, Button, Drawer, Empty} from 'antd'
-import {secondToTime} from "../../utils/text.utils";
 import ExamDetail from "./exam-detail.component";
 import ExamHistoryTable from "./exam-history-table.component";
 
@@ -17,7 +16,6 @@ const PrivateExamList = ({token}) => {
 
     const {exam_id} = useParams()
     const dispatch = useDispatch()
-    const history = useHistory()
 
     const [showExam, setShowExam] = useState(false)
 
@@ -34,7 +32,7 @@ const PrivateExamList = ({token}) => {
             {token, exam_id: parseInt(exam_id)}
         ))
         dispatch(getExamStart({token, exam_id}))
-    }, [])
+    }, [dispatch])
     return (
         <section className="section-5 page-2 exam-list">
             <div className="exam-list--title">

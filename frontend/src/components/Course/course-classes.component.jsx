@@ -6,7 +6,7 @@ const CourseClasses = ({classes, isLoading}) => {
     return (
         <section className="mt-10 section-course-classes" id="cs-course-classes">
             <h2 className="text--main section-header" id="cs-course-overview">
-                Danh sách lớp
+                Danh sách lớp thuộc khóa học
             </h2>
             <List
                 className="class-list"

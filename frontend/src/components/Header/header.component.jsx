@@ -1,10 +1,10 @@
-import React, {useEffect, useState, Suspense} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React, {Suspense} from 'react'
+import {useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {loadUserStart, logoutStart} from '../../redux/Auth/auth.actions';
+import {logoutStart} from '../../redux/Auth/auth.actions';
 import {showRLModal} from '../../redux/UI/ui.actions'
 
-import {Button, Spin, Layout, Menu} from 'antd'
+import {Button, Layout } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import {clearCurrentProfile} from "../../redux/Profile/profile.actions";

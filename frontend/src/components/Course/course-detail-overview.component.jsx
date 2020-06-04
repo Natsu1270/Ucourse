@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import Truncate from 'react-truncate'
-import { formatDate, parseHtml } from "../../utils/text.utils";
+import { parseHtml } from "../../utils/text.utils";
 import Constants from "../../constants";
-import { ArrowDownOutlined, ArrowUpOutlined, ThunderboltOutlined, ClockCircleOutlined, DeploymentUnitOutlined } from '@ant-design/icons'
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 import Skill from "./skill.component";
 
 const CourseDetailOverview = ({full_description, open_date, end_date, level, benefits, skills, num_course, isLoading }) => {

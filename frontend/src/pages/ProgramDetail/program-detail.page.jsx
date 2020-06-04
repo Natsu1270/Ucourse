@@ -8,8 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProgramDetailStart } from "../../redux/Program/program.actions";
 import { createStructuredSelector } from "reselect";
 import { errorResponseSelector, isFetchingSelector, programDetailSelector, programCoursesSelector } from "../../redux/Program/program.selects";
-import HashLoader from "react-spinners/HashLoader";
-import Constants from "../../constants";
 import ProgramDetailBanner from "../../components/Program/program-detail-banner.component";
 import CourseDetailTab from "../../components/Course/course-detail-tab.component";
 import CourseDetailOverview from "../../components/Course/course-detail-overview.component";
@@ -24,7 +22,7 @@ const ProgramDetailPage = () => {
     useEffect(() => {
         window.scrollTo(0, 0)
         dispatch(fetchProgramDetailStart(slug))
-    }, [])
+    }, [dispatch])
 
     const { program, programCourses, isFetching, errorResponse } = useSelector(createStructuredSelector({
         program: programDetailSelector,

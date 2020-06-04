@@ -9,19 +9,19 @@ const ExamHistoryTable = ({exams}) => {
             title: 'Lần',
             dataIndex: 'stt',
             key: 'stt',
-            render: text => <a>{text}</a>,
+            render: text => <span>{text}</span>,
         },
         {
             title: 'Điểm',
             dataIndex: 'grade',
             key: 'grade',
-            render: text => <a>{text}</a>,
+            render: text => <span>{text}</span>,
         },
         {
             title: 'Kết quả',
             dataIndex: 'result',
             key: 'result',
-            render: text => <a>{text}</a>,
+            render: text => <span>{text}</span>,
         },
         {
             title: 'Ngày thực hiện',
