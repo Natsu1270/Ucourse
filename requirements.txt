@@ -1,7 +1,7 @@
 asgiref==3.2.3
 cffi==1.14.0
 cryptography==2.8
-Django==3.0.3
+Django==3.0.7
 django-cors-headers==3.2.1
 django-elasticsearch-dsl==7.1.1
 django-extensions==2.2.8
