@@ -17,8 +17,22 @@ export function* onGetCourseDetail() {
     yield takeLatest(CourseActionTypes.FETCH_COURSE_DETAIL_START, getCourseDetail)
 }
 
+export function* buyCourse({payload}) {
+    try {
+        let {data} = yield call(CourseServices.buyCourseAPI, payload)
+        yield put(CourseActions.buyCourseSuccess())
+    } catch (e) {
+        yield put(CourseActions.buyCourseFail(e.response))
+    }
+}
+
+export function* onBuyCourse() {
+    yield takeLatest(CourseActionTypes.BUY_COURSE_START, buyCourse)
+}
+
 export function* courseSaga() {
     yield all([
-        call(onGetCourseDetail)
+        call(onGetCourseDetail),
+        call(onBuyCourse)
     ])
 }

@@ -2,8 +2,8 @@ import React, {useEffect, lazy, Suspense, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux';
 import {Link, useParams, useHistory} from 'react-router-dom'
 
-import {fetchCourseDetailStart} from '../../redux/Course/course.actions'
-import {Breadcrumb, Modal, Skeleton, Spin, Result, Button} from 'antd'
+import {buyCourseStart, fetchCourseDetailStart} from '../../redux/Course/course.actions'
+import {Breadcrumb, Modal, Skeleton, Spin, Result, Button, message} from 'antd'
 import {HomeOutlined} from '@ant-design/icons'
 import {createStructuredSelector} from "reselect";
 import {
@@ -19,16 +19,15 @@ import CourseDetailTab from "../../components/Course/course-detail-tab.component
 import CourseDetailOverview from "../../components/Course/course-detail-overview.component";
 import CourseDetailComponents from "../../components/Course/course-detail-components.component";
 import CourseClasses from "../../components/Course/course-classes.component";
-import CourseDetailTeacher from "../../components/Course/course-detail-teacher.component";
-import CourseDetailReview from "../../components/Course/course-detail-review.component";
-import CourseDetailRelated from "../../components/Course/course-detail-related.component";
+
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
 import {myCourseHomesSelector, errorResponseRegisterCourseSelector} from "../../redux/CourseHome/course-home.selects";
 import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
 import {registerCourseModalSelector} from "../../redux/UI/ui.selects";
-import {toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
+import {showRLModal, toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
 import Constants from "../../constants";
+import {checkBoughtCourseAPI} from "../../api/course.services";
 
 const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
 
@@ -59,9 +58,21 @@ const CourseDetail = () => {
     };
 
     useEffect(() => {
+
         dispatch(fetchCourseDetailStart(slug));
         window.scrollTo(0, 0)
     }, []);
+
+    useEffect(() => {
+        if (course.id && token) {
+            const checkBought = async () => {
+            const result = await checkBoughtCourseAPI({token, course: course.id})
+            const isOwn = result.status === 200
+            setOwnCourse(isOwn)
+        }
+        checkBought().then(r => console.log(r))
+        }
+    }, [course])
 
     useEffect(() => {
         if (Object.keys(course).length > 0) {
@@ -70,13 +81,20 @@ const CourseDetail = () => {
     }, [course])
 
 
-
     const handleRegister = () => {
-        dispatch(registerCourseStart({course_id: course.id, token}))
-        if (!errorRegister) {
-            dispatch(toggleRegisterCourseModal())
-            setOwnCourse(true)
+        if (token) {
+            dispatch(buyCourseStart({course: course.id, token}))
+            // dispatch(registerCourseStart({course_id: course.id, token}))
+            if (!errorRegister) {
+                dispatch(toggleRegisterCourseModal())
+                setOwnCourse(true)
+            }
+        } else {
+            message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
+                1.5,
+                () => dispatch(showRLModal()))
         }
+
     };
 
     const courseDetailComp = (
@@ -113,9 +131,9 @@ const CourseDetail = () => {
                 isLoading={isFetching}
             />
 
-            <CourseDetailComponents course={course} />
-            
-            <CourseClasses classes={classes} isLoading={isFetching} />
+            <CourseDetailComponents course={course}/>
+
+            <CourseClasses classes={classes} isLoading={isFetching}/>
 
             {/*<CourseDetailTeacher />*/}
 

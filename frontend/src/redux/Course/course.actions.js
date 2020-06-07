@@ -43,3 +43,17 @@ export const fetchCourseDetailFail = (err) => ({
     type: CourseActionTypes.FETCH_COURSE_DETAIL_FAIL,
     payload: err
 });
+
+export const buyCourseStart = (params) => ({
+    type: CourseActionTypes.BUY_COURSE_START,
+    payload: params
+})
+
+export const buyCourseSuccess = () => ({
+    type: CourseActionTypes.BUY_COURSE_SUCCESS
+})
+
+export const buyCourseFail = (err) => ({
+    type: CourseActionTypes.BUY_COURSE_FAIL,
+    payload: err
+})

@@ -1,7 +1,8 @@
-from rest_framework import generics, permissions
-from .serializers import CourseSerializer, CourseDetailSerializer
+from rest_framework.response import Response
+from rest_framework import generics, permissions, views, status
+from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer
 from api.permissions import IsTeacherOrTARoleOrReadOnly
-from .models import Course, CourseDetail
+from .models import Course, CourseDetail, UserBuyCourse
 
 
 class CourseListView(generics.ListCreateAPIView):
@@ -30,3 +31,42 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly,
         IsTeacherOrTARoleOrReadOnly
     ]
+
+
+class BuyCourseAPI(generics.GenericAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        course_id = request.data['course']
+        instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
+        return Response({
+            "data": {
+
+            },
+            "result": True,
+            "message": "Register Successfully",
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
+
+
+class CheckIsBought(generics.GenericAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def post(self, request):
+        course_id = request.data['course']
+        try:
+            instance = UserBuyCourse.objects.get(user=request.user, course_id=course_id)
+            return Response({
+                "result": True,
+                "status_code": 200
+            }, status=status.HTTP_200_OK)
+        except UserBuyCourse.DoesNotExist:
+            return Response({
+                "result": False,
+                "status_code": 400
+            }, status=status.HTTP_400_BAD_REQUEST)

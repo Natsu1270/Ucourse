@@ -505,4 +505,12 @@
         background-color: #ffffff;
         padding: 1rem 3rem;
     }
+
+    .class-sub-info {
+        display: flex;
+        flex-wrap: wrap;
+        &__item {
+            flex: 0 0 25rem;
+        }
+    }
 }

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course, CourseDetail, Skill
+from .models import Course, CourseDetail, Skill, UserBuyCourse
 from course_homes.models import CourseHome
 from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer, ProfileMinSerializer
 
@@ -12,7 +12,8 @@ class CourseHomeShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseHome
         fields = [
-            'id', 'status', 'name', 'full_name', 'open_date', 'end_date', 'expected_date',
+            'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
+            'expected_date', 'register_date',
             'over_admission_days', 'teacher', 'maximum_number'
         ]
 
@@ -72,6 +73,17 @@ class CourseMinSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'slug', 'icon', 'status'
+        ]
+
+
+class UserBuyCourseSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+
+    class Meta:
+        model = UserBuyCourse
+        fields = [
+            'id', 'user', 'course', 'bought_date'
         ]
 
 

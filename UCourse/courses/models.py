@@ -46,6 +46,7 @@ class Course(models.Model):
     fee_type = models.CharField(max_length=10, choices=FEE_TYPE_CHOICES, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     price = models.CharField(max_length=25, blank=True, null=True)
+    user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
     # open_date = models.DateField(blank=True, null=True)
     # end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
@@ -76,6 +77,12 @@ class Course(models.Model):
     @property
     def course_home_count(self):
         return self.c_homes.count()
+
+
+class UserBuyCourse(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    bought_date = models.DateField(default=timezone.now)
 
 
 class Skill(models.Model):
