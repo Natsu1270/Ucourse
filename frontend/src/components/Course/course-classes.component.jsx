@@ -1,10 +1,13 @@
 import React, {useState} from 'react'
-import {List, Avatar, Skeleton, Tag, Button} from 'antd'
+import {List, Avatar, Skeleton, Tag, Button, message} from 'antd'
 import {dayDiff} from "../../utils/text.utils";
 import moment from 'moment'
+import {useDispatch} from "react-redux";
+import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
 
-const CourseClasses = ({classes, isLoading}) => {
+const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
 
+    const dispatch = useDispatch()
 
     const courseHomeStatus = (home) => {
         const now = moment()
@@ -17,7 +20,7 @@ const CourseClasses = ({classes, isLoading}) => {
         }
 
         if (home.status === 'closed' || endDays < 0) {
-            return <Tag color="#f50">Khóa học đã kết thúc</Tag>
+            return <Tag color="#f50">Lớp đã kết thúc</Tag>
         }
         if (registerDays > 0) {
             return <Tag color="#ffcd3c">Chưa đến ngày đăng ký</Tag>
@@ -43,6 +46,14 @@ const CourseClasses = ({classes, isLoading}) => {
         return -openDays < delayDays;
     }
 
+    const registerClass = (item) => {
+        if (!isOwn) {
+            message.error("Vui lòng đăng ký khóa học trước khi đăng ký lớp")
+        } else {
+            dispatch(registerCourseStart({course_id: course.id, token, class_id: item.id}))
+        }
+    }
+
     return (
         <section className="mt-10 section-course-classes" id="cs-course-classes">
             <h2 className="text--main section-header" id="cs-course-overview">
@@ -55,7 +66,7 @@ const CourseClasses = ({classes, isLoading}) => {
                 dataSource={classes}
                 renderItem={item => (
                     <List.Item
-                        actions={[<Button disabled={!canRegister(item)} type="primary" key="list-loadmore-edit">Đăng ký
+                        actions={[<Button onClick={() => registerClass(item)} disabled={!canRegister(item)} type="primary" key="list-loadmore-edit">Đăng ký
                             lớp</Button>]}
                     >
                         <Skeleton avatar title={false} loading={isLoading} active>
@@ -68,6 +79,7 @@ const CourseClasses = ({classes, isLoading}) => {
                                     <span className="class-sub-info__item">Giảng viên: {item.teacher.fullname}</span>
                                     <span className="class-sub-info__item">Ngày bắt đầu: {item.open_date}</span>
                                     <span className="class-sub-info__item">{courseHomeStatus(item)}</span>
+                                    <span className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
                                 </div>}
                             />
                         </Skeleton>

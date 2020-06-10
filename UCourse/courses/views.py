@@ -32,6 +32,9 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
         IsTeacherOrTARoleOrReadOnly
     ]
 
+    def get_serializer_context(self):
+        return {"user": self.request.user}
+
 
 class BuyCourseAPI(generics.GenericAPIView):
     permission_classes = [

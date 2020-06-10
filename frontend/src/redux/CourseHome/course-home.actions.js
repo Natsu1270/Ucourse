@@ -14,6 +14,20 @@ export const registerCourseFail = (err) => ({
     payload: err
 });
 
+export const unRegisterCourseStart = (params) => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_START,
+    payload: params
+});
+
+export const unRegisterCourseSuccess = () => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_SUCCESS
+});
+
+export const unRegisterCourseFail = (err) => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_FAIL,
+    payload: err
+});
+
 export const fetchMyCoursesStart = (params) => ({
     type: CourseHomeTypes.FETCH_MY_COURSES_START,
     payload: params

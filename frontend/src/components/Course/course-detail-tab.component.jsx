@@ -82,7 +82,7 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                             </Button> :
                         isOwn ?
                             <Button type="primary" className="cs-btn-tab" onClick={gotoCourseLearn} >
-                                Tiếp tục khóa học
+                                Đã đăng ký
                             </Button> :
                             <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
                                 Đăng ký ngay

@@ -52,10 +52,10 @@ const CourseDetail = () => {
         classes: courseClassesSelector
     }));
 
-    const isMyCourse = () => {
-        let isOwn = myCourses.some(c => c.id === course.id)
-        setOwnCourse(isOwn)
-    };
+    // const isMyCourse = () => {
+    //     let isOwn = myCourses.some(c => c.id === course.id)
+    //     setOwnCourse(isOwn)
+    // };
 
     useEffect(() => {
 
@@ -74,11 +74,11 @@ const CourseDetail = () => {
         }
     }, [course])
 
-    useEffect(() => {
-        if (Object.keys(course).length > 0) {
-            isMyCourse()
-        }
-    }, [course])
+    // useEffect(() => {
+    //     if (Object.keys(course).length > 0) {
+    //         isMyCourse()
+    //     }
+    // }, [course])
 
 
     const handleRegister = () => {
@@ -131,9 +131,9 @@ const CourseDetail = () => {
                 isLoading={isFetching}
             />
 
-            <CourseDetailComponents course={course}/>
+            <CourseDetailComponents loading={isFetching} course={course}/>
 
-            <CourseClasses classes={classes} isLoading={isFetching}/>
+            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={classes} isLoading={isFetching}/>
 
             {/*<CourseDetailTeacher />*/}
 

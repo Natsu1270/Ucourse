@@ -4,9 +4,9 @@ import CourseHomeTypes from "./course-home.types"
 import * as CourseHomeActions from "./course-home.actions"
 import * as CourseHomeServices from "../../api/courseHome.services"
 
-export function* registerCourse({payload : {course_id, token}}) {
+export function* registerCourse({payload : {course_id, token, class_id}}) {
     try {
-        let {data} = yield call(CourseHomeServices.registerCourseAPI, {course_id, token});
+        let {data} = yield call(CourseHomeServices.registerCourseAPI, {course_id, token, class_id});
         yield put(CourseHomeActions.registerCourseSuccess())
     } catch (err) {
         yield put(CourseHomeActions.registerCourseFail(err.response))
@@ -15,6 +15,19 @@ export function* registerCourse({payload : {course_id, token}}) {
 
 export function* onRegisterCourse() {
     yield takeLatest(CourseHomeTypes.REGISTER_COURSE_START, registerCourse)
+}
+
+export function* unRegisterCourse({payload : { token, class_id }}) {
+    try {
+        let {data} = yield call(CourseHomeServices.unRegisterCourseAPI, { token, class_id});
+        yield put(CourseHomeActions.unRegisterCourseSuccess())
+    } catch (err) {
+        yield put(CourseHomeActions.unRegisterCourseFail(err.response))
+    }
+}
+
+export function* onUnRegisterCourse() {
+    yield takeLatest(CourseHomeTypes.UNREGISTER_COURSE_START, unRegisterCourse)
 }
 
 export function* fetchMyCourses({payload}) {
@@ -49,7 +62,8 @@ export default function* courseHomeSaga() {
     yield all([
         call(onRegisterCourse),
         call(onFetchMyCourses),
-        call(onGetCourseHomeDetail)
+        call(onGetCourseHomeDetail),
+        call(onUnRegisterCourse)
     ])
 }
 

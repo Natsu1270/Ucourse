@@ -12,9 +12,11 @@ const courseHomeReducer = (state=initState, action) => {
         case CourseHomeTypes.REGISTER_COURSE_START:
         case CourseHomeTypes.FETCH_MY_COURSES_START:
         case CourseHomeTypes.GET_COURSE_HOME_DETAIL_START:
+        case CourseHomeTypes.UNREGISTER_COURSE_START:
             return {...state, isLoading: true};
 
         case CourseHomeTypes.REGISTER_COURSE_SUCCESS:
+        case CourseHomeTypes.UNREGISTER_COURSE_SUCCESS:
             return {...state, isLoading: false};
 
         case CourseHomeTypes.FETCH_MY_COURSES_SUCCESS:
@@ -26,6 +28,7 @@ const courseHomeReducer = (state=initState, action) => {
         case CourseHomeTypes.REGISTER_COURSE_FAIL:
         case CourseHomeTypes.FETCH_MY_COURSES_FAIL:
         case CourseHomeTypes.GET_COURSE_HOME_DETAIL_FAIL:
+        case CourseHomeTypes.UNREGISTER_COURSE_FAIL:
             return {...state, isLoading: false, errorResponse: action.payload};
 
         default:
