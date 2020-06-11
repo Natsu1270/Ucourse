@@ -3,7 +3,7 @@ import {List, Avatar, Skeleton, Tag, Button, message} from 'antd'
 import {dayDiff} from "../../utils/text.utils";
 import moment from 'moment'
 import {useDispatch} from "react-redux";
-import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
+import {registerCourseStart, unRegisterCourseStart} from "../../redux/CourseHome/course-home.actions";
 
 const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
 
@@ -50,7 +50,12 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
         if (!isOwn) {
             message.error("Vui lòng đăng ký khóa học trước khi đăng ký lớp")
         } else {
-            dispatch(registerCourseStart({course_id: course.id, token, class_id: item.id}))
+            if (item.is_my_class) {
+                dispatch(unRegisterCourseStart({token, class_id: item.id}))
+            } else {
+                dispatch(registerCourseStart({course_id: course.id, token, class_id: item.id}))
+            }
+            window.location.reload();
         }
     }
 
@@ -66,8 +71,15 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                 dataSource={classes}
                 renderItem={item => (
                     <List.Item
-                        actions={[<Button onClick={() => registerClass(item)} disabled={!canRegister(item)} type="primary" key="list-loadmore-edit">Đăng ký
-                            lớp</Button>]}
+                        actions={[
+                            <Button
+                                onClick={() => registerClass(item)}
+                                disabled={!canRegister(item)}
+                                type="primary"
+                                key="list-loadmore-edit">
+                                {item.is_my_class ? 'Hủy đăng ký' : 'Đăng ký'}
+                            </Button>
+                        ]}
                     >
                         <Skeleton avatar title={false} loading={isLoading} active>
                             <List.Item.Meta
@@ -79,7 +91,8 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                     <span className="class-sub-info__item">Giảng viên: {item.teacher.fullname}</span>
                                     <span className="class-sub-info__item">Ngày bắt đầu: {item.open_date}</span>
                                     <span className="class-sub-info__item">{courseHomeStatus(item)}</span>
-                                    <span className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
+                                    <span
+                                        className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
                                 </div>}
                             />
                         </Skeleton>

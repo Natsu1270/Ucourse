@@ -65,6 +65,13 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                             className="course-tab__address--link">Chương trình</a>
                     </li>
 
+                    {
+                        !isProgram ? <li className="course-tab__address" id="tab-components">
+                        <a href="#cs-course-classes"
+                            className="course-tab__address--link">Đăng ký lớp</a>
+                    </li>:null
+                    }
+
                     {/*<li className="course-tab__address" id="tab-review">*/}
                     {/*    <a href="#cs-course-review"*/}
                     {/*        className="course-tab__address--link">Đánh giá học viên</a>*/}
@@ -81,8 +88,8 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                                 Đăng ký ngay
                             </Button> :
                         isOwn ?
-                            <Button type="primary" className="cs-btn-tab" onClick={gotoCourseLearn} >
-                                Đã đăng ký
+                            <Button type="primary" className="cs-btn-tab" >
+                                Đã sở hữu
                             </Button> :
                             <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
                                 Đăng ký ngay

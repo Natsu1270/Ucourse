@@ -21,8 +21,12 @@ import CourseDetailComponents from "../../components/Course/course-detail-compon
 import CourseClasses from "../../components/Course/course-classes.component";
 
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
-import {myCourseHomesSelector, errorResponseRegisterCourseSelector} from "../../redux/CourseHome/course-home.selects";
-import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
+import {
+    myCourseHomesSelector,
+    errorResponseRegisterCourseSelector,
+    courseHomeShowSelector
+} from "../../redux/CourseHome/course-home.selects";
+import {getCourseHomeShowStart, registerCourseStart} from "../../redux/CourseHome/course-home.actions";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
 import {registerCourseModalSelector} from "../../redux/UI/ui.selects";
 import {showRLModal, toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
@@ -39,7 +43,7 @@ const CourseDetail = () => {
 
     const {
         course, courseDetail, isFetching, errorResponse, myCourses,
-        token, registerCourseModal, errorRegister, classes
+        token, registerCourseModal, errorRegister, classes, courseHomeShows,
     } = useSelector(createStructuredSelector({
         course: courseDetailSelector,
         courseDetail: courseDetailDetailSelector,
@@ -49,7 +53,8 @@ const CourseDetail = () => {
         token: tokenSelector,
         registerCourseModal: registerCourseModalSelector,
         errorRegister: errorResponseRegisterCourseSelector,
-        classes: courseClassesSelector
+        classes: courseClassesSelector,
+        courseHomeShows: courseHomeShowSelector
     }));
 
     // const isMyCourse = () => {
@@ -71,6 +76,7 @@ const CourseDetail = () => {
             setOwnCourse(isOwn)
         }
         checkBought().then(r => console.log(r))
+        dispatch(getCourseHomeShowStart({token, course_id: course.id}))
         }
     }, [course])
 
@@ -133,7 +139,7 @@ const CourseDetail = () => {
 
             <CourseDetailComponents loading={isFetching} course={course}/>
 
-            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={classes} isLoading={isFetching}/>
+            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={courseHomeShows} isLoading={isFetching}/>
 
             {/*<CourseDetailTeacher />*/}
 

@@ -22,6 +22,11 @@ export const courseHomeDetailSelector = createSelector(
     courseHome => courseHome.courseHomeDetail ? courseHome.courseHomeDetail : {}
 );
 
+export const courseHomeShowSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.courseHomeShows ? courseHome.courseHomeShows : []
+);
+
 export const ofCourseSelector = createSelector(
     [courseHomeDetailSelector],
     courseHomeDetail => courseHomeDetail.course ? courseHomeDetail.course : {}

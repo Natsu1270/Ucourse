@@ -84,3 +84,17 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
+
+class CourseHomeShowAPI(generics.ListAPIView):
+    serializer_class = serializers.CourseHomeShowSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def get_queryset(self):
+        course_id = self.request.query_params['course_id']
+        return CourseHome.objects.filter(course_id=course_id)
+
+    def get_serializer_context(self):
+        return {"user": self.request.user}

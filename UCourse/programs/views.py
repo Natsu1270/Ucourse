@@ -29,3 +29,6 @@ class ProgramDetailAPI(generics.RetrieveAPIView):
     lookup_field = 'slug'
     serializer_class = ProgramDetailSerializer
     queryset = Program.objects.all()
+
+    def get_serializer_context(self):
+        return {"user": self.request.user}

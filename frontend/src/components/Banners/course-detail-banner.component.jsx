@@ -38,8 +38,8 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                     </Skeleton>
 
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={own ? gotoCourseLearn : handleRegister} className="register-btn cs-btn--animated">
-                            {isRegistering ? Constants.SPIN_ICON : own ? 'Đã đăng ký' : 'Đăng ký học'}
+                        <Button to="#" onClick={own ? null : handleRegister} className="register-btn cs-btn--animated">
+                            {isRegistering ? Constants.SPIN_ICON : own ? 'Đã sở hữu' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">
                         </div>

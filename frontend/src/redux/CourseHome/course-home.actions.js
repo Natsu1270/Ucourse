@@ -57,3 +57,18 @@ export const getCourseHomeDetailFail = (err) => ({
     type: CourseHomeTypes.FETCH_MY_COURSES_FAIL,
     payload: err
 });
+
+export const getCourseHomeShowStart = (params) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_START,
+    payload: params
+});
+
+export const getCourseHomeShowSuccess = (courseHomeShow) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_SUCCESS,
+    payload: courseHomeShow
+});
+
+export const getCourseHomeShowFail = (err) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_FAIL,
+    payload: err
+});

@@ -6,7 +6,7 @@ const ProgramDetailPrequire = ({prequire}) => {
     return (
         <section className="mt-10 section-course-prequire" id="cs-course-prequire">
             <h2 className="text--main section-header">
-                    Pre-requisites
+                    Các kiến thức cần có trước khi đăng ký
                 </h2>
 
             <div className="section-course-prequire__body">

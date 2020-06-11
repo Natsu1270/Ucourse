@@ -4,7 +4,7 @@ import {formatDate} from "../../utils/text.utils";
 import Constants from "../../constants";
 
 import programBg1 from '../../assets/program-bg1.png'
-import {Avatar} from "antd";
+import {Avatar, Button} from "antd";
 
 const ProgramDetailBanner = ({program}) => {
     const s = {
@@ -33,9 +33,9 @@ const ProgramDetailBanner = ({program}) => {
                             {program.short_description}
                         </p>
                         <div className="d-flex enroll-area mt-5">
-                            <Link to="" className="cs-btn cs-btn--animated cs-btn--banner cs-btn--white">
-                                Đăng ký học
-                            </Link>
+                            <Button onClick={() => console.log(program)} className="register-btn cs-btn--animated">
+                                {program.is_my_program ? 'Đã sở hữu' : 'Đăng ký chương trình'}
+                            </Button>
                         </div>
                     </div>
                     <div className="program-banner__content--tags"></div>

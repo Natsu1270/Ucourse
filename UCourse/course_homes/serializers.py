@@ -84,6 +84,31 @@ class CourseHomeSerializer(serializers.ModelSerializer):
         ]
 
 
+class CourseHomeShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    teacher = ProfileMinSerializer(read_only=True)
+    full_name = serializers.CharField()
+    student_count = serializers.SerializerMethodField()
+    is_my_class = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
+            'expected_date', 'register_date',
+            'over_admission_days', 'teacher', 'maximum_number', 'student_count', 'is_my_class'
+        ]
+
+    @staticmethod
+    def get_student_count(obj):
+        return obj.students.count()
+
+    def get_is_my_class(self, obj):
+        user = self.context.get('user')
+        check_user = user.course_homes.filter(pk=obj.id).count() > 0
+        return check_user
+
+
 class CourseHomeMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course = serializers.PrimaryKeyRelatedField(read_only=True)
