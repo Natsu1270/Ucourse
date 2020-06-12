@@ -4,9 +4,9 @@ import {formatDate} from "../../utils/text.utils";
 import Constants from "../../constants";
 
 import programBg1 from '../../assets/program-bg1.png'
-import {Avatar, Button} from "antd";
+import {Avatar, Button, Skeleton} from "antd";
 
-const ProgramDetailBanner = ({program}) => {
+const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister}) => {
     const s = {
         background: `linear-gradient(
           rgba(0, 0, 0, 0.2), 
@@ -33,9 +33,12 @@ const ProgramDetailBanner = ({program}) => {
                             {program.short_description}
                         </p>
                         <div className="d-flex enroll-area mt-5">
-                            <Button onClick={() => console.log(program)} className="register-btn cs-btn--animated">
-                                {program.is_my_program ? 'Đã sở hữu' : 'Đăng ký chương trình'}
-                            </Button>
+                            <Skeleton active loading={isRegistering}>
+                                <Button onClick={() => isOwn ? null: handleRegister()} className="register-btn cs-btn--animated">
+                                    {isOwn ? 'Đã sở hữu' : 'Đăng ký chương trình'}
+                                </Button>
+                            </Skeleton>
+
                         </div>
                     </div>
                     <div className="program-banner__content--tags"></div>

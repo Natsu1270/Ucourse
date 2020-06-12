@@ -79,22 +79,22 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
 
                 </ul>
                 <div className="course-tab__btn">
-                    {
-                        isRegistering ?
-                            <Button type="primary" className="cs-btn-tab">
-                                {Constants.SPIN_ICON_WHITE}
-                            </Button> :
-                            isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
-                                Đăng ký ngay
-                            </Button> :
-                        isOwn ?
-                            <Button type="primary" className="cs-btn-tab" >
-                                Đã sở hữu
-                            </Button> :
-                            <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
-                                Đăng ký ngay
-                            </Button>
-                    }
+                    {/*{*/}
+                    {/*    isRegistering ?*/}
+                    {/*        <Button type="primary" className="cs-btn-tab">*/}
+                    {/*            {Constants.SPIN_ICON_WHITE}*/}
+                    {/*        </Button> :*/}
+                    {/*        isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
+                    {/*            Đăng ký ngay*/}
+                    {/*        </Button> :*/}
+                    {/*    isOwn ?*/}
+                    {/*        <Button type="primary" className="cs-btn-tab" >*/}
+                    {/*            Đã sở hữu*/}
+                    {/*        </Button> :*/}
+                    {/*        <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
+                    {/*            Đăng ký ngay*/}
+                    {/*        </Button>*/}
+                    {/*}*/}
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"
