@@ -12,7 +12,8 @@ class RegisterClassAPI(generics.GenericAPIView):
         permissions.IsAuthenticated
     ]
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         can_register = True
         class_id = request.data['class_id']
         course_id = request.data['course_id']
@@ -55,7 +56,8 @@ class UnRegisterClassAPI(generics.GenericAPIView):
         permissions.IsAuthenticated
     ]
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         class_id = request.data['class_id']
         course_home = CourseHome.objects.get(pk=class_id)
         course_home.students.remove(request.user)
@@ -89,7 +91,7 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
 class CourseHomeShowAPI(generics.ListAPIView):
     serializer_class = serializers.CourseHomeShowSerializer
     permission_classes = [
-        permissions.IsAuthenticated
+        permissions.IsAuthenticatedOrReadOnly
     ]
 
     def get_queryset(self):
@@ -97,4 +99,13 @@ class CourseHomeShowAPI(generics.ListAPIView):
         return CourseHome.objects.filter(course_id=course_id)
 
     def get_serializer_context(self):
+        user = self.request.user
+        if user.is_anonymous:
+            return {"user": None}
         return {"user": self.request.user}
+
+
+class CourseHomeDetailShowAPI(generics.RetrieveAPIView):
+    serializer_class = serializers.CourseHomeShowSerializer
+    lookup_field = 'slug'
+    queryset = CourseHome.objects.all()

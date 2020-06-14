@@ -4,13 +4,15 @@ import {dayDiff} from "../../utils/text.utils";
 import moment from 'moment'
 import {useDispatch} from "react-redux";
 import {registerCourseStart, unRegisterCourseStart} from "../../redux/CourseHome/course-home.actions";
+import Constants from "../../constants";
 
 const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
 
     const dispatch = useDispatch()
+    const now = moment()
+
 
     const courseHomeStatus = (home) => {
-        const now = moment()
         const registerDays = dayDiff(home.register_date, now)
         const openDays = dayDiff(home.open_date, now)
         const delayDays = home.over_admission_days
@@ -35,7 +37,6 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
     }
 
     const canRegister = (home) => {
-        const now = moment()
         const registerDays = dayDiff(home.register_date, now)
         const openDays = dayDiff(home.open_date, now)
         const delayDays = home.over_admission_days
@@ -59,12 +60,24 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
         }
     }
 
+    const registerBtn = (item) => {
+        if (!canRegister(item)) return 'Hết hạn đăng ký'
+        if (item.is_my_class) {
+            if (dayDiff(item.open_date, now) <= 0) {
+                return 'Đăng ký thành công'
+            } else {
+                return 'Hủy đăng ký'
+            }
+        }
+        return 'Đăng ký'
+    }
+
     return (
         <section className="mt-10 section-course-classes" id="cs-course-classes">
             <h2 className="text--main section-header" id="cs-course-overview">
                 Danh sách lớp thuộc khóa học
             </h2>
-            <List
+            {classes.length ? <List
                 className="class-list"
                 loading={isLoading}
                 itemLayout="horizontal"
@@ -77,7 +90,9 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                 disabled={!canRegister(item)}
                                 type="primary"
                                 key="list-loadmore-edit">
-                                {item.is_my_class ? 'Hủy đăng ký' : 'Đăng ký'}
+                                {
+                                    registerBtn(item)
+                                }
                             </Button>
                         ]}
                     >
@@ -98,7 +113,7 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                         </Skeleton>
                     </List.Item>
                 )}
-            />
+            /> : Constants.EMPTY_CLASS_RESULT}
         </section>
     )
 }

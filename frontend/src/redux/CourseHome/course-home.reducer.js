@@ -6,6 +6,7 @@ const initState = {
     myCourseHomes: null,
     courseHomeDetail: null,
     courseHomeShows: null,
+    courseHomeShowDetail: null
 };
 
 const courseHomeReducer = (state=initState, action) => {
@@ -15,6 +16,7 @@ const courseHomeReducer = (state=initState, action) => {
         case CourseHomeTypes.GET_COURSE_HOME_DETAIL_START:
         case CourseHomeTypes.UNREGISTER_COURSE_START:
         case CourseHomeTypes.GET_COURSE_HOME_SHOW_START:
+        case CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_START:
             return {...state, isLoading: true};
 
         case CourseHomeTypes.REGISTER_COURSE_SUCCESS:
@@ -30,11 +32,15 @@ const courseHomeReducer = (state=initState, action) => {
         case CourseHomeTypes.GET_COURSE_HOME_SHOW_SUCCESS:
             return {...state, isLoading: false, courseHomeShows: action.payload}
 
+        case CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_SUCCESS:
+            return {...state, isLoading: false, courseHomeShowDetail: action.payload}
+
         case CourseHomeTypes.REGISTER_COURSE_FAIL:
         case CourseHomeTypes.FETCH_MY_COURSES_FAIL:
         case CourseHomeTypes.GET_COURSE_HOME_DETAIL_FAIL:
         case CourseHomeTypes.UNREGISTER_COURSE_FAIL:
         case CourseHomeTypes.GET_COURSE_HOME_SHOW_FAIL:
+        case CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_FAIL:
             return {...state, isLoading: false, errorResponse: action.payload};
 
         default:

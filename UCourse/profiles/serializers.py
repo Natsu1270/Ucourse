@@ -32,4 +32,4 @@ class TeacherProfileSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('id', 'fullname', 'email')
+        fields = ('pk', 'id', 'fullname', 'email')

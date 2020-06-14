@@ -12,9 +12,13 @@ export const getCourseListAPI = () => {
 };
 
 
-export const getCourseDetailAPI = (slug) => {
+export const getCourseDetailAPI = (params) => {
+    const {slug, token} = params
+    const headers = token ?
+        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
+        {'Content-Type': 'application/json'}
     return axios.request({
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         method: 'GET',
         url: `${COURSE_API_URL}/${slug}`
     })

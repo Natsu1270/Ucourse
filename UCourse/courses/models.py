@@ -80,6 +80,13 @@ class Course(models.Model):
     def course_home_count(self):
         return self.c_homes.count()
 
+    @property
+    def course_teachers(self):
+        teachers = []
+        for c in self.c_homes.all():
+            teachers.append(c.teacher)
+        return teachers
+
 
 class UserBuyCourse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

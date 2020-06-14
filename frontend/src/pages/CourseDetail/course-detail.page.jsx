@@ -39,8 +39,6 @@ const CourseDetail = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const {slug} = useParams();
-    const [ownCourse, setOwnCourse] = useState(false);
-
     const {
         course, courseDetail, isFetching, errorResponse, myCourses,
         token, registerCourseModal, errorRegister, classes, courseHomeShows,
@@ -57,35 +55,27 @@ const CourseDetail = () => {
         courseHomeShows: courseHomeShowSelector
     }));
 
-    // const isMyCourse = () => {
-    //     let isOwn = myCourses.some(c => c.id === course.id)
-    //     setOwnCourse(isOwn)
-    // };
+    const [ownCourse, setOwnCourse] = useState(false);
 
     useEffect(() => {
 
-        dispatch(fetchCourseDetailStart(slug));
+        dispatch(fetchCourseDetailStart({slug, token}));
+
         window.scrollTo(0, 0)
     }, []);
 
     useEffect(() => {
-        if (course.id && token) {
-            const checkBought = async () => {
-            const result = await checkBoughtCourseAPI({token, course: course.id})
-            const isOwn = result.status === 200
-            setOwnCourse(isOwn)
-        }
-        checkBought().then(r => console.log(r))
-        dispatch(getCourseHomeShowStart({token, course_id: course.id}))
+        if (course.id) {
+            // const checkBought = async () => {
+            //     const result = await checkBoughtCourseAPI({token, course: course.id})
+            //     const isOwn = result.status === 200
+            //     setOwnCourse(isOwn)
+            // }
+            // checkBought().then(r => console.log(r))
+            dispatch(getCourseHomeShowStart({token, course_id: course.id}))
+            setOwnCourse(course.is_my_course)
         }
     }, [course])
-
-    // useEffect(() => {
-    //     if (Object.keys(course).length > 0) {
-    //         isMyCourse()
-    //     }
-    // }, [course])
-
 
     const handleRegister = () => {
         if (token) {
@@ -139,7 +129,8 @@ const CourseDetail = () => {
 
             <CourseDetailComponents loading={isFetching} course={course}/>
 
-            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={courseHomeShows} isLoading={isFetching}/>
+            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={courseHomeShows}
+                           isLoading={isFetching}/>
 
             {/*<CourseDetailTeacher />*/}
 

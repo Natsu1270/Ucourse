@@ -12,6 +12,11 @@ export const errorResponseRegisterCourseSelector = createSelector(
     courseHome => courseHome.errorResponse
 );
 
+export const errorResponseSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.errorResponse
+);
+
 export const myCourseHomesSelector = createSelector(
     [courseHomeSelector],
     courseHome => courseHome.myCourseHomes ? courseHome.myCourseHomes : []
@@ -50,4 +55,9 @@ export const topicExamsSelector = createSelector(
 export const forumsSelector = createSelector(
     [courseHomeDetailSelector],
     courseHomeDetail => courseHomeDetail.forums ? courseHomeDetail.forums : []
+)
+
+export const courseHomeDetailShowSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.courseHomeShowDetail ? courseHome.courseHomeShowDetail : {}
 )

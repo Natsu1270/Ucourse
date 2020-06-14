@@ -70,6 +70,19 @@ export function* onGetCourseHomeShow() {
     yield takeLatest(CourseHomeTypes.GET_COURSE_HOME_SHOW_START, getCourseHomeShow)
 }
 
+export function* getCourseHomeDetailShow({payload}) {
+    try {
+        let {data} = yield call(CourseHomeServices.getCourseHomeDetailShowAPI, payload)
+        yield put(CourseHomeActions.getCourseHomeShowDetailSuccess(data.data))
+    } catch (err) {
+        yield put(CourseHomeActions.getCourseHomeShowDetailFail(err.response))
+    }
+}
+
+export function* onGetCourseHomeDetailShow() {
+    yield takeLatest(CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_START, getCourseHomeDetailShow)
+}
+
 
 export default function* courseHomeSaga() {
     yield all([
@@ -78,6 +91,7 @@ export default function* courseHomeSaga() {
         call(onGetCourseHomeDetail),
         call(onUnRegisterCourse),
         call(onGetCourseHomeShow),
+        call(onGetCourseHomeDetailShow)
     ])
 }
 

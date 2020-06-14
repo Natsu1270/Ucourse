@@ -1,6 +1,6 @@
 // import {css} from "@emotion/core";
 import React from 'react'
-import {Spin} from 'antd'
+import {Button, Result, Spin} from 'antd'
 import {LoadingOutlined} from "@ant-design/icons";
 
 // const override = css`
@@ -30,6 +30,17 @@ const ckeditorConfigs = {
         ]
     }
 }
+const emptyData = <Result className="white-bg"
+    title="Chưa có lớp mở thuộc khóa học này"
+  />
+
+const levelTypes = {
+    Beginner: "Cơ bản",
+    Intermediate: "Trung cấp",
+    Advanced: "Nâng cao"
+}
+
+
 const Constants = {
     DATE_FORMAT: 'YYYY/MM/DD',
     DEFAULT_BIRTHDAY_PICK: '1996/01/01',
@@ -47,7 +58,10 @@ const Constants = {
     VIDEO_FILE_TYPE: 'video',
     DOCUMENT_FILE_TYPE: 'document',
     COURSES_DETAIL_LINK: '/courses',
-    CKEDITOR_CONFIGS: ckeditorConfigs
+    CKEDITOR_CONFIGS: ckeditorConfigs,
+    EMPTY_CLASS_RESULT: emptyData,
+    COURSE_LEVEL_TYPES: levelTypes,
+    UN_AUTHORIZATION_ERROR: "Bạn phải đăng nhập để thực hiện chức năng này"
 };
 
 export default Constants

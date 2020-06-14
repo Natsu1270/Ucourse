@@ -21,6 +21,8 @@ import ProgramDetailComponents from "../../components/Program/program-detail-com
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
 import {buyProgramAPI} from "../../api/program.services";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
+import Constants from "../../constants";
+import {showRLModal} from "../../redux/UI/ui.actions";
 
 const ProgramDetailPage = () => {
     const [isRegistering, setIsRegistering] = useState(false)
@@ -54,6 +56,10 @@ const ProgramDetailPage = () => {
     }
 
     const handleRegister = () => {
+        if (!token) {
+            message.error(Constants.UN_AUTHORIZATION_ERROR, 1.5, () => dispatch(showRLModal()))
+            return
+        }
         registerProgram()
             .then(res => {
                 message.success("Đăng ký chương trình thành công")
@@ -75,7 +81,8 @@ const ProgramDetailPage = () => {
                 {program.field}
             </Breadcrumb.Item>
         </Breadcrumb>
-        <ProgramDetailBanner isOwn={own} isRegistering={isRegistering} handleRegister={handleRegister} program={program}/>
+        <ProgramDetailBanner isOwn={own} isRegistering={isRegistering} handleRegister={handleRegister}
+                             program={program}/>
         <CourseDetailTab isRegistering={isRegistering} handleRegister={handleRegister} isProgram={true}/>
         <CourseDetailOverview
             benefits={program.benefits}

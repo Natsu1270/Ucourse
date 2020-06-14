@@ -34,16 +34,16 @@ const SearchFilter = () => {
     const {Panel} = Collapse
     const {RangePicker} = DatePicker
     const levelOptions = [
-        {label: 'Beginner', value: 'Beginner'},
-        {label: 'Intermediate', value: 'Intermediate'},
-        {label: 'Advanced', value: 'Advanced'},
+        {label: 'Cơ bản', value: 'Beginner'},
+        {label: 'Trung cấp', value: 'Intermediate'},
+        {label: 'Nâng cao', value: 'Advanced'},
     ]
 
-    const rateOptions = [
-        {label: [<Rate disabled defaultValue={3}/>, ' ( 3↑ )'], value: 3},
-        {label: [<Rate disabled defaultValue={4}/>, ' ( 4↑ )'], value: 4},
-        {label: [<Rate disabled defaultValue={5}/>, ' ( 5↑ )'], value: 5},
-    ]
+    // const rateOptions = [
+    //     {label: [<Rate disabled defaultValue={3}/>, ' ( 3↑ )'], value: 3},
+    //     {label: [<Rate disabled defaultValue={4}/>, ' ( 4↑ )'], value: 4},
+    //     {label: [<Rate disabled defaultValue={5}/>, ' ( 5↑ )'], value: 5},
+    // ]
 
 
     function onChangeField(checkedValues) {
@@ -54,9 +54,9 @@ const SearchFilter = () => {
         dispatch(updateSearchFilterLevel(checkedValues))
     }
 
-    function onChangeRate(checkedValues) {
-        dispatch(updateSearchFilterRating(checkedValues))
-    }
+    // function onChangeRate(checkedValues) {
+    //     dispatch(updateSearchFilterRating(checkedValues))
+    // }
 
     function onChangeTeacher(checkedValues) {
         dispatch(updateSearchFilterTeacher(checkedValues))
@@ -94,26 +94,26 @@ const SearchFilter = () => {
             <Panel key="3" header="Thời gian mở" className='white-bg'>
                 <RangePicker format={Constants.DD_MM_YYYY}/>
             </Panel>
-            <Panel key="4" header="Điểm đánh giá" className='white-bg'>
-                <Checkbox.Group style={{width: '100%'}} onChange={onChangeRate}>
-                    <Row>
-                        {rateOptions.map(rate => (
-                            <Col key={rate.value} span={24} style={{marginBottom: '1rem'}}>
-                                <Checkbox value={rate.value}>{rate.label[0]}{rate.label[1]}</Checkbox>
-                            </Col>
-                        ))}
-                    </Row>
+            {/*<Panel key="4" header="Điểm đánh giá" className='white-bg'>*/}
+            {/*    <Checkbox.Group style={{width: '100%'}} onChange={onChangeRate}>*/}
+            {/*        <Row>*/}
+            {/*            {rateOptions.map(rate => (*/}
+            {/*                <Col key={rate.value} span={24} style={{marginBottom: '1rem'}}>*/}
+            {/*                    <Checkbox value={rate.value}>{rate.label[0]}{rate.label[1]}</Checkbox>*/}
+            {/*                </Col>*/}
+            {/*            ))}*/}
+            {/*        </Row>*/}
 
-                </Checkbox.Group>
-            </Panel>
+            {/*    </Checkbox.Group>*/}
+            {/*</Panel>*/}
             <Panel key="5" header="Giảng viên" className='white-bg'>
                 {
                     isLoading ? <Spin/> :
                         <Checkbox.Group style={{width: '100%'}} onChange={onChangeTeacher}>
                             <Row>
                                 {teacherList.map(teacher => (
-                                    <Col key={teacher.email} span={24} style={{marginBottom: '1rem'}}>
-                                        <Checkbox value={teacher.email}>{teacher.fullname}</Checkbox>
+                                    <Col key={teacher.pk} span={24} style={{marginBottom: '1rem'}}>
+                                        <Checkbox value={teacher.pk}>{teacher.fullname}</Checkbox>
                                     </Col>
                                 ))}
                             </Row>

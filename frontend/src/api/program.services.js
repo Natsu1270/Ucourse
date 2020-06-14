@@ -14,8 +14,12 @@ export const getProgramListAPI = () => {
 
 export const getProgramDetailAPI = (params) => {
     const {token, slug} = params
+    const headers = token ?
+        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
+        {'Content-Type': 'application/json'}
+
     return axios.request({
-        headers: {'Content-Type': 'application/json', 'Authorization': `token ${token}`},
+        headers,
         method: 'GET',
         url: `${PROGRAM_API_URL}/${slug}`
     })

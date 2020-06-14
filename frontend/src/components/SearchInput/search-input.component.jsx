@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
-import { Input, AutoComplete } from "antd";
-import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { createStructuredSelector } from 'reselect'
-import { getPopularKeywordsStart } from '../../redux/Search/search.actions'
+import React, {useEffect, useState} from 'react'
+import {Input, AutoComplete, Button} from "antd";
+import {useHistory} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {createStructuredSelector} from 'reselect'
+import {getPopularKeywordsStart} from '../../redux/Search/search.actions'
 
-import { getPopularSearchKeywordsAPI } from '../../api/search.services'
-import { isFetchingKeywordsSelector, popularKeywordsSelector } from '../../redux/Search/search.selects';
+import {getPopularSearchKeywordsAPI} from '../../api/search.services'
+import {isFetchingKeywordsSelector, popularKeywordsSelector} from '../../redux/Search/search.selects';
+import {SearchOutlined} from "@ant-design/icons";
 
 
 const renderTitle = title => (
@@ -40,10 +41,11 @@ const renderItem = (title, count) => ({
 });
 
 
-const SearchInput = ({ width, value }) => {
+const SearchInput = ({width, value}) => {
     const dispatch = useDispatch();
     let history = useHistory();
-    const { popularKeywords, isFetchingKeywords } = useSelector(createStructuredSelector({
+    const [search, setSearch] = useState('')
+    const {popularKeywords, isFetchingKeywords} = useSelector(createStructuredSelector({
         popularKeywords: popularKeywordsSelector,
         isFetchingKeywords: isFetchingKeywordsSelector
     }));
@@ -66,26 +68,31 @@ const SearchInput = ({ width, value }) => {
     }, [dispatch]);
 
 
-
     return (
-        <div className="certain-category-search-wrapper" style={{ width: width }}>
+        <div className="certain-category-search-wrapper d-flex" style={{width: width}}>
             <AutoComplete
                 className="certain-category-search"
                 defaultValue={value}
                 dropdownClassName="certain-category-search-dropdown"
                 dropdownMatchSelectWidth={false}
-                dropdownStyle={{ width: 300 }}
-                style={{ width: '100%' }}
+                dropdownStyle={{width: 300}}
+                style={{width: '100%'}}
                 options={options}
                 optionLabelProp="value"
             >
-                <Input.Search
+                <Input
                     size="large"
                     placeholder="Tìm kiếm"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     onPressEnter={
-                        (e) => history.push(`/search?query=${e.target.value}`)
-                    } />
+                        () => history.push(`/search?query=${search}`)
+                    }/>
+
             </AutoComplete>
+            <Button style={{height: '4rem'}} onClick={() => history.push(`/search?query=${search}`)}>
+                <SearchOutlined />
+            </Button>
         </div>
     );
 }

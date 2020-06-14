@@ -52,15 +52,27 @@ export const getCourseHomeDetailAPI = ({slug, token}) => {
 
 
 export const getCourseHomeShowAPI = ({token, course_id}) => {
+
+    const headers = token ?
+        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
+        {'Content-Type': 'application/json'}
+    return axios.request({
+        headers,
+        method: 'GET',
+        url: `${API_URL}/show/class`,
+        params: {
+            course_id
+        }
+    })
+}
+
+export const getCourseHomeDetailShowAPI = ({token, slug}) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `token ${token}`,
         },
         method: 'GET',
-        url: `${API_URL}/show/class`,
-        params: {
-            course_id
-        }
+        url: `${API_URL}/show/class/${slug}`,
     })
 }

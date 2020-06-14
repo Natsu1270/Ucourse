@@ -37,6 +37,9 @@
 .search-course-card {
 	background-color: $white-color;
 	box-shadow: $small-box-shadow-black;
+	&:hover {
+		cursor: pointer;
+	}
  	&__body {
 		overflow:hidden;
 		width: 100%;
@@ -63,10 +66,12 @@
 					display: inline-block;
 					padding-right: 5rem;
 					font-size: 1.6rem;
-					width: 15%;
+					//width: 15%;
+					flex: 0 0 25%;
+					color: rgba(0,0,0,0.75);
 				}
 				.item-author {
-					width: 25%;
+					//width: 25%;
 				}
 
 			}

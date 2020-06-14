@@ -9,5 +9,6 @@ urlpatterns = [
     path('unregister', views.UnRegisterClassAPI.as_view()),
     path('my', views.UserCourseHomeListAPI.as_view(), name='user_course_home_list'),
     path('<str:slug>', views.CourseHomeDetailAPI.as_view(), name='course_home_detail'),
-    path('show/class', views.CourseHomeShowAPI.as_view())
+    path('show/class', views.CourseHomeShowAPI.as_view()),
+    path('show/class/<str:slug>', views.CourseHomeDetailShowAPI.as_view())
 ]
