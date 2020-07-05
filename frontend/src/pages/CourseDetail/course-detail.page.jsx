@@ -2,8 +2,8 @@ import React, {useEffect, lazy, Suspense, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux';
 import {Link, useParams, useHistory} from 'react-router-dom'
 
-import {fetchCourseDetailStart} from '../../redux/Course/course.actions'
-import {Breadcrumb, Modal, Skeleton, Spin, Result, Button} from 'antd'
+import {buyCourseStart, fetchCourseDetailStart} from '../../redux/Course/course.actions'
+import {Breadcrumb, Modal, Skeleton, Spin, Result, Button, message} from 'antd'
 import {HomeOutlined} from '@ant-design/icons'
 import {createStructuredSelector} from "reselect";
 import {
@@ -11,23 +11,27 @@ import {
     errorResponseSelector,
     isFetchingSelector,
     courseDetailDetailSelector,
-    courseTeacherSelector,
+    courseClassesSelector,
 } from "../../redux/Course/course.selects";
 import {slugifyString} from "../../utils/text.utils";
 import CourseDetailBanner from "../../components/Banners/course-detail-banner.component";
 import CourseDetailTab from "../../components/Course/course-detail-tab.component";
 import CourseDetailOverview from "../../components/Course/course-detail-overview.component";
 import CourseDetailComponents from "../../components/Course/course-detail-components.component";
-import CourseDetailTeacher from "../../components/Course/course-detail-teacher.component";
-import CourseDetailReview from "../../components/Course/course-detail-review.component";
-import CourseDetailRelated from "../../components/Course/course-detail-related.component";
+import CourseClasses from "../../components/Course/course-classes.component";
+
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
-import {myCourseHomesSelector, errorResponseRegisterCourseSelector} from "../../redux/CourseHome/course-home.selects";
-import {registerCourseStart} from "../../redux/CourseHome/course-home.actions";
+import {
+    myCourseHomesSelector,
+    errorResponseRegisterCourseSelector,
+    courseHomeShowSelector
+} from "../../redux/CourseHome/course-home.selects";
+import {getCourseHomeShowStart, registerCourseStart} from "../../redux/CourseHome/course-home.actions";
 import {tokenSelector} from "../../redux/Auth/auth.selects";
 import {registerCourseModalSelector} from "../../redux/UI/ui.selects";
-import {toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
+import {showRLModal, toggleRegisterCourseModal} from "../../redux/UI/ui.actions";
 import Constants from "../../constants";
+import {checkBoughtCourseAPI} from "../../api/course.services";
 
 const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
 
@@ -35,48 +39,58 @@ const CourseDetail = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const {slug} = useParams();
-    const [ownCourse, setOwnCourse] = useState(false);
-
     const {
-        course, courseDetail, teachers,
-        isFetching, errorResponse, myCourses,
-        token, registerCourseModal, errorRegister
+        course, courseDetail, isFetching, errorResponse, myCourses,
+        token, registerCourseModal, errorRegister, classes, courseHomeShows,
     } = useSelector(createStructuredSelector({
         course: courseDetailSelector,
         courseDetail: courseDetailDetailSelector,
-        teachers: courseTeacherSelector,
         isFetching: isFetchingSelector,
         errorResponse: errorResponseSelector,
         myCourses: myCourseHomesSelector,
         token: tokenSelector,
         registerCourseModal: registerCourseModalSelector,
-        errorRegister: errorResponseRegisterCourseSelector
+        errorRegister: errorResponseRegisterCourseSelector,
+        classes: courseClassesSelector,
+        courseHomeShows: courseHomeShowSelector
     }));
 
-    const isMyCourse = () => {
-        let isOwn = myCourses.some(c => c.id === course.id)
-        setOwnCourse(isOwn)
-    };
+    const [ownCourse, setOwnCourse] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchCourseDetailStart(slug));
+
+        dispatch(fetchCourseDetailStart({slug, token}));
+
         window.scrollTo(0, 0)
     }, []);
 
     useEffect(() => {
-        if (Object.keys(course).length > 0) {
-            isMyCourse()
+        if (course.id) {
+            // const checkBought = async () => {
+            //     const result = await checkBoughtCourseAPI({token, course: course.id})
+            //     const isOwn = result.status === 200
+            //     setOwnCourse(isOwn)
+            // }
+            // checkBought().then(r => console.log(r))
+            dispatch(getCourseHomeShowStart({token, course_id: course.id}))
+            setOwnCourse(course.is_my_course)
         }
     }, [course])
 
-
-
     const handleRegister = () => {
-        dispatch(registerCourseStart({course_id: course.id, token}))
-        if (!errorRegister) {
-            dispatch(toggleRegisterCourseModal())
-            setOwnCourse(true)
+        if (token) {
+            dispatch(buyCourseStart({course: course.id, token}))
+            // dispatch(registerCourseStart({course_id: course.id, token}))
+            if (!errorRegister) {
+                dispatch(toggleRegisterCourseModal())
+                setOwnCourse(true)
+            }
+        } else {
+            message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
+                1.5,
+                () => dispatch(showRLModal()))
         }
+
     };
 
     const courseDetailComp = (
@@ -97,7 +111,6 @@ const CourseDetail = () => {
                 courseDetail={courseDetail}
                 course={course}
                 own={ownCourse}
-                teachers={teachers}
                 handleRegister={handleRegister}
                 isLoading={isFetching}
             />
@@ -114,13 +127,16 @@ const CourseDetail = () => {
                 isLoading={isFetching}
             />
 
-            <CourseDetailComponents course={course}/>
+            <CourseDetailComponents loading={isFetching} course={course}/>
 
-            <CourseDetailTeacher teachers={teachers}/>
+            <CourseClasses token={token} course={course} isOwn={ownCourse} classes={courseHomeShows}
+                           isLoading={isFetching}/>
 
-            <CourseDetailReview course={course}/>
+            {/*<CourseDetailTeacher />*/}
 
-            <CourseDetailRelated course={course}/>
+            {/*<CourseDetailReview course={course}/>*/}
+
+            {/*<CourseDetailRelated course={course}/>*/}
 
             <AbilityTest/>
 

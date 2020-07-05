@@ -64,40 +64,37 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                         <a href="#cs-course-components"
                             className="course-tab__address--link">Chương trình</a>
                     </li>
+
                     {
-                        isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
-                            <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Giảng viên</a>
-                        </li>
+                        !isProgram ? <li className="course-tab__address" id="tab-components">
+                        <a href="#cs-course-classes"
+                            className="course-tab__address--link">Đăng ký lớp</a>
+                    </li>:null
                     }
-                    <li className="course-tab__address" id="tab-review">
-                        <a href="#cs-course-review"
-                            className="course-tab__address--link">Đánh giá học viên</a>
-                    </li>
-                    {
-                        isProgram ? <span /> : <li className="course-tab__address" id="tab-tutors">
-                            <a href="#cs-course-tutors"
-                                className="course-tab__address--link">Giảng viên</a>
-                        </li>
-                    }
+
+                    {/*<li className="course-tab__address" id="tab-review">*/}
+                    {/*    <a href="#cs-course-review"*/}
+                    {/*        className="course-tab__address--link">Đánh giá học viên</a>*/}
+                    {/*</li>*/}
+
                 </ul>
                 <div className="course-tab__btn">
-                    {
-                        isRegistering ?
-                            <Button type="primary" className="cs-btn-tab">
-                                {Constants.SPIN_ICON_WHITE}
-                            </Button> :
-                            isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
-                                Đăng ký ngay
-                            </Button> :
-                        isOwn ?
-                            <Button type="primary" className="cs-btn-tab" onClick={gotoCourseLearn} >
-                                Tiếp tục khóa học
-                            </Button> :
-                            <Button onClick={handleRegister} type="primary" className="cs-btn-tab">
-                                Đăng ký ngay
-                            </Button>
-                    }
+                    {/*{*/}
+                    {/*    isRegistering ?*/}
+                    {/*        <Button type="primary" className="cs-btn-tab">*/}
+                    {/*            {Constants.SPIN_ICON_WHITE}*/}
+                    {/*        </Button> :*/}
+                    {/*        isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
+                    {/*            Đăng ký ngay*/}
+                    {/*        </Button> :*/}
+                    {/*    isOwn ?*/}
+                    {/*        <Button type="primary" className="cs-btn-tab" >*/}
+                    {/*            Đã sở hữu*/}
+                    {/*        </Button> :*/}
+                    {/*        <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
+                    {/*            Đăng ký ngay*/}
+                    {/*        </Button>*/}
+                    {/*}*/}
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"

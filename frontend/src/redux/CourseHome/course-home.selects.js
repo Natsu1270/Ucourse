@@ -12,6 +12,11 @@ export const errorResponseRegisterCourseSelector = createSelector(
     courseHome => courseHome.errorResponse
 );
 
+export const errorResponseSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.errorResponse
+);
+
 export const myCourseHomesSelector = createSelector(
     [courseHomeSelector],
     courseHome => courseHome.myCourseHomes ? courseHome.myCourseHomes : []
@@ -20,6 +25,11 @@ export const myCourseHomesSelector = createSelector(
 export const courseHomeDetailSelector = createSelector(
     [courseHomeSelector],
     courseHome => courseHome.courseHomeDetail ? courseHome.courseHomeDetail : {}
+);
+
+export const courseHomeShowSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.courseHomeShows ? courseHome.courseHomeShows : []
 );
 
 export const ofCourseSelector = createSelector(
@@ -45,4 +55,19 @@ export const topicExamsSelector = createSelector(
 export const forumsSelector = createSelector(
     [courseHomeDetailSelector],
     courseHomeDetail => courseHomeDetail.forums ? courseHomeDetail.forums : []
+)
+
+export const courseHomeDetailShowSelector = createSelector(
+    [courseHomeSelector],
+    courseHome => courseHome.courseHomeShowDetail ? courseHome.courseHomeShowDetail : {}
+)
+
+export const classFieldSelector = createSelector(
+    courseHomeDetailShowSelector,
+    courseHomeShowDetail => courseHomeShowDetail.field ? courseHomeShowDetail.field : {}
+)
+
+export const classCourseSelector = createSelector(
+    courseHomeDetailShowSelector,
+    courseHomeShowDetail => courseHomeShowDetail.course ? courseHomeShowDetail.course : {}
 )

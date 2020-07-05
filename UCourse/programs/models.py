@@ -36,6 +36,7 @@ class Program(models.Model):
     benefits = RichTextField(blank=True, null=True)
     pre_requisites = RichTextField(blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='program_tags', blank=True)
+    user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyProgram', related_name='buy_programs')
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
@@ -57,3 +58,9 @@ class Program(models.Model):
     @property
     def courses_count(self):
         return self.program_course.count()
+
+
+class UserBuyProgram(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    bought_date = models.DateField(default=timezone.now)

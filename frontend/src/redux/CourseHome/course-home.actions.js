@@ -14,6 +14,20 @@ export const registerCourseFail = (err) => ({
     payload: err
 });
 
+export const unRegisterCourseStart = (params) => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_START,
+    payload: params
+});
+
+export const unRegisterCourseSuccess = () => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_SUCCESS
+});
+
+export const unRegisterCourseFail = (err) => ({
+    type: CourseHomeTypes.UNREGISTER_COURSE_FAIL,
+    payload: err
+});
+
 export const fetchMyCoursesStart = (params) => ({
     type: CourseHomeTypes.FETCH_MY_COURSES_START,
     payload: params
@@ -41,5 +55,35 @@ export const getCourseHomeDetailSuccess = (courseHomeDetail) => ({
 
 export const getCourseHomeDetailFail = (err) => ({
     type: CourseHomeTypes.FETCH_MY_COURSES_FAIL,
+    payload: err
+});
+
+export const getCourseHomeShowStart = (params) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_START,
+    payload: params
+});
+
+export const getCourseHomeShowSuccess = (courseHomeShow) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_SUCCESS,
+    payload: courseHomeShow
+});
+
+export const getCourseHomeShowFail = (err) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_FAIL,
+    payload: err
+});
+
+export const getCourseHomeShowDetailStart = (params) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_START,
+    payload: params
+});
+
+export const getCourseHomeShowDetailSuccess = (courseHomeShowDetail) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_SUCCESS,
+    payload: courseHomeShowDetail
+});
+
+export const getCourseHomeShowDetailFail = (err) => ({
+    type: CourseHomeTypes.GET_COURSE_HOME_SHOW_DETAIL_FAIL,
     payload: err
 });

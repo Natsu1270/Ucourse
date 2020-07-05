@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Program, Field
+from .models import Program, Field, UserBuyProgram
 from courses.serializers import CourseSerializer, CourseSearchSerializer
 
 
@@ -26,6 +26,7 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     field = serializers.StringRelatedField(read_only=True)
     program_course = CourseSearchSerializer(many=True, read_only=True)
     courses_count = serializers.IntegerField(read_only=True)
+    is_my_program = serializers.SerializerMethodField()
 
     class Meta:
         model = Program
@@ -33,8 +34,12 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
             'id', 'name', 'code', 'icon', 'slug',
             'program_course', 'benefits', 'pre_requisites',
             'courses_count', 'status', 'field',
-            'short_description', 'full_description'
+            'short_description', 'full_description', 'is_my_program'
         ]
+
+    def get_is_my_program(self, obj):
+        user = self.context.get('user')
+        return obj.user_buy.filter(pk=user.id).count() > 0
 
 
 class ProgramSearchSerializer(serializers.ModelSerializer):
@@ -72,4 +77,15 @@ class FieldMinSerializer(serializers.ModelSerializer):
         model = Field
         fields = [
             'id', 'name', 'code', 'slug', 'icon', 'description'
+        ]
+
+
+class UserBuyProgramSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    program = serializers.PrimaryKeyRelatedField(queryset=Program.objects.all())
+
+    class Meta:
+        model = UserBuyProgram
+        fields = [
+            'id', 'user', 'program', 'bought_date'
         ]

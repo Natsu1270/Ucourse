@@ -1,17 +1,19 @@
 import React from 'react'
+import Constants from "../../constants";
 
-const CourseSubInfo = ({author, level, open_date, rate}) => {
+const CourseSubInfo = ({class_count, level, open_date, rate}) => {
+
 
     return (
         <ul className="search-course-card__body--content--info">
             <li className="search-course-card__body--content--info__item item-author">
                 <span className="text--const">
-                    by {author}
+                    Số lượng: {class_count} lớp
                 </span>
             </li>
             <li className="search-course-card__body--content--info__item">
                 <span className="text--const">
-                    {level}
+                    Cấp độ: {Constants.COURSE_LEVEL_TYPES[level]}
                 </span>
             </li>
             <li className="search-course-card__body--content--info__item">

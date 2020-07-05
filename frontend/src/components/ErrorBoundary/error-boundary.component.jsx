@@ -17,21 +17,20 @@ export const ErrorBoundary = ({ errResponse, comp }) => {
                 }}
                 status="500"
                 title="500"
-                subTitle="Sorry, the server is wrong."
+                subTitle="Lỗi máy chủ nội bộ"
                 extra={<Button onClick={() => history.push('/')} type="primary">Trang chủ</Button>}
             />)
         } else {
-            return (
-                <Result
-                    status="warning"
-                    title={errResponse.data}
-                    extra={
-                        <Button type="primary">
-                            Trang chủ
-                            </Button>
-                    }
-                />
-            )
+            return (<Result
+                style={{
+                    backgroundColor: 'white',
+                    boxShadow: '0 1rem 2rem rgba(0,0,0,0.05)'
+                }}
+                status="500"
+                title="Có lỗi xảy ra!"
+                subTitle={errResponse.data.error_message}
+                extra={<Button onClick={() => history.push('/')} type="primary">Trang chủ</Button>}
+            />)
         }
 
     } else {

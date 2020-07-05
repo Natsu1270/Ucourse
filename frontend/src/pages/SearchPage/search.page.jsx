@@ -13,7 +13,7 @@ import {
     searchRatingSelector,
     searchTeacherSelector,
 } from '../../redux/Search/search.selects'
-import {Tabs} from 'antd'
+import {Empty, Tabs} from 'antd'
 import SearchCourses from "../../components/SearchResult/search-courses.component";
 import SearchPrograms from "../../components/SearchResult/search-programs.component";
 import SearchInput from "../../components/SearchInput/search-input.component";
@@ -71,7 +71,11 @@ const CourseSearchPage = ({location}) => {
             filterCourses = filterCourses.filter(course => filterLevel.includes(course.level))
         }
         if (filterTeacher && filterTeacher.length) {
-           filterCourses = filterCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
+            filterCourses = searchCourses.filter(course =>
+                course.course_teachers.some(
+                    teacher => filterTeacher.includes(teacher)
+                )
+            )
         }
         setCourses(filterCourses);
         setPrograms(filterPrograms)
@@ -88,7 +92,11 @@ const CourseSearchPage = ({location}) => {
             filterCourses = filterCourses.filter(course => filterField.includes(course.field))
         }
         if (filterTeacher && filterTeacher.length) {
-            filterCourses = filterCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
+            filterCourses = searchCourses.filter(course =>
+                course.course_teachers.some(
+                    teacher => filterTeacher.includes(teacher)
+                )
+            )
         }
         setCourses(filterCourses)
     }, [filterLevel]);
@@ -97,7 +105,11 @@ const CourseSearchPage = ({location}) => {
         let filterCourses = [];
 
         if (filterTeacher && filterTeacher.length) {
-            filterCourses = searchCourses.filter(course => filterTeacher.includes(course.teacher[0].email))
+            filterCourses = searchCourses.filter(course =>
+                course.course_teachers.some(
+                    teacher => filterTeacher.includes(teacher)
+                )
+            )
         } else {
             filterCourses = searchCourses
         }
@@ -128,21 +140,22 @@ const CourseSearchPage = ({location}) => {
 
                 {/*    <SearchInput width={'100%'} value={query}/>*/}
                 {/*</div>*/}
-                <Tabs defaultActiveKey="1">
-                    <TabPane tab="Tất cả" key="1">
-                        <SearchContainer component={SearchPrograms} programs={programs}/>
-                        <SearchContainer component={SearchCourses} courses={courses}/>
-                    </TabPane>
+                { !programs.length && !courses.length ? <Empty className="white-bg p-5" /> :
+                    (<Tabs defaultActiveKey="1">
+                        <TabPane tab="Tất cả" key="1">
+                            <SearchContainer component={SearchPrograms} programs={programs}/>
+                            <SearchContainer component={SearchCourses} courses={courses}/>
+                        </TabPane>
 
-                    <TabPane tab="Chương trình học" key="2">
-                        <SearchContainer component={SearchPrograms} programs={programs}/>
-                    </TabPane>
+                        <TabPane tab="Chương trình học" key="2">
+                            <SearchContainer component={SearchPrograms} programs={programs}/>
+                        </TabPane>
 
-                    <TabPane tab="Khoá học" key="3">
-                        <SearchContainer component={SearchCourses} courses={courses}/>
-                    </TabPane>
-
-                </Tabs>
+                        <TabPane tab="Khoá học" key="3">
+                            <SearchContainer component={SearchCourses} courses={courses}/>
+                        </TabPane>
+                    </Tabs>)
+                }
 
             </div>
 

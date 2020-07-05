@@ -31,23 +31,17 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                     <h1 className="text--main text--main__bigger text-white">
                         {isLoading ? Constants.SPIN_ICON : courseDetail.verbose_name}
                     </h1>
-                    <p className="course-description text--sub text--sub__bigger mt-4">
-                        {isLoading ? <Skeleton active />:courseDetail.short_description}
-                    </p>
+                    <Skeleton active loading={isLoading}>
+                        <p className="course-description text--sub text--sub__bigger mt-4">
+                            {courseDetail.short_description}
+                        </p>
+                    </Skeleton>
+
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={own ? gotoCourseLearn : handleRegister} className="register-btn cs-btn--animated">
-                            {isRegistering ? Constants.SPIN_ICON : own ? 'Tiếp tục học' : 'Đăng ký học'}
+                        <Button to="#" onClick={own ? null : handleRegister} className="register-btn cs-btn--animated">
+                            {isRegistering ? Constants.SPIN_ICON : own ? 'Đã sở hữu' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">
-                            <p className="text-white text--sub">
-                                Khoá học bắt đầu vào : {formatDate(course.open_date, Constants.MMM_Do_YYYY)}
-                            </p>
-                            <p className="text-white text--sub">
-                                Giảng viên : {teachers[0] ? teachers[0].fullname : ''}
-                            </p>
-                            <p className="text-white text--sub">
-                                Điểm đánh giá: {course.rate_score}
-                            </p>
                         </div>
                     </div>
                 </div>

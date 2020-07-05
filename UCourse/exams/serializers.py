@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice
-from questions.serializers import QuestionMinSerializer, QuestionSerializer
+from questions.serializers import QuestionSerializer
 from courses.serializers import CourseMinSerializer
 
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import {SmileTwoTone, MehTwoTone, FrownTwoTone} from '@ant-design/icons'
 
-const CourseCardSub = ({teacher,level, open_date }) => {
+const CourseCardSub = ({homeNum, level, open_date }) => {
 
     const renderLevel = () => {
         if (level === 'Beginner') {
@@ -16,7 +16,7 @@ const CourseCardSub = ({teacher,level, open_date }) => {
     return (
         <div className="course-card-sub">
             <div className="course-card-sub__teacher">
-                by {teacher}
+                 {homeNum === 0 ? "Chưa có lớp" : homeNum + " lớp"}
             </div>
             <div className="course-card-sub__others dis-flex-start">
                 <span className="course-card-sub__others--item">

@@ -46,16 +46,13 @@ class Course(models.Model):
     fee_type = models.CharField(max_length=10, choices=FEE_TYPE_CHOICES, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     price = models.CharField(max_length=25, blank=True, null=True)
+    outline_detail = RichTextField(blank=True, null=True)
+    outline_file = models.FileField(upload_to='courses/outlines', blank=True, null=True)
+    user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
     # open_date = models.DateField(blank=True, null=True)
     # end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
-    teacher = models.ManyToManyField(
-        Profile,
-        related_name='courses_tutors',
-        blank=True,
-        limit_choices_to={'is_teacher': True},
-    )
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
@@ -83,6 +80,19 @@ class Course(models.Model):
     def course_home_count(self):
         return self.c_homes.count()
 
+    @property
+    def course_teachers(self):
+        teachers = []
+        for c in self.c_homes.all():
+            teachers.append(c.teacher)
+        return teachers
+
+
+class UserBuyCourse(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    bought_date = models.DateField(default=timezone.now)
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=255)
@@ -105,6 +115,3 @@ class CourseDetail(models.Model):
 
     def __str__(self):
         return self.course.title
-
-
-

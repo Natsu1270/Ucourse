@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from courses.serializers import CourseMinSerializer
+from programs.serializers import FieldMinSerializer
 from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
 # from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer
-from exams.serializers import ExamSerializer, ExamShowSerializer
+from exams.serializers import ExamShowSerializer
 from forums.serializers import ForumSerializer
 from profiles.serializers import ProfileMinSerializer
 
@@ -84,6 +86,38 @@ class CourseHomeSerializer(serializers.ModelSerializer):
         ]
 
 
+class CourseHomeShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    teacher = ProfileMinSerializer(read_only=True)
+    full_name = serializers.CharField()
+    student_count = serializers.SerializerMethodField()
+    is_my_class = serializers.SerializerMethodField()
+    field = serializers.SerializerMethodField()
+    course = CourseMinSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
+            'expected_date', 'register_date', 'field', 'course',
+            'over_admission_days', 'teacher', 'maximum_number', 'student_count', 'is_my_class'
+        ]
+
+    def get_student_count(self, obj):
+        return obj.students.count()
+
+    def get_is_my_class(self, obj):
+        user = self.context.get('user')
+        if user:
+            check_user = user.course_homes.filter(pk=obj.id).count() > 0
+            return check_user
+        return False
+
+    def get_field(self, obj):
+        field = obj.course.field
+        return FieldMinSerializer(instance=field).data
+
+
 class CourseHomeMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -92,16 +126,4 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         model = CourseHome
         fields = [
             'id', 'course', 'status',
-        ]
-
-
-class CourseHomeShowSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
-    teacher = ProfileMinSerializer(read_only=True)
-
-    class Meta:
-        model = CourseHome
-        fields = [
-            'id', 'status', 'open_date', 'end_date', 'expected_date',
-            'over_admission_days', 'teacher', 'maximum_number'
         ]

@@ -1,10 +1,10 @@
-import React, {useEffect, useState, Suspense} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React, {Suspense} from 'react'
+import {useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {loadUserStart, logoutStart} from '../../redux/Auth/auth.actions';
+import {logoutStart} from '../../redux/Auth/auth.actions';
 import {showRLModal} from '../../redux/UI/ui.actions'
 
-import {Button, Spin, Layout, Menu} from 'antd'
+import {Button, Layout } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import {clearCurrentProfile} from "../../redux/Profile/profile.actions";
@@ -24,7 +24,7 @@ const Header = ({token, currentUser}) => {
 
     return (
         <Header className='cs-main-header' id="main-header">
-            <ul className='cs-navbar' mode="horizontal" defaultSelectedKeys={['2']}>
+            <ul className='cs-navbar' mode="horizontal">
                 <li>
                     <Link to="/" className="cs-logo text--main bold">
                         UCourse
@@ -37,10 +37,11 @@ const Header = ({token, currentUser}) => {
                 <li className='header-search'>
                     <SearchInput width={400}/>
                 </li>
-                <li>
                     {
                         currentUser ? (
-                            <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout}/>
+                            <li>
+                                <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout}/>
+                            </li>
                         ) : (
                             <li className="nav-item active-nav" id="logout-btn">
                                 <Button type="primary" onClick={() => dispatch(showRLModal())}>
@@ -49,7 +50,6 @@ const Header = ({token, currentUser}) => {
                             </li>
                         )
                     }
-                </li>
             </ul>
             <Suspense fallback={<span/>}>
                 <RegisterOrLogin/>

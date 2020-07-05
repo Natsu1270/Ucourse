@@ -1,7 +1,32 @@
 from rest_framework import serializers
-from .models import Course, CourseDetail, Skill
-from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer
-from course_homes.serializers import CourseHomeMinSerializer, CourseHomeShowSerializer
+from .models import Course, CourseDetail, Skill, UserBuyCourse
+from course_homes.models import CourseHome
+from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer, ProfileMinSerializer
+
+
+class CourseHomeShowSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    teacher = ProfileMinSerializer(read_only=True)
+    full_name = serializers.CharField()
+    student_count = serializers.SerializerMethodField()
+    is_my_class = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
+            'expected_date', 'register_date',
+            'over_admission_days', 'teacher', 'maximum_number', 'student_count', 'is_my_class'
+        ]
+
+    @staticmethod
+    def get_student_count(obj):
+        return obj.students.count()
+
+    def get_is_my_class(self, obj):
+        user = self.context.get('user')
+        check_user = CourseHome.objects.filter(students__in=[user])
+        return True if check_user.count() > 0 else False
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
@@ -22,36 +47,43 @@ class CourseSerializer(serializers.ModelSerializer):
     course_detail = CourseDetailSerializer(many=False, read_only=True)
     program = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
-    teacher = ProfileSerializer(many=True, read_only=True)
     tags = serializers.StringRelatedField(many=True, read_only=True)
     field = serializers.StringRelatedField(read_only=True)
     ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
     c_homes = CourseHomeShowSerializer(many=True, read_only=True)
+    is_my_course = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'icon', 'slug', 'level',
+            'id', 'title', 'code', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
             'fee_type', 'status', 'course_detail', 'program',
-            'teacher', 'field', 'tags', 'ability_test', 'created_date',
-            'updated_date', 'created_by', 'c_homes'
+            'field', 'tags', 'ability_test', 'created_date',
+            'updated_date', 'created_by', 'c_homes', 'is_my_course'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')
+
+    def get_is_my_course(self, obj):
+        user = self.context.get('user')
+        if user:
+            return obj.user_buy.filter(pk=user.id).count() > 0
+        else:
+            return False
 
 
 class CourseSearchSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field = serializers.StringRelatedField(read_only=True)
-    teacher = TeacherProfileSearchSerializer(many=True, read_only=True)
     level = serializers.CharField(source='get_level_display')
     course_home_count = serializers.IntegerField(read_only=True)
+    course_teachers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = Course
         fields = [
             'id', 'title', 'code', 'fee_type',
             'icon', 'slug', 'level', 'status',
-            'teacher', 'field', 'course_home_count'
+            'field', 'course_home_count', 'course_teachers'
         ]
 
 
@@ -60,6 +92,17 @@ class CourseMinSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'slug', 'icon', 'status'
+        ]
+
+
+class UserBuyCourseSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+
+    class Meta:
+        model = UserBuyCourse
+        fields = [
+            'id', 'user', 'course', 'bought_date'
         ]
 
 

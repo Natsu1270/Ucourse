@@ -1,6 +1,7 @@
 import slugify from 'slugify';
 import moment from 'moment';
 import parse from 'html-react-parser'
+import Constants from "../constants";
 
 export function slugifyString(str) {
     if (str) {
@@ -33,4 +34,11 @@ export function timeDiff(timestamp) {
     if (timestamp) {
         return moment(timestamp).fromNow()
     }
+}
+
+export function dayDiff(time1, time2) {
+    const t1 = moment(time1)
+    const t2 = moment(time2)
+
+    return t1.diff(t2, 'days')
 }

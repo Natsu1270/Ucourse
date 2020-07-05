@@ -23,7 +23,7 @@ const CourseCard = ({course, onClick}) => {
         >
             <Meta title={course.title} description={
                 <CourseCardSub
-                    teacher={course.teacher[0].fullname}
+                    homeNum={course.course_home_count}
                     level={course.level}
                     open_date={course.open_date}
                 />}

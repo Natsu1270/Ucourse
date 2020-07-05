@@ -7,9 +7,9 @@ export const courseDetailSelector = createSelector(
     course => course.courseDetail ? course.courseDetail : {}
 );
 
-export const courseTeacherSelector = createSelector(
+export const courseClassesSelector = createSelector(
     [courseDetailSelector],
-    courseDetail => courseDetail.teacher ? courseDetail.teacher : []
+    courseDetail => courseDetail.c_homes ? courseDetail.c_homes : []
 );
 
 export const courseDetailDetailSelector = createSelector(

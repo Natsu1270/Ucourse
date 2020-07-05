@@ -70,7 +70,7 @@
     text-align: center;
     font-weight: 700;
     height: 8rem;
-    width: 16rem;
+    min-width: 16rem;
     margin-right: 2rem;
 	&:hover {
 		color: #26c4e5;
@@ -95,7 +95,7 @@
             justify-content: flex-start;
             align-items: center;
             list-style: none;
-            width: 70%;
+            width: 100%;
         }
 
         &__address {
@@ -190,33 +190,32 @@
 
 .section-course-overview {
     &__content {
-        display: grid;
-        grid-template-columns: 1fr 1fr 30rem;
-        grid-template-areas: "header . ." "description description right" "detail detail right" "detail detail right" "skill skill right";
-        grid-column-gap: 3rem;
-
-        @include responsive(tab-port) {
-            grid-template-areas: "header . ." "right right right" "description description description" "detail detail detail" "detail detail detail" "skill skill skill";
-        }
+        //display: grid;
+        //grid-template-columns: 1fr 1fr 30rem;
+        //grid-template-areas: "header . ." "description description right" "detail detail right" "detail detail right" "skill skill right";
+        //grid-column-gap: 3rem;
+        //
+        //@include responsive(tab-port) {
+        //    grid-template-areas: "header . ." "right right right" "description description description" "detail detail detail" "detail detail detail" "skill skill skill";
+        //}
     }
 
     &__header {
-        grid-area: header;
+        //grid-area: header;
         margin-bottom: 4rem;
     }
 
     &__description {
-        grid-area: description;
         text-align: justify;
         background-color: white;
         margin-bottom: 4rem;
         padding: 2rem 4rem;
-        box-shadow: $shadow-light;
+        //box-shadow: $shadow-light;
 
     }
 
     &__right {
-        grid-area: right;
+        //grid-area: right;
         background-color: #ffffff;
         box-shadow: $shadow-light;
         padding: 3rem 2rem;
@@ -255,7 +254,7 @@
     }
 
     &__detail {
-        grid-area: detail;
+        //grid-area: detail;
         background-color: #ffffff;
         box-shadow: $shadow-light;
         padding: 3rem 2rem;
@@ -278,7 +277,7 @@
             width: 100%;
 
             ul {
-                list-style: none;
+                //list-style: none;
                 padding: 2rem 3rem;
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
@@ -289,9 +288,9 @@
     }
 
     &__skill {
-        grid-area: skill;
+        //grid-area: skill;
         background-color: #ffffff;
-        box-shadow: $shadow-light;
+        //box-shadow: $shadow-light;
         padding: 3rem 2rem;
 
         &--sets {
@@ -324,7 +323,7 @@
     &__tabs {
         background-color: $white-color;
 
-        box-shadow: $shadow-light;
+        //box-shadow: $shadow-light;
         padding: 2rem 3rem;
     }
 }
@@ -498,4 +497,20 @@
 
 .section-header {
     margin-bottom: 4rem;
+}
+
+
+.section-course-classes {
+    .class-list {
+        background-color: #ffffff;
+        padding: 1rem 3rem;
+    }
+
+    .class-sub-info {
+        display: flex;
+        flex-wrap: wrap;
+        &__item {
+            flex: 0 0 25rem;
+        }
+    }
 }

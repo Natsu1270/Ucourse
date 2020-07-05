@@ -8,7 +8,6 @@ import { Spin } from 'antd';
 import {
     LoadingOutlined,
     UserOutlined,
-    SettingOutlined,
     AppstoreOutlined,
     LogoutOutlined,
     ReadOutlined} from "@ant-design/icons";
@@ -31,9 +30,7 @@ const ProfileHeaderDropdown = (props) => {
         backgroundColor: 'transparent',
         border: '1px solid white'
     };
-    const bodyStyles = {
-        backgroundColor: '#33b5e5'
-    }
+   
     const menu = (
         <Menu>
             <Menu.Item>
