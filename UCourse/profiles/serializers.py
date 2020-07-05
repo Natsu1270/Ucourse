@@ -22,7 +22,7 @@ class ProfileMinSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'fullname', 'avatar', 'email')
+        fields = ('first_name', 'last_name', 'fullname', 'avatar', 'email', 'phone_number')
 
 
 class TeacherProfileSearchSerializer(serializers.ModelSerializer):
@@ -32,4 +32,4 @@ class TeacherProfileSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Teacher
-        fields = ('pk', 'id', 'fullname', 'email')
+        fields = ('pk', 'id', 'fullname', 'email', 'phone_number')

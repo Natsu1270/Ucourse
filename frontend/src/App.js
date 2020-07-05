@@ -77,8 +77,8 @@ function App() {
                                     <Route exact path="/field" component={FieldPage}/>
                                     <Route path="/field/:slug" component={FieldDetailPage}/>
                                     <Route path="/programs/:slug" component={ProgramDetail}/>
-                                    <Route path="/courses/:slug" component={CourseDetail}/>
-                                    <Route path="/courses/:slug/:name" component={ClassDetailPage} />
+                                    <Route exact path="/courses/:slug" component={CourseDetail}/>
+                                    <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
                                     <Route exact path="/ability-tests" component={AbilityTestPage}/>
                                     <Route path="/learn/:slug">
                                         <CourseHomePage myCourses={myCourses} />

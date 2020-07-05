@@ -61,3 +61,13 @@ export const courseHomeDetailShowSelector = createSelector(
     [courseHomeSelector],
     courseHome => courseHome.courseHomeShowDetail ? courseHome.courseHomeShowDetail : {}
 )
+
+export const classFieldSelector = createSelector(
+    courseHomeDetailShowSelector,
+    courseHomeShowDetail => courseHomeShowDetail.field ? courseHomeShowDetail.field : {}
+)
+
+export const classCourseSelector = createSelector(
+    courseHomeDetailShowSelector,
+    courseHomeShowDetail => courseHomeShowDetail.course ? courseHomeShowDetail.course : {}
+)

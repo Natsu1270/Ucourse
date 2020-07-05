@@ -5,11 +5,22 @@ import moment from 'moment'
 import {useDispatch} from "react-redux";
 import {registerCourseStart, unRegisterCourseStart} from "../../redux/CourseHome/course-home.actions";
 import Constants from "../../constants";
+import CourseHomeDrawer from "../CourseHome/course-home-drawer.component";
 
 const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
 
     const dispatch = useDispatch()
     const now = moment()
+
+    const [isShow, setIsShow] = useState(false);
+
+    const showDrawer = () => {
+        setIsShow(true)
+    };
+
+    const onClose = () => {
+        setIsShow(false)
+    };
 
 
     const courseHomeStatus = (home) => {
@@ -93,7 +104,11 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                 {
                                     registerBtn(item)
                                 }
-                            </Button>
+                            </Button>,
+                            // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                            <a onClick={showDrawer} key={`a-${item.id}`}>
+                                View Profile
+                            </a>,
                         ]}
                     >
                         <Skeleton avatar title={false} loading={isLoading} active>
@@ -110,6 +125,7 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                         className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
                                 </div>}
                             />
+                            <CourseHomeDrawer courseHome={item} visible={isShow} handleClose={onClose} />
                         </Skeleton>
                     </List.Item>
                 )}

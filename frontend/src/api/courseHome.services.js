@@ -67,11 +67,11 @@ export const getCourseHomeShowAPI = ({token, course_id}) => {
 }
 
 export const getCourseHomeDetailShowAPI = ({token, slug}) => {
+    const headers = token ?
+        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
+        {'Content-Type': 'application/json'}
     return axios.request({
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `token ${token}`,
-        },
+        headers,
         method: 'GET',
         url: `${API_URL}/show/class/${slug}`,
     })
