@@ -125,5 +125,5 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = CourseHome
         fields = [
-            'id', 'course', 'status',
+            'id', 'course', 'status', 'slug'
         ]

@@ -12,17 +12,6 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
     const dispatch = useDispatch()
     const now = moment()
 
-    const [isShow, setIsShow] = useState(false);
-
-    const showDrawer = () => {
-        setIsShow(true)
-    };
-
-    const onClose = () => {
-        setIsShow(false)
-    };
-
-
     const courseHomeStatus = (home) => {
         const registerDays = dayDiff(home.register_date, now)
         const openDays = dayDiff(home.open_date, now)
@@ -106,7 +95,7 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                 }
                             </Button>,
                             // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                            <a onClick={showDrawer} key={`a-${item.id}`}>
+                            <a onClick={() => null} key={`a-${item.id}`}>
                                 View Profile
                             </a>,
                         ]}
@@ -125,7 +114,7 @@ const CourseClasses = ({course, classes, isLoading, isOwn, token}) => {
                                         className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
                                 </div>}
                             />
-                            <CourseHomeDrawer courseHome={item} visible={isShow} handleClose={onClose} />
+                            
                         </Skeleton>
                     </List.Item>
                 )}

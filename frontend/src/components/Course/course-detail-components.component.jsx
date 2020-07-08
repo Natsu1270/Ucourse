@@ -2,6 +2,7 @@ import React from 'react'
 import {Avatar, Card, Empty, Skeleton, Tabs} from 'antd'
 import documentAvatar from '../../assets/pdf.png';
 import {parseHtml} from "../../utils/text.utils";
+import { BACKEND_HOST } from '../../configs';
 
 const {Meta} = Card;
 
@@ -15,7 +16,7 @@ const CourseDetailComponents = ({course, loading}) => {
             <div>
                 {parseHtml(course.outline_detail)}
                 <Card hoverable style={{width: 300, marginTop: 16}}
-                      onClick={() => window.open(course.outline_file, '_blank')}>
+                      onClick={() => window.open(BACKEND_HOST + course.outline_file, '_blank')}>
                     <Skeleton loading={loading} avatar active>
                         <Meta
                             avatar={
