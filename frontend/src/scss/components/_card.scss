@@ -20,7 +20,7 @@
 		&--content {
 			padding: 2rem;
 			&--title {
-				font-size: 2rem;
+				font-size: 1.8rem;
 				font-weight: 500;
 			}
 			&--info {
@@ -117,9 +117,14 @@
 }
 
 .course-card-sub {
+	padding : 2rem;
 	&__teacher {
 		font-size: 1.4rem;
 		color: $color-grey-dark-2;
+	}
+
+	&__title {
+		font-weight: 500;
 	}
 	&__others {
 
@@ -135,7 +140,12 @@
 }
 
 .course-card {
+	max-width: 28rem;
 	box-shadow: 0 5px 10px rgba(0,0,0,0.08);
+	img {
+		width: 100%;
+		max-height: 20rem;
+	}
 }
 
 .ability-test-card {

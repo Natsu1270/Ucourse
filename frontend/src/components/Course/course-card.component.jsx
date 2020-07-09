@@ -1,34 +1,34 @@
 import React from 'react'
-import {Card} from 'antd'
+import { Card } from 'antd'
 import CourseCardSub from "./course-card-sub.component";
 
-const CourseCard = ({course, onClick}) => {
-    const coverStyle = {
-        width: '100%',
-        height: '17rem',
-        minWidth: '25rem',
-        backgroundImage: `url(${course.icon})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover'
-    };
-    const {Meta} = Card;
+const CourseCard = ({ course, onClick }) => {
+    // const coverStyle = {
+    //     width: '100%',
+    //     height: '17rem',
+    //     minWidth: '25rem',
+    //     // backgroundImage: `url(${course.icon})`,
+    //     backgroundRepeat: 'no-repeat',
+    //     backgroundPosition: 'center',
+    //     backgroundSize: 'cover'
+    // };
+    const { Meta } = Card;
     return (
-        <Card
+        <div
             className="course-card"
             onClick={onClick}
-            hoverable
-            style={{ borderRadius: '1.3rem', overflow: 'hidden'}}
-            cover={<div style={coverStyle}/>}
+            style={{ borderRadius: '1.3rem', overflow: 'hidden' }}
         >
-            <Meta title={course.title} description={
-                <CourseCardSub
-                    homeNum={course.course_home_count}
-                    level={course.level}
-                    open_date={course.open_date}
-                />}
+            <img src={course.icon} alt="course-icon"></img>
+
+            <CourseCardSub
+                title={course.title}
+                homeNum={course.course_home_count}
+                level={course.level}
+                open_date={course.open_date}
             />
-        </Card>
+
+        </div>
     )
 }
 

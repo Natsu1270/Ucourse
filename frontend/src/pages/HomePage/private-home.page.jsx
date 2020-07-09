@@ -1,18 +1,19 @@
-import React, {useEffect} from 'react'
-import {useSelector} from "react-redux";
-import {createStructuredSelector} from "reselect";
-import {useHistory, Link} from 'react-router-dom';
-import {isLoadingSelector} from "../../redux/CourseHome/course-home.selects";
-import {Avatar, Card, Carousel, Skeleton} from "antd";
+import React, { useEffect } from 'react'
+import { useSelector } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { useHistory, Link } from 'react-router-dom';
+import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
+import { Avatar, Card, Carousel, Skeleton } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
-import {homeCoursesSelector, homeProgramsSelector, isGettingSelector} from "../../redux/Home/home.selects";
+import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
 import HomeCourseCard from "./home-course-card"
+import MyCourseTable from './my-courses-table'
 
-const PrivateHomePage = ({ownCourses, ownPrograms}) => {
+const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
     const history = useHistory();
-    const {isLoadingLearnings, isGetting, courses, programs} = useSelector(createStructuredSelector({
+    const { isLoadingLearnings, isGetting, courses, programs } = useSelector(createStructuredSelector({
         isLoadingLearnings: isLoadingSelector,
         isGetting: isGettingSelector,
         courses: homeCoursesSelector,
@@ -22,9 +23,9 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
     useEffect(() => {
         window.scrollTo(0, 0)
     }, []);
-    const ownCourseIds = ownCourses.map(course=>course.course.id)
+    const ownCourseIds = ownCourses.map(course => course.course.id)
 
-    const {Meta} = Card;
+    const { Meta } = Card;
     const suggestCourses = courses.filter(course => !ownCourseIds.includes(course.id))
     const suggestPrograms = programs.filter(program => !ownPrograms.includes(program))
 
@@ -34,15 +35,15 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                 Trong tiến trình
             </h3>
             <section className="private-home__learning">
-            <h3 className="text--main private-home__learning--header">
-                                    Chương trình học
+                <h3 className="text--main private-home__learning--header">
+                    Chương trình học
                                 </h3>
                 {
                     isLoadingLearnings ?
-                        <Skeleton active avatar paragraph={{rows: 2}}/> :
+                        <Skeleton active avatar paragraph={{ rows: 2 }} /> :
                         programs.length ?
                             <div className="private-home__learning--programs">
-                                
+
                                 <div className="private-home__learning--programs--items">
                                     {
                                         ownPrograms.map(program => (
@@ -54,10 +55,10 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                                 </div>
                             </div> : null
                 }
-                
-                        <div className="private-home__learning--courses">
-                            <h3 className="text--main private-home__learning--header">
-                                Khóa học
+
+                <div className="private-home__learning--courses">
+                    <h3 className="text--main private-home__learning--header">
+                        Khóa học
                             </h3>
                     {
                         isLoadingLearnings ?
@@ -66,15 +67,11 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
                                 <Skeleton active avatar />
                                 <Skeleton active avatar />
                             </div> : <div className="private-home__learning--courses--items">
-                                {
-                                    ownCourses.map(course => (
-                                        <HomeCourseCard course={course} onClick={() => history.push(`learn/${course.course.slug}`)} />
-                                    ))
-                                }
+                                <MyCourseTable courses={ownCourses} />
                             </div>
                     }
-                            
-                        </div>
+
+                </div>
                 <div className="private-home__learning--link">
                     <Link to='/my-courses'>
                         Xem tất cả &rarr;
@@ -87,23 +84,23 @@ const PrivateHomePage = ({ownCourses, ownPrograms}) => {
             </h3>
             <section className="private-home__suggest mb-5">
                 {
-                    isGetting ? <Skeleton active avatar/> :
+                    isGetting ? <Skeleton active avatar /> :
                         suggestCourses.map(course => (
                             <CourseCard
                                 course={course}
-                                onClick={() => history.push(`/courses/${course.slug}`)}/>
+                                onClick={() => history.push(`/courses/${course.slug}`)} />
                         ))
                 }
             </section>
             <section className="private-home__suggest">
                 {
-                    isGetting ? <Skeleton active avatar/> :
+                    isGetting ? <Skeleton active avatar /> :
                         suggestPrograms.map(program => (
                             <SearchProgramItem
                                 img={program.icon}
                                 title={program.name}
                                 num_course={program.courses_count}
-                                onClick={() => history.push(`/programs/${program.slug}`)}/>
+                                onClick={() => history.push(`/programs/${program.slug}`)} />
                         ))
                 }
             </section>
