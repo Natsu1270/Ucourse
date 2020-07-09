@@ -35,7 +35,7 @@ const CourseHomePage = ({myCourses}) => {
     const match = useRouteMatch();
 
     const isMyCourse = () => {
-        return myCourses.find(course => course.course.slug === slug)
+        return myCourses.find(course => course.slug === slug)
     }
 
     const {
