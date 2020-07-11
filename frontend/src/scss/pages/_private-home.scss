@@ -1,7 +1,6 @@
 .private-home {
     &--title {
         font-size: 4rem;
-        border-bottom: 1px solid lightgrey;
         padding-bottom: 2rem;
     }
 
@@ -34,11 +33,11 @@
         &--courses {
             padding-top: 2rem;
 
-            &--items {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
-                grid-gap: 2rem;
-            }
+            // &--items {
+            //     display: grid;
+            //     grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
+            //     grid-gap: 2rem;
+            // }
         }
     }
 

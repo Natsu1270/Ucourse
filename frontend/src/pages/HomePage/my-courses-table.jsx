@@ -44,9 +44,9 @@ const MyCourseTable = ({ courses }) => {
 
     return (
         <Table
+            size="middle"
             columns={tableColumns}
             dataSource={data}
-            pagination={{ pageSize: 3 }}
         />
     )
 }

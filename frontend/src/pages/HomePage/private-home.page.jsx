@@ -3,12 +3,14 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Card, Carousel, Skeleton } from "antd";
+import { Avatar, Card, Carousel, Skeleton, Collapse, Empty } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
 import HomeCourseCard from "./home-course-card"
 import MyCourseTable from './my-courses-table'
+
+const { Panel } = Collapse;
 
 const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
@@ -25,7 +27,6 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
     }, []);
     const ownCourseIds = ownCourses.map(course => course.course.id)
 
-    const { Meta } = Card;
     const suggestCourses = courses.filter(course => !ownCourseIds.includes(course.id))
     const suggestPrograms = programs.filter(program => !ownPrograms.includes(program))
 
@@ -35,43 +36,41 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                 Trong tiến trình
             </h3>
             <section className="private-home__learning">
-                <h3 className="text--main private-home__learning--header">
-                    Chương trình học
-                                </h3>
-                {
-                    isLoadingLearnings ?
-                        <Skeleton active avatar paragraph={{ rows: 2 }} /> :
-                        programs.length ?
-                            <div className="private-home__learning--programs">
 
-                                <div className="private-home__learning--programs--items">
-                                    {
-                                        ownPrograms.map(program => (
-                                            <div key={program.id} className="mini-program">
-                                                {program.name}
-                                            </div>
-                                        ))
-                                    }
+                <Collapse>
+                    <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
+
+                        {
+                            ownPrograms.length ?
+                                <div className="private-home__learning--programs">
+                                    <div className="private-home__learning--programs--items">
+                                        {
+                                            ownPrograms.map(program => (
+                                                <div key={program.id} className="mini-program">
+                                                    {program.name}
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        }
+                    </Panel>
+
+                    <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Khóa học</h4>} key="2">
+                        {
+                            isLoadingLearnings ?
+                                <div className="d-flex">
+                                    <Skeleton active avatar />
+                                    <Skeleton active avatar />
+                                    <Skeleton active avatar />
+                                </div> : <div className="private-home__learning--courses--items">
+                                    <MyCourseTable courses={ownCourses} />
                                 </div>
-                            </div> : null
-                }
+                        }
+                    </Panel>
 
-                <div className="private-home__learning--courses">
-                    <h3 className="text--main private-home__learning--header">
-                        Khóa học
-                            </h3>
-                    {
-                        isLoadingLearnings ?
-                            <div className="d-flex">
-                                <Skeleton active avatar />
-                                <Skeleton active avatar />
-                                <Skeleton active avatar />
-                            </div> : <div className="private-home__learning--courses--items">
-                                <MyCourseTable courses={ownCourses} />
-                            </div>
-                    }
+                </Collapse>
 
-                </div>
                 <div className="private-home__learning--link">
                     <Link to='/my-courses'>
                         Xem tất cả &rarr;
