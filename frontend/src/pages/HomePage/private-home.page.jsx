@@ -53,9 +53,8 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                                                     dataSource={program.program_course}
                                                     renderItem={item => (
                                                         <List.Item
-                                                            actions={[<a key="detail">Chi tiết</a>]}
+                                                            actions={[<Link to={`courses/${item.slug}`} key="detail">Chi tiết</Link>]}
                                                         >
-
                                                             <List.Item.Meta
                                                                 avatar={
                                                                     <Avatar src={item.icon} />
