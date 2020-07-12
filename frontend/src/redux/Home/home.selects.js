@@ -28,3 +28,21 @@ export const homeCoursesSelector = createSelector(
     coursesAndPrograms => coursesAndPrograms.courses ?
         coursesAndPrograms.courses : []
 )
+
+
+export const myCoursesAndProgramsSelector = createSelector(
+    [homeSelector],
+    home => home.myCoursesAndPrograms ? home.myCoursesAndPrograms : {}
+)
+
+export const myProgramsSelector = createSelector(
+    [myCoursesAndProgramsSelector],
+    myCoursesAndPrograms => myCoursesAndPrograms.myPrograms ?
+        myCoursesAndPrograms.myPrograms : []
+)
+
+export const myCoursesSelector = createSelector(
+    [myCoursesAndProgramsSelector],
+    myCoursesAndPrograms => myCoursesAndPrograms.myCourses ?
+        myCoursesAndPrograms.myCourses : []
+)

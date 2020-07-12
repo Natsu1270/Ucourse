@@ -19,9 +19,9 @@ const MyCourseTable = ({ courses }) => {
             render: text => <span>{text}</span>,
         },
         {
-            title: 'Tình trạng',
-            dataIndex: 'result',
-            key: 'result',
+            title: 'Giảng viên',
+            dataIndex: 'teacher',
+            key: 'teacher',
             render: text => <span>{text}</span>,
         },
         {
@@ -35,8 +35,8 @@ const MyCourseTable = ({ courses }) => {
     const data = courses.map((course, index) => ({
         key: index,
         stt: index + 1,
-        title: course.slug,
-        result: 'Pass',
+        title: course.full_name,
+        teacher: course.teacher,
         link: course.slug
     }))
 

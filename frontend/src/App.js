@@ -1,34 +1,35 @@
-import React, {lazy, Suspense, useEffect} from 'react'
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
-import {useSelector, useDispatch} from 'react-redux'
-import {createStructuredSelector} from 'reselect'
+import React, { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 
 import LoginAndRegisterPage from "./pages/LoginAndRegisterPage/login-register.page";
 import Header from "./components/Header/header.component";
 import Footer from "./components/Footer/footer.component";
 import HomePage from "./pages/HomePage/home.page";
 import ProfilePage from "./pages/ProfilePage/profile.page";
-import {tokenSelector, currentUserSelector} from './redux/Auth/auth.selects'
+import { tokenSelector, currentUserSelector } from './redux/Auth/auth.selects'
 
 
 import 'antd/dist/antd.css'
 import './App.scss';
-import {Spin, Layout} from 'antd';
+import { Spin, Layout } from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
-import {getProfileStart} from "./redux/Profile/profile.actions";
-import {fetchMyCoursesStart} from "./redux/CourseHome/course-home.actions";
-import {myCourseHomesSelector} from "./redux/CourseHome/course-home.selects";
+import { getProfileStart } from "./redux/Profile/profile.actions";
+import { fetchMyCoursesStart } from "./redux/CourseHome/course-home.actions";
+import { myCourseHomesSelector } from "./redux/CourseHome/course-home.selects";
+import { myCoursesSelector, myProgramsSelector } from "./redux/Home/home.selects"
 import PrivateCourseRoute from "./components/Common/private-course-route.component";
 import PrivateHomePage from "./pages/HomePage/private-home.page";
-import {getAllStart} from "./redux/Home/home.actions";
+import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
 const SearchPage = lazy(() => import('./pages/SearchPage/search.page'));
 const FieldPage = lazy(() => import('./pages/FieldPage/field.page'));
 const FieldDetailPage = lazy(() => import('./pages/FieldPage/field-detail.page'));
-const ProgramDetail = lazy(() => import ('./pages/ProgramDetail/program-detail.page'));
+const ProgramDetail = lazy(() => import('./pages/ProgramDetail/program-detail.page'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail/course-detail.page'));
 const AbilityTestPage = lazy(() => import('./pages/AbilityTestPage/ability-tests.page'));
 const CourseHomePage = lazy(() => import('./pages/CourseHome/course-home.page'));
@@ -37,59 +38,60 @@ const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page
 function App() {
 
     const dispatch = useDispatch();
-    const {token, currentUser, myCourses} = useSelector(createStructuredSelector({
+    const { token, currentUser, myCourses, myPrograms } = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
-        myCourses: myCourseHomesSelector
+        myCourses: myCoursesSelector,
+        myPrograms: myProgramsSelector
     }));
 
     useEffect(() => {
         if (currentUser && token) {
             dispatch(getProfileStart(token));
-            dispatch(fetchMyCoursesStart(token));
+            dispatch(getAllMyStart(token));
             dispatch(getAllStart());
         }
     }, [dispatch, currentUser, token]);
 
-    const {Content} = Layout;
+    const { Content } = Layout;
 
     return (
         <Router>
             <div className="App">
                 <Layout>
-                    <Header token={token} currentUser={currentUser}/>
+                    <Header token={token} currentUser={currentUser} />
                     <Switch>
                         <Route exact path="/">
                             {
                                 currentUser ?
-                                    <PrivateHomePage ownCourses={myCourses} ownPrograms={[]} /> :
-                                    <HomePage currentUser={currentUser}/>
+                                    <PrivateHomePage ownCourses={myCourses} ownPrograms={myPrograms} /> :
+                                    <HomePage currentUser={currentUser} />
                             }
                         </Route>
                         <Content className="content">
-                            <Suspense fallback={<Spin/>}>
+                            <Suspense fallback={<Spin />}>
                                 <Switch>
-                                    <Route exact path="/about" component={AboutPage}/>
+                                    <Route exact path="/about" component={AboutPage} />
                                     <AuthRoute exact path="/auth" component={LoginAndRegisterPage}
-                                               redirectTo="/profile"/>
-                                    <PrivateRoute path="/profile" component={ProfilePage}/>
-                                    <Route exact path="/search" component={SearchPage}/>
-                                    <Route exact path="/field" component={FieldPage}/>
-                                    <Route path="/field/:slug" component={FieldDetailPage}/>
-                                    <Route path="/programs/:slug" component={ProgramDetail}/>
-                                    <Route exact path="/courses/:slug" component={CourseDetail}/>
+                                        redirectTo="/profile" />
+                                    <PrivateRoute path="/profile" component={ProfilePage} />
+                                    <Route exact path="/search" component={SearchPage} />
+                                    <Route exact path="/field" component={FieldPage} />
+                                    <Route path="/field/:slug" component={FieldDetailPage} />
+                                    <Route path="/programs/:slug" component={ProgramDetail} />
+                                    <Route exact path="/courses/:slug" component={CourseDetail} />
                                     <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
-                                    <Route exact path="/ability-tests" component={AbilityTestPage}/>
+                                    <Route exact path="/ability-tests" component={AbilityTestPage} />
                                     <Route path="/learn/:slug">
                                         <CourseHomePage myCourses={myCourses} />
                                     </Route>
-                                    <Route component={Page404NotFound}/>
+                                    <Route component={Page404NotFound} />
 
                                 </Switch>
                             </Suspense>
                         </Content>
                     </Switch>
-                    <Footer/>
+                    <Footer />
                 </Layout>
             </div>
         </Router>

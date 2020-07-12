@@ -4,6 +4,8 @@ from rest_framework import views, status
 from rest_framework.response import Response
 
 from api.utils import uc_response, create_search_keyword
+from course_homes.models import CourseHome
+from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
 from programs.models import Program
 from courses.serializers import CourseSearchSerializer
@@ -33,7 +35,8 @@ class SearchAPI(views.APIView):
 
 class GetAllAPI(views.APIView):
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
 
         courses = Course.objects.all()
         programs = Program.objects.all()
@@ -45,3 +48,19 @@ class GetAllAPI(views.APIView):
         return Response(
             uc_response(data=data, result=True, error=None, message='OK', status_code=200),
             status=status.HTTP_200_OK)
+
+
+class GetAllMyAPI(views.APIView):
+
+    def get(self, request):
+        my_courses = CourseHome.objects.filter(students__in=[self.request.user])
+        my_programs = Program.objects.filter(user_buy__in=[self.request.user])
+        data = {
+            "myCourses": CourseHomeMinSerializer(instance=my_courses, many=True).data,
+            "myPrograms": ProgramSearchSerializer(instance=my_programs, many=True).data
+        }
+
+        return Response(
+            uc_response(data=data, result=True, error=None, message='OK', status_code=200),
+            status=status.HTTP_200_OK
+        )

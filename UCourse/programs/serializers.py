@@ -46,12 +46,13 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field = serializers.StringRelatedField(read_only=True)
     courses_count = serializers.IntegerField(read_only=True)
+    program_course = CourseSearchSerializer(many=True, read_only=True)
 
     class Meta:
         model = Program
         fields = [
             'id', 'name', 'code', 'icon', 'slug',
-            'courses_count', 'status', 'field'
+            'courses_count', 'status', 'field', 'program_course'
         ]
 
 

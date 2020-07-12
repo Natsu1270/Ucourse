@@ -121,9 +121,10 @@ class CourseHomeShowSerializer(serializers.ModelSerializer):
 class CourseHomeMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course = serializers.PrimaryKeyRelatedField(read_only=True)
+    teacher = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = CourseHome
         fields = [
-            'id', 'course', 'status', 'slug'
+            'id', 'course', 'status', 'slug', 'full_name', 'teacher'
         ]

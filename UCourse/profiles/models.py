@@ -43,7 +43,7 @@ class Profile(models.Model):
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return self.user.email
+        return self.fullname
 
     @property
     def get_avatar(self):

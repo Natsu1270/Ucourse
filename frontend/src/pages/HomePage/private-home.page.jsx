@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Card, Carousel, Skeleton, Collapse, Empty } from "antd";
+import { Avatar, Card, Carousel, Skeleton, Collapse, Empty, List } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
@@ -42,17 +42,36 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
                         {
                             ownPrograms.length ?
-                                <div className="private-home__learning--programs">
-                                    <div className="private-home__learning--programs--items">
-                                        {
-                                            ownPrograms.map(program => (
-                                                <div key={program.id} className="mini-program">
-                                                    {program.name}
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+
+                                <Collapse >
+                                    {
+                                        ownPrograms.map(program => (
+                                            <Panel key={program.id} header={program.name}>
+                                                <List
+                                                    className="demo-loadmore-list"
+                                                    itemLayout="horizontal"
+                                                    dataSource={program.program_course}
+                                                    renderItem={item => (
+                                                        <List.Item
+                                                            actions={[<a key="detail">Chi tiết</a>]}
+                                                        >
+
+                                                            <List.Item.Meta
+                                                                avatar={
+                                                                    <Avatar src={item.icon} />
+                                                                }
+                                                                title={<a href="https://ant.design">{item.title}</a>}
+                                                            // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                            />
+                                                        </List.Item>
+                                                    )}
+                                                />
+                                            </Panel>
+                                        ))
+                                    }
+
+                                </Collapse>
+                                : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                         }
                     </Panel>
 
