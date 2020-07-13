@@ -8,46 +8,14 @@ import { registerCourseStart, unRegisterCourseStart } from "../../redux/CourseHo
 import Constants from "../../constants";
 import CourseHomeDrawer from "../CourseHome/course-home-drawer.component";
 
+import { courseHomeStatus, canRegister } from './course-home.utils'
+
 const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
 
     const history = useHistory()
     const dispatch = useDispatch()
     const now = moment()
 
-    const courseHomeStatus = (home) => {
-        const registerDays = dayDiff(home.register_date, now)
-        const openDays = dayDiff(home.open_date, now)
-        const delayDays = home.over_admission_days
-        let endDays;
-        if (home.end_date) {
-            endDays = dayDiff(home.close_date, now)
-        }
-
-        if (home.status === 'closed' || endDays < 0) {
-            return <Tag color="#f50">Lớp đã kết thúc</Tag>
-        }
-        if (registerDays > 0) {
-            return <Tag color="#ffcd3c">Chưa đến ngày đăng ký</Tag>
-        }
-
-        if (registerDays <= 0 && openDays > 0) return <Tag color="#87d068">Đang mở đăng ký</Tag>
-        if (-openDays < delayDays) {
-            return <Tag color="#2db7f5">Trong tiến trình, có thể đăng ký</Tag>
-        } else {
-            return <Tag color="#f50">Trong tiến trình, hết hạn đăng ký</Tag>
-        }
-    }
-
-    const canRegister = (home) => {
-        const registerDays = dayDiff(home.register_date, now)
-        const openDays = dayDiff(home.open_date, now)
-        const delayDays = home.over_admission_days
-        if (registerDays > 0) {
-            return false
-        }
-        if (registerDays <= 0 && openDays > 0) return true
-        return -openDays < delayDays;
-    }
 
     const registerClass = (item) => {
         if (!isOwn) {

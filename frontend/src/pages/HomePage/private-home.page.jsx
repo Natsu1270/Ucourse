@@ -32,10 +32,12 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
     return (
         <main className="private-home page section-10">
-            <h3 className="text--main private-home--title">
-                Trong tiến trình
+
+            <section className="private-home__learning mb-5">
+
+                <h3 className="text--main private-home--title">
+                    Trong tiến trình
             </h3>
-            <section className="private-home__learning">
 
                 <Collapse>
                     <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
@@ -96,31 +98,36 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                 </div>
 
             </section>
-            <h3 className="text--main private-home--title mt-5">
-                Gợi ý cho bạn
-            </h3>
+
             <section className="private-home__suggest mb-5">
-                {
-                    isGetting ? <Skeleton active avatar /> :
-                        suggestCourses.map(course => (
-                            <CourseCard
-                                course={course}
-                                onClick={() => history.push(`/courses/${course.slug}`)} />
-                        ))
-                }
+                <h3 className="text--main private-home--title mt-5">
+                    Gợi ý cho bạn
+                </h3>
+                <div className="private-home__suggest--items">
+                    {
+                        isGetting ? <Skeleton active avatar /> :
+                            suggestCourses.map(course => (
+                                <CourseCard
+                                    course={course}
+                                    onClick={() => history.push(`/courses/${course.slug}`)} />
+                            ))
+                    }
+                </div>
+
+                <div className="private-home__suggest--items">
+                    {
+                        isGetting ? <Skeleton active avatar /> :
+                            suggestPrograms.map(program => (
+                                <SearchProgramItem
+                                    img={program.icon}
+                                    title={program.name}
+                                    num_course={program.courses_count}
+                                    onClick={() => history.push(`/programs/${program.slug}`)} />
+                            ))
+                    }
+                </div>
             </section>
-            <section className="private-home__suggest">
-                {
-                    isGetting ? <Skeleton active avatar /> :
-                        suggestPrograms.map(program => (
-                            <SearchProgramItem
-                                img={program.icon}
-                                title={program.name}
-                                num_course={program.courses_count}
-                                onClick={() => history.push(`/programs/${program.slug}`)} />
-                        ))
-                }
-            </section>
+
         </main>
     )
 };

@@ -1,10 +1,14 @@
 .private-home {
     &--title {
-        font-size: 4rem;
+        font-size: 3.5rem;
         padding-bottom: 2rem;
     }
 
     &__learning {
+
+        background-color: #ffffff;
+        padding: 2rem 3rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
 
         &--item {
             box-shadow: 0 0.5rem 0.8rem rgba(0,0,0,0.07);
@@ -42,9 +46,15 @@
     }
 
     &__suggest {
-        padding-top: 2rem;
-        display: grid;
-        grid-gap: 3rem;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        background-color: #ffffff;
+        padding: 2rem 3rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+        
+        &--items {
+            padding-top: 2rem;
+            display: grid;
+            grid-gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
     }
 }

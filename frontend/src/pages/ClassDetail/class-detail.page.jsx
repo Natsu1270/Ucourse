@@ -17,12 +17,17 @@ import {
 } from '../../redux/CourseHome/course-home.selects'
 import { createStructuredSelector } from "reselect";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
-import { Descriptions, Badge, Timeline } from 'antd';
+import { Descriptions, Badge, Timeline, Button } from 'antd';
 import { formatDate } from '../../utils/text.utils'
 import Constants from '../../constants'
+import { courseHomeStatus, canRegister } from '../../components/Course/course-home.utils'
+import { dayDiff } from "../../utils/text.utils";
+
 
 import "./class-detail.page.scss";
 import moment from 'moment';
+
+const now = moment()
 
 const ClassDetailPage = () => {
 
@@ -47,6 +52,18 @@ const ClassDetailPage = () => {
         dispatch(getCourseHomeShowDetailStart({ token, slug: className }))
     }, [dispatch])
 
+    const registerBtn = (item) => {
+        if (!canRegister(item)) return 'Hết hạn đăng ký'
+        if (item.is_my_class) {
+            if (dayDiff(item.open_date, now) <= 0) {
+                return 'Đăng ký thành công'
+            } else {
+                return 'Hủy đăng ký'
+            }
+        }
+        return 'Đăng ký'
+    }
+
 
     const classDetailComp = (
         <div className="class-detail">
@@ -68,9 +85,21 @@ const ClassDetailPage = () => {
             </Breadcrumb>
             <div className="class-detail--content mb-4">
                 <Skeleton active loading={isLoading}>
-                    <h3 className="text--main">
-                        {classDetail.full_name}
-                    </h3>
+                    <div className="row">
+                        <h3 className="text--main col-xl-6 col-md-6">
+                            {classDetail.full_name}
+                        </h3>
+                        <div className="col-xl-6 col-md-6">
+                            {
+                                canRegister(classDetail) ?
+
+                                    <Button onClick={() => null}>
+                                        {registerBtn(classDetail)}
+                                    </Button>
+                                    : null
+                            }
+                        </div>
+                    </div>
                 </Skeleton>
 
                 <Skeleton active loading={isLoading}>
@@ -78,7 +107,7 @@ const ClassDetailPage = () => {
                         <Descriptions.Item label="Khoá học">{classDetail.course ? classDetail.course.title : ''}</Descriptions.Item>
                         <Descriptions.Item label="Giảng viên">{classDetail.teacher ? classDetail.teacher.fullname : ''}</Descriptions.Item>
                         <Descriptions.Item label="Trạng thái">
-                            <Badge status="processing" text="Running" />
+                            {courseHomeStatus(classDetail)}
                         </Descriptions.Item>
                         <Descriptions.Item label="Số lượng học viên đã đăng ký">{classDetail.student_count}</Descriptions.Item>
                         <Descriptions.Item label="Số lượng học viên tối đa">{classDetail.maximum_number}</Descriptions.Item>
