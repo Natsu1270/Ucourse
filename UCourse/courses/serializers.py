@@ -88,11 +88,20 @@ class CourseSearchSerializer(serializers.ModelSerializer):
 
 
 class CourseMinSerializer(serializers.ModelSerializer):
+    is_my_course = serializers.SerializerMethodField()
+
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'slug', 'icon', 'status'
+            'id', 'title', 'slug', 'icon', 'status', 'is_my_course'
         ]
+
+    def get_is_my_course(self, obj):
+        user = self.context.get('user')
+        if user:
+            return obj.user_buy.filter(pk=user.id).count() > 0
+        else:
+            return False
 
 
 class UserBuyCourseSerializer(serializers.ModelSerializer):

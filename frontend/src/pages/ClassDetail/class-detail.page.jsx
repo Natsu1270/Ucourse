@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import ErrorBoundary from "../../components/ErrorBoundary/error-boundary.component";
@@ -17,11 +17,14 @@ import {
 } from '../../redux/CourseHome/course-home.selects'
 import { createStructuredSelector } from "reselect";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
-import { Descriptions, Badge, Timeline, Button } from 'antd';
+import { Descriptions, Badge, Timeline, Button, message } from 'antd';
 import { formatDate } from '../../utils/text.utils'
 import Constants from '../../constants'
 import { courseHomeStatus, canRegister } from '../../components/Course/course-home.utils'
 import { dayDiff } from "../../utils/text.utils";
+import { registerCourseStart, unRegisterCourseStart } from "../../redux/CourseHome/course-home.actions";
+import { checkBoughtCourseAPI } from "../../api/course.services";
+
 
 
 import "./class-detail.page.scss";
@@ -34,6 +37,7 @@ const ClassDetailPage = () => {
     const { slug, name } = useParams()
     const dispatch = useDispatch()
     const className = slugifyString(slug + name)
+    const [ownCourse, setOwnCourse] = useState(false)
 
     const {
         token, classDetail, classField, classCourse,
@@ -49,8 +53,11 @@ const ClassDetailPage = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        dispatch(getCourseHomeShowDetailStart({ token, slug: className }))
-    }, [dispatch])
+        if (token) {
+
+            dispatch(getCourseHomeShowDetailStart({ token, slug: className }))
+        }
+    }, [className, dispatch, token])
 
     const registerBtn = (item) => {
         if (!canRegister(item)) return 'Hết hạn đăng ký'
@@ -62,6 +69,27 @@ const ClassDetailPage = () => {
             }
         }
         return 'Đăng ký'
+    }
+
+
+
+    const registerClass = async (item) => {
+        try {
+            const result = await checkBoughtCourseAPI({ token, course: classDetail.course.id })
+            const isOwn = result.status === 200
+            if (!isOwn) {
+                message.error("Vui lòng đăng ký khóa học trước khi đăng ký lớp")
+            } else {
+                if (item.is_my_class) {
+                    dispatch(unRegisterCourseStart({ token, class_id: item.id }))
+                } else {
+                    dispatch(registerCourseStart({ course_id: item.course.id, token, class_id: item.id }))
+                }
+                window.location.reload();
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
 
 
@@ -89,21 +117,28 @@ const ClassDetailPage = () => {
                         <h3 className="text--main col-xl-6 col-md-6">
                             {classDetail.full_name}
                         </h3>
-                        <div className="col-xl-6 col-md-6">
-                            {
-                                canRegister(classDetail) ?
-
-                                    <Button onClick={() => null}>
-                                        {registerBtn(classDetail)}
-                                    </Button>
-                                    : null
-                            }
-                        </div>
                     </div>
                 </Skeleton>
 
                 <Skeleton active loading={isLoading}>
-                    <Descriptions className="class-detail__description" title="Thông tin lớp học" layout="vertical" bordered>
+                    <Descriptions className="class-detail__description"
+                        title={
+                            <div className="row">
+                                <h3 className="col-xl-6 col-md-6">
+                                    Thông tin lớp học
+                                </h3>
+                                <div className="col-xl-6 col-md-6 text-right">
+                                    {
+                                        canRegister(classDetail) ?
+
+                                            <Button type="primary" onClick={() => registerClass(classDetail)}>
+                                                {registerBtn(classDetail)}
+                                            </Button>
+                                            : null
+                                    }
+                                </div>
+                            </div>}
+                        layout="vertical" bordered>
                         <Descriptions.Item label="Khoá học">{classDetail.course ? classDetail.course.title : ''}</Descriptions.Item>
                         <Descriptions.Item label="Giảng viên">{classDetail.teacher ? classDetail.teacher.fullname : ''}</Descriptions.Item>
                         <Descriptions.Item label="Trạng thái">

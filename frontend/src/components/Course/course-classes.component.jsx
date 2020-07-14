@@ -33,6 +33,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
     const registerBtn = (item) => {
         if (!canRegister(item)) return 'Hết hạn đăng ký'
         if (item.is_my_class) {
+            let a = dayDiff(item.open_date, now);
             if (dayDiff(item.open_date, now) <= 0) {
                 return 'Đăng ký thành công'
             } else {

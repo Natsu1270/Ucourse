@@ -109,3 +109,9 @@ class CourseHomeDetailShowAPI(generics.RetrieveAPIView):
     serializer_class = serializers.CourseHomeShowSerializer
     lookup_field = 'slug'
     queryset = CourseHome.objects.all()
+
+    def get_serializer_context(self):
+        user = self.request.user
+        if user.is_anonymous:
+            return {"user": None}
+        return {"user": user}
