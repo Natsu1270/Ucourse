@@ -7,6 +7,11 @@ export const currentUserSelector = createSelector(
     auth => auth.currentUser
 )
 
+export const userRoleSelector = createSelector(
+    [currentUserSelector],
+    currentUser => currentUser ? currentUser.role : {}
+)
+
 export const tokenSelector = createSelector(
     [authSelector],
     auth => auth.userToken

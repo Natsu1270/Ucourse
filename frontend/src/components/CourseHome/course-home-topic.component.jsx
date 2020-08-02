@@ -1,13 +1,13 @@
 import React from 'react'
-import {Avatar, List} from 'antd'
-import {useHistory} from 'react-router-dom'
+import { Avatar, List } from 'antd'
+import { useHistory } from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
 import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
-import {parseHtml} from "../../utils/text.utils"
+import { parseHtml, formatDate } from "../../utils/text.utils"
 
-const CourseHomeTopic = ({topic}) => {
+const CourseHomeTopic = ({ topic }) => {
     const history = useHistory()
 
     function gotoLecture(assetId, fileUrl, type) {
@@ -35,9 +35,10 @@ const CourseHomeTopic = ({topic}) => {
 
     const topicQuizes = topic.topic_exams.map(
         quiz => ({
-            id : quiz.id,
+            id: quiz.id,
             title: quiz.name,
-            info: quiz.info
+            info: quiz.info,
+            expired: quiz.expired_date
         })
     )
 
@@ -53,15 +54,15 @@ const CourseHomeTopic = ({topic}) => {
             </h3>
             {topic.info ? <div className="course-topic__info">
                 {parseHtml(topic.info)}
-            </div> : null} 
+            </div> : null}
             <div className="course-topic__content">
                 <List
                     itemLayout="horizontal"
                     dataSource={topicAssets}
                     renderItem={item => (
-                        <List.Item className="course-topic__content--item" onClick={() => gotoLecture(item.id,item.content,item.file_type)}>
+                        <List.Item className="course-topic__content--item" onClick={() => gotoLecture(item.id, item.content, item.file_type)}>
                             <List.Item.Meta
-                                avatar={<Avatar src={assetAvatar(item.icon, item.file_type)}/>}
+                                avatar={<Avatar src={assetAvatar(item.icon, item.file_type)} />}
                                 title={item.title}
                                 description={item.info}
                             />
@@ -70,19 +71,19 @@ const CourseHomeTopic = ({topic}) => {
                 />
                 {
                     topicQuizes.length > 0 ?
-                    <List
-                    itemLayout="horizontal"
-                    dataSource={topicQuizes}
-                    renderItem={item => (
-                        <List.Item className="course-topic__content--item" onClick={() => gotoExam(item.id)}>
-                            <List.Item.Meta
-                                avatar={<Avatar src={quizIcon}/>}
-                                title={item.title}
-                                description={item.info}
-                            />
-                        </List.Item>
-                    )}
-                /> : null
+                        <List
+                            itemLayout="horizontal"
+                            dataSource={topicQuizes}
+                            renderItem={item => (
+                                <List.Item className="course-topic__content--item" onClick={() => gotoExam(item.id)}>
+                                    <List.Item.Meta
+                                        avatar={<Avatar src={quizIcon} />}
+                                        title={item.title}
+                                        description={item.expired ? <p>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do_YYYY)}</p> : null}
+                                    />
+                                </List.Item>
+                            )}
+                        /> : null
                 }
             </div>
         </div>

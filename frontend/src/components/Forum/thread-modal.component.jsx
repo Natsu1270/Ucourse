@@ -1,20 +1,20 @@
-import React, {useState} from 'react'
-import {useDispatch, useSelector} from "react-redux";
-import {createThreadModalSelector} from "../../redux/UI/ui.selects";
-import {Form, Input, message, Modal} from "antd";
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { createThreadModalSelector } from "../../redux/UI/ui.selects";
+import { Form, Input, message, Modal } from "antd";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import {toggleCreateThreadModal} from "../../redux/UI/ui.actions";
-import {createStructuredSelector} from "reselect";
-import {errorResponseSelector, isGettingSelector} from "../../redux/Forum/forum.selects";
-import {createThreadsStart, modifyThreadStart} from "../../redux/Forum/forum.actions";
+import { toggleCreateThreadModal } from "../../redux/UI/ui.actions";
+import { createStructuredSelector } from "reselect";
+import { errorResponseSelector, isGettingSelector } from "../../redux/Forum/forum.selects";
+import { createThreadsStart, modifyThreadStart } from "../../redux/Forum/forum.actions";
 import Constants from "../../constants";
 
-const ThreadModal = ({token, forum_id, thread_id, isCreate, name, content}) => {
+const ThreadModal = ({ token, forum_id, thread_id, isCreate, name, content }) => {
 
     const dispatch = useDispatch()
-    const {createThreadModal, isCreating, errorResponse} = useSelector(createStructuredSelector({
+    const { createThreadModal, isCreating, errorResponse } = useSelector(createStructuredSelector({
         createThreadModal: createThreadModalSelector,
         isCreating: isGettingSelector,
         errorResponse: errorResponseSelector
@@ -28,9 +28,9 @@ const ThreadModal = ({token, forum_id, thread_id, isCreate, name, content}) => {
 
     const onFinish = (values) => {
         if (isCreate) {
-            dispatch(createThreadsStart({token, forum: forum_id, name: values['name'], content: editorState}))
+            dispatch(createThreadsStart({ token, forum: forum_id, name: values['name'], content: editorState }))
         } else {
-            dispatch(modifyThreadStart({token, forum: forum_id, thread_id , name: values['name'], content: editorState}))
+            dispatch(modifyThreadStart({ token, forum: forum_id, thread_id, name: values['name'], content: editorState }))
         }
         dispatch(toggleCreateThreadModal())
         if (!errorResponse) {
@@ -38,7 +38,7 @@ const ThreadModal = ({token, forum_id, thread_id, isCreate, name, content}) => {
                 isCreate ? "Tạo chủ đề thành công" : "Chỉnh sửa chủ đề thành công",
                 1,
                 () => {
-                     window.location.reload(false);
+                    window.location.reload(false);
                 })
         } else {
             message.error(errorResponse)
@@ -50,8 +50,8 @@ const ThreadModal = ({token, forum_id, thread_id, isCreate, name, content}) => {
     };
 
     const layout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 20},
+        labelCol: { span: 4 },
+        wrapperCol: { span: 20 },
     };
 
     const styles = {
@@ -82,20 +82,20 @@ const ThreadModal = ({token, forum_id, thread_id, isCreate, name, content}) => {
                     className="thread--form"
                     onFinish={onFinish}
                     initialValues={{ name: name }}
-                    // onFinishFailed={onFinishFailed}
+                // onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
                         label="Tên chủ đề"
                         name="name"
-                        rules={[{required: true, message: 'Hãy nhập tên chủ đề'}]}
+                        rules={[{ required: true, message: 'Hãy nhập tên chủ đề' }]}
                     >
-                        <Input/>
+                        <Input />
                     </Form.Item>
 
                     <Form.Item
                         label="Nội dung"
                         name="content"
-                        rules={[{required: true, message: 'Hãy nhập nội dung chủ đề'}]}
+                        rules={[{ required: true, message: 'Hãy nhập nội dung chủ đề' }]}
                     >
                         <CKEditor
                             editor={ClassicEditor}

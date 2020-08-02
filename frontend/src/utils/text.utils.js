@@ -42,3 +42,7 @@ export function dayDiff(time1, time2) {
 
     return t1.diff(t2, 'days')
 }
+
+export function isTimeBefore(timestamp) {
+    return moment(timestamp).isBefore(moment())
+}

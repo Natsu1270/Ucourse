@@ -20,9 +20,20 @@ class Exam(models.Model):
         (FINAL_COURSE_TEST, "Final Course Test"),
     ]
 
+    PICK_BEST = 'best'
+    PICK_LAST = 'last'
+    PICK_AVERAGE = 'average'
+
+    EXAM_RESULT_CHOICES = [
+        (PICK_BEST, 'Get highest result'),
+        (PICK_LAST, 'Get last result'),
+        (PICK_AVERAGE, 'Get average result'),
+    ]
+
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True, db_index=True)
     exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES)
+    get_result_type = models.CharField(max_length=10, choices=EXAM_RESULT_CHOICES, default=PICK_BEST, blank=True)
     questions = models.ManyToManyField(Question, related_name="question_exams")
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -37,6 +48,8 @@ class Exam(models.Model):
     )
     duration = models.IntegerField(blank=True, null=True)
     pass_score = models.FloatField(max_length=3)
+    max_try = models.IntegerField(default=1)
+    expired_date = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)

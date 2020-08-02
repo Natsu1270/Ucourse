@@ -1,14 +1,15 @@
-import React, {useEffect, Suspense, lazy} from 'react'
-import {useSelector, useDispatch} from "react-redux";
-import {createStructuredSelector} from "reselect";
+import React, { useState, useEffect, Suspense, lazy } from 'react'
+import { useSelector, useDispatch } from "react-redux";
+import { createStructuredSelector } from "reselect";
 import {
     useParams, Route, BrowserRouter as Router,
     Switch, useRouteMatch, useLocation, useHistory, Redirect
 } from 'react-router-dom'
-import {Layout, Menu, Skeleton} from 'antd'
-import {UserOutlined, LaptopOutlined} from "@ant-design/icons";
-import {getCourseHomeDetailStart} from "../../redux/CourseHome/course-home.actions";
-import {tokenSelector} from "../../redux/Auth/auth.selects";
+import { Layout, Menu, Skeleton } from 'antd'
+import { UserOutlined, LaptopOutlined } from "@ant-design/icons";
+import { getCourseHomeDetailStart } from "../../redux/CourseHome/course-home.actions";
+import { tokenSelector } from "../../redux/Auth/auth.selects";
+import { checkClassOwnership } from "../../api/courseHome.services"
 import {
     courseHomeDetailSelector, courseInfoSelector,
     isLoadingSelector,
@@ -28,10 +29,12 @@ const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-h
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
 const PrivateExamList = lazy(() => import("../../components/Exam/private-exam-list.component"))
 
-const CourseHomePage = ({myCourses}) => {
+const CourseHomePage = ({ myCourses, userRole }) => {
+
+    const [own, setOwn] = useState(true)
 
     const dispatch = useDispatch();
-    const {slug} = useParams();
+    const { slug } = useParams();
     const match = useRouteMatch();
 
     const isMyCourse = () => {
@@ -57,41 +60,49 @@ const CourseHomePage = ({myCourses}) => {
     }))
 
     useEffect(() => {
-        dispatch(getCourseHomeDetailStart({token, slug}))
+        dispatch(getCourseHomeDetailStart({ token, slug }))
     }, [])
 
-    if (!isMyCourse()) {
-        return <Redirect to={`${Constants.COURSES_DETAIL_LINK}/${slug}`}/>
+    useEffect(() => {
+        if (courseHomeDetail.is_my_class !== undefined) {
+            setOwn(courseHomeDetail.is_my_class)
+        }
+    }, [courseHomeDetail])
+
+
+
+    if (!own || !token) {
+        return <Redirect to='/' />
     }
     return (
         <Layout className="course-home">
             <Router>
-                <CourseHomeSider course={course} isLoading={isLoading} match={match}/>
+                <CourseHomeSider course={course} isLoading={isLoading} match={match} />
                 <Route exact path={match.url}>
-                    <CourseHomeInfo courseInfo={courseInfo} isLoading={isLoading}/>
+                    <CourseHomeInfo courseInfo={courseInfo} isLoading={isLoading} userRole={userRole} />
                 </Route>
                 <Suspense fallback={Constants.SPIN_ICON}>
                     <Route exact path={`${match.url}/schedule`}>
-                        <CourseHomeSchedule topics={topics} isLoading={isLoading}/>
+                        <CourseHomeSchedule topics={topics} isLoading={isLoading} />
                     </Route>
                     <Route exact path={`${match.url}/grades`}>
-                        <CourseHomeGrades/>
+                        <CourseHomeGrades />
                     </Route>
                     <Route exact path={`${match.url}/forums`}>
-                        <Forums forums={forums} isLoading={isLoading}/>
+                        <Forums forums={forums} isLoading={isLoading} />
                     </Route>
                     <Route exact path={`${match.url}/forums/:forum_id`}>
-                        <ForumDetail token={token}/>
+                        <ForumDetail token={token} />
                     </Route>
                     <Route exact path={`${match.url}/forums/:forum_id/threads/:thread_id`}>
-                        <ThreadDetail token={token}/>
+                        <ThreadDetail token={token} />
                     </Route>
                 </Suspense>
                 <Route exact path={`${match.url}/lecture/:topic/:assetId`}>
-                    <CourseHomeLecture topics={topics} isLoading={isLoading}/>
+                    <CourseHomeLecture topics={topics} isLoading={isLoading} />
                 </Route>
                 <Route exact path={`${match.url}/exams/:exam_id`}>
-                    <PrivateExamList token={token}/>
+                    <PrivateExamList token={token} />
                 </Route>
 
             </Router>

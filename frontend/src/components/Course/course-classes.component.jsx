@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { List, Avatar, Skeleton, Tag, Button, message } from 'antd'
 import { dayDiff } from "../../utils/text.utils";
 import moment from 'moment'
@@ -76,7 +77,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                                 avatar={
                                     <Avatar src={item.teacher.avatar} />
                                 }
-                                title={<span className="text--sub__bigger3 text-black">{item.full_name}</span>}
+                                title={<Link to={`${course.slug}/${item.name}`} className="text--sub__bigger3 text-black">{item.full_name}</Link>}
                                 description={<div className="class-sub-info text-info-normal">
                                     <span className="class-sub-info__item">Giảng viên: {item.teacher.fullname}</span>
                                     <span className="class-sub-info__item">Ngày bắt đầu: {item.open_date}</span>

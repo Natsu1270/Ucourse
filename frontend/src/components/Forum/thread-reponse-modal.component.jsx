@@ -1,20 +1,20 @@
-import React, {useState} from 'react'
-import {useDispatch, useSelector} from "react-redux";
-import {replyThreadModalSelector} from "../../redux/UI/ui.selects";
-import {Form, message, Modal} from "antd";
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { replyThreadModalSelector } from "../../redux/UI/ui.selects";
+import { Form, message, Modal } from "antd";
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-import {toggleReplyThreadModal} from "../../redux/UI/ui.actions";
-import {createStructuredSelector} from "reselect";
-import {errorResponseSelector, isGettingSelector} from "../../redux/Forum/forum.selects";
+import { toggleReplyThreadModal } from "../../redux/UI/ui.actions";
+import { createStructuredSelector } from "reselect";
+import { errorResponseSelector, isGettingSelector } from "../../redux/Forum/forum.selects";
 import Constants from "../../constants";
 
-const ThreadResponseModal = ({token, thread_id, handleAddItem}) => {
+const ThreadResponseModal = ({ token, thread_id, handleAddItem }) => {
 
     const dispatch = useDispatch()
 
-    const {replyThreadModal, isCreating, errorResponse} = useSelector(createStructuredSelector({
+    const { replyThreadModal, isCreating, errorResponse } = useSelector(createStructuredSelector({
         replyThreadModal: replyThreadModalSelector,
         isCreating: isGettingSelector,
         errorResponse: errorResponseSelector
@@ -47,8 +47,8 @@ const ThreadResponseModal = ({token, thread_id, handleAddItem}) => {
     };
 
     const layout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 20},
+        labelCol: { span: 4 },
+        wrapperCol: { span: 20 },
     };
 
     const styles = {
@@ -81,7 +81,7 @@ const ThreadResponseModal = ({token, thread_id, handleAddItem}) => {
                     <Form.Item
                         label="Nội dung"
                         name="content"
-                        rules={[{required: true, message: 'Hãy nhập nội dung trả lời'}]}
+                        rules={[{ required: true, message: 'Hãy nhập nội dung trả lời' }]}
                     >
                         <CKEditor
                             editor={ClassicEditor}

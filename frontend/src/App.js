@@ -8,7 +8,7 @@ import Header from "./components/Header/header.component";
 import Footer from "./components/Footer/footer.component";
 import HomePage from "./pages/HomePage/home.page";
 import ProfilePage from "./pages/ProfilePage/profile.page";
-import { tokenSelector, currentUserSelector } from './redux/Auth/auth.selects'
+import { tokenSelector, currentUserSelector, userRoleSelector } from './redux/Auth/auth.selects'
 
 
 import 'antd/dist/antd.css'
@@ -20,7 +20,7 @@ import { getProfileStart } from "./redux/Profile/profile.actions";
 import { fetchMyCoursesStart } from "./redux/CourseHome/course-home.actions";
 import { myCourseHomesSelector } from "./redux/CourseHome/course-home.selects";
 import { myCoursesSelector, myProgramsSelector } from "./redux/Home/home.selects"
-import PrivateCourseRoute from "./components/Common/private-course-route.component";
+// import PrivateCourseRoute from "./components/Common/private-course-route.component";
 import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 
@@ -38,9 +38,10 @@ const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page
 function App() {
 
     const dispatch = useDispatch();
-    const { token, currentUser, myCourses, myPrograms } = useSelector(createStructuredSelector({
+    const { token, currentUser, userRole, myCourses, myPrograms } = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
+        userRole: userRoleSelector,
         myCourses: myCoursesSelector,
         myPrograms: myProgramsSelector
     }));
@@ -83,7 +84,7 @@ function App() {
                                     <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
                                     <Route exact path="/ability-tests" component={AbilityTestPage} />
                                     <Route path="/learn/:slug">
-                                        <CourseHomePage myCourses={myCourses} />
+                                        <CourseHomePage myCourses={myCourses} userRole={userRole} />
                                     </Route>
                                     <Route component={Page404NotFound} />
 

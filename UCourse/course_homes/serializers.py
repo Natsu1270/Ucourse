@@ -76,14 +76,23 @@ class CourseHomeSerializer(serializers.ModelSerializer):
     learning_topics = LearningTopicSerializer(many=True, read_only=True)
     slug = serializers.CharField(read_only=True)
     forums = ForumSerializer(many=True, read_only=True)
+    is_my_class = serializers.SerializerMethodField()
 
     class Meta:
         model = CourseHome
         fields = [
             'id', 'course', 'status', 'students', 'slug',
-            'learning_topics', 'course_info', 'forums',
+            'learning_topics', 'course_info', 'forums', 'is_my_class',
             'maximum_number', 'created_date', 'modified_date'
         ]
+
+    def get_is_my_class(self, obj):
+        user = self.context.get('user')
+        if user:
+            check_user = user.course_homes.filter(pk=obj.id).count() > 0
+            return check_user
+        return False
+
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):

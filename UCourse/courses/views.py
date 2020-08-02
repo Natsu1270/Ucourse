@@ -63,7 +63,8 @@ class CheckIsBought(generics.GenericAPIView):
         permissions.IsAuthenticated
     ]
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         course_id = request.data['course']
         try:
             instance = UserBuyCourse.objects.get(user=request.user, course_id=course_id)

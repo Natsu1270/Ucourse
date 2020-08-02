@@ -1,21 +1,21 @@
-import React, {useEffect, useState} from 'react'
-import {Avatar, Button, Card, Dropdown, Menu, Skeleton} from "antd";
-import {toggleReplyThreadModal} from "../../redux/UI/ui.actions";
-import {parseHtml, timeDiff} from "../../utils/text.utils";
-import {CaretDownOutlined} from "@ant-design/icons";
-import {useDispatch} from "react-redux";
+import React, { useEffect, useState } from 'react'
+import { Avatar, Button, Card, Dropdown, Menu, Skeleton } from "antd";
+import { toggleReplyThreadModal } from "../../redux/UI/ui.actions";
+import { parseHtml, timeDiff } from "../../utils/text.utils";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Constants from "../../constants";
 import CKEditor from "@ckeditor/ckeditor5-react";
-import {modifyResponseStart} from "../../redux/Forum/forum.actions";
+import { modifyResponseStart } from "../../redux/Forum/forum.actions";
 
-const ThreadResponse = ({token, threadId, reply, handleDelete, user, isLoading}) => {
+const ThreadResponse = ({ token, threadId, reply, handleDelete, user, isLoading }) => {
 
     const [editing, setEditing] = useState(false)
     const [editorState, setEditorState] = useState(null)
     const [replyContent, setReplyContent] = useState(reply.content)
     const dispatch = useDispatch()
-    const {Meta} = Card
+    const { Meta } = Card
 
 
     const menu = (
@@ -39,22 +39,22 @@ const ThreadResponse = ({token, threadId, reply, handleDelete, user, isLoading})
                     avatar={
                         <Avatar
                             size={48}
-                            src={reply.created_by ? reply.created_by.user_profile.avatar : ""}/>
+                            src={reply.created_by ? reply.created_by.user_profile.avatar : ""} />
                     }
                     title={
                         <div className="dis-flex-between">
                             <div>
-                                             <span
-                                                 className="thread--user mr-3">
-                                                 {reply.created_by ? reply.created_by.user_profile.fullname : ''}
-                                             </span>
+                                <span
+                                    className="thread--user mr-3">
+                                    {reply.created_by ? reply.created_by.user_profile.fullname : ''}
+                                </span>
                                 <span
                                     className="text-info-sub">&middot; {timeDiff(reply.timestamp)}</span>
                             </div>
                             {
                                 reply.created_by.id === user.id ?
                                     <Dropdown overlay={menu} placement="topCenter">
-                                        <CaretDownOutlined className="down-indict"/>
+                                        <CaretDownOutlined className="down-indict" />
                                     </Dropdown> : null
                             }
                         </div>

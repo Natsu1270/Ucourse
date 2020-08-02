@@ -3,7 +3,7 @@ import axios from 'axios'
 const API_URL = '/api/course-home';
 
 
-export const registerCourseAPI = ({course_id, token, class_id}) => {
+export const registerCourseAPI = ({ course_id, token, class_id }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export const registerCourseAPI = ({course_id, token, class_id}) => {
     })
 };
 
-export const unRegisterCourseAPI = ({token, class_id}) => {
+export const unRegisterCourseAPI = ({ token, class_id }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const unRegisterCourseAPI = ({token, class_id}) => {
 };
 
 
-export const fetchMyCourseHomesAPI = ({token}) => {
+export const fetchMyCourseHomesAPI = ({ token }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ export const fetchMyCourseHomesAPI = ({token}) => {
     })
 };
 
-export const getCourseHomeDetailAPI = ({slug, token}) => {
+export const getCourseHomeDetailAPI = ({ slug, token }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -51,11 +51,11 @@ export const getCourseHomeDetailAPI = ({slug, token}) => {
 }
 
 
-export const getCourseHomeShowAPI = ({token, course_id}) => {
+export const getCourseHomeShowAPI = ({ token, course_id }) => {
 
     const headers = token ?
-        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
-        {'Content-Type': 'application/json'}
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
     return axios.request({
         headers,
         method: 'GET',
@@ -66,13 +66,29 @@ export const getCourseHomeShowAPI = ({token, course_id}) => {
     })
 }
 
-export const getCourseHomeDetailShowAPI = ({token, slug}) => {
+export const getCourseHomeDetailShowAPI = ({ token, slug }) => {
     const headers = token ?
-        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
-        {'Content-Type': 'application/json'}
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
     return axios.request({
         headers,
         method: 'GET',
         url: `${API_URL}/show/class/${slug}`,
+    })
+}
+
+
+export const checkClassOwnership = ({ token, slug }) => {
+
+    const headers = token ?
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
+    return axios.request({
+        headers,
+        method: 'POST',
+        url: `${API_URL}/check`,
+        data: {
+            slug
+        }
     })
 }

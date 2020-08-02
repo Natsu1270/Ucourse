@@ -87,6 +87,12 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticated
     ]
 
+    def get_serializer_context(self):
+        user = self.request.user
+        if user.is_anonymous:
+            return {"user": None}
+        return {"user": user}
+
 
 class CourseHomeShowAPI(generics.ListAPIView):
     serializer_class = serializers.CourseHomeShowSerializer
@@ -115,3 +121,20 @@ class CourseHomeDetailShowAPI(generics.RetrieveAPIView):
         if user.is_anonymous:
             return {"user": None}
         return {"user": user}
+
+
+class CheckClassOwnership(generics.GenericAPIView):
+
+    def post(self, request):
+        cls = request.data['slug']
+        user = self.request.user
+        course_home = CourseHome.objects.get(slug=cls)
+        if not user.is_anonymous and course_home.students.filter(pk=user.id).exists():
+            return Response({
+                "result": True,
+                "status_code": 200
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "result": False,
+            "status_code": 400
+        }, status=status.HTTP_400_BAD_REQUEST)

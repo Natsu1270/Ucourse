@@ -7,7 +7,7 @@ const Footer = () => {
     return (
         <footer className="page-footer font-small blue ">
 
-            <div className="container-fluid text-center text-md-left pt-5">
+            <div className="container-fluid text-center text-md-left pt-2">
 
                 <div className="row">
 
@@ -16,7 +16,7 @@ const Footer = () => {
                         <br />
                         <p className="text-white ">Learn online, ear certificates</p>
                         <div className="img-fluid align-center mt-3 mb-3 footer-logo">
-                            <img src={logo} width="200px" alt="logo" />
+                            <img src={logo} width="100px" alt="logo" />
                         </div>
                     </div>
 

@@ -15,10 +15,10 @@ class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'code', 'name',
+            'id', 'code', 'name', 'get_result_type',
             'exam_type', 'questions', 'students',
-            'topic', 'duration', 'pass_score',
-            'status'
+            'topic', 'duration', 'pass_score', 'max_try',
+            'status', 'expired_date'
         ]
 
 
@@ -29,7 +29,7 @@ class ExamShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'code', 'name',
+            'id', 'code', 'name', 'get_result_type', 'max_try', 'expired_date',
             'exam_type', 'duration', 'pass_score',
             'status'
         ]
