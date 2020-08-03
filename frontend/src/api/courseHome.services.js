@@ -92,3 +92,16 @@ export const checkClassOwnership = ({ token, slug }) => {
         }
     })
 }
+
+export const updateCourseHomeInfo = ({ token, slug, info }) => {
+
+
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'PUT',
+        url: `${API_URL}/${slug}`,
+        data: {
+            course_info: info
+        }
+    })
+}

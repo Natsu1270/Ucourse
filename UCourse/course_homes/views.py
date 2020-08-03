@@ -3,8 +3,10 @@ from rest_framework.response import Response
 from django.db.models import Q
 import datetime
 
+from api.permissions import IsTeacherOrTARoleOrReadOnly
+
 from . import serializers
-from course_homes.models import CourseHome
+from course_homes.models import CourseHome, LearningTopic, TopicAsset
 
 
 class RegisterClassAPI(generics.GenericAPIView):
@@ -92,6 +94,22 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         if user.is_anonymous:
             return {"user": None}
         return {"user": user}
+
+
+class CreateLearningTopic(generics.CreateAPIView):
+    serializer_class = serializers.LearningTopicSerializer
+    queryset = LearningTopic.objects.all()
+    permission_classes = [
+        IsTeacherOrTARoleOrReadOnly
+    ]
+
+
+class CreateTopicAsset(generics.CreateAPIView):
+    serializer_class = serializers.TopicAssetSerializer
+    queryset = TopicAsset.objects.all()
+    permission_classes = [
+        IsTeacherOrTARoleOrReadOnly
+    ]
 
 
 class CourseHomeShowAPI(generics.ListAPIView):

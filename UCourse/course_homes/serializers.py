@@ -16,7 +16,7 @@ class RegisterCourseSerializer(serializers.Serializer):
 
 class TopicAssetSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    learning_topic = serializers.PrimaryKeyRelatedField(read_only=True)
+    learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all())
 
     class Meta:
         model = TopicAsset
@@ -29,9 +29,9 @@ class TopicAssetSerializer(serializers.ModelSerializer):
 
 class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course_home = serializers.PrimaryKeyRelatedField(read_only=True)
-    topic_assets = TopicAssetSerializer(many=True, read_only=True)
-    topic_exams = ExamShowSerializer(many=True, read_only=True)
+    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all())
+    topic_assets = TopicAssetSerializer(many=True, read_only=True, required=False)
+    topic_exams = ExamShowSerializer(many=True, read_only=True, required=False)
 
     class Meta:
         model = LearningTopic
@@ -71,12 +71,12 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
 
 class CourseHomeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course = serializers.PrimaryKeyRelatedField(read_only=True)
-    students = UserSerializer(many=True)
+    course = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    students = UserSerializer(many=True, required=False)
     learning_topics = LearningTopicSerializer(many=True, read_only=True)
     slug = serializers.CharField(read_only=True)
-    forums = ForumSerializer(many=True, read_only=True)
-    is_my_class = serializers.SerializerMethodField()
+    forums = ForumSerializer(many=True, read_only=True, required=False)
+    is_my_class = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = CourseHome
@@ -92,7 +92,6 @@ class CourseHomeSerializer(serializers.ModelSerializer):
             check_user = user.course_homes.filter(pk=obj.id).count() > 0
             return check_user
         return False
-
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):
@@ -138,3 +137,4 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'course', 'status', 'slug', 'full_name', 'teacher'
         ]
+

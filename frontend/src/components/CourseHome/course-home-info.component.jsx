@@ -1,23 +1,48 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {parseHtml} from "../../utils/text.utils";
-import {Button, Skeleton, Space} from "antd";
+import {Button, message, Skeleton, Space} from "antd";
 import {EditOutlined, CloseOutlined, CheckOutlined} from '@ant-design/icons'
 
 import CKEditor from '@ckeditor/ckeditor5-react'
 import CKEditorInline from '@ckeditor/ckeditor5-build-classic'
 
-const CourseHomeInfo = ({courseInfo, isLoading, userRole}) => {
+import {updateCourseHomeInfo} from "../../api/courseHome.services";
+
+const CourseHomeInfo = ({courseInfo, isLoading, userRole, token, slug}) => {
 
     const [editing, setEditing] = useState(false)
     const [info, setInfo] = useState(courseInfo)
+    const [updating, setUpdating] = useState(false)
+
+    useEffect(() => {
+        if (courseInfo) {
+            setInfo(courseInfo)
+        }
+    }, [courseInfo])
+
+    const updateInfo = async () => {
+        setUpdating(true)
+        const result = await updateCourseHomeInfo({token, slug, info})
+        if (result.status === 200) {
+            message.success("Cập nhật thành công")
+        } else {
+            message.error("Có lỗi xảy ra")
+            setInfo(courseInfo)
+        }
+        setUpdating(false);
+        setEditing(false)
+    }
 
     const renderButton = () => {
         if (editing) {
             return (
                 <Space>
-                    <Button type="danger" onClick={() => setEditing(false)}><CloseOutlined/> Huỷ</Button>
-                    <Button type="primary" onClick={() => setEditing(true)}><CheckOutlined/> Xong</Button>
-
+                    <Button
+                        disabled={updating}
+                        type="danger" onClick={() => setEditing(false)}><CloseOutlined/> Huỷ</Button>
+                    <Button
+                        disabled={updating || info === courseInfo}
+                        type="primary" onClick={() => updateInfo()}><CheckOutlined/> Xong</Button>
                 </Space>
             )
         }
@@ -43,10 +68,14 @@ const CourseHomeInfo = ({courseInfo, isLoading, userRole}) => {
                 {
                     editing ? <CKEditor
                             editor={CKEditorInline}
-                            data={courseInfo}
+                            data={info}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setInfo(data)
+                            }}
                         >
                         </CKEditor> :
-                        parseHtml(courseInfo)
+                        parseHtml(info)
                 }
 
             </Skeleton>

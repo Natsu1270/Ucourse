@@ -71,7 +71,7 @@ class LearningTopic(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
     info = RichTextField(blank=True, null=True)
     course_home = models.ForeignKey(CourseHome, related_name='learning_topics', on_delete=models.CASCADE)
-    status = models.CharField(max_length=10, choices=TOPIC_STATUS_CHOICES)
+    status = models.CharField(max_length=10, choices=TOPIC_STATUS_CHOICES, default=ACTIVE)
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
 
