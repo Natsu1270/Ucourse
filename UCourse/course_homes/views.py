@@ -1,10 +1,14 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.db.models import Q
+from rest_framework.parsers import MultiPartParser, JSONParser
+
 import datetime
 
+from api.permissions import IsTeacherOrTARoleOrReadOnly
+
 from . import serializers
-from course_homes.models import CourseHome
+from course_homes.models import CourseHome, LearningTopic, TopicAsset
 
 
 class RegisterClassAPI(generics.GenericAPIView):
@@ -20,7 +24,8 @@ class RegisterClassAPI(generics.GenericAPIView):
         course_home = CourseHome.objects.get(pk=class_id)
         # get registered class
         registered_class = CourseHome.objects.filter(
-            Q(course_id=course_id) & Q(students__in=[request.user]) & ~Q(status__exact='closed')
+            Q(course_id=course_id) & Q(students__in=[
+                request.user]) & ~Q(status__exact='closed')
         )
         if registered_class.count() > 0:
             for c in registered_class:
@@ -92,6 +97,24 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         if user.is_anonymous:
             return {"user": None}
         return {"user": user}
+
+
+class CreateLearningTopic(generics.CreateAPIView):
+    serializer_class = serializers.LearningTopicSerializer
+    queryset = LearningTopic.objects.all()
+    permission_classes = [
+        IsTeacherOrTARoleOrReadOnly
+    ]
+    parser_classes = [MultiPartParser, JSONParser]
+
+
+class CreateTopicAsset(generics.CreateAPIView):
+    serializer_class = serializers.TopicAssetSerializer
+    queryset = TopicAsset.objects.all()
+    permission_classes = [
+        IsTeacherOrTARoleOrReadOnly
+    ]
+    parser_classes = [MultiPartParser, JSONParser]
 
 
 class CourseHomeShowAPI(generics.ListAPIView):

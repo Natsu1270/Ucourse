@@ -10220,9 +10220,15 @@ rc-tree-select@~4.1.0:
     rc-util "^5.0.5"
 
 rc-tree@^3.8.0, rc-tree@~3.8.0:
+<<<<<<< HEAD
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/rc-tree/-/rc-tree-3.8.2.tgz#e22c0a4e11726ee676a83227099f16634c5feb7f"
   integrity sha512-4RLJhiGpt/Wvj7O9mm0IX+Bv9PrcdKL3j2BIpGLQX3Xd+n4p5PcqL46mRRdGoWvvTJcZ6ZEiZDg46nSyTYLdHA==
+=======
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/rc-tree/-/rc-tree-3.8.3.tgz#c81c5cd962d2fe3b452248f6d4e813c5592774f7"
+  integrity sha512-XDKdkvnqW5adhOgmYynvUT6/nozGRpa4O2YwtP3Zv5JjlNEfesrOd0p0LgNlyUHB02YcP/Tk21hUAgW5VmQPBw==
+>>>>>>> 0dc415bca83958003938bab0063033828111387f
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "2.x"

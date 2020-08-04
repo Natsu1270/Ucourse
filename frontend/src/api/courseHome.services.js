@@ -92,3 +92,28 @@ export const checkClassOwnership = ({ token, slug }) => {
         }
     })
 }
+
+export const updateCourseHomeInfo = ({ token, slug, info }) => {
+
+
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'PUT',
+        url: `${API_URL}/${slug}`,
+        data: {
+            course_info: info
+        }
+    })
+}
+
+export const createLearningTopic = (data) => {
+    const { token, name, info, course_home, code } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/learning_topic/create`,
+        data: {
+            name, info, course_home, code
+        }
+    })
+}

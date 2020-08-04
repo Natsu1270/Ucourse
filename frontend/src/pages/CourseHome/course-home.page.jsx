@@ -79,11 +79,18 @@ const CourseHomePage = ({ myCourses, userRole }) => {
             <Router>
                 <CourseHomeSider course={course} isLoading={isLoading} match={match} />
                 <Route exact path={match.url}>
-                    <CourseHomeInfo courseInfo={courseInfo} isLoading={isLoading} userRole={userRole} />
+                    <CourseHomeInfo
+                        courseInfo={courseInfo}
+                        isLoading={isLoading}
+                        userRole={userRole}
+                        token={token}
+                        slug={slug}
+                    />
                 </Route>
                 <Suspense fallback={Constants.SPIN_ICON}>
                     <Route exact path={`${match.url}/schedule`}>
-                        <CourseHomeSchedule topics={topics} isLoading={isLoading} />
+                        <CourseHomeSchedule
+                            topics={topics} isLoading={isLoading} userRole={userRole} token={token} course={courseHomeDetail.id} />
                     </Route>
                     <Route exact path={`${match.url}/grades`}>
                         <CourseHomeGrades />
