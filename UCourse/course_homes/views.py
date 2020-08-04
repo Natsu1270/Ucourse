@@ -1,6 +1,8 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.db.models import Q
+from rest_framework.parsers import MultiPartParser, JSONParser
+
 import datetime
 
 from api.permissions import IsTeacherOrTARoleOrReadOnly
@@ -22,7 +24,8 @@ class RegisterClassAPI(generics.GenericAPIView):
         course_home = CourseHome.objects.get(pk=class_id)
         # get registered class
         registered_class = CourseHome.objects.filter(
-            Q(course_id=course_id) & Q(students__in=[request.user]) & ~Q(status__exact='closed')
+            Q(course_id=course_id) & Q(students__in=[
+                request.user]) & ~Q(status__exact='closed')
         )
         if registered_class.count() > 0:
             for c in registered_class:
@@ -102,6 +105,7 @@ class CreateLearningTopic(generics.CreateAPIView):
     permission_classes = [
         IsTeacherOrTARoleOrReadOnly
     ]
+    parser_classes = [MultiPartParser, JSONParser]
 
 
 class CreateTopicAsset(generics.CreateAPIView):
@@ -110,6 +114,7 @@ class CreateTopicAsset(generics.CreateAPIView):
     permission_classes = [
         IsTeacherOrTARoleOrReadOnly
     ]
+    parser_classes = [MultiPartParser, JSONParser]
 
 
 class CourseHomeShowAPI(generics.ListAPIView):

@@ -118,6 +118,9 @@ button, input {
 	width: 100%;
 	margin-top: 12vh;
 	padding-bottom: 10rem;
+	.ant-modal {
+		padding-bottom: 0px !important;
+	  }
 }
 
 .pd-5 {

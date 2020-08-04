@@ -89,7 +89,8 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                 </Route>
                 <Suspense fallback={Constants.SPIN_ICON}>
                     <Route exact path={`${match.url}/schedule`}>
-                        <CourseHomeSchedule topics={topics} isLoading={isLoading} />
+                        <CourseHomeSchedule
+                            topics={topics} isLoading={isLoading} userRole={userRole} token={token} course={courseHomeDetail.id} />
                     </Route>
                     <Route exact path={`${match.url}/grades`}>
                         <CourseHomeGrades />
