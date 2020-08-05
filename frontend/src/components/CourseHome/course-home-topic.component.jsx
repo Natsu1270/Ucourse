@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, List } from 'antd'
+import { Avatar, List, Row, Col, Dropdown,Menu, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
@@ -7,7 +7,9 @@ import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
 import { parseHtml, formatDate } from "../../utils/text.utils"
 
-const CourseHomeTopic = ({ topic }) => {
+import {CaretDownOutlined} from '@ant-design/icons'
+
+const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit }) => {
     const history = useHistory()
 
     function gotoLecture(assetId, fileUrl, type) {
@@ -47,11 +49,42 @@ const CourseHomeTopic = ({ topic }) => {
 
     }
 
+    
+
+
+    const menu = (
+        <Menu>
+            <Menu.Item
+                onClick={
+                    () => handleDelete(topic.id)
+                }
+            >
+                Xóa chủ đề
+            </Menu.Item>
+            <Menu.Item onClick={() => triggerEdit(topic.id)}>
+                Sửa chủ đề
+            </Menu.Item>
+        </Menu>
+    );
+
     return (
         <div className="course-topic">
-            <h3 className="course-topic__header text--main">
-                {topic.name}
-            </h3>
+            <Row>
+                <Col span={23}>
+                    <h3 className="course-topic__header text--main">{topic.name}</h3>
+                </Col>
+                <Col span={1}>
+                    {
+                        userRole.code ?
+                        userRole.code === 'TC' ?
+                        <Dropdown overlay={menu} placement="topCenter">
+                            <CaretDownOutlined className="down-indict" />
+                                </Dropdown> : null
+                            :null
+                    }
+                </Col>
+            </Row>
+            
             {topic.info ? <div className="course-topic__info">
                 {parseHtml(topic.info)}
             </div> : null}

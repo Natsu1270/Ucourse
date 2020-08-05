@@ -117,3 +117,24 @@ export const createLearningTopic = (data) => {
         }
     })
 }
+
+export const editLearningTopic = (data) => {
+    const { token, name, info, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'PUT',
+        url: `${API_URL}/learning_topic/${id}`,
+        data: {
+            name, info
+        }
+    })
+}
+
+export const deleteLearningTopic = (data) => {
+    const { token, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'DELETE',
+        url: `${API_URL}/learning_topic/${id}`
+    })
+}
