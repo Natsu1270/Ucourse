@@ -6,6 +6,7 @@ import documentAvatar from '../../assets/word.png';
 import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
 import { parseHtml, formatDate } from "../../utils/text.utils"
+import { BACKEND_HOST } from '../../configs';
 
 import {CaretDownOutlined} from '@ant-design/icons'
 
@@ -16,7 +17,7 @@ const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit }) => {
         if (type === Constants.VIDEO_FILE_TYPE) {
             history.push(`lecture/${topic.id}/${assetId}`)
         } else {
-            window.open(fileUrl, '_blank')
+            window.open(BACKEND_HOST + fileUrl, '_blank')
         }
     }
 
