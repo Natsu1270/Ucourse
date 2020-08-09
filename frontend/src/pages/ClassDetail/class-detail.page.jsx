@@ -95,22 +95,23 @@ const ClassDetailPage = () => {
 
     const classDetailComp = (
         <div className="class-detail">
-            <Breadcrumb separator='>' className="course-detail__breadcrumb mb-5">
-                <Skeleton paragraph={{ rows: 1 }} active loading={isLoading}>
+            <Skeleton paragraph={{ rows: 1 }} active loading={isLoading}>
+                <Breadcrumb separator='>' className="course-detail__breadcrumb mb-5">
                     <Breadcrumb.Item href="/">
                         <HomeOutlined />
                     </Breadcrumb.Item>
                     <Breadcrumb.Item href="/field">
                         Field
-                    </Breadcrumb.Item>
+                        </Breadcrumb.Item>
                     <Breadcrumb.Item href={`/field/${slugifyString(classField.slug)}`}>
                         {classField.name}
                     </Breadcrumb.Item>
                     <Breadcrumb.Item href={`/courses/${slugifyString(classCourse.slug)}`}>
                         {classCourse.title}
                     </Breadcrumb.Item>
-                </Skeleton>
-            </Breadcrumb>
+                </Breadcrumb>
+            </Skeleton>
+
             <div className="class-detail--content mb-4">
                 <Skeleton active loading={isLoading}>
                     <div className="row">

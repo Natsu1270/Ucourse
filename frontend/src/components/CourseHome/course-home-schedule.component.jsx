@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
-import { Skeleton, Button, Modal, Row, Col, Form, Upload, Input } from "antd";
+import React, { useEffect } from 'react'
+import { Skeleton, Button, Modal, Row, Col, Form, Upload, Input, Radio } from "antd";
 import CourseHomeTopic from "./course-home-topic.component";
 import { useState } from 'react';
 
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
-import { createLearningTopic, editLearningTopic } from '../../api/courseHome.services'
+import { createLearningTopic, editLearningTopic, createTopicAsset, editTopicAsset } from '../../api/courseHome.services'
 
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 import { message } from 'antd';
@@ -36,6 +36,15 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
     const [learningTopics, setTopic] = useState([])
     const [isDeleting, setDeleting] = useState(false)
     const [editingTopic, setEditingTopic] = useState(null)
+    const [isCreateTopic, setIsCreateTopic] = useState(true)
+    const [fileList, setFile] = useState([])
+    const [isEditAsset, setIsEditAsset] = useState(false)
+    const [assetName, setAssetName] = useState("")
+    const [assetInfo, setAssetInfo] = useState("")
+    const [assetFileType, setAssetFileType] = useState("")
+    const [assetFile, setAssetFile] = useState(null)
+    const [assetId, setAssetId] = useState(null)
+
 
     useEffect(() => {
         if (topics && topics.length > 0) {
@@ -43,12 +52,49 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         }
     }, [topics])
 
+
+    const props = {
+        onRemove: file => {
+            setFile([])
+        },
+        beforeUpload: file => {
+            setFile([file])
+            return false;
+        },
+        fileList,
+    };
+
     const onFinish = values => {
         if (editingTopic === null) {
             createTopic(values.name, info)
+        } else {
+            editTopic(values.name, info, editingTopic)
         }
-        editTopic(values.name, info)
     };
+
+    const submitCreateAsset = values => {
+        createAsset(values)
+    }
+
+    const createAsset = async (values) => {
+        setLoading(true)
+        const { assetName: name, description: info, fileType: file_type } = values
+        const data = {
+            token, learning_topic: editingTopic, name, info, file_type, file: fileList[0]
+        }
+        const editData = {
+            token, id: assetId, name, info, file_type, file: fileList[0]
+        }
+        try {
+
+            const result = !isEditAsset ? await createTopicAsset(data) : await editTopicAsset(editData)
+            const msg = !isEditAsset ? "Thêm bài giảng thành công" : "Chỉnh sửa bài giảng thành công"
+            message.success(msg, 1.5, () => window.location.reload())
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+            setLoading(false)
+        }
+    }
 
     const handleDelete = async (id) => {
         const data = { token, id: id }
@@ -87,9 +133,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         const topicToEdit = learningTopics.find(topic => topic.id === id)
         setInfo(topicToEdit.info)
         setName(topicToEdit.name)
+        setIsCreateTopic(true)
         setShowModal(true)
     }
-
 
     const editTopic = async (name, info, id) => {
         setLoading(true)
@@ -99,15 +145,39 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
         try {
             const result = await editLearningTopic(data)
+            const topicIndex = learningTopics.findIndex(t => t.id === id)
+            const newTopics = [...learningTopics]
+            newTopics[topicIndex] = result.data.data
+            setTopic(newTopics)
+            message.success("Cập nhật chủ đề học thành công")
+            setShowModal(false)
         } catch (err) {
             message.error(err.message)
         }
+        setLoading(false)
     }
 
     const handleClose = () => {
         setShowModal(false)
     }
-    
+
+    const triggerCreateAsset = (topicId) => {
+        setIsCreateTopic(false)
+        setShowModal(true)
+        setEditingTopic(topicId)
+    }
+
+    const triggerEditAsset = (asset) => {
+        setIsCreateTopic(false)
+        setIsEditAsset(true)
+        setAssetId(asset.id)
+        setAssetName(asset.title)
+        setAssetInfo(asset.info)
+        setAssetFileType(asset.file_type)
+        setAssetFile(asset.file)
+        setShowModal(true)
+    }
+
     return (
         <section className="section-5 page-2">
 
@@ -115,9 +185,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 <Col span={10}><h3 className="text--main mb-5">Chủ đề học</h3></Col>
                 <Col span={4}>{
                     userRole.code
-                        ? userRole.code === "TC" ?
+                        ? userRole.code === "TC" || userRole.code === "TA" ?
                             <Button onClick={() => {
                                 setShowModal(true)
+                                setIsCreateTopic(true)
                             }
                             } type="primary">Thêm chủ đề học</Button> : null
                         : null
@@ -135,17 +206,19 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         <Skeleton active avatar />
                     </div>
                 ) : learningTopics.map(topic =>
-                    <Skeleton active avatar paragraph={{ rows: 4 }} loading={isDeleting}>
-                         <CourseHomeTopic
+                    <Skeleton key={topic.id} active avatar paragraph={{ rows: 4 }} loading={isDeleting}>
+                        <CourseHomeTopic
                             handleDelete={handleDelete}
                             triggerEdit={triggerEdit}
                             userRole={userRole}
                             key={topic.id}
                             topic={topic}
                             token={token}
+                            triggerCreateAsset={triggerCreateAsset}
+                            triggerEditAsset={triggerEditAsset}
                         />
                     </Skeleton>
-                    )
+                )
             }
 
 
@@ -165,52 +238,119 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 onCancel={handleClose}
 
             >
-                <Form
-                    name="validate_other"
-                    {...formItemLayout}
-                    onFinish={onFinish}
-                    initialValues={{
-                        name: name
-                    }}
-                >
-                    <Form.Item
-                        {...formItemLayout}
-                        name="name"
-                        label="Tên chủ đề"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Nhập tên chủ đề',
-                            },
-                        ]}
-                    >
-                        <Input placeholder="Nhập tên chủ đề" value={name}/>
-                    </Form.Item>
-                    
-                    <Form.Item
-                        {...formItemLayout}
-                        name="info"
-                        label="Mô tả chủ đề"
-                    >
-                        
-                        <CKEditor
-                            key="editor"
-                            editor={ClassicEditor}
-                            data={info}
-                            onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setInfo(data)
+                {
+                    isCreateTopic ?
+                        <Form
+                            name="topic_form"
+                            {...formItemLayout}
+                            onFinish={onFinish}
+                            initialValues={{
+                                name: name
                             }}
                         >
+                            <Form.Item
+                                {...formItemLayout}
+                                name="name"
+                                label="Tên chủ đề"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập tên chủ đề',
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Nhập tên chủ đề" value={name} />
+                            </Form.Item>
 
-                        </CKEditor>
-                    </Form.Item>
-                    <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                        <Button type="primary" htmlType="submit" disabled={loading}>
-                            Xác nhận
-                        </Button>
-                    </Form.Item>
-                </Form>
+                            <Form.Item
+                                {...formItemLayout}
+                                name="info"
+                                label="Mô tả chủ đề"
+                            >
+
+                                <CKEditor
+                                    key="editor"
+                                    editor={ClassicEditor}
+                                    data={info}
+                                    onChange={(event, editor) => {
+                                        const data = editor.getData();
+                                        setInfo(data)
+                                    }}
+                                >
+
+                                </CKEditor>
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                                <Button type="primary" htmlType="submit" loading={loading}>
+                                    Xác nhận
+                                </Button>
+                            </Form.Item>
+                        </Form> :
+                        <Form
+                            name="asset_form"
+                            {...formItemLayout}
+                            onFinish={submitCreateAsset}
+                            initialValues={{
+                                assetName: assetName,
+                                description: assetInfo,
+                                fileType: assetFileType
+                            }}
+                        >
+                            <Form.Item
+                                {...formItemLayout}
+                                name="assetName"
+                                label="Tên"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Vui lòng nhập tên bài giảng',
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Nhập tên bài giảng" value={name} />
+                            </Form.Item>
+
+                            <Form.Item name="fileType" label="Loại bài giảng">
+                                <Radio.Group>
+                                    <Radio value="doc">Tài liệu</Radio>
+                                    <Radio value="video">Video</Radio>
+                                </Radio.Group>
+                            </Form.Item>
+
+                            <Form.Item
+                                name="file"
+                                label="File bài giảng"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                                rules={[
+                                    {
+                                        required: !isEditAsset,
+                                        message: 'Vui lòng tải lên file bài giảng',
+                                    },
+                                ]}
+                            >
+                                <Upload {...props} name="file" multiple={false}>
+                                    <Button disabled={fileList.length > 0}>
+                                        <UploadOutlined /> Nhấn để chọn file
+                                    </Button>
+                                </Upload>
+                            </Form.Item>
+
+                            <Form.Item
+                                {...formItemLayout}
+                                name="description"
+                                label="Mô tả"
+                            >
+                                <Input placeholder="Nhập mô tả bải giảng" value={name} />
+                            </Form.Item>
+                            <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                                <Button type="primary" htmlType="submit" loading={loading}>
+                                    Xác nhận
+                                </Button>
+                            </Form.Item>
+
+                        </Form>
+                }
             </Modal>
         </section>
 

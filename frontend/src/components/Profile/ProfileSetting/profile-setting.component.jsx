@@ -77,7 +77,7 @@ const ProfileSetting = ({profile, isLoading, token}) => {
                     <Input placeholder="Phone number..."/>
                 </Form.Item>
                 <Form.Item name="birth_date" label="Birth Date" {...config}>
-                    <DatePicker format={Constants.DATE_FORMAT}/>
+                    <DatePicker />
                 </Form.Item>
                 <Form.Item name="gender" label="Gender">
                     <Select placeholder="Gender..." style={{width: '25%'}}>

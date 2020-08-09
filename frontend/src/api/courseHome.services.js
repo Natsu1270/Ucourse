@@ -138,3 +138,51 @@ export const deleteLearningTopic = (data) => {
         url: `${API_URL}/learning_topic/${id}`
     })
 }
+
+
+export const createTopicAsset = (data) => {
+
+    const { token, name, info, learning_topic, file_type, file } = data
+    const formData = new FormData()
+    formData.set("name", name)
+    formData.set("info", info)
+    formData.set("learning_topic", learning_topic)
+    formData.set("file_type", file_type)
+    formData.append("file", file)
+
+    return axios.request({
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/topic_asset/create`,
+        data: formData
+    })
+}
+
+
+
+export const editTopicAsset = (data) => {
+    const { token, name, info, file_type, file, id } = data
+    const formData = new FormData()
+    formData.set("name", name)
+    formData.set("info", info)
+    formData.set("file_type", file_type)
+    if (file !== undefined && file !== null) {
+        formData.append("file", file)
+    }
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'PUT',
+        url: `${API_URL}/topic_asset/${id}`,
+        data: formData
+    })
+}
+
+export const deleteTopicAsset = (data) => {
+    const { token, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'DELETE',
+        url: `${API_URL}/topic_asset/${id}`
+    })
+}
+
