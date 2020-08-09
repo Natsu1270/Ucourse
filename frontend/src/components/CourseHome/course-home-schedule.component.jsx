@@ -84,10 +84,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
     const triggerEdit = (id) => {
         setEditingTopic(id)
-        setShowModal(true)
         const topicToEdit = learningTopics.find(topic => topic.id === id)
         setInfo(topicToEdit.info)
         setName(topicToEdit.name)
+        setShowModal(true)
     }
 
 
@@ -104,7 +104,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         }
     }
 
-
+    const handleClose = () => {
+        setShowModal(false)
+    }
+    
     return (
         <section className="section-5 page-2">
 
@@ -113,7 +116,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 <Col span={4}>{
                     userRole.code
                         ? userRole.code === "TC" ?
-                            <Button onClick={() => setShowModal(true)} type="primary">Thêm chủ đề học</Button> : null
+                            <Button onClick={() => {
+                                setShowModal(true)
+                            }
+                            } type="primary">Thêm chủ đề học</Button> : null
                         : null
                 }</Col>
             </Row>
@@ -144,6 +150,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
 
             <Modal
+                destroyOnClose={true}
                 width={920}
                 style={{ paddingBottom: "0px" }}
                 className="bg-white"
@@ -151,11 +158,11 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 visible={showModal}
                 confirmLoading={loading}
                 footer={[
-                    <Button key="back" danger onClick={() => setShowModal(false)}>
+                    <Button key="back" danger onClick={handleClose}>
                         Huỷ
                     </Button>
                 ]}
-                onCancel={() => setShowModal(false)}
+                onCancel={handleClose}
 
             >
                 <Form
@@ -163,7 +170,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                     {...formItemLayout}
                     onFinish={onFinish}
                     initialValues={{
-                        name
+                        name: name
                     }}
                 >
                     <Form.Item
@@ -177,14 +184,17 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             },
                         ]}
                     >
-                        <Input placeholder="Nhập tên chủ đề" />
+                        <Input placeholder="Nhập tên chủ đề" value={name}/>
                     </Form.Item>
+                    
                     <Form.Item
                         {...formItemLayout}
                         name="info"
                         label="Mô tả chủ đề"
                     >
+                        
                         <CKEditor
+                            key="editor"
                             editor={ClassicEditor}
                             data={info}
                             onChange={(event, editor) => {
@@ -194,7 +204,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         >
 
                         </CKEditor>
-                        <Input type="hidden" value={info} placeholder="Nhập mô tả chủ đề" />
                     </Form.Item>
                     <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
                         <Button type="primary" htmlType="submit" disabled={loading}>
