@@ -29,16 +29,16 @@ const Footer = () => {
 
                         <ul className="list-unstyled">
                             <li>
-                                <Link to="#"> Hướng dẫn đăng ký </Link>
+                                <Link to="/cauhoi"> Các câu hỏi thường gặp </Link>
                             </li>
                             <li>
-                                <Link to="#">Hướng dẫn thanh toán</Link>
+                                <Link to="/huongdan-thanhtoan">Hướng dẫn thanh toán</Link>
                             </li>
                             <li>
-                                <Link to="#">Tài khoản giao dịch</Link>
+                                <Link to="/taikhoan-giaodich">Tài khoản giao dịch</Link>
                             </li>
                             <li>
-                                <Link to="#">Liên hệ</Link>
+                                <Link to="/lienhe">Liên hệ</Link>
                             </li>
                         </ul>
 
@@ -50,14 +50,20 @@ const Footer = () => {
                         <br />
                         <ul className="list-unstyled">
                             <li>
-                                <i className="fa fa-envelope-square"></i><a> Email</a>
+                                <i className="fa fa-envelope-square"></i><a  href="mailto:trungtamdaotaoCongngheUcourse@gmail.com"> Email</a>
                             </li>
-                            <li><i className="fab fa-facebook-square"></i><a> Facebook </a></li>
+
                             <li>
-                                <i className="fab fa-twitter-square"></i><a> Twitter</a>
+                                <i className="fab fa-facebook-square"></i><a href=""> Facebook </a>
                             </li>
                             <li>
-                                <i className="fab fa-google-plus-square"></i><a> Google plus</a>
+
+                                <i className="fab fa-twitter-square"></i><a href ="https://twitter.com/TUcourse"> Twitter</a>
+                            </li>
+
+                            <li>
+                                <i className="fab fa-google-plus-square"></i><a href ="https://twitter.com/TUcourse"> Google plus</a>
+
                             </li>
                         </ul>
 

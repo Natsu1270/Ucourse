@@ -14,17 +14,17 @@ const AboutPage = () => {
                     <span className="cs-about--text__main">Thông tin</span>
                     <p></p>
                     <p className="cs-about--text__sub">Được hình thành vào 11/2019, Trung tâm đào tạo trực
-                        tyến <b>Csource</b> đã và đang đạt được những thành công
-                        vô cùng nổi bật. <b>Csource</b> là một trung tâm đào tạo về lĩnh vực công nghệ thông tin. Trung
+                        tuyến <b>Ucource</b> đã và đang đạt được những thành công
+                        vô cùng nổi bật. <b>Ucource</b> là một trung tâm đào tạo về lĩnh vực công nghệ thông tin. Trung
                         tâm được
                         thành lập bởi 2 sinh viên Bùi Duy Hùng và Trần Thị Anh của Khoa Khoa học & Kỹ thuật Máy tính,
                         Trường Đại học
-                        Bách Khoa - Đại học Quốc gia Thành phố Hồ Chí Minh. <b>Csource</b> cung cấp các khóa học hướng
+                        Bách Khoa - Đại học Quốc gia Thành phố Hồ Chí Minh. <b>Ucource</b> cung cấp các khóa học hướng
                         tới tất cả các
                         đối tượng và lứa tuổi có nhu cầu nâng cao kiến thức về lĩnh vực công nghệ thông tin. </p>
                     <br/>
                     <span className="cs-about--text__main">Tầm nhìn</span>
-                    <p className="cs-about--text__sub"><b>Csource</b> kết hợp 2 hình thức đào tạo: Đào tạo tập trung và
+                    <p className="cs-about--text__sub"><b>Ucource</b> kết hợp 2 hình thức đào tạo: Đào tạo tập trung và
                         mua
                         bán khóa học trực tuyến bằng cách cung
                         cấp các khoá học trực tuyến đa phương tiện đồng thời có các bài giảng tương tác thực giữa giảng
