@@ -114,8 +114,8 @@ class TopicAsset(models.Model):
     file_type = models.CharField(
         max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)
     status = models.BooleanField(default=True)
-    icon = models.ImageField(
-        upload_to=asset_upload_path, blank=True, null=True)
+    # icon = models.ImageField(
+    #     upload_to=asset_upload_path, blank=True, null=True)
     info = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):

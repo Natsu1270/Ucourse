@@ -117,6 +117,15 @@ class CreateTopicAsset(generics.CreateAPIView):
     parser_classes = [MultiPartParser, JSONParser]
 
 
+class EditTopicAsset(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.TopicAssetSerializer
+    queryset = TopicAsset.objects.all()
+    permission_classes = [
+        IsTeacherOrTARoleOrReadOnly
+    ]
+    parser_classes = [MultiPartParser, JSONParser]
+
+
 class EditLearningTopic(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.LearningTopicSerializer
     queryset = LearningTopic.objects.all()

@@ -16,22 +16,20 @@ class RegisterCourseSerializer(serializers.Serializer):
 
 class TopicAssetSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all())
+    learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
+    file = serializers.FileField(required=False)
 
     class Meta:
         model = TopicAsset
         fields = [
             'id', 'name', 'learning_topic',
-            'file', 'file_type', 'status',
-            'icon', 'info'
+            'file', 'file_type', 'status', 'info'
         ]
-
-
 
 
 class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all())
+    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
     topic_assets = TopicAssetSerializer(many=True, read_only=True, required=False)
     topic_exams = ExamShowSerializer(many=True, read_only=True, required=False)
 
