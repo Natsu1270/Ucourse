@@ -41,7 +41,7 @@ const RegisterOrLogin = () => {
                 message.error(errMessage.statusText)
             } else {
                 if (errMessage.data) {
-                    const errorLists = errMessage.data.error_message.map(
+                    const errorLists = (errMessage.data.error_message || []).map(
                         e => e = e.replace(e[0], e[0].toUpperCase())
                     )
                     const errText = errorLists.join('\n')
