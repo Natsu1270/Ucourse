@@ -7,7 +7,7 @@ class UserTakenInline(admin.TabularInline):
 
 @admin.register(Exam)
 class ExamAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code', 'exam_type')
+    list_display = ('__str__', 'exam_type')
     list_filter = ('status', 'exam_type',)
     readonly_fields = ('created_date', 'created_by', 'modified_by')
 

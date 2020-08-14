@@ -16,14 +16,14 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    question_kits = serializers.StringRelatedField(many=True, read_only=True)
-    choices = ChoiceSerializer(many=True, read_only=True)
-    answers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    question_kits = serializers.StringRelatedField(many=True, read_only=True, required=False)
+    choices = ChoiceSerializer(many=True, required=False)
+    answers = serializers.PrimaryKeyRelatedField(many=True, required=False, queryset=Choice.objects.all())
 
     class Meta:
         model = Question
         fields = [
-            'id', 'name', 'code', 'content',
+            'id', 'name', 'content',
             'choices', 'answers', 'question_type',
             'difficult_level', 'score', 'status',
             'question_kits', 'created_date'
@@ -36,7 +36,7 @@ class QuestionMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = [
-            'id', 'name', 'code', 'content', 'question_type',
+            'id', 'name', 'content', 'question_type',
             'difficult_level', 'score', 'status',
         ]
 

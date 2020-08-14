@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API_URL = '/api/exams';
 
-export const getExamDetailAPI = ({token, exam_id}) => {
+export const getExamDetailAPI = ({ token, exam_id }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const getStudentExamList = ({ token, exam_id }) => {
 }
 
 export const submitExam = (params) => {
-    const {token, exam, result, responses} = params
+    const { token, exam, result, responses } = params
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -41,3 +41,36 @@ export const submitExam = (params) => {
         }
     })
 }
+
+export const createExam = (params) => {
+    const {
+        token, topic, name, exam_type,
+        get_result_type, duration, max_try,
+        pass_score, start_date, expired_date
+    } = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/create`,
+        data: {
+            topic, name, exam_type, get_result_type, duration,
+            max_try, pass_score, start_date, expired_date
+        }
+    })
+}
+
+export const deleteExam = (params) => {
+    const { token, id } = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'DELETE',
+        url: `${API_URL}/${id}`,
+    })
+}
+

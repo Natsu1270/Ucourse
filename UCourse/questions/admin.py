@@ -8,7 +8,7 @@ class QuestionInline(admin.TabularInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code')
+    list_display = ('__str__',)
     list_filter = ('status', 'question_type', 'difficult_level')
     readonly_fields = ('created_date', 'created_by')
 

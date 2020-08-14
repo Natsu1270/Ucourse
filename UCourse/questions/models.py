@@ -38,7 +38,6 @@ class Question(models.Model):
     ]
 
     name = models.CharField(max_length=255, blank=True)
-    code = models.CharField(max_length=10, unique=True)
     content = RichTextField()
     choices = models.ManyToManyField(Choice, related_name='questions')
     answers = models.ManyToManyField(Choice, related_name='ans_questions')
