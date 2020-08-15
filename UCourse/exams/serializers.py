@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from course_homes.models import LearningTopic
 from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice
 from questions.serializers import QuestionSerializer
 from courses.serializers import CourseMinSerializer
@@ -7,18 +8,17 @@ from courses.serializers import CourseMinSerializer
 
 class ExamSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    exam_type = serializers.CharField(source='get_exam_type_display')
-    questions = QuestionSerializer(many=True, read_only=True)
-    students = serializers.StringRelatedField(many=True, read_only=True)
-    topic = serializers.StringRelatedField(read_only=True)
+    questions = QuestionSerializer(many=True, required=False)
+    students = serializers.StringRelatedField(many=True, read_only=True, required=False)
+    topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all())
 
     class Meta:
         model = Exam
         fields = [
-            'id', 'code', 'name', 'get_result_type',
+            'id', 'name', 'get_result_type',
             'exam_type', 'questions', 'students',
             'topic', 'duration', 'pass_score', 'max_try',
-            'status', 'expired_date'
+            'status', 'expired_date', 'start_date'
         ]
 
 
@@ -29,7 +29,7 @@ class ExamShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'code', 'name', 'get_result_type', 'max_try', 'expired_date',
+            'id', 'name', 'get_result_type', 'max_try', 'expired_date', 'start_date',
             'exam_type', 'duration', 'pass_score',
             'status'
         ]

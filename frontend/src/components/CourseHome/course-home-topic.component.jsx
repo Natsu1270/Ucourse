@@ -10,9 +10,13 @@ import { BACKEND_HOST } from '../../configs';
 
 import { CaretDownOutlined, SettingTwoTone } from '@ant-design/icons'
 import { deleteTopicAsset } from '../../api/courseHome.services';
+import { deleteExam } from '../../api/exam.services';
 
 
-const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit, token, triggerCreateAsset, triggerEditAsset }) => {
+const CourseHomeTopic = ({
+    topic, userRole, handleDelete,
+    triggerEdit, token, triggerCreateAsset,
+    triggerEditAsset, triggerCreateQuize }) => {
     const history = useHistory()
     const [assets, setAssets] = useState([])
     const [quizes, setQuizes] = useState([])
@@ -67,12 +71,16 @@ const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit, token, tr
     }
 
     const deleteAsset = async (id, type) => {
-        const data = { token, id: id }
+        const data = { token, id }
         try {
             if (type === "asset") {
                 const result = await deleteTopicAsset(data)
                 const updateAssets = assets.filter(asset => asset.id != id)
                 setAssets(updateAssets)
+            } else {
+                const result = await deleteExam(data)
+                const updateExams = quizes.filter(q => q.id != id)
+                setQuizes(updateExams)
             }
             message.success("Xoá thành công")
         } catch (err) {
@@ -117,6 +125,9 @@ const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit, token, tr
             <Menu.Item onClick={() => triggerCreateAsset(topic.id)}>
                 Thêm bài giảng
             </Menu.Item>
+            <Menu.Item onClick={() => triggerCreateQuize(topic.id)}>
+                Thêm bài kiểm tra
+            </Menu.Item>
         </Menu>
     );
 
@@ -144,30 +155,32 @@ const CourseHomeTopic = ({ topic, userRole, handleDelete, triggerEdit, token, tr
                 {parseHtml(topic.info)}
             </div> : null}
             <div className="course-topic__content">
-                <List
-
-                    itemLayout="horizontal"
-                    dataSource={assets}
-                    renderItem={item => (
-                        <List.Item
-                            actions={[userRole.code ?
-                                userRole.code === 'TC' || userRole.code === "TA" ?
-                                    <Dropdown overlay={<Menu>
-                                        <Menu.Item danger onClick={() => deleteAsset(item.id, "asset")}>Xóa bài giảng</Menu.Item>
-                                        <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài giảng</Menu.Item>
-                                    </Menu>} placement="topCenter">
-                                        <CaretDownOutlined className="down-indict" />
-                                    </Dropdown> : null : null]}
-                            className="course-topic__content--item"
-                        >
-                            <List.Item.Meta
-                                avatar={<Avatar src={assetAvatar(item.icon, item.file_type)} />}
-                                title={<span onClick={() => gotoLecture(item.id, item.content, item.file_type)}>{item.title}</span>}
-                                description={item.info}
-                            />
-                        </List.Item>
-                    )}
-                />
+                {
+                    assets.length > 0 ?
+                        <List
+                            itemLayout="horizontal"
+                            dataSource={assets}
+                            renderItem={item => (
+                                <List.Item
+                                    actions={[userRole.code ?
+                                        userRole.code === 'TC' || userRole.code === "TA" ?
+                                            <Dropdown overlay={<Menu>
+                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "asset")}>Xóa bài giảng</Menu.Item>
+                                                <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài giảng</Menu.Item>
+                                            </Menu>} placement="topCenter">
+                                                <CaretDownOutlined className="down-indict" />
+                                            </Dropdown> : null : null]}
+                                    className="course-topic__content--item"
+                                >
+                                    <List.Item.Meta
+                                        avatar={<Avatar src={assetAvatar(item.icon, item.file_type)} />}
+                                        title={<span onClick={() => gotoLecture(item.id, item.content, item.file_type)}>{item.title}</span>}
+                                        description={item.info}
+                                    />
+                                </List.Item>
+                            )}
+                        /> : null
+                }
                 {
                     quizes.length > 0 ?
                         <List

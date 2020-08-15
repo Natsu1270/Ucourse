@@ -1,19 +1,29 @@
-import React, { useEffect } from 'react'
-import { Skeleton, Button, Modal, Row, Col, Form, Upload, Input, Radio } from "antd";
-import CourseHomeTopic from "./course-home-topic.component";
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react'
 
+import CourseHomeTopic from "./course-home-topic.component";
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import moment from 'moment'
+import {
+    createLearningTopic, editLearningTopic,
+    createTopicAsset, editTopicAsset
+} from '../../api/courseHome.services'
 
-import { createLearningTopic, editLearningTopic, createTopicAsset, editTopicAsset } from '../../api/courseHome.services'
+import {
+    Skeleton, Button, Modal, Row,
+    Col, Form, Upload, Input, Radio,
+    message, Drawer, Select, InputNumber,
+    DatePicker
+} from "antd";
 
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
-import { message } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import slugify from 'slugify';
-
 import { deleteLearningTopic } from '../../api/courseHome.services';
+import { disabledDate, disabledDateTime, disabledRangeTime } from '../../utils/date.utils'
+import { createExam } from '../../api/exam.services';
 
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const formItemLayout = {
     labelCol: { span: 6 },
@@ -30,6 +40,7 @@ const normFile = e => {
 const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
     const [showModal, setShowModal] = useState(false)
+    const [showDrawer, setShowDrawer] = useState(false)
     const [info, setInfo] = useState("")
     const [name, setName] = useState("")
     const [loading, setLoading] = useState(false)
@@ -155,6 +166,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
             message.error(err.message)
         }
         setLoading(false)
+        setEditingTopic(null)
+        setName('')
+        setInfo('')
     }
 
     const handleClose = () => {
@@ -176,6 +190,32 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setAssetFileType(asset.file_type)
         setAssetFile(asset.file)
         setShowModal(true)
+    }
+
+    const triggerCreateQuize = (topicId) => {
+        setShowDrawer(true)
+        setEditingTopic(topicId)
+    }
+
+    const createQuize = async (values) => {
+        console.log(values)
+        setLoading(true)
+        const start_date = values.date ? values.date[0] : null;
+        const expired_date = values.date ? values.date[1] : null;
+
+        const data = {
+            token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
+            duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
+            start_date, expired_date
+        }
+        try {
+            const result = await createExam(data)
+            message.success("Tạo bài kiểm tra thành công", 1.5, () => window.location.reload())
+        } catch (err) {
+            message.error(err.message)
+        }
+        setLoading(false)
+
     }
 
     return (
@@ -216,6 +256,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             token={token}
                             triggerCreateAsset={triggerCreateAsset}
                             triggerEditAsset={triggerEditAsset}
+                            triggerCreateQuize={triggerCreateQuize}
                         />
                     </Skeleton>
                 )
@@ -249,6 +290,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             }}
                         >
                             <Form.Item
+                                hasFeedback
                                 {...formItemLayout}
                                 name="name"
                                 label="Tên chủ đề"
@@ -263,6 +305,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             </Form.Item>
 
                             <Form.Item
+                                hasFeedback
                                 {...formItemLayout}
                                 name="info"
                                 label="Mô tả chủ đề"
@@ -298,6 +341,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         >
                             <Form.Item
                                 {...formItemLayout}
+                                hasFeedback
                                 name="assetName"
                                 label="Tên"
                                 rules={[
@@ -310,7 +354,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                                 <Input placeholder="Nhập tên bài giảng" value={name} />
                             </Form.Item>
 
-                            <Form.Item name="fileType" label="Loại bài giảng">
+                            <Form.Item
+                                hasFeedback
+                                name="fileType" label="Loại bài giảng">
                                 <Radio.Group>
                                     <Radio value="doc">Tài liệu</Radio>
                                     <Radio value="video">Video</Radio>
@@ -318,6 +364,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             </Form.Item>
 
                             <Form.Item
+                                hasFeedback
                                 name="file"
                                 label="File bài giảng"
                                 valuePropName="fileList"
@@ -337,6 +384,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             </Form.Item>
 
                             <Form.Item
+                                hasFeedback
                                 {...formItemLayout}
                                 name="description"
                                 label="Mô tả"
@@ -352,6 +400,95 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         </Form>
                 }
             </Modal>
+
+            <Drawer
+                destroyOnClose={true}
+                title="Tạo bài kiểm tra"
+                width={850}
+                onClose={() => setShowDrawer(false)}
+                visible={showDrawer}
+                bodyStyle={{ paddingBottom: 80 }}
+                footer={
+                    <div style={{ textAlign: 'right', }}>
+                        <Button type="primary" danger onClick={() => setShowDrawer(false)} style={{ marginRight: 8 }}>
+                            Hủy
+                        </Button>
+                    </div>
+                }
+            >
+                <Form
+                    layout="vertical"
+                    onFinish={createQuize}
+                >
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="name" label="Tên"
+                                rules={[{ required: true, message: 'Vui lòng nhập tên bài kiểm tra' }]}
+                            >
+                                <Input placeholder="Nhập tên bài kiểm tra" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="resultType"
+                                label="Cách tính điểm"
+                                rules={[{ required: true, message: 'Vui lòng chọn hình thức tính điểm' }]}
+                            >
+                                <Select placeholder="Hình thức tính điểm">
+                                    <Option value="best">Lấy điểm cao nhất</Option>
+                                    <Option value="last">Lấy điểm bài làm cuối cùng</Option>
+                                    <Option value="average">Lấy điểm trung bình</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item hasFeedback name="duration" label="Thời gian làm bài (giây)"
+                                rules={[{ required: true, message: 'Xác định thời gian làm bài' }]}>
+                                <InputNumber style={{ width: "100%" }} min={1} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item hasFeedback name="max_try" label="Số lần làm bài cho phép (để trống nêu không giới hạn)"
+                            >
+                                <InputNumber style={{ width: "100%" }} min={1} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item name="date" label="Thời gian bài kiểm tra">
+                                <RangePicker
+                                    disabledDate={disabledDate}
+                                    // disabledTime={disabledRangeTime}
+                                    showTime={{
+                                        hideDisabledOptions: true,
+                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    }}
+                                    format="DD-MM-YYYY HH:mm:ss"
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item hasFeedback name="pass_score" label="Điểm để qua bài test"
+                            >
+                                <InputNumber style={{ width: "100%" }} min={0} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Form.Item >
+                        <Button type="primary" htmlType="submit" loading={loading}>
+                            Xác nhận
+                        </Button>
+                    </Form.Item>
+
+                </Form>
+            </Drawer>
+
         </section>
 
 

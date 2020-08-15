@@ -6,7 +6,15 @@ from . import serializers
 from api.utils import uc_response
 
 
-class ExamDetailAPI(generics.RetrieveAPIView):
+class ExamDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = serializers.ExamSerializer
+    queryset = Exam.objects.all()
+
+
+class CreateExamAPI(generics.CreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]

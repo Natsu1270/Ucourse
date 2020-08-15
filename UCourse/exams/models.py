@@ -31,7 +31,6 @@ class Exam(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True, db_index=True)
     exam_type = models.CharField(max_length=2, choices=EXAM_TYPE_CHOICES)
     get_result_type = models.CharField(max_length=10, choices=EXAM_RESULT_CHOICES, default=PICK_BEST, blank=True)
     questions = models.ManyToManyField(Question, related_name="question_exams")
@@ -47,8 +46,9 @@ class Exam(models.Model):
         blank=True, null=True
     )
     duration = models.IntegerField(blank=True, null=True)
-    pass_score = models.FloatField(max_length=3)
+    pass_score = models.FloatField(max_length=3, blank=True, null=True)
     max_try = models.IntegerField(default=1)
+    start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
     expired_date = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
