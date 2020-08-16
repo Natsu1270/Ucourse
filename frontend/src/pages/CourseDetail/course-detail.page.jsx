@@ -77,12 +77,24 @@ const CourseDetail = () => {
     }, [course])
 
     const handleRegister = () => {
+        // if (token) {
+        //     dispatch(buyCourseStart({ course: course.id, token }))
+        //     // dispatch(registerCourseStart({course_id: course.id, token}))
+        //     if (!errorRegister) {
+        //         dispatch(toggleRegisterCourseModal())
+        //         setOwnCourse(true)
+        //     }
+        // } else {
+        //     message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
+        //         1.5,
+        //         () => dispatch(showRLModal()))
+        // }
         if (token) {
             dispatch(buyCourseStart({ course: course.id, token }))
             // dispatch(registerCourseStart({course_id: course.id, token}))
             if (!errorRegister) {
-                dispatch(toggleRegisterCourseModal())
-                setOwnCourse(true)
+                // dispatch(toggleRegisterCourseModal())
+                // setOwnCourse(true)
             }
         } else {
             message.error('Bạn phải đăng nhập để thực hiện chức năng này!',

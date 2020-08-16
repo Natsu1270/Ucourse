@@ -49,6 +49,11 @@ export const buyCourseStart = (params) => ({
     payload: params
 })
 
+export const buyCourseFinish = (params) => ({
+    type: CourseActionTypes.BUY_COURSE_FINISH,
+    payload: params
+});
+
 export const buyCourseSuccess = () => ({
     type: CourseActionTypes.BUY_COURSE_SUCCESS
 })

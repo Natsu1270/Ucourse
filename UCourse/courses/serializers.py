@@ -59,7 +59,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'id', 'title', 'code', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
             'fee_type', 'status', 'course_detail', 'program',
             'field', 'tags', 'ability_test', 'created_date',
-            'updated_date', 'created_by', 'c_homes', 'is_my_course'
+            'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')
 
