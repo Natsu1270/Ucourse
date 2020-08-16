@@ -10,7 +10,8 @@ class ExamSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     questions = QuestionSerializer(many=True, required=False)
     students = serializers.StringRelatedField(many=True, read_only=True, required=False)
-    topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all())
+    topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
+    total_score = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Exam
@@ -18,9 +19,16 @@ class ExamSerializer(serializers.ModelSerializer):
             'id', 'name', 'get_result_type',
             'exam_type', 'questions', 'students',
             'topic', 'duration', 'pass_score', 'max_try',
-            'status', 'expired_date', 'start_date'
+            'status', 'expired_date', 'start_date', 'total_score'
         ]
 
+    @staticmethod
+    def get_total_score(obj):
+        questions = obj.questions.all()
+        res = 0
+        for q in questions:
+            res += q.score
+        return res
 
 class ExamShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)

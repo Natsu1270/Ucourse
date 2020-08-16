@@ -26,3 +26,17 @@ export const createQuestion = (params) => {
         data: params
     })
 }
+
+export const editQuestion = (params) => {
+    const { token } = params
+
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/edit`,
+        data: params
+    })
+}

@@ -74,3 +74,15 @@ export const deleteExam = (params) => {
     })
 }
 
+export const editExam = (params) => {
+    const { token, id } = params
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'PATCH',
+        url: `${API_URL}/${id}`,
+        data: params
+    })
+}

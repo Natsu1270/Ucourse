@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Avatar, List, Row, Col, Dropdown, Menu, message } from 'antd'
+import { Avatar, List, Row, Col, Dropdown, Menu, message, Typography } from 'antd'
 import { useHistory } from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
 import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
-import { parseHtml, formatDate } from "../../utils/text.utils"
+import { parseHtml, formatDate, isTimeBefore } from "../../utils/text.utils"
 import { BACKEND_HOST } from '../../configs';
 
 import { CaretDownOutlined, SettingTwoTone } from '@ant-design/icons'
 import { deleteTopicAsset } from '../../api/courseHome.services';
 import { deleteExam } from '../../api/exam.services';
 
+const { Text } = Typography
 
 const CourseHomeTopic = ({
     topic, userRole, handleDelete,
     triggerEdit, token, triggerCreateAsset,
-    triggerEditAsset, triggerCreateQuize }) => {
+    triggerEditAsset, triggerCreateQuize,
+    triggerEditQuize
+}) => {
     const history = useHistory()
     const [assets, setAssets] = useState([])
     const [quizes, setQuizes] = useState([])
@@ -43,7 +46,12 @@ const CourseHomeTopic = ({
                     id: quiz.id,
                     title: quiz.name,
                     info: quiz.info,
-                    expired: quiz.expired_date
+                    expired: quiz.expired_date,
+                    resultType: quiz.get_result_type,
+                    duration: quiz.duration,
+                    maxTry: quiz.max_try,
+                    startDate: quiz.start_date,
+                    passScore: quiz.pass_score
                 })
             )
             setQuizes(topicQuizes)
@@ -165,7 +173,9 @@ const CourseHomeTopic = ({
                                     actions={[userRole.code ?
                                         userRole.code === 'TC' || userRole.code === "TA" ?
                                             <Dropdown overlay={<Menu>
-                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "asset")}>Xóa bài giảng</Menu.Item>
+                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "asset")}>
+                                                    Xóa bài giảng
+                                                </Menu.Item>
                                                 <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài giảng</Menu.Item>
                                             </Menu>} placement="topCenter">
                                                 <CaretDownOutlined className="down-indict" />
@@ -192,7 +202,7 @@ const CourseHomeTopic = ({
                                         userRole.code === 'TC' || userRole.code === "TA" ?
                                             <Dropdown overlay={<Menu>
                                                 <Menu.Item danger onClick={() => deleteAsset(item.id, "quizes")}>Xóa bài kiểm tra</Menu.Item>
-                                                {/* <Menu.Item onClick={() => editAsset(item.id, "quizes")}>Sửa chủ đề</Menu.Item> */}
+                                                <Menu.Item onClick={() => triggerEditQuize(item)}>Sửa bài kiểm tra</Menu.Item>
                                             </Menu>} placement="topCenter">
                                                 <CaretDownOutlined className="down-indict" />
                                             </Dropdown> : null : null]}
@@ -201,8 +211,13 @@ const CourseHomeTopic = ({
                                     <List.Item.Meta
                                         onClick={() => gotoExam(item.id)}
                                         avatar={<Avatar src={quizIcon} />}
-                                        title={<span onClick={() => gotoLecture(item.id, item.content, item.file_type)}>{item.title}</span>}
-                                        description={item.expired ? <p>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do_YYYY)}</p> : null}
+                                        title={<span>{item.title}</span>}
+                                        description={
+                                            item.expired ?
+                                                !isTimeBefore(item.expired) ?
+                                                    <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
+                                                    <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
+                                                : null}
                                     />
                                 </List.Item>
                             )}

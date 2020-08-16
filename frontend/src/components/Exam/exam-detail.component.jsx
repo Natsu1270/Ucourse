@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {mapKeys} from 'lodash'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { mapKeys } from 'lodash'
 
-import {Button, Checkbox, Form, Radio, message} from 'antd'
-import {parseHtml} from "../../utils/text.utils";
+import { Button, Checkbox, Form, Radio, message, Popconfirm, Row, Col, Tag, Space } from 'antd'
+import { parseHtml } from "../../utils/text.utils";
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-light.css'
-import {submitExamStart} from "../../redux/Exam/exam.actions";
-import {isProcessingSelector} from "../../redux/Exam/exam.selects";
-import {CheckCircleTwoTone} from "@ant-design/icons";
+import { submitExamStart } from "../../redux/Exam/exam.actions";
+import { isProcessingSelector } from "../../redux/Exam/exam.selects";
+import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
+import Countdown from 'react-countdown'
 
 
-const ExamDetail = ({exam, token}) => {
+const ExamDetail = ({ exam, token }) => {
 
     const [finished, setFinished] = useState(false)
     const [responses, setResponses] = useState(null)
@@ -20,8 +21,8 @@ const ExamDetail = ({exam, token}) => {
     const questions = exam.questions
 
     const formItemLayout = {
-        labelCol: {span: 4},
-        wrapperCol: {span: 24},
+        labelCol: { span: 4 },
+        wrapperCol: { span: 24 },
     };
     const radioStyle = {
         display: 'flex',
@@ -54,9 +55,9 @@ const ExamDetail = ({exam, token}) => {
 
     const openMessage = () => {
         if (isSubmitting) {
-            message.loading({content: 'Đang xử lý', key});
+            message.loading({ content: 'Đang xử lý', key });
         } else {
-            message.success({content: 'Hoàn tất!', key, duration: 2});
+            message.success({ content: 'Hoàn tất!', key, duration: 2 });
             setFinished(true)
         }
     };
@@ -97,7 +98,7 @@ const ExamDetail = ({exam, token}) => {
         })
         const responses = questionResponses.filter(response => response)
         const result = calResult(values, questions)
-        dispatch(submitExamStart({token, exam: exam.id, result, responses}))
+        dispatch(submitExamStart({ token, exam: exam.id, result, responses }))
         openMessage()
     }
 
@@ -108,28 +109,28 @@ const ExamDetail = ({exam, token}) => {
             if (answers.includes(choice.id)) {
                 return (
                     <Radio defaultChecked key={choice.id} style={radioStyleRightChoice}
-                           className='radio-choice'
-                           value={choice.id}>
-                        {parseHtml(choice.content)} <CheckCircleTwoTone twoToneColor="#52c41a"/>
+                        className='radio-choice'
+                        value={choice.id}>
+                        {parseHtml(choice.content)} <CheckCircleTwoTone twoToneColor="#52c41a" />
                     </Radio>)
             } else {
                 return (
                     <Radio defaultChecked key={choice.id} style={radioStyleWrong}
-                           className='radio-choice'
-                           value={choice.id}>
+                        className='radio-choice'
+                        value={choice.id}>
                         {parseHtml(choice.content)}
                     </Radio>)
             }
         } else if (answers.includes(choice.id)) {
             return (
                 <Radio key={choice.id} style={radioStyleRight} className='radio-choice'
-                       value={choice.id}>
+                    value={choice.id}>
                     {parseHtml(choice.content)}
                 </Radio>)
         } else {
             return (
                 <Radio key={choice.id} style={radioStyle} className='radio-choice'
-                       value={choice.id}>
+                    value={choice.id}>
                     {parseHtml(choice.content)}
                 </Radio>
             )
@@ -160,7 +161,7 @@ const ExamDetail = ({exam, token}) => {
                     {
                         question.choices.map(choice => (
                             <Checkbox key={choice.id} style={radioStyle}
-                                      className='radio-choice' value={choice.id}>
+                                className='radio-choice' value={choice.id}>
                                 {parseHtml(choice.content)}
                             </Checkbox>
                         ))
@@ -174,7 +175,7 @@ const ExamDetail = ({exam, token}) => {
                     {
                         question.choices.map(choice => (
                             <Radio key={choice.id} style={radioStyle}
-                                   className='radio-choice' value={choice.id}>
+                                className='radio-choice' value={choice.id}>
                                 {parseHtml(choice.content)}
                             </Radio>
                         ))
@@ -187,14 +188,29 @@ const ExamDetail = ({exam, token}) => {
 
     return (
         <section className="section-10 exam-detail">
-            <div className="exam-detail--info">
-                <h1 className="exam-detail--title">
-                    {exam.name}
-                </h1>
-                <h3 className="exam-detail--sub-title">
-                    Tổng điểm:
+            <Row className="exam-detail--info">
+                <Col span={10}>
+                    <h1 className="exam-detail--title">
+                        {exam.name}
+                    </h1>
+                    <h3 className="exam-detail--sub-title">
+                        Tổng điểm:
                 </h3>
-            </div>
+                </Col>
+                <Col span={12} style={{ fontSize: '2.5rem', fontWeight: '500' }}>
+                    {
+                        !finished ? <Space>
+                            <ClockCircleTwoTone spin />
+                            <Countdown
+                                date={Date.now() + exam.duration * 1000}
+                                onComplete={submitForm}
+                            >
+                            </Countdown>
+                        </Space> : <Tag color="red">Hết thời gian làm bài</Tag>
+                    }
+
+                </Col>
+            </Row>
             <div className="exam-detail--content">
                 <Form
                     name="exam-detail-form"
@@ -221,12 +237,22 @@ const ExamDetail = ({exam, token}) => {
                             </div>
                         ))
                     }
+                    <Form.Item hidden={finished} className="text-center">
+                        <Popconfirm
+                            title="Hoàn thành bài kiểm tra ?"
+                            onConfirm={submitForm}
+                            okText="Xác nhận"
+                            cancelText="Tiếp tục làm"
+                        >
+                            <Button type="primary" htmlType="button">
+                                Hoàn tất
+                            </Button>
+                        </Popconfirm>
+
+                    </Form.Item>
+
                 </Form>
-                {
-                    finished ? null : <Button onClick={submitForm} type="primary">
-                        Hoàn tất
-                    </Button>
-                }
+
             </div>
         </section>
     )

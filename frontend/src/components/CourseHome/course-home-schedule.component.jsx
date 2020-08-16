@@ -20,7 +20,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import slugify from 'slugify';
 import { deleteLearningTopic } from '../../api/courseHome.services';
 import { disabledDate, disabledDateTime, disabledRangeTime } from '../../utils/date.utils'
-import { createExam } from '../../api/exam.services';
+import { createExam, editExam } from '../../api/exam.services';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -55,6 +55,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
     const [assetFileType, setAssetFileType] = useState("")
     const [assetFile, setAssetFile] = useState(null)
     const [assetId, setAssetId] = useState(null)
+    const [editingQuize, setEditingQuize] = useState({})
 
 
     useEffect(() => {
@@ -197,6 +198,11 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setEditingTopic(topicId)
     }
 
+    const triggerEditQuize = quize => {
+        setShowDrawer(true)
+        setEditingQuize(quize)
+    }
+
     const createQuize = async (values) => {
         console.log(values)
         setLoading(true)
@@ -206,11 +212,26 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         const data = {
             token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
             duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date
+            start_date, expired_date, id: editingQuize.id
+        }
+
+        const editData = {
+            token, name: values.name, get_result_type: values.resultType,
+            duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
+            start_date, expired_date, id: editingQuize.id
         }
         try {
-            const result = await createExam(data)
-            message.success("Tạo bài kiểm tra thành công", 1.5, () => window.location.reload())
+            if (editingQuize.id === undefined) {
+                const result = await createExam(data)
+            }
+            else {
+                const result = await editExam(editData)
+            }
+            message.success(
+                !editingQuize.id ? "Tạo bài kiểm tra thành công" : "Chỉnh sửa bài kiểm tra thành công",
+                1.5,
+                () => window.location.reload()
+            )
         } catch (err) {
             message.error(err.message)
         }
@@ -257,6 +278,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             triggerCreateAsset={triggerCreateAsset}
                             triggerEditAsset={triggerEditAsset}
                             triggerCreateQuize={triggerCreateQuize}
+                            triggerEditQuize={triggerEditQuize}
                         />
                     </Skeleton>
                 )
@@ -419,6 +441,16 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 <Form
                     layout="vertical"
                     onFinish={createQuize}
+                    initialValues={
+                        {
+                            name: editingQuize.title,
+                            resultType: editingQuize.resultType,
+                            duration: editingQuize.duration,
+                            max_try: editingQuize.maxTry,
+                            pass_score: editingQuize.passScore,
+                            date: [moment(editingQuize.startDate), moment(editingQuize.expired)]
+                        }
+                    }
                 >
                     <Row gutter={16}>
                         <Col span={12}>

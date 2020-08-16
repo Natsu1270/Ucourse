@@ -11,7 +11,7 @@ import {
 import {
     Skeleton, Button, Drawer, Empty, List,
     Space, message, Row, Col, Modal, Form,
-    Input, Select, Switch,
+    Input, Select, Switch, Popconfirm,
     InputNumber
 } from 'antd'
 import ExamDetail from "./exam-detail.component";
@@ -21,7 +21,7 @@ import { isRoleTeacherOrTA } from '../../utils/account.utils'
 import Constants from '../../constants'
 
 import { SettingTwoTone, DeleteTwoTone, PlusCircleOutlined, PlusOutlined, MinusCircleTwoTone } from '@ant-design/icons'
-import { deleteQuestion, createQuestion } from '../../api/question.services'
+import { deleteQuestion, createQuestion, editQuestion } from '../../api/question.services'
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
@@ -42,8 +42,9 @@ const PrivateExamList = ({ userRole, token }) => {
     const [processing, setProcessing] = useState(false)
     const [questions, setQuestions] = useState([])
     const [showModal, setShowModal] = useState(false)
-    const [content, setContent] = useState('')
+    const [questionContent, setQuestionContent] = useState('')
     const [editingExam, setEditingExam] = useState({})
+    const [oldChoices, setOldChoices] = useState([])
 
     const { studentExams, examDetail, isProcessing } = useSelector(createStructuredSelector({
         studentExams: studentExamsSelector,
@@ -82,28 +83,77 @@ const PrivateExamList = ({ userRole, token }) => {
     }
 
     const onFinish = async values => {
+        console.log(values)
         setProcessing(true)
         const choices = values.choices
         const data = {
             name: values.name, difficult_level: values.difficulity,
             score: values.score, question_type: values.question_type,
-            content, choices, token, exam: examDetail.id
+            content: questionContent, choices, token, exam: examDetail.id, id: editingExam.id
         }
         try {
-            const result = await createQuestion(data)
-            questions.push(result.data.data)
-            setQuestions(questions)
-            message.success("Tạo câu hỏi thành công")
+            if (editingExam.id === undefined) {
+                const result = await createQuestion(data)
+                questions.push(result.data.data)
+                setQuestions(questions)
+                message.success("Tạo câu hỏi thành công")
+            } else {
+                const result = await editQuestion(data)
+                message.success("Chỉnh sửa câu hỏi thành công", 1.5, () => window.location.reload())
+            }
         } catch (err) {
             message.error(err.message)
         }
         setProcessing(false)
+        setShowModal(false)
     }
 
     const triggerEdit = item => {
         setEditingExam(item)
-        setContent(item.content)
+        setQuestionContent(item.content)
         setShowModal(true)
+        setOldChoices(item.choices)
+    }
+
+    const handleClose = () => {
+        setShowModal(false)
+        setEditingExam({})
+        setQuestionContent('')
+        setOldChoices([])
+    }
+
+    const canDoExam = () => {
+        if (expired || isRoleTeacherOrTA(userRole.code)) return null
+        if (studentExams.length >= examDetail.max_try) {
+            return <Button type="dashed" onClick={() => message.info('Qúa số lần làm cho phép')} >Làm bài</Button>
+        }
+        return (
+            <Popconfirm
+                title="Bạn có làm bài kiểm tra ngay bây giờ ?"
+                onConfirm={() => setShowExam(true)}
+                okText="Xác nhận"
+                cancelText="Hủy"
+            >
+                <Button type="primary">Làm bài</Button>
+            </Popconfirm>
+        )
+
+    }
+
+    const examResult = () => {
+        if (examDetail.get_result_type !== undefined) {
+            const examType = examDetail.get_result_type
+            const resultList = studentExams.map(exam => exam.result)
+            if (resultList.length === 0) return "Chưa có lần làm bài nào"
+            if (examType === Constants.EXAM_GET_BEST) {
+                return Math.max(...resultList) + '/' + examDetail.total_score
+            } else if (examType === Constants.EXAM_GET_AVERAGE) {
+                const sum = resultList.reduce((x, y) => x + y, 0)
+                return sum / resultList.length + '/' + examDetail.total_score
+            } else {
+                return resultList[0] + '/' + examDetail.total_score
+            }
+        }
     }
 
     return (
@@ -132,7 +182,15 @@ const PrivateExamList = ({ userRole, token }) => {
                 }</p>
 
                 <Skeleton loading={isProcessing} active>
-                    {expired || isRoleTeacherOrTA(userRole.code) ? null : <Button type="primary" onClick={() => setShowExam(true)}>Làm bài</Button>}
+                    <p className="text--sub__bigger">
+                        Kết quả làm bài: {examResult()}
+                    </p>
+                </Skeleton>
+
+                <Skeleton loading={isProcessing} active>
+                    {
+                        canDoExam()
+                    }
                 </Skeleton>
             </div>
             {
@@ -169,10 +227,18 @@ const PrivateExamList = ({ userRole, token }) => {
                                             <SettingTwoTone style={{ fontSize: '2rem' }} />
                                             Sửa
                                         </Space>,
-                                        <Space style={{ cursor: 'pointer' }} onClick={() => delQuestion(item.id)}>
-                                            <DeleteTwoTone style={{ fontSize: '2rem' }} twoToneColor="red" />
+                                        <Popconfirm
+                                            title="Bạn có chắc muốn xóa câu hỏi này?"
+                                            onConfirm={() => delQuestion(item.id)}
+                                            okText="Xác nhận"
+                                            cancelText="Hủy"
+                                        >
+                                            <Space style={{ cursor: 'pointer' }} >
+                                                <DeleteTwoTone style={{ fontSize: '2rem' }} twoToneColor="red" />
                                                 Xóa
-                                        </Space>
+                                            </Space>
+                                        </Popconfirm>
+
                                     ]}
                                 >
                                     <List.Item.Meta
@@ -190,7 +256,7 @@ const PrivateExamList = ({ userRole, token }) => {
                                 Lịch sử làm bài
                             </h2>
                             {studentExams.length ?
-                                <ExamHistoryTable exams={studentExams} />
+                                <ExamHistoryTable exams={studentExams} passScore={examDetail.pass_score} />
                                 : <Empty description="Không có lịch sử làm bài" />}
                         </div>
                     </Skeleton>
@@ -223,9 +289,9 @@ const PrivateExamList = ({ userRole, token }) => {
                         className="bg-white"
                         visible={showModal}
                         title="Quản lý câu hỏi"
-                        onCancel={() => setShowModal(false)}
+                        onCancel={handleClose}
                         footer={[
-                            <Button type="primary" danger key="back" onClick={() => setShowModal(false)}>
+                            <Button type="primary" danger key="back" onClick={handleClose}>
                                 Hủy
                             </Button>,]}>
                         <Form
@@ -233,9 +299,8 @@ const PrivateExamList = ({ userRole, token }) => {
                             name="topic_form"
                             onFinish={onFinish}
                             initialValues={{
-                                name: editingExam.name, content, score: editingExam.score,
+                                name: editingExam.name, questionContent, score: editingExam.score,
                                 question_type: editingExam.question_type, difficulity: editingExam.difficult_level,
-                                choices: examDetail.choices
                             }}
                         >
                             <Form.Item
@@ -284,32 +349,46 @@ const PrivateExamList = ({ userRole, token }) => {
                                 rules={[{ required: true, message: 'Chọn loại câu hỏi' }]}
                             >
                                 <Select placeholder="Chọn loại câu hỏi">
-                                    <Option value="mc">Chọn một</Option>
-                                    <Option value="cb">Chọn nhiều</Option>
+                                    <Option value="mc">Chọn một đáp án</Option>
+                                    <Option value="cb">Chọn nhiều đáp án</Option>
                                     <Option value="tx">Câu hỏi văn bản</Option>
                                 </Select>
                             </Form.Item>
 
                             <Form.Item
-                                name="content"
+                                name="questionContent"
                                 label="Nội dung câu hỏi"
                                 rules={[{ required: true, message: 'Vui lòng nhập nội dung câu hỏi', },]}
                             >
                                 <CKEditor
                                     key="editor"
                                     editor={ClassicEditor}
-                                    data={content}
+                                    data={questionContent}
                                     onChange={(event, editor) => {
                                         const data = editor.getData();
-                                        setContent(data)
+                                        setQuestionContent(data)
                                     }}
                                 >
                                 </CKEditor>
                             </Form.Item>
                             <Form.List name="choices">
                                 {(fields, { add, remove }) => {
-                                    if (editingExam && editingExam.choices) {
-                                        fields = editingExam.choices
+                                    if (oldChoices.length > 0) {
+                                        oldChoices.forEach((choice, index) => {
+                                            let isAnswer = false;
+                                            if (editingExam.answers.includes(choice.id)) {
+                                                isAnswer = true
+                                            }
+                                            fields.push({
+                                                name: index,
+                                                key: index,
+                                                isListField: true, fieldKey: index,
+                                                content: choice.content,
+                                                isAnswer,
+                                                id: choice.id
+                                            })
+                                        })
+                                        setOldChoices([])
                                     }
                                     return (
                                         <div>
@@ -317,9 +396,7 @@ const PrivateExamList = ({ userRole, token }) => {
                                                 <div
                                                     key={field.key} style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }} align="middle">
                                                     <Form.Item
-                                                        initialValue={
-                                                            parseHtml(field.content)
-                                                        }
+                                                        initialValue={parseHtml(field.content)}
                                                         hasFeedback
                                                         style={{ width: '80%' }}
                                                         wrapperCol={{ span: 23 }}
@@ -332,12 +409,23 @@ const PrivateExamList = ({ userRole, token }) => {
                                                         <Input placeholder="Nội dung" />
                                                     </Form.Item>
                                                     <Form.Item
+                                                        initialValue={field.isAnswer !== undefined ? field.isAnswer : false}
                                                         name={[field.name, 'isAnswer']}
                                                         fieldKey={[field.fieldKey, 'isAnswer' + field.key]}
-                                                        label="Là đáp án"
+                                                        label="Đáp án đúng"
                                                         valuePropName="checked"
                                                         className="mr-5">
                                                         <Switch />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        hidden={true}
+                                                        initialValue={field.id}
+                                                        label="Nội dung câu trả lời"
+                                                        {...field}
+                                                        name={[field.name, 'id']}
+                                                        fieldKey={[field.fieldKey, 'id' + field.key]}
+                                                    >
+                                                        <Input />
                                                     </Form.Item>
 
                                                     <MinusCircleTwoTone
