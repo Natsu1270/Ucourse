@@ -3,6 +3,11 @@ from rest_framework import generics, permissions, views, status
 from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 from .models import Course, CourseDetail, UserBuyCourse
+import uuid
+from services.momo_service import MoMoService, MoMoQueryStatusService
+from django.shortcuts import render, redirect, get_object_or_404, reverse
+import json
+
 
 
 class CourseListView(generics.ListCreateAPIView):
@@ -47,16 +52,77 @@ class BuyCourseAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         user = request.user
         course_id = request.data['course']
+        course = Course.objects.get(pk=course_id)
+        amount = course.get_price()
+        if amount != 0:
+            orderId = str(uuid.uuid4())
+            requestId = str(uuid.uuid4())
+            orderInfo = 'Card Payment'
+            returnUrl = request.META["HTTP_REFERER"] + "/redirect"
+            notifyUrl = request.build_absolute_uri() + "/success"
+            extraData = request.META["HTTP_REFERER"]
+            momo = MoMoService(orderInfo, returnUrl,
+                                notifyUrl, amount, orderId, requestId, extraData)
+
+            response = momo.call()
+            response_data = response.content.decode("utf-8")
+            json_response = json.loads(response_data)
+            payUrl = json_response['payUrl']
+
+
+            return Response({
+                "data": {
+                    "payUrl": payUrl
+                },
+                "result": True,
+                "message": "Register Successfully",
+                "status_code": 201
+            }, status=status.HTTP_201_CREATED)
+        
         instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
         return Response({
             "data": {
-
+                
             },
             "result": True,
             "message": "Register Successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
 
+class BuyCourseSuccessAPI(generics.GenericAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def post(self, request, *args, **kwargs):
+        partnerRefId = request.data["partnerRefId"]
+        requestId = request.data["requestId"]
+        user = request.user
+        course_id = request.data['course']
+        errorCode = request.data['errorCode']
+        extraData = request.data['extraData']
+        resUrl = extraData.split("=")[1]
+
+        print(extraData)
+        if (errorCode == "0"):
+            query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
+            response = query.call()
+            response_data = response.content.decode("utf-8")
+            json_response = json.loads(response_data)
+            if json_response["data"]["status"] == 0:    
+                course = Course.objects.get(pk=course_id)
+                try:
+                   UserBuyCourse.objects.get(user=user, course_id=course_id)
+                except:
+                    instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
+                return Response({
+                        "redirect": resUrl,
+                        "ok": True,
+                    }, status=status.HTTP_201_CREATED)
+                    
+        return Response({
+            "redirect": resUrl,
+            "ok": False,
+        }, status=status.HTTP_201_CREATED)
 
 class CheckIsBought(generics.GenericAPIView):
     permission_classes = [

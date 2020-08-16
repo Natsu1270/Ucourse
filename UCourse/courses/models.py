@@ -68,6 +68,11 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+    def get_price(self):
+        if self.fee_type == "free" or self.fee_type == None:
+            return 0
+        return self.price
+
     def set_created_by(self, user):
         self.created_by = user
         self.created_by_name = user.email

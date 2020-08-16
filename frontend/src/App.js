@@ -37,6 +37,8 @@ const CourseDetail = lazy(() => import('./pages/CourseDetail/course-detail.page'
 const AbilityTestPage = lazy(() => import('./pages/AbilityTestPage/ability-tests.page'));
 const CourseHomePage = lazy(() => import('./pages/CourseHome/course-home.page'));
 const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page'));
+const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
+
 
 function App() {
 
@@ -87,6 +89,7 @@ function App() {
                                     <Route path="/field/:slug" component={FieldDetailPage} />
                                     <Route path="/programs/:slug" component={ProgramDetail} />
                                     <Route exact path="/courses/:slug" component={CourseDetail} />
+                                    <Route exact path="/courses/:slug/redirect" component={CoursePaymentPage} />
                                     <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
                                     <Route exact path="/ability-tests" component={AbilityTestPage} />
                                     <Route path="/learn/:slug">

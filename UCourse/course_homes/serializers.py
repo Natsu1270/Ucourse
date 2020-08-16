@@ -27,6 +27,8 @@ class TopicAssetSerializer(serializers.ModelSerializer):
         ]
 
 
+
+
 class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)

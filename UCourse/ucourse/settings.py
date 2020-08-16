@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'users',
     'roles',
     'profiles',
+    'events',
     'courses',
     'programs',
     'course_homes',
