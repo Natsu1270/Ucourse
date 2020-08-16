@@ -3,11 +3,11 @@ import { useHistory } from "react-router-dom";
 import { Button, Skeleton, Row, Col } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
-import {useSelector} from "react-redux";
-import {isLoadingSelector} from "../../redux/CourseHome/course-home.selects";
+import { useSelector } from "react-redux";
+import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
 
-import {showRLModal} from "../../redux/UI/ui.actions";
-import {useDispatch} from "react-redux";
+import { showRLModal } from "../../redux/UI/ui.actions";
+import { useDispatch } from "react-redux";
 import Modal from 'antd/lib/modal/Modal';
 import LoginSignUpOverlay from '../RegisterOrLogin/login-signup-overlay.ulti';
 import Register from '../Register/register.component';
@@ -39,7 +39,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
     }
 
     const handleCourseRegister = () => {
-        
+
         if (own) {
             return null;
         }
@@ -77,21 +77,32 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                     </div>
                 </div>
 
-            </div> 
+            </div>
             <Modal
-                title=""
+                title={<h1>Thanh toán</h1>}
                 closeIcon={<i></i>}
                 visible={showPayment}
                 onCancel={() => setShowPayment(false)}
-                footer={null}
+                footer={[
+                    <Button type="primary" danger key="back" onClick={() => setShowPayment(false)}>
+                        Hủy
+                    </Button>
+                ]}
                 width={800}
-                style={{ top: 10 }}>
-                <div className={`cs-account-form__container cs-signup${showPayment ? ' right-panel-active' : ''}`}
-                    id="cs-form-container">
-                    <h1>Thanh toán</h1>
+                style={{ top: 10, backgroundColor: 'white', paddingBottom: "0px" }}>
+                <div>
                     <Row gutter={[16, 16]}>
                         <Col span={12}>
-                            <button onClick={handleRegister} className="momo-button"><img src={momo}/>Thanh toán bằng momo</button>
+                            <Button
+                                className="ant-btn momo-btn cs-btn--animated"
+                                style={{
+                                    height: '7rem', color: '#b0006d',
+                                    fontWeight: '500', fontSize: '1.8rem', border: 'none'
+                                }}
+                                type="default"
+                                onClick={handleRegister}>
+                                <img src={momo} width={48} /> <span className="ml-3">Thanh toán bằng momo</span>
+                            </Button>
                         </Col>
                         <Col span={12}>
                             <h4 className="text--sub__smaller">
