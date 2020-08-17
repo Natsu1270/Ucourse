@@ -8,7 +8,7 @@ import datetime
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 
 from . import serializers
-from course_homes.models import CourseHome, LearningTopic, TopicAsset
+from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment
 
 
 class RegisterClassAPI(generics.GenericAPIView):
@@ -178,3 +178,27 @@ class CheckClassOwnership(generics.GenericAPIView):
             "result": False,
             "status_code": 400
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AssigmentListAPI(generics.ListCreateAPIView):
+    serializer_class = serializers.AssignmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Assignment.objects.all()
+    parser_classes = [MultiPartParser, JSONParser]
+
+    def post(self, request, *args, **kwargs):
+        files = request.data.getlist('file[]')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        assignment = serializer.save()
+
+        for file in files:
+            asset = TopicAsset.objects.create(name=assignment.name + 'file', file=file, learning_topic = assignment.learning_topic)
+            assignment.assigment_files.add(asset)
+
+        assignment.save()
+        return Response({
+            "data": serializers.AssignmentSerializer(instance=assignment).data,
+            "result": True,
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)

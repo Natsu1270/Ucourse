@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { formatDate } from '../utils/text.utils';
 
 const API_URL = '/api/course-home';
 
@@ -186,3 +187,23 @@ export const deleteTopicAsset = (data) => {
     })
 }
 
+export const createAssignment = (data) => {
+
+    const { token, name, info, learning_topic, max_score, max_submit_time, start_date, due_date, files } = data
+    const formData = new FormData()
+    formData.set("name", name)
+    formData.set("info", info)
+    formData.set("learning_topic", learning_topic)
+    formData.set("max_score", max_score)
+    formData.set("max_submit_time", max_submit_time)
+    formData.set("start_date", start_date)
+    formData.set("due_date", due_date)
+    files.forEach(file => formData.append("file[]", file))
+
+    return axios.request({
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/assignment`,
+        data: formData
+    })
+}

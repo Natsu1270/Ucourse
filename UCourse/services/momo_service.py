@@ -10,8 +10,6 @@ import pathlib
 from base64 import b64encode
 
 
-
-
 class MoMoService:
     def __init__(self, orderInfo, returnUrl, notifyUrl, amount, orderId, requestId, extraData):
         self.signature = None
@@ -55,6 +53,7 @@ class MoMoService:
         signature = h.hexdigest()
         return signature
 
+
 class MoMoQueryStatusService: 
     def __init__(self, partnerRefId, requestId):
         self.publicKey = ''
@@ -89,6 +88,3 @@ class MoMoQueryStatusService:
         emsg = b64encode(cipher_text)
         return emsg.decode("ascii")
 
-
-
-    

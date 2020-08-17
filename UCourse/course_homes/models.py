@@ -109,13 +109,18 @@ class TopicAsset(models.Model):
 
     name = models.CharField(max_length=255)
     learning_topic = models.ForeignKey(
-        LearningTopic, related_name='topic_assets', on_delete=models.CASCADE)
+        LearningTopic, related_name='topic_assets', on_delete=models.CASCADE, blank=True, null=True
+    )
+    assignment = models.ForeignKey(
+        'Assignment', related_name='assigment_files', on_delete=models.CASCADE, blank=True, null=True
+    )
+    student_assignment = models.ForeignKey(
+        'StudentAssignment', related_name='student_assigment_files', on_delete=models.CASCADE, blank=True, null=True
+    )
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(
         max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)
     status = models.BooleanField(default=True)
-    # icon = models.ImageField(
-    #     upload_to=asset_upload_path, blank=True, null=True)
     info = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
@@ -128,9 +133,12 @@ class TopicAsset(models.Model):
 
 class Assignment(models.Model):
     name = models.CharField(max_length=255)
+    start_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     due_date = models.DateTimeField(null=True, blank=True)
     info = RichTextField(blank=True, null=True)
     status = models.BooleanField(default=True)
+    max_submit_time = models.IntegerField(blank=True, null=True)
+    max_score = models.FloatField(blank=True, null=True)
     learning_topic = models.ForeignKey(
         LearningTopic, related_name='learning_topic_assignments', on_delete=models.CASCADE
     )
@@ -165,8 +173,7 @@ class StudentAssignment(models.Model):
         settings.AUTH_USER_MODEL, related_name='ass_student', on_delete=models.CASCADE)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default=EMPTY)
-    attachment = models.FileField(upload_to=assignment_upload_path)
-
+    score = models.FloatField(blank=True, null=True)
     modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     @property

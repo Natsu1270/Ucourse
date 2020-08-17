@@ -27,8 +27,6 @@ class TopicAssetSerializer(serializers.ModelSerializer):
         ]
 
 
-
-
 class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
@@ -45,15 +43,15 @@ class LearningTopicSerializer(serializers.ModelSerializer):
 
 class AssignmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    learning_topic = serializers.PrimaryKeyRelatedField(read_only=True)
-    students = serializers.StringRelatedField(many=True, read_only=True)
-    created_by = serializers.StringRelatedField(read_only=True)
+    learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
+    assignment_files = TopicAssetSerializer(many=True, required=False)
+    students = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Assignment
         fields = [
-            'id', 'name', 'due_date',
-            'info', 'status', 'learning_topic',
+            'id', 'name', 'start_date', 'due_date', 'assignment_files',
+            'info', 'status', 'learning_topic', 'max_submit_time', 'max_score',
             'students', 'created_date', 'created_by'
         ]
 
@@ -62,12 +60,13 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     assigment = serializers.StringRelatedField(read_only=True)
     student = serializers.StringRelatedField(read_only=True)
+    student_assigment_files = TopicAssetSerializer(many=True, required=False)
 
     class Meta:
         model = StudentAssignment
         fields = [
-            'id', 'assignment', 'student',
-            'status', 'attachment', 'modified_date'
+            'id', 'assignment', 'student', 'student_assigment_files',
+            'status', 'modified_date'
         ]
 
 

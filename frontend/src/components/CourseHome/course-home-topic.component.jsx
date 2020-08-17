@@ -8,7 +8,10 @@ import Constants from "../../constants";
 import { parseHtml, formatDate, isTimeBefore } from "../../utils/text.utils"
 import { BACKEND_HOST } from '../../configs';
 
-import { CaretDownOutlined, SettingTwoTone } from '@ant-design/icons'
+import {
+    CaretDownOutlined, SettingTwoTone, DeleteOutlined,
+    SettingOutlined, BookOutlined, ReadOutlined, ProfileOutlined
+} from '@ant-design/icons'
 import { deleteTopicAsset } from '../../api/courseHome.services';
 import { deleteExam } from '../../api/exam.services';
 
@@ -18,7 +21,7 @@ const CourseHomeTopic = ({
     topic, userRole, handleDelete,
     triggerEdit, token, triggerCreateAsset,
     triggerEditAsset, triggerCreateQuize,
-    triggerEditQuize
+    triggerEditQuize, triggerCreateAssignment
 }) => {
     const history = useHistory()
     const [assets, setAssets] = useState([])
@@ -118,23 +121,26 @@ const CourseHomeTopic = ({
 
 
     const menu = (
-        <Menu>
+        <Menu style={{ fontSize: '2rem' }}>
             <Menu.Item
                 danger
                 onClick={
                     () => handleDelete(topic.id)
                 }
             >
-                Xóa chủ đề
+                <DeleteOutlined /> Xóa chủ đề
             </Menu.Item>
             <Menu.Item onClick={() => triggerEdit(topic.id)}>
-                Sửa chủ đề
+                <SettingOutlined /> Sửa chủ đề
             </Menu.Item>
             <Menu.Item onClick={() => triggerCreateAsset(topic.id)}>
-                Thêm bài giảng
+                <ReadOutlined /> Thêm bài giảng
             </Menu.Item>
             <Menu.Item onClick={() => triggerCreateQuize(topic.id)}>
-                Thêm bài kiểm tra
+                <ProfileOutlined /> Thêm bài kiểm tra
+            </Menu.Item>
+            <Menu.Item onClick={() => triggerCreateAssignment(topic.id)}>
+                <BookOutlined /> Thêm assignment
             </Menu.Item>
         </Menu>
     );
