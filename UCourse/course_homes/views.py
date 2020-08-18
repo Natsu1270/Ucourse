@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.db.models import Q
@@ -8,7 +9,7 @@ import datetime
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 
 from . import serializers
-from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment
+from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment, StudentAssignment
 
 
 class RegisterClassAPI(generics.GenericAPIView):
@@ -193,12 +194,76 @@ class AssigmentListAPI(generics.ListCreateAPIView):
         assignment = serializer.save()
 
         for file in files:
-            asset = TopicAsset.objects.create(name=assignment.name + 'file', file=file, learning_topic = assignment.learning_topic)
-            assignment.assigment_files.add(asset)
+            asset = TopicAsset.objects.create(
+                name=assignment.name + '-' + file.name, file=file, assignment=assignment)
+            # assignment.assigment_files.add(asset)
 
-        assignment.save()
         return Response({
             "data": serializers.AssignmentSerializer(instance=assignment).data,
             "result": True,
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
+
+
+class AssignmentDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.AssignmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Assignment.objects.all()
+
+
+class StudentAssignmentAPI(generics.RetrieveAPIView):
+    serializer_class = serializers.StudentAssignmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        assignment = self.request.query_params['assignment']
+        try:
+            instance = StudentAssignment.objects.get(
+                Q(student=self.request.user) & Q(assignment_id=assignment)).order_by('-id')
+            return instance
+        except ObjectDoesNotExist:
+            return None
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance is not None:
+            return Response({
+                "data": serializers.AssignmentSerializer(instance=instance).data,
+                "result": True,
+                "status_code": 200
+            }, status=status.HTTP_200_OK)
+        return Response({
+            "result": False,
+            "status_code": 404
+        }, status=status.HTTP_200_OK)
+
+
+class SubmitAssignmentAPI(generics.GenericAPIView):
+    serializer_class = serializers.StudentAssignmentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = StudentAssignment.objects.all()
+    parser_classes = [JSONParser, MultiPartParser]
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        assignment = request.data['assignment']
+        files = request.data.getlist('files[]')
+        student_assignment = StudentAssignment.objects.create(
+            assignment_id=int(assignment), student=user, status=1)
+        student_assignment.submit_time = student_assignment.submit_time + 1
+        student_assignment.save()
+
+        for file in files:
+            assignment_file = TopicAsset.objects.create(
+                name=file.name, file=file, student_assignment=student_assignment
+            )
+
+        return Response({
+            "data": serializers.StudentAssignmentSerializer(instance=student_assignment).data,
+            "result": True,
+            "status_code": 201
+        }, status=status.HTTP_201_CREATED)
+
+
+
+

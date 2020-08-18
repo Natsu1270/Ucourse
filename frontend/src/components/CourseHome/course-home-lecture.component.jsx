@@ -15,9 +15,16 @@ const CourseHomeLecture = ({ topics, isLoading }) => {
             {
                 <Skeleton loading={isLoading} active avatar paragraph={{ rows: 4 }}>
                     <div>
-                        <h3 className="text--main course-lecture--title mb-5">
-                            {lecture.name}
-                        </h3>
+                        <div className="exam-list--title">
+                            {
+                                <Skeleton loading={isLoading} active>
+                                    <h3 className="text--main">
+                                        {lecture.name}
+                                    </h3>
+                                </Skeleton>
+                            }
+                        </div>
+
                         <div className="course-lecture--video">
                             <VideoPlayer videoUrl={lecture.file} videoId={lecture.id} />
                         </div>

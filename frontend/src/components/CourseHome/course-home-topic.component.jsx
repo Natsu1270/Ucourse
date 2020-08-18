@@ -3,6 +3,7 @@ import { Avatar, List, Row, Col, Dropdown, Menu, message, Typography } from 'ant
 import { useHistory } from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
+import assignmentAvatar from '../../assets/exam.png';
 import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
 import { parseHtml, formatDate, isTimeBefore } from "../../utils/text.utils"
@@ -12,7 +13,7 @@ import {
     CaretDownOutlined, SettingTwoTone, DeleteOutlined,
     SettingOutlined, BookOutlined, ReadOutlined, ProfileOutlined
 } from '@ant-design/icons'
-import { deleteTopicAsset } from '../../api/courseHome.services';
+import { deleteTopicAsset, deleteAssigment } from '../../api/courseHome.services';
 import { deleteExam } from '../../api/exam.services';
 
 const { Text } = Typography
@@ -26,7 +27,9 @@ const CourseHomeTopic = ({
     const history = useHistory()
     const [assets, setAssets] = useState([])
     const [quizes, setQuizes] = useState([])
+    const [assignments, setAssignments] = useState([])
 
+    // populated topic materials
     useEffect(() => {
         if (topic.topic_assets) {
             const topicAssets = topic.topic_assets.map(
@@ -59,6 +62,16 @@ const CourseHomeTopic = ({
             )
             setQuizes(topicQuizes)
         }
+        if (topic.topic_assignments) {
+            const topicAssignments = topic.topic_assignments.map(
+                ass => ({
+                    id: ass.id, name: ass.name, info: ass.info,
+                    start_date: ass.start_date, due_date: ass.due_date,
+                    max_score: ass.max_score, max_submit_time: ass.max_submit_time
+                })
+            )
+            setAssignments(topicAssignments)
+        }
     }, [topic])
 
 
@@ -74,7 +87,9 @@ const CourseHomeTopic = ({
         history.push(`exams/${exam_id}`)
     }
 
-
+    function gotoAssignment(assignment_id) {
+        history.push(`assignment/${assignment_id}`)
+    }
 
     const assetAvatar = (icon, type) => {
         return icon ? icon : type === Constants.VIDEO_FILE_TYPE ? videoAvatar : documentAvatar
@@ -88,6 +103,10 @@ const CourseHomeTopic = ({
                 const result = await deleteTopicAsset(data)
                 const updateAssets = assets.filter(asset => asset.id != id)
                 setAssets(updateAssets)
+            } else if (type === "assignment") {
+                const result = await deleteAssigment(data)
+                const updateAssignments = assignments.filter(ass => ass.id != id)
+                setAssignments(updateAssignments)
             } else {
                 const result = await deleteExam(data)
                 const updateExams = quizes.filter(q => q.id != id)
@@ -116,8 +135,6 @@ const CourseHomeTopic = ({
     const addAsset = async () => {
         alert('adding asset')
     }
-
-
 
 
     const menu = (
@@ -224,6 +241,35 @@ const CourseHomeTopic = ({
                                                     <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
                                                     <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
                                                 : null}
+                                    />
+                                </List.Item>
+                            )}
+                        /> : null
+                }
+                {
+                    assignments.length > 0 ?
+                        <List
+                            itemLayout="horizontal"
+                            dataSource={assignments}
+                            renderItem={item => (
+                                <List.Item
+                                    actions={[userRole.code ?
+                                        userRole.code === 'TC' || userRole.code === "TA" ?
+                                            <Dropdown overlay={<Menu>
+                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "assignment")}>
+                                                    Xóa bài assignment
+                                                </Menu.Item>
+                                                <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài assignment</Menu.Item>
+                                            </Menu>} placement="topCenter">
+                                                <CaretDownOutlined className="down-indict" />
+                                            </Dropdown> : null : null]}
+                                    className="course-topic__content--item"
+                                >
+                                    <List.Item.Meta
+                                        onClick={() => gotoAssignment(item.id)}
+                                        avatar={<Avatar src={assignmentAvatar} />}
+                                        title={<span>{item.name}</span>}
+                                        description={item.info}
                                     />
                                 </List.Item>
                             )}

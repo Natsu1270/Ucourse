@@ -16,5 +16,8 @@ urlpatterns = [
     path('topic_asset/<int:pk>', views.EditTopicAsset.as_view()),
     path('topic_asset/create', views.CreateTopicAsset.as_view()),
     path('assignment', views.AssigmentListAPI.as_view()),
+    path('assignment/<int:pk>', views.AssignmentDetailAPI.as_view()),
+    path('assignment/student', views.StudentAssignmentAPI.as_view()),
+    path('assignment/student/submit', views.SubmitAssignmentAPI.as_view()),
     path('<str:slug>', views.CourseHomeDetailAPI.as_view(), name='course_home_detail'),
 ]

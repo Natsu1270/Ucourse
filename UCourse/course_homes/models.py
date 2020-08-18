@@ -128,7 +128,13 @@ class TopicAsset(models.Model):
 
     @property
     def upload_path(self):
-        return 'courses/home/' + self.learning_topic.course_slug
+        if self.learning_topic is not None:
+            return 'courses/home/' + self.learning_topic.course_slug
+        if self.assignment is not None:
+            return 'courses/home/assignment/' + self.assignment.name
+        if self.student_assignment is not None:
+            return 'courses/home/assignment/submit/' + str(self.student_assignment.id)
+        return 'courses/home/assets'
 
 
 class Assignment(models.Model):
@@ -140,7 +146,7 @@ class Assignment(models.Model):
     max_submit_time = models.IntegerField(blank=True, null=True)
     max_score = models.FloatField(blank=True, null=True)
     learning_topic = models.ForeignKey(
-        LearningTopic, related_name='learning_topic_assignments', on_delete=models.CASCADE
+        LearningTopic, related_name='topic_assignments', on_delete=models.CASCADE
     )
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='user_assignment', through='StudentAssignment'
@@ -174,6 +180,7 @@ class StudentAssignment(models.Model):
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default=EMPTY)
     score = models.FloatField(blank=True, null=True)
+    submit_time = models.IntegerField(blank=True, null=True, default=0)
     modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     @property

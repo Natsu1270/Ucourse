@@ -28,6 +28,7 @@ const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-h
 const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-home-forums.component"))
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
 const PrivateExamList = lazy(() => import("../../components/Exam/private-exam-list.component"))
+const AssignmentPage = lazy(() => import("../../components/Assignment/assignment.page"))
 
 const CourseHomePage = ({ myCourses, userRole }) => {
 
@@ -110,6 +111,10 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                 </Route>
                 <Route exact path={`${match.url}/exams/:exam_id`}>
                     <PrivateExamList userRole={userRole} token={token} />
+                </Route>
+
+                <Route exact path={`${match.url}/assignment/:assignmentId`}>
+                    <AssignmentPage token={token} />
                 </Route>
 
             </Router>

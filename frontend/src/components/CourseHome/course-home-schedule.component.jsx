@@ -128,7 +128,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setLoading(true)
         console.log(values)
         const { assName: name, assInfo: info, assDate, assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile } = values
-        const files = assFile.map(file => file.originFileObj)
+        const files = assFile.map(file => ({
+            file: file.originFileObj,
+            fileName: file.name
+        }))
         const start_date = assDate[0] ? assDate[0].format('YYYY-MM-DD HH:MM') : undefined
         const due_date = assDate[1] ? assDate[1].format('YYYY-MM-DD HH:MM') : undefined
 

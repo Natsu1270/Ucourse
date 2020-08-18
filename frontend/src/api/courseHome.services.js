@@ -187,6 +187,15 @@ export const deleteTopicAsset = (data) => {
     })
 }
 
+export const getAssignmentDetailAPI = (data) => {
+    const { token, assignment } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${API_URL}/assignment/${assignment}`,
+    })
+}
+
 export const createAssignment = (data) => {
 
     const { token, name, info, learning_topic, max_score, max_submit_time, start_date, due_date, files } = data
@@ -198,12 +207,45 @@ export const createAssignment = (data) => {
     formData.set("max_submit_time", max_submit_time)
     formData.set("start_date", start_date)
     formData.set("due_date", due_date)
-    files.forEach(file => formData.append("file[]", file))
+    files.forEach(file => formData.append("file[]", file.file, file.fileName))
 
     return axios.request({
         headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
         method: 'POST',
         url: `${API_URL}/assignment`,
+        data: formData
+    })
+}
+
+export const deleteAssigment = (data) => {
+    const { token, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'DELETE',
+        url: `${API_URL}/assignment/${id}`
+    })
+}
+
+export const getStudentAssignmentAPI = (data) => {
+    const { token, assignment } = data
+
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${API_URL}/assignment/student`,
+        params: {
+            assignment
+        }
+    })
+}
+
+export const submitAssignmentAPI = (data) => {
+    const { token, formData } = data
+
+    return axios.request({
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/assignment/student/submit`,
         data: formData
     })
 }

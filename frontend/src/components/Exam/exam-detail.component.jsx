@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { mapKeys } from 'lodash'
 
-import { Button, Checkbox, Form, Radio, message, Popconfirm, Row, Col, Tag, Space } from 'antd'
+import { Button, Checkbox, Form, Radio, message, Popconfirm, Row, Col, Tag, Space, Statistic } from 'antd'
 import { parseHtml } from "../../utils/text.utils";
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-light.css'
 import { submitExamStart } from "../../redux/Exam/exam.actions";
 import { isProcessingSelector } from "../../redux/Exam/exam.selects";
 import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
-import Countdown from 'react-countdown'
+
+const { Countdown } = Statistic
 
 
 const ExamDetail = ({ exam, token }) => {
@@ -202,8 +203,8 @@ const ExamDetail = ({ exam, token }) => {
                         !finished ? <Space>
                             <ClockCircleTwoTone spin />
                             <Countdown
-                                date={Date.now() + exam.duration * 1000}
-                                onComplete={submitForm}
+                                value={Date.now() + exam.duration * 1000}
+                                onFinish={submitForm}
                             >
                             </Countdown>
                         </Space> : <Tag color="red">Hết thời gian làm bài</Tag>
