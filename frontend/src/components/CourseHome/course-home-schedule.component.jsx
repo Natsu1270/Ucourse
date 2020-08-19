@@ -141,11 +141,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         }
         try {
             const result = await createAssignment(data)
-            message.success("Tạo assignment thành công")
+            message.success("Tạo assignment thành công", 1.5, () => window.location.reload())
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
-        setLoading(false)
     }
 
     const handleDelete = async (id) => {
@@ -214,6 +213,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
     const handleClose = () => {
         setShowModal(false)
+        setEditingAsset({})
+        setEditingTopic({})
+        setEditingAssignment({})
     }
 
     const triggerCreateAsset = (topicId) => {
@@ -240,11 +242,16 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setEditingQuize(quize)
     }
 
-    const triggerCreateAssigment = topic => {
+    const triggerCreateAssignment = (topic, isCreate, assignment) => {
         setIsEditAsset(false)
         setIsCreateTopic(false)
-        setEditingTopic(topic)
-        setIsCreateAssignment(true)
+        if (isCreate) {
+            setEditingTopic(topic)
+            setIsCreateAssignment(true)
+        } else {
+            setIsCreateAssignment(false)
+            setEditingAssignment(assignment)
+        }
         setShowModal(true)
     }
 
@@ -336,7 +343,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
             </Form>)
 
         }
-        if (isCreateAssignment) {
+        if (isCreateAssignment || editingAssignment.id) {
 
             const initStartDate = editingAssignment.start_date ? moment(editingAssignment.start_date) : null
             const initDueDate = editingAssignment.due_date ? moment(editingAssignment.due_date) : null
@@ -357,7 +364,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         {...formItemLayout}
                         hasFeedback
                         name="assName"
-                        label="Mô tả bài assigment"
+                        label="Tên"
                         rules={[
                             { required: true, message: 'Vui lòng nhập tên assignment!', },
                         ]} >
@@ -368,7 +375,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         {...formItemLayout}
                         hasFeedback
                         name="assInfo"
-                        label="Tên"
+                        label="Mô tả bài assigment"
                     >
                         <Input placeholder="Nhập thông tin mô assignment" value={name} />
                     </Form.Item>
@@ -539,7 +546,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             triggerEditAsset={triggerEditAsset}
                             triggerCreateQuize={triggerCreateQuize}
                             triggerEditQuize={triggerEditQuize}
-                            triggerCreateAssignment={triggerCreateAssigment}
+                            triggerCreateAssignment={triggerCreateAssignment}
                         />
                     </Skeleton>
                 )

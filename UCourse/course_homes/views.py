@@ -246,10 +246,16 @@ class SubmitAssignmentAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
+        student_assignment_id = request.data['studentAssignment']
         assignment = request.data['assignment']
         files = request.data.getlist('files[]')
-        student_assignment = StudentAssignment.objects.create(
-            assignment_id=int(assignment), student=user, status=1)
+
+        if student_assignment_id is None or student_assignment_id == 'undefined':
+            student_assignment = StudentAssignment.objects.create(
+                assignment_id=int(assignment), student=user, status=1)
+        else:
+            student_assignment = StudentAssignment.objects.get(pk=int(student_assignment_id))
+
         student_assignment.submit_time = student_assignment.submit_time + 1
         student_assignment.save()
 
@@ -263,7 +269,6 @@ class SubmitAssignmentAPI(generics.GenericAPIView):
             "result": True,
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
-
 
 
 

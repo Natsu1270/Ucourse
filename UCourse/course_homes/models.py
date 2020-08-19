@@ -112,7 +112,7 @@ class TopicAsset(models.Model):
         LearningTopic, related_name='topic_assets', on_delete=models.CASCADE, blank=True, null=True
     )
     assignment = models.ForeignKey(
-        'Assignment', related_name='assigment_files', on_delete=models.CASCADE, blank=True, null=True
+        'Assignment', related_name='assignment_files', on_delete=models.CASCADE, blank=True, null=True
     )
     student_assignment = models.ForeignKey(
         'StudentAssignment', related_name='student_assignment_files', on_delete=models.CASCADE, blank=True, null=True

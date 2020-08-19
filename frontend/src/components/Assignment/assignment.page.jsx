@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import {
     Skeleton, message, Descriptions, Badge, Button, Form,
-    Upload, Tag, Statistic, Tree, Row, Col, Card
+    Upload, Tag, Statistic, Tree, Row, Col, Card, Space, List,
+    Popconfirm, Tabs
 } from "antd";
-import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI } from '../../api/courseHome.services'
+import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI, deleteTopicAsset } from '../../api/courseHome.services'
 import { formatDate, isTimeBefore, parseHtml, dayDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';
-import { InboxOutlined, UploadOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons'
+import { InboxOutlined, UploadOutlined, DownOutlined, SettingOutlined, PaperClipOutlined } from '@ant-design/icons'
 
 const { Dragger } = Upload
 const { Countdown } = Statistic
+const { TabPane } = Tabs
 
 const normFile = e => {
     if (Array.isArray(e)) {
@@ -28,6 +30,8 @@ const AssignmentPage = ({ token }) => {
     const [studentAssignment, setStudentAssignment] = useState({})
     const [showModal, setShowModal] = useState(false)
     const [uploading, setUploading] = useState(false)
+    const [attachments, setAttachments] = useState([])
+    const [isEdit, setIsEdit] = useState(false)
 
     const [form] = Form.useForm()
 
@@ -56,6 +60,15 @@ const AssignmentPage = ({ token }) => {
         }
     }, [assignmentId])
 
+    useEffect(() => {
+        if (studentAssignment.student_assignment_files) {
+            setAttachments(studentAssignment.student_assignment_files)
+        }
+        if (studentAssignment.id !== undefined) {
+            setIsEdit(true)
+        }
+    }, [studentAssignment])
+
 
     const submitAssignment = async (values) => {
         const fileList = values.files
@@ -64,13 +77,14 @@ const AssignmentPage = ({ token }) => {
             formData.append('files[]', file.originFileObj, file.name)
         })
         formData.set('assignment', assignmentDetail.id)
+        formData.set('studentAssignment', studentAssignment.id)
         const data = {
             token, formData
         }
         setUploading(true)
         try {
             const result = await submitAssignmentAPI(data)
-            message.success("Xác nhận thành công")
+            message.success("Xác nhận thành công", 1.5, () => window.location.reload())
         } catch (err) {
             message.error("Xác nhận không thành công: " + err.message)
         }
@@ -78,6 +92,7 @@ const AssignmentPage = ({ token }) => {
     }
 
     const parseStatus = (status) => {
+        if (status === undefined) return <Tag color="red">Chưa nộp bài</Tag>
         if (status === "1") {
             return <Tag color="#108ee9">Đã nộp bài</Tag>
         }
@@ -105,6 +120,38 @@ const AssignmentPage = ({ token }) => {
         }
     }
 
+    const deleteAttachment = async (id) => {
+        const data = { token, id }
+        setLoading(true)
+        try {
+            const result = await deleteTopicAsset(data)
+            const newAttachments = attachments.filter(a => a.id !== id)
+            setAttachments(newAttachments)
+            message.success("Xóa file nộp thành công")
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setLoading(false)
+    }
+
+    const parseSubmitBtn = () => {
+        if (studentAssignment.status === undefined) {
+            return (
+                <Button type="primary" onClick={() => setShowModal(true)}>
+                    <UploadOutlined />Thêm bài nộp
+                </Button>
+            )
+        }
+        return studentAssignment.submit_time < assignmentDetail.max_submit_time ?
+            studentAssignment.status === '0' ?
+                <Button type="primary" onClick={() => setShowModal(true)}>
+                    <UploadOutlined />Thêm bài nộp
+                </Button> :
+                <Button type="primary" onClick={() => setShowModal(true)}>
+                    <SettingOutlined />Chỉnh sửa bài nộp
+                </Button> : null
+    }
+
 
 
     return (
@@ -120,88 +167,118 @@ const AssignmentPage = ({ token }) => {
                     </div>
                     <Skeleton loading={loading} active paragraph={{ rows: 8 }}>
                         <p className="text--sub__bigger2">{parseHtml(assignmentDetail.info)}</p>
-                        <Descriptions
-                            title="" className="mb-5"
-                            bordered layout="vertical"
-                            column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
-                            <Descriptions.Item label="Số lần nộp tối đa">
-                                {assignmentDetail.max_submit_time ? assignmentDetail.max_submit_time : "Không giới hạn"}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Điểm">{assignmentDetail.max_score}</Descriptions.Item>
-                            <Descriptions.Item label="Ngày bắt đầu">
-                                {
-                                    !isTimeBefore(assignmentDetail.start_date) ?
-                                        <Badge status="processing" text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} /> :
-                                        <Badge status="warning" text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} />
-                                }
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Deadline">
-                                {
-                                    !isTimeBefore(assignmentDetail.due_date) ?
-                                        <Badge status="processing" text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} /> :
-                                        <Badge status="error" text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} />
-                                }
-                            </Descriptions.Item>
-                        </Descriptions>
+                        <Tabs defaultActiveKey="1">
+                            <TabPane tab="Mô tả bài assignment" key="1">
+                                <Descriptions
+                                    title="Thông tin bài assignment" className="mb-5"
+                                    bordered layout="vertical"
+                                    column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
+                                    <Descriptions.Item label="Số lần nộp tối đa">
+                                        {assignmentDetail.max_submit_time ? assignmentDetail.max_submit_time : "Không giới hạn"}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Điểm">{assignmentDetail.max_score}</Descriptions.Item>
+                                    <Descriptions.Item label="Ngày bắt đầu">
+                                        {
+                                            !isTimeBefore(assignmentDetail.start_date) ?
+                                                <Badge status="processing" text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} /> :
+                                                <Badge status="warning" text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} />
+                                        }
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Deadline">
+                                        {
+                                            !isTimeBefore(assignmentDetail.due_date) ?
+                                                <Badge status="processing" text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} /> :
+                                                <Badge status="error" text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} />
+                                        }
+                                    </Descriptions.Item>
+                                    {
+                                        assignmentDetail.assignment_files ?
+                                            <Descriptions.Item label="File đính kèm">
+                                                <Tree
+                                                    switcherIcon={<DownOutlined />}
+                                                    defaultExpandedKeys={['a-1']}
+                                                    showLine
+                                                    treeData={[
+                                                        {
+                                                            title: "Attachments",
+                                                            key: 'a-1',
+                                                            children: assignmentDetail.assignment_files.map(
+                                                                file => ({
+                                                                    key: file.id,
+                                                                    title: file.name
+                                                                })
+                                                            )
+                                                        }
+                                                    ]}
+                                                >
+                                                </Tree>
+                                            </Descriptions.Item> : null
+                                    }
+                                </Descriptions>
+                            </TabPane>
+                            <TabPane tab="Bài nộp của tôi" key="2">
+                                <Descriptions
+                                    column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }}
+                                    title="Bài nộp của tôi" bordered>
+                                    <Descriptions.Item label="Trạng thái">{parseStatus(studentAssignment.status)}</Descriptions.Item>
+                                    <Descriptions.Item label="Số lần đã nộp">
+                                        {studentAssignment.submit_time ? studentAssignment.submit_time : 0}/{assignmentDetail.max_submit_time
+                                        }</Descriptions.Item>
+                                    <Descriptions.Item label="Điểm">
+                                        {
+                                            studentAssignment.score ? studentAssignment.score : "Chưa được chấm điểm"
+                                        }
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Lần sửa đổi cuối cùng">
+                                        {
+                                            formatDate(studentAssignment.modified_date, Constants.MMM_Do__YY__TIME)
+                                        }
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Thời gian còn lại">
+                                        {
+                                            parseRemainTime()
+                                        }
+                                    </Descriptions.Item>
 
-                        <Descriptions
-                            column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }}
-                            title="Bài nộp của tôi" bordered>
-                            <Descriptions.Item label="Trạng thái">{parseStatus(studentAssignment.status)}</Descriptions.Item>
-                            <Descriptions.Item label="Số lần đã nộp">{studentAssignment.submit_time}/{assignmentDetail.max_submit_time}</Descriptions.Item>
-                            <Descriptions.Item label="Điểm">
+                                </Descriptions>
                                 {
-                                    studentAssignment.score ? studentAssignment.score : "Chưa được chấm điểm"
+                                    studentAssignment.student_assignment_files ?
+                                        <Card className="mt-5" hoverable loading={loading}>
+                                            <Tree
+                                                switcherIcon={<DownOutlined />}
+                                                defaultExpandedKeys={['a-1']}
+                                                showLine
+                                                treeData={[
+                                                    {
+                                                        title: "Attachments",
+                                                        key: 'a-1',
+                                                        children: studentAssignment.student_assignment_files.map(
+                                                            file => ({
+                                                                key: file.id,
+                                                                title: file.name
+                                                            })
+                                                        )
+                                                    }
+                                                ]}
+                                            >
+                                            </Tree>
+                                        </Card>
+                                        : null
                                 }
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Lần sửa đổi cuối cùng">
-                                {
-                                    formatDate(studentAssignment.modified_date, Constants.MMM_Do__YY__TIME)
-                                }
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Thời gian còn lại">
-                                {
-                                    parseRemainTime()
-                                }
-                            </Descriptions.Item>
-                        </Descriptions>
-                        <Card className="mt-5" hoverable loading={loading}>
-                            {
-                                studentAssignment.student_assignment_files ?
-                                    <Tree
-                                        switcherIcon={<DownOutlined />}
-                                        defaultExpandedKeys={['a-1']}
-                                        showLine
-                                        treeData={[
-                                            {
-                                                title: "Attachments",
-                                                key: 'a-1',
-                                                children: studentAssignment.student_assignment_files.map(
-                                                    file => ({
-                                                        key: file.id,
-                                                        title: file.name
-                                                    })
-                                                )
-                                            }
-                                        ]}
-                                    >
-                                    </Tree> : null
-                            }
-                        </Card>
+                                <div className="text-center mt-5">
+                                    {
+                                        parseSubmitBtn()
+                                    }
+                                </div>
+                            </TabPane>
+                        </Tabs>
+
+
+
+
 
                     </Skeleton>
-                    <div className="text-center mt-5">
-                        {
-                            studentAssignment.submit_time < assignmentDetail.max_submit_time ?
-                                studentAssignment.status === '0' ?
-                                    <Button type="primary" onClick={() => setShowModal(true)}>
-                                        <UploadOutlined />Thêm bài nộp
-                                    </Button> :
-                                    <Button type="primary" onClick={() => setShowModal(true)}>
-                                        <SettingOutlined />Chỉnh sửa bài nộp
-                                    </Button> : null
-                        }
-                    </div>
+
                 </div>
             }
 
@@ -237,6 +314,38 @@ const AssignmentPage = ({ token }) => {
                             <p className="ant-upload-text">Nhấn vào hoặc kéo file vào để tải lên</p>
                         </Dragger>
                     </Form.Item>
+                    {
+                        studentAssignment.status === "1" ?
+                            <List
+                                loading={loading}
+                                itemLayout="horizontal"
+                                dataSource={attachments}
+                                renderItem={item => (
+                                    <List.Item
+                                        actions={
+                                            [
+                                                <Popconfirm
+                                                    title="Bạn có chắc chắn muốn xóa file đã nộp?"
+                                                    onConfirm={() => deleteAttachment(item.id)}
+                                                    okText="Xác nhận"
+                                                    cancelText="Hủy"
+                                                >
+                                                    <Button
+
+                                                        danger type="primary" key="delete">Xóa file</Button>
+                                                </Popconfirm>
+
+                                            ]
+                                        }>
+                                        <Skeleton avatar title={false} loading={item.loading} active>
+                                            <List.Item.Meta
+                                                title={<Space><PaperClipOutlined />{item.name}</Space>}
+                                            />
+                                        </Skeleton>
+                                    </List.Item>
+                                )}
+                            /> : null
+                    }
                 </Form>
             </Modal>
 

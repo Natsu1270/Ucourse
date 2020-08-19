@@ -156,7 +156,7 @@ const CourseHomeTopic = ({
             <Menu.Item onClick={() => triggerCreateQuize(topic.id)}>
                 <ProfileOutlined /> Thêm bài kiểm tra
             </Menu.Item>
-            <Menu.Item onClick={() => triggerCreateAssignment(topic.id)}>
+            <Menu.Item onClick={() => triggerCreateAssignment(topic.id, true, null)}>
                 <BookOutlined /> Thêm assignment
             </Menu.Item>
         </Menu>
@@ -259,7 +259,7 @@ const CourseHomeTopic = ({
                                                 <Menu.Item danger onClick={() => deleteAsset(item.id, "assignment")}>
                                                     Xóa bài assignment
                                                 </Menu.Item>
-                                                <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài assignment</Menu.Item>
+                                                <Menu.Item onClick={() => triggerCreateAssignment(null, false, item)}>Sửa bài assignment</Menu.Item>
                                             </Menu>} placement="topCenter">
                                                 <CaretDownOutlined className="down-indict" />
                                             </Dropdown> : null : null]}
