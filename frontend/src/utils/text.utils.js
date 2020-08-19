@@ -36,6 +36,7 @@ export function timeDiff(timestamp) {
     }
 }
 
+// calculate day between two date (time1 >= time2 => return >= 0)
 export function dayDiff(time1, time2) {
     const t1 = moment(time1)
     const t2 = moment(time2)

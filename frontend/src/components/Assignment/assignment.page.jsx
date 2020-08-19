@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Skeleton, message, Descriptions, Badge, Button, Form, Upload } from "antd";
+import { Skeleton, message, Descriptions, Badge, Button, Form, Upload, Tag, Statistic } from "antd";
 import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI } from '../../api/courseHome.services'
-import { formatDate, isTimeBefore, parseHtml } from '../../utils/text.utils';
+import { formatDate, isTimeBefore, parseHtml, dayDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import { showRLModal } from '../../redux/UI/ui.actions';
 import Modal from 'antd/lib/modal/Modal';
 import { InboxOutlined, UploadOutlined } from '@ant-design/icons'
 
 const { Dragger } = Upload
+const { Countdown } = Statistic
 
 const normFile = e => {
     if (Array.isArray(e)) {
@@ -74,6 +75,34 @@ const AssignmentPage = ({ token }) => {
         setUploading(false)
     }
 
+    const parseStatus = (status) => {
+        if (status === "1") {
+            return <Tag color="#108ee9">Đã nộp bài</Tag>
+        }
+        if (status === "0") {
+            return <Tag color="yellow">Chưa có bài nộp</Tag>
+        }
+        return <Tag color="red">Bài nộp không hợp lệ</Tag>
+    }
+
+    const calCountDownVal = () => {
+        if (assignmentDetail.due_date) {
+            const value = (dayDiff(assignmentDetail.due_date, Date.now())) * 24 * 60 * 60 * 1000
+            return Date.now() + value
+        }
+    }
+
+    const parseRemainTime = () => {
+        if (!isTimeBefore(assignmentDetail.due_date)) {
+            return (<Countdown
+                value={calCountDownVal()}
+                format="D ngày H giờ m phút s"
+            />)
+        } else {
+            return <Tag color="red">Bài assignment đã quá hạn nộp</Tag>
+        }
+    }
+
 
 
     return (
@@ -87,7 +116,7 @@ const AssignmentPage = ({ token }) => {
                             </h3>
                         </Skeleton>
                     </div>
-                    <Skeleton loading={loading} active>
+                    <Skeleton loading={loading} active paragraph={{ rows: 8 }}>
                         <p className="text--sub__bigger2">{parseHtml(assignmentDetail.info)}</p>
                         <Descriptions
                             title="" className="mb-5"
@@ -116,13 +145,23 @@ const AssignmentPage = ({ token }) => {
                         <Descriptions
                             column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }}
                             title="Bài nộp của tôi" bordered>
-                            <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-                            <Descriptions.Item label="Billing Mode">Prepaid</Descriptions.Item>
-                            <Descriptions.Item label="Automatic Renewal">YES</Descriptions.Item>
-                            <Descriptions.Item label="Order time">2018-04-24 18:00:00</Descriptions.Item>
-                            <Descriptions.Item label="Negotiated Amount">$80.00</Descriptions.Item>
-                            <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-                            <Descriptions.Item label="Official Receipts">$60.00</Descriptions.Item>
+                            <Descriptions.Item label="Trạng thái">{parseStatus(studentAssignment.status)}</Descriptions.Item>
+                            <Descriptions.Item label="Số lần đã nộp">{studentAssignment.submit_time}/{assignmentDetail.max_submit_time}</Descriptions.Item>
+                            <Descriptions.Item label="Điểm">
+                                {
+                                    studentAssignment.score ? studentAssignment.score : "Chưa được chấm điểm"
+                                }
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Lần sửa đổi cuối cùng">
+                                {
+                                    formatDate(studentAssignment.modified_date, Constants.MMM_Do__YY__TIME)
+                                }
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Thời gian còn lại">
+                                {
+                                    parseRemainTime()
+                                }
+                            </Descriptions.Item>
                         </Descriptions>
                     </Skeleton>
                     <div className="text-center mt-5">

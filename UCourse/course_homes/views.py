@@ -219,7 +219,7 @@ class StudentAssignmentAPI(generics.RetrieveAPIView):
         assignment = self.request.query_params['assignment']
         try:
             instance = StudentAssignment.objects.get(
-                Q(student=self.request.user) & Q(assignment_id=assignment)).order_by('-id')
+                Q(student=self.request.user) & Q(assignment_id=assignment))
             return instance
         except ObjectDoesNotExist:
             return None
@@ -228,7 +228,7 @@ class StudentAssignmentAPI(generics.RetrieveAPIView):
         instance = self.get_object()
         if instance is not None:
             return Response({
-                "data": serializers.AssignmentSerializer(instance=instance).data,
+                "data": serializers.StudentAssignmentSerializer(instance=instance).data,
                 "result": True,
                 "status_code": 200
             }, status=status.HTTP_200_OK)
