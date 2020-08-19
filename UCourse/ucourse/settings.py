@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'ckeditor',
+    'rest_framework_swagger',
 
     'api',
     'users',

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Skeleton, message, Descriptions, Badge, Button, Form, Upload, Tag, Statistic } from "antd";
+import {
+    Skeleton, message, Descriptions, Badge, Button, Form,
+    Upload, Tag, Statistic, Tree, Row, Col, Card
+} from "antd";
 import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI } from '../../api/courseHome.services'
 import { formatDate, isTimeBefore, parseHtml, dayDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
-import { showRLModal } from '../../redux/UI/ui.actions';
 import Modal from 'antd/lib/modal/Modal';
-import { InboxOutlined, UploadOutlined } from '@ant-design/icons'
+import { InboxOutlined, UploadOutlined, DownOutlined, SettingOutlined } from '@ant-design/icons'
 
 const { Dragger } = Upload
 const { Countdown } = Statistic
@@ -163,11 +165,42 @@ const AssignmentPage = ({ token }) => {
                                 }
                             </Descriptions.Item>
                         </Descriptions>
+                        <Card className="mt-5" hoverable loading={loading}>
+                            {
+                                studentAssignment.student_assignment_files ?
+                                    <Tree
+                                        switcherIcon={<DownOutlined />}
+                                        defaultExpandedKeys={['a-1']}
+                                        showLine
+                                        treeData={[
+                                            {
+                                                title: "Attachments",
+                                                key: 'a-1',
+                                                children: studentAssignment.student_assignment_files.map(
+                                                    file => ({
+                                                        key: file.id,
+                                                        title: file.name
+                                                    })
+                                                )
+                                            }
+                                        ]}
+                                    >
+                                    </Tree> : null
+                            }
+                        </Card>
+
                     </Skeleton>
                     <div className="text-center mt-5">
-                        <Button type="primary" onClick={() => setShowModal(true)}>
-                            <UploadOutlined />Thêm bài nộp
-                        </Button>
+                        {
+                            studentAssignment.submit_time < assignmentDetail.max_submit_time ?
+                                studentAssignment.status === '0' ?
+                                    <Button type="primary" onClick={() => setShowModal(true)}>
+                                        <UploadOutlined />Thêm bài nộp
+                                    </Button> :
+                                    <Button type="primary" onClick={() => setShowModal(true)}>
+                                        <SettingOutlined />Chỉnh sửa bài nộp
+                                    </Button> : null
+                        }
                     </div>
                 </div>
             }
@@ -207,7 +240,7 @@ const AssignmentPage = ({ token }) => {
                 </Form>
             </Modal>
 
-        </section>
+        </section >
     )
 }
 

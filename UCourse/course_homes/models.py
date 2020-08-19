@@ -115,7 +115,7 @@ class TopicAsset(models.Model):
         'Assignment', related_name='assigment_files', on_delete=models.CASCADE, blank=True, null=True
     )
     student_assignment = models.ForeignKey(
-        'StudentAssignment', related_name='student_assigment_files', on_delete=models.CASCADE, blank=True, null=True
+        'StudentAssignment', related_name='student_assignment_files', on_delete=models.CASCADE, blank=True, null=True
     )
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(

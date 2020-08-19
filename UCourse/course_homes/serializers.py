@@ -61,12 +61,12 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     assigment = serializers.PrimaryKeyRelatedField(queryset=Assignment.objects.all(), required=False)
     student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
-    student_assigment_files = TopicAssetSerializer(many=True, required=False)
+    student_assignment_files = TopicAssetSerializer(many=True, required=False)
 
     class Meta:
         model = StudentAssignment
         fields = [
-            'id', 'assignment', 'student', 'score', 'student_assigment_files',
+            'id', 'assignment', 'student', 'score', 'student_assignment_files',
             'status', 'modified_date', 'assigment', 'submit_time'
         ]
 
