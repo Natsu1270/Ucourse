@@ -96,8 +96,8 @@ class CourseHomeDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_context(self):
         user = self.request.user
         if user.is_anonymous:
-            return {"user": None}
-        return {"user": user}
+            return {"user": None, "request": self.request}
+        return {"user": user, "request": self.request}
 
 
 class CreateLearningTopic(generics.CreateAPIView):
@@ -209,6 +209,15 @@ class AssignmentDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.AssignmentSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = Assignment.objects.all()
+    parser_classes = [MultiPartParser, JSONParser]
+
+    def patch(self, request, *args, **kwargs):
+        assignment = self.get_object()
+        files = request.data.getlist('file[]')
+        for file in files:
+            asset = TopicAsset.objects.create(
+                name=assignment.name + '-' + file.name, file=file, assignment=assignment)
+        return self.partial_update(request, *args, **kwargs)
 
 
 class StudentAssignmentAPI(generics.RetrieveAPIView):
@@ -228,7 +237,7 @@ class StudentAssignmentAPI(generics.RetrieveAPIView):
         instance = self.get_object()
         if instance is not None:
             return Response({
-                "data": serializers.StudentAssignmentSerializer(instance=instance).data,
+                "data": serializers.StudentAssignmentSerializer(instance=instance, context={'request': request}).data,
                 "result": True,
                 "status_code": 200
             }, status=status.HTTP_200_OK)

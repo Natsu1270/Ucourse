@@ -40,8 +40,8 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_context(self):
         user = self.request.user
         if user.is_anonymous:
-            return {"user": None}
-        return {"user": user}
+            return {"user": None, "request": self.request}
+        return {"user": user, "request": self.request}
 
 
 class BuyCourseAPI(generics.GenericAPIView):

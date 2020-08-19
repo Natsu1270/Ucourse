@@ -9,7 +9,10 @@ import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI, d
 import { formatDate, isTimeBefore, parseHtml, dayDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';
-import { InboxOutlined, UploadOutlined, DownOutlined, SettingOutlined, PaperClipOutlined } from '@ant-design/icons'
+import {
+    InboxOutlined, UploadOutlined, DownOutlined,
+    SettingOutlined, PaperClipOutlined, ClockCircleTwoTone
+} from '@ant-design/icons'
 
 const { Dragger } = Upload
 const { Countdown } = Statistic
@@ -22,7 +25,7 @@ const normFile = e => {
     return e && e.fileList;
 };
 
-const AssignmentPage = ({ token }) => {
+const AssignmentStudent = ({ token }) => {
 
     const { assignmentId } = useParams();
     const [loading, setLoading] = useState(false)
@@ -153,12 +156,22 @@ const AssignmentPage = ({ token }) => {
     }
 
 
+    const onSelect = (selectedKeys, info) => {
+        console.log('selected', selectedKeys, info);
+        if (info.node.url) {
+            if (info.node.url) {
+                window.open(info.node.url, '_blank')
+            }
+        }
+    };
+
+
 
     return (
         <section className="section-5 page-2 course-lecture">
             {
                 <div>
-                    <div className="">
+                    <div className="exam-list--title">
                         <Skeleton loading={loading} active>
                             <h3 className="text--main">
                                 {assignmentDetail.name}
@@ -167,6 +180,12 @@ const AssignmentPage = ({ token }) => {
                     </div>
                     <Skeleton loading={loading} active paragraph={{ rows: 8 }}>
                         <p className="text--sub__bigger2">{parseHtml(assignmentDetail.info)}</p>
+                        <div className="text-center">
+                            <p className="text--sub__bigger">Thời gian còn lại</p>
+                            {
+                                parseRemainTime()
+                            }
+                        </div>
                         <Tabs defaultActiveKey="1">
                             <TabPane tab="Mô tả bài assignment" key="1">
                                 <Descriptions
@@ -195,6 +214,7 @@ const AssignmentPage = ({ token }) => {
                                         assignmentDetail.assignment_files ?
                                             <Descriptions.Item label="File đính kèm">
                                                 <Tree
+                                                    onSelect={onSelect}
                                                     switcherIcon={<DownOutlined />}
                                                     defaultExpandedKeys={['a-1']}
                                                     showLine
@@ -205,7 +225,8 @@ const AssignmentPage = ({ token }) => {
                                                             children: assignmentDetail.assignment_files.map(
                                                                 file => ({
                                                                     key: file.id,
-                                                                    title: file.name
+                                                                    title: file.name,
+                                                                    url: file.file
                                                                 })
                                                             )
                                                         }
@@ -234,17 +255,16 @@ const AssignmentPage = ({ token }) => {
                                             formatDate(studentAssignment.modified_date, Constants.MMM_Do__YY__TIME)
                                         }
                                     </Descriptions.Item>
-                                    <Descriptions.Item label="Thời gian còn lại">
-                                        {
-                                            parseRemainTime()
-                                        }
-                                    </Descriptions.Item>
+                                    {/* <Descriptions.Item label="Thời gian còn lại">
+                                        
+                                    </Descriptions.Item> */}
 
                                 </Descriptions>
                                 {
                                     studentAssignment.student_assignment_files ?
                                         <Card className="mt-5" hoverable loading={loading}>
                                             <Tree
+                                                onSelect={onSelect}
                                                 switcherIcon={<DownOutlined />}
                                                 defaultExpandedKeys={['a-1']}
                                                 showLine
@@ -255,7 +275,8 @@ const AssignmentPage = ({ token }) => {
                                                         children: studentAssignment.student_assignment_files.map(
                                                             file => ({
                                                                 key: file.id,
-                                                                title: file.name
+                                                                title: file.name,
+                                                                url: file.file
                                                             })
                                                         )
                                                     }
@@ -353,4 +374,4 @@ const AssignmentPage = ({ token }) => {
     )
 }
 
-export default AssignmentPage
+export default AssignmentStudent

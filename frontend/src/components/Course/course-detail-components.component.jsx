@@ -1,33 +1,32 @@
 import React from 'react'
-import {Avatar, Card, Empty, Skeleton, Tabs} from 'antd'
+import { Avatar, Card, Empty, Skeleton, Tabs } from 'antd'
 import documentAvatar from '../../assets/pdf.png';
-import {parseHtml} from "../../utils/text.utils";
-import { BACKEND_HOST } from '../../configs';
+import { parseHtml } from "../../utils/text.utils";
 
-const {Meta} = Card;
+const { Meta } = Card;
 
-const CourseDetailComponents = ({course, loading}) => {
-    const {TabPane} = Tabs;
+const CourseDetailComponents = ({ course, loading }) => {
+    const { TabPane } = Tabs;
     const courseOutline = () => {
         if (!course.outline_detail && !course.outline_file) {
-            return <Empty/>
+            return <Empty />
         } else {
             return (
-            <div>
-                {parseHtml(course.outline_detail)}
-                <Card hoverable style={{width: 300, marginTop: 16}}
-                      onClick={() => window.open(BACKEND_HOST + course.outline_file, '_blank')}>
-                    <Skeleton loading={loading} avatar active>
-                        <Meta
-                            avatar={
-                                <Avatar src={documentAvatar}/>
-                            }
-                            title={course.title}
-                            description="File đính kèm chi tiết"
-                        />
-                    </Skeleton>
-                </Card>
-            </div>)
+                <div>
+                    {parseHtml(course.outline_detail)}
+                    <Card hoverable style={{ width: 300, marginTop: 16 }}
+                        onClick={() => window.open(course.outline_file, '_blank')}>
+                        <Skeleton loading={loading} avatar active>
+                            <Meta
+                                avatar={
+                                    <Avatar src={documentAvatar} />
+                                }
+                                title={course.title}
+                                description="File đính kèm chi tiết"
+                            />
+                        </Skeleton>
+                    </Card>
+                </div>)
         }
     }
 

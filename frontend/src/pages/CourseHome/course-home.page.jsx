@@ -22,13 +22,17 @@ import Constants from "../../constants"
 import Forums from "../../components/Forum/forums.component";
 import ForumDetail from "../../components/Forum/forum-detail.component";
 import ThreadDetail from "../../components/Forum/thread-detail.component";
+import RoleComponent from "../../components/RoleComponent"
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
 const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-home-grades.component"))
 const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-home-forums.component"))
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
 const PrivateExamList = lazy(() => import("../../components/Exam/private-exam-list.component"))
-const AssignmentPage = lazy(() => import("../../components/Assignment/assignment.page"))
+
+const AssignmentStudent = lazy(() => import("../../components/Assignment/assignment-student.component"))
+const AssignmentTeacher = lazy(() => import("../../components/Assignment/assignment-teacher.component"))
+
 
 const CourseHomePage = ({ myCourses, userRole }) => {
 
@@ -114,7 +118,13 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                 </Route>
 
                 <Route exact path={`${match.url}/assignment/:assignmentId`}>
-                    <AssignmentPage token={token} />
+                    <RoleComponent
+                        roleCode={userRole.code}
+                        StudentComponent={AssignmentStudent}
+                        TeacherTAComponent={AssignmentTeacher}
+                        AdminComponent={null}
+                        token={token}
+                    />
                 </Route>
 
             </Router>

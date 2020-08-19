@@ -67,7 +67,8 @@ const CourseHomeTopic = ({
                 ass => ({
                     id: ass.id, name: ass.name, info: ass.info,
                     start_date: ass.start_date, due_date: ass.due_date,
-                    max_score: ass.max_score, max_submit_time: ass.max_submit_time
+                    max_score: ass.max_score, max_submit_time: ass.max_submit_time,
+                    assignment_files: ass.assignment_files
                 })
             )
             setAssignments(topicAssignments)
@@ -79,7 +80,7 @@ const CourseHomeTopic = ({
         if (type === Constants.VIDEO_FILE_TYPE) {
             history.push(`lecture/${topic.id}/${assetId}`)
         } else {
-            window.open(BACKEND_HOST + fileUrl, '_blank')
+            window.open(fileUrl, '_blank')
         }
     }
 

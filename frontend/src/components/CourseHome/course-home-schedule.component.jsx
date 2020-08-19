@@ -5,18 +5,18 @@ import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import moment from 'moment'
 import {
-    createLearningTopic, editLearningTopic,
-    createTopicAsset, editTopicAsset, createAssignment
+    createLearningTopic, editLearningTopic, deleteTopicAsset,
+    createTopicAsset, editTopicAsset, createAssignment, editAssignment
 } from '../../api/courseHome.services'
 
 import {
     Skeleton, Button, Modal, Row,
     Col, Form, Upload, Input, Radio,
     message, Drawer, Select, InputNumber,
-    DatePicker
+    DatePicker, List, Popconfirm, Space
 } from "antd";
 
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, PaperClipOutlined } from '@ant-design/icons';
 import slugify from 'slugify';
 import { deleteLearningTopic } from '../../api/courseHome.services';
 import { disabledDate, disabledDateTime, disabledRangeTime } from '../../utils/date.utils'
@@ -57,6 +57,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
     const [editingQuize, setEditingQuize] = useState({})
 
     const [editingAssignment, setEditingAssignment] = useState({})
+    const [assignmentFiles, setAssignmentFiles] = useState([])
 
 
     useEffect(() => {
@@ -128,10 +129,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setLoading(true)
         console.log(values)
         const { assName: name, assInfo: info, assDate, assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile } = values
-        const files = assFile.map(file => ({
+        const files = assFile ? assFile.map(file => ({
             file: file.originFileObj,
             fileName: file.name
-        }))
+        })) : []
         const start_date = assDate[0] ? assDate[0].format('YYYY-MM-DD HH:MM') : undefined
         const due_date = assDate[1] ? assDate[1].format('YYYY-MM-DD HH:MM') : undefined
 
@@ -140,11 +141,16 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
             max_submit_time, start_date: start_date, due_date: due_date, files
         }
         try {
-            const result = await createAssignment(data)
-            message.success("Tạo assignment thành công", 1.5, () => window.location.reload())
+            const result = isCreateAssignment ?
+                await createAssignment(data) : await editAssignment(data, editingAssignment.id)
+            message.success(
+                isCreateAssignment ? "Tạo assignment thành công" : "Chỉnh sửa assignment thành công",
+                1.5, () => window.location.reload()
+            )
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
+        setLoading(false)
     }
 
     const handleDelete = async (id) => {
@@ -216,6 +222,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setEditingAsset({})
         setEditingTopic({})
         setEditingAssignment({})
+        setAssignmentFiles([])
     }
 
     const triggerCreateAsset = (topicId) => {
@@ -251,6 +258,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         } else {
             setIsCreateAssignment(false)
             setEditingAssignment(assignment)
+            setAssignmentFiles(assignment.assignment_files)
         }
         setShowModal(true)
     }
@@ -289,6 +297,20 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         }
         setLoading(false)
 
+    }
+
+    const deleteAttachment = async (id) => {
+        const data = { token, id }
+        setLoading(true)
+        try {
+            const result = await deleteTopicAsset(data)
+            const newAttachments = assignmentFiles.filter(a => a.id !== id)
+            setAssignmentFiles(newAttachments)
+            message.success("Xóa file nộp thành công")
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setLoading(false)
     }
 
     const renderForm = () => {
@@ -393,6 +415,44 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         </Upload>
                     </Form.Item>
 
+                    {
+                        !isCreateAssignment && assignmentFiles.length > 0 ?
+                            <Form.Item
+                                {...formItemLayout}
+                                label="File đính kèm"
+                            >
+                                <List
+                                    loading={loading}
+                                    itemLayout="horizontal"
+                                    dataSource={assignmentFiles}
+                                    renderItem={item => (
+                                        <List.Item
+                                            actions={
+                                                [
+                                                    <Popconfirm
+                                                        title="Bạn có chắc chắn muốn xóa file này?"
+                                                        onConfirm={() => deleteAttachment(item.id)}
+                                                        okText="Xác nhận"
+                                                        cancelText="Hủy"
+                                                    >
+                                                        <Button
+                                                            danger type="primary" key="delete">Xóa</Button>
+                                                    </Popconfirm>
+
+                                                ]
+                                            }>
+                                            <Skeleton avatar title={false} loading={item.loading} active>
+                                                <List.Item.Meta
+                                                    title={<Space><PaperClipOutlined />{item.name}</Space>}
+                                                />
+                                            </Skeleton>
+                                        </List.Item>
+                                    )}
+                                />
+                            </Form.Item> : null
+
+                    }
+
                     <Form.Item
                         {...formItemLayout}
                         hasFeedback
@@ -429,7 +489,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             Xác nhận
                     </Button>
                     </Form.Item>
-
                 </Form>
             )
         }
