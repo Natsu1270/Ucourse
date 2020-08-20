@@ -51,6 +51,7 @@ class Exam(models.Model):
     start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
     expired_date = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=True)
+    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='exam_viewed', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(

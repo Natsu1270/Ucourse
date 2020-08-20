@@ -13,7 +13,8 @@ import {
     CaretDownOutlined, SettingTwoTone, DeleteOutlined,
     SettingOutlined, BookOutlined, ReadOutlined, ProfileOutlined
 } from '@ant-design/icons'
-import { deleteTopicAsset, deleteAssigment } from '../../api/courseHome.services';
+import { deleteTopicAsset } from '../../api/courseHome.services';
+import { deleteAssigment } from '../../api/assignment.services';
 import { deleteExam } from '../../api/exam.services';
 
 const { Text } = Typography
@@ -89,7 +90,7 @@ const CourseHomeTopic = ({
     }
 
     function gotoAssignment(assignment_id) {
-        history.push(`assignment/${assignment_id}`)
+        history.push(`${topic.id}/assignment/${assignment_id}`)
     }
 
     const assetAvatar = (icon, type) => {

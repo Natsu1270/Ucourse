@@ -55,6 +55,7 @@ class Course(models.Model):
         Program, related_name='program_course', blank=True)
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
+    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_viewed', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)
     created_by = models.ForeignKey(

@@ -6,8 +6,10 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import moment from 'moment'
 import {
     createLearningTopic, editLearningTopic, deleteTopicAsset,
-    createTopicAsset, editTopicAsset, createAssignment, editAssignment
+    createTopicAsset, editTopicAsset
 } from '../../api/courseHome.services'
+
+import { createAssignment, editAssignment } from '../../api/assignment.services'
 
 import {
     Skeleton, Button, Modal, Row,

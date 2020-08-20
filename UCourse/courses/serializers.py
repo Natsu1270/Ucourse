@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from users.models import User
 from .models import Course, CourseDetail, Skill, UserBuyCourse
 from course_homes.models import CourseHome
 from profiles.serializers import TeacherProfileSearchSerializer, ProfileSerializer, ProfileMinSerializer
@@ -52,13 +54,14 @@ class CourseSerializer(serializers.ModelSerializer):
     ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
     c_homes = CourseHomeShowSerializer(many=True, read_only=True)
     is_my_course = serializers.SerializerMethodField()
+    views = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Course
         fields = [
             'id', 'title', 'code', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
             'fee_type', 'status', 'course_detail', 'program',
-            'field', 'tags', 'ability_test', 'created_date',
+            'field', 'tags', 'ability_test', 'views', 'created_date',
             'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')
@@ -77,11 +80,12 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     level = serializers.CharField(source='get_level_display')
     course_home_count = serializers.IntegerField(read_only=True)
     course_teachers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    views = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type',
+            'id', 'title', 'code', 'fee_type', 'views',
             'icon', 'slug', 'level', 'status',
             'field', 'course_home_count', 'course_teachers'
         ]

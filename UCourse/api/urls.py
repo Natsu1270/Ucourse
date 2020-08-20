@@ -17,4 +17,5 @@ urlpatterns = [
     path('all/my', GetAllMyAPI.as_view()),
     path('forums/', include('forums.urls')),
     path('questions/', include('questions.urls')),
+    path('assignment/', include('assignment.urls'))
 ]

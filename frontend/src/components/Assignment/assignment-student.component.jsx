@@ -5,7 +5,8 @@ import {
     Upload, Tag, Statistic, Tree, Row, Col, Card, Space, List,
     Popconfirm, Tabs
 } from "antd";
-import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI, deleteTopicAsset } from '../../api/courseHome.services'
+import { deleteTopicAsset } from '../../api/courseHome.services'
+import { getAssignmentDetailAPI, submitAssignmentAPI, getStudentAssignmentAPI } from '../../api/assignment.services';
 import { formatDate, isTimeBefore, parseHtml, dayDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';

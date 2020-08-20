@@ -1,14 +1,16 @@
 import React from 'react'
 
-const RoleComponent = ({ roleCode, token, StudentComponent, TeacherTAComponent, AdminComponent }) => {
+const RoleComponent = ({
+    roleCode, token, StudentComponent, TeacherTAComponent, AdminComponent, ...otherProps
+}) => {
     if (roleCode === undefined) return
     if (roleCode === "AD") {
-        return <AdminComponent token={token} />
+        return <AdminComponent token={token} {...otherProps} />
     }
     if (roleCode === "TC" || roleCode === "TA") {
-        return <TeacherTAComponent token={token} />
+        return <TeacherTAComponent token={token} {...otherProps} />
     }
-    return <StudentComponent token={token} />
+    return <StudentComponent token={token} {...otherProps} />
 }
 
 export default RoleComponent

@@ -19,11 +19,12 @@ class TopicAssetSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
     file = serializers.FileField(required=False)
+    views = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = TopicAsset
         fields = [
-            'id', 'name', 'learning_topic',
+            'id', 'name', 'learning_topic', 'views',
             'file', 'file_type', 'status', 'info'
         ]
 
@@ -33,11 +34,12 @@ class AssignmentSerializer(serializers.ModelSerializer):
     learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
     assignment_files = TopicAssetSerializer(many=True, required=False)
     students = serializers.StringRelatedField(many=True, required=False)
+    views = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         model = Assignment
         fields = [
-            'id', 'name', 'start_date', 'due_date', 'assignment_files',
+            'id', 'name', 'start_date', 'due_date', 'assignment_files', 'views',
             'info', 'status', 'learning_topic', 'max_submit_time', 'max_score',
             'students', 'created_date', 'created_by'
         ]
@@ -62,6 +64,20 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     assignment = serializers.PrimaryKeyRelatedField(queryset=Assignment.objects.all(), required=False)
     student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    student_assignment_files = TopicAssetSerializer(many=True, required=False)
+
+    class Meta:
+        model = StudentAssignment
+        fields = [
+            'id', 'assignment', 'student', 'score', 'student_assignment_files',
+            'status', 'modified_date', 'assignment', 'submit_time'
+        ]
+
+
+class StudentAssignmentDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    assignment = serializers.PrimaryKeyRelatedField(queryset=Assignment.objects.all(), required=False)
+    student = UserSerializer(required=False)
     student_assignment_files = TopicAssetSerializer(many=True, required=False)
 
     class Meta:

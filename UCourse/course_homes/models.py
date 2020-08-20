@@ -120,6 +120,7 @@ class TopicAsset(models.Model):
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(
         max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)
+    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='lecture_viewed', blank=True)
     status = models.BooleanField(default=True)
     info = models.CharField(max_length=255, null=True, blank=True)
 
@@ -150,6 +151,9 @@ class Assignment(models.Model):
     )
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='user_assignment', through='StudentAssignment'
+    )
+    views = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='assignment_viewed', blank=True
     )
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(

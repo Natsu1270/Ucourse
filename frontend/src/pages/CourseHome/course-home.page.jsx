@@ -117,13 +117,14 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                     <PrivateExamList userRole={userRole} token={token} />
                 </Route>
 
-                <Route exact path={`${match.url}/assignment/:assignmentId`}>
+                <Route exact path={`${match.url}/:topicId/assignment/:assignmentId`}>
                     <RoleComponent
                         roleCode={userRole.code}
                         StudentComponent={AssignmentStudent}
                         TeacherTAComponent={AssignmentTeacher}
                         AdminComponent={null}
                         token={token}
+                        courseHomeDetail={courseHomeDetail}
                     />
                 </Route>
 
