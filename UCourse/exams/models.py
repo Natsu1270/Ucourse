@@ -4,7 +4,7 @@ from django.conf import settings
 
 from courses.models import Course
 from questions.models import Question, Choice, QuestionKit
-from course_homes.models import LearningTopic
+from course_homes.models import LearningTopic, CourseHome
 
 import random
 
@@ -51,6 +51,7 @@ class Exam(models.Model):
     start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
     expired_date = models.DateTimeField(blank=True, null=True)
     status = models.BooleanField(default=True)
+    enable_review = models.BooleanField(default=True)
     views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='exam_viewed', blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)
@@ -91,7 +92,24 @@ class StudentExam(models.Model):
     @property
     def topic(self):
         return self.exam.topic
-    
+
+
+class StudentExamResult(models.Model):
+    exam = models.ForeignKey(
+        Exam, related_name='student_exams_result', on_delete=models.SET_NULL, null=True
+    )
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='exam_students_result', on_delete=models.SET_NULL, null=True
+    )
+    final_result = models.FloatField(blank=True, null=True)
+    last_update = models.DateTimeField(auto_now=True, blank=True, null=True)
+    course_home = models.ForeignKey(
+        CourseHome, on_delete=models.CASCADE, null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.student.__str__() + self.exam.__str__()
+
 
 class QuestionResponse(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

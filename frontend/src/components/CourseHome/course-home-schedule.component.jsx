@@ -151,8 +151,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
             )
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     const handleDelete = async (id) => {
@@ -296,8 +296,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
             )
         } catch (err) {
             message.error(err.message)
+            setLoading(false)
         }
-        setLoading(false)
 
     }
 

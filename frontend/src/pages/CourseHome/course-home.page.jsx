@@ -25,13 +25,15 @@ import ThreadDetail from "../../components/Forum/thread-detail.component";
 import RoleComponent from "../../components/RoleComponent"
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
-const CourseHomeGrades = lazy(() => import("../../components/CourseHome/course-home-grades.component"))
 const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-home-forums.component"))
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
 const PrivateExamList = lazy(() => import("../../components/Exam/private-exam-list.component"))
 
 const AssignmentStudent = lazy(() => import("../../components/Assignment/assignment-student.component"))
 const AssignmentTeacher = lazy(() => import("../../components/Assignment/assignment-teacher.component"))
+
+const CourseHomeGradesStudent = lazy(() => import("../../components/CourseHome/course-home-grades-student.component"))
+const CourseHomeGradesTeacher = lazy(() => import("../../components/CourseHome/course-home-grades-teacher.component"))
 
 
 const CourseHomePage = ({ myCourses, userRole }) => {
@@ -98,7 +100,13 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                             topics={topics} isLoading={isLoading} userRole={userRole} token={token} course={courseHomeDetail.id} />
                     </Route>
                     <Route exact path={`${match.url}/grades`}>
-                        <CourseHomeGrades />
+                        <RoleComponent
+                            roleCode={userRole.code}
+                            StudentComponent={CourseHomeGradesStudent}
+                            TeacherTAComponent={CourseHomeGradesTeacher}
+                            token={token}
+                            courseHomeId={courseHomeDetail.id}
+                        />
                     </Route>
                     <Route exact path={`${match.url}/forums`}>
                         <Forums forums={forums} isLoading={isLoading} />
@@ -114,7 +122,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                     <CourseHomeLecture topics={topics} isLoading={isLoading} />
                 </Route>
                 <Route exact path={`${match.url}/exams/:exam_id`}>
-                    <PrivateExamList userRole={userRole} token={token} />
+                    <PrivateExamList userRole={userRole} token={token} courseHomeDetail={courseHomeDetail} />
                 </Route>
 
                 <Route exact path={`${match.url}/:topicId/assignment/:assignmentId`}>

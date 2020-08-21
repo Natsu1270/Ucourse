@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CourseHomeGrades = () => {
+const CourseHomeGradesTeacher = () => {
 
     return (
         <section className="section-5 page-2">
@@ -11,4 +11,4 @@ const CourseHomeGrades = () => {
     )
 };
 
-export default CourseHomeGrades
+export default CourseHomeGradesTeacher

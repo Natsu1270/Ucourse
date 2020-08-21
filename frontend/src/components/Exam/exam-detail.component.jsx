@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { mapKeys } from 'lodash'
 
-import { Button, Checkbox, Form, Radio, message, Popconfirm, Row, Col, Tag, Space, Statistic } from 'antd'
+import {
+    Button, Checkbox, Form, Radio, message, Popconfirm, Row,
+    Col, Tag, Space, Statistic, Result
+} from 'antd'
 import { parseHtml } from "../../utils/text.utils";
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-light.css'
@@ -13,7 +16,7 @@ import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
 const { Countdown } = Statistic
 
 
-const ExamDetail = ({ exam, token }) => {
+const ExamDetail = ({ exam, token, courseHomeId }) => {
 
     const [finished, setFinished] = useState(false)
     const [responses, setResponses] = useState(null)
@@ -99,7 +102,7 @@ const ExamDetail = ({ exam, token }) => {
         })
         const responses = questionResponses.filter(response => response)
         const result = calResult(values, questions)
-        dispatch(submitExamStart({ token, exam: exam.id, result, responses }))
+        dispatch(submitExamStart({ token, exam: exam.id, result, responses, courseHomeId }))
         openMessage()
     }
 
@@ -189,72 +192,83 @@ const ExamDetail = ({ exam, token }) => {
 
     return (
         <section className="section-10 exam-detail">
-            <Row className="exam-detail--info">
-                <Col span={10}>
-                    <h1 className="exam-detail--title">
-                        {exam.name}
-                    </h1>
-                    <h3 className="exam-detail--sub-title">
-                        Tổng điểm:
-                </h3>
-                </Col>
-                <Col span={12} style={{ fontSize: '2.5rem', fontWeight: '500' }}>
-                    {
-                        !finished ? <Space>
-                            <ClockCircleTwoTone spin />
-                            <Countdown
-                                value={Date.now() + exam.duration * 1000}
-                                onFinish={submitForm}
+            {
+                questions.length > 0 ?
+                    <div><Row className="exam-detail--info">
+                        <Col span={10}>
+                            <h1 className="exam-detail--title">
+                                {exam.name}
+                            </h1>
+                            <h3 className="exam-detail--sub-title">
+                                Tổng điểm:
+                    </h3>
+                        </Col>
+                        <Col span={12} style={{ fontSize: '2.5rem', fontWeight: '500' }}>
+                            {
+                                !finished ? <Space>
+                                    <ClockCircleTwoTone spin />
+                                    <Countdown
+                                        value={Date.now() + exam.duration * 1000}
+                                        onFinish={submitForm}
+                                    >
+                                    </Countdown>
+                                </Space> : <Tag color="red">Hết thời gian làm bài</Tag>
+                            }
+
+                        </Col>
+                    </Row>
+                        <div className="exam-detail--content">
+                            <Form
+                                name="exam-detail-form"
+                                onFinish={onFinish}
+                                form={form}
+                                {...formItemLayout}
                             >
-                            </Countdown>
-                        </Space> : <Tag color="red">Hết thời gian làm bài</Tag>
-                    }
+                                {
+                                    questions.map((question, index) => (
+                                        <div className="choices" key={question.id}>
+                                            <div
+                                                className="exam-detail--content--question__header dis-flex-start">
+                                                <span>{index + 1}. </span> {parseHtml(question.content)}
+                                            </div>
 
-                </Col>
-            </Row>
-            <div className="exam-detail--content">
-                <Form
-                    name="exam-detail-form"
-                    onFinish={onFinish}
-                    form={form}
-                    {...formItemLayout}
-                >
-                    {
-                        questions.map((question, index) => (
-                            <div className="choices" key={question.id}>
-                                <div
-                                    className="exam-detail--content--question__header dis-flex-start">
-                                    <span>{index + 1}. </span> {parseHtml(question.content)}
-                                </div>
+                                            <Form.Item
+                                                name={question.id}
+                                                label="">
+                                                {
+                                                    !finished ?
+                                                        renderQuestion(question) : renderResultQuestion(question)
+                                                }
+                                            </Form.Item>
+                                        </div>
+                                    ))
+                                }
+                                <Form.Item hidden={finished} className="text-center">
+                                    <Popconfirm
+                                        title="Hoàn thành bài kiểm tra ?"
+                                        onConfirm={submitForm}
+                                        okText="Xác nhận"
+                                        cancelText="Tiếp tục làm"
+                                    >
+                                        <Button type="primary" htmlType="button">
+                                            Hoàn tất
+                                </Button>
+                                    </Popconfirm>
 
-                                <Form.Item
-                                    name={question.id}
-                                    label="">
-                                    {
-                                        !finished ?
-                                            renderQuestion(question) : renderResultQuestion(question)
-                                    }
                                 </Form.Item>
-                            </div>
-                        ))
-                    }
-                    <Form.Item hidden={finished} className="text-center">
-                        <Popconfirm
-                            title="Hoàn thành bài kiểm tra ?"
-                            onConfirm={submitForm}
-                            okText="Xác nhận"
-                            cancelText="Tiếp tục làm"
-                        >
-                            <Button type="primary" htmlType="button">
-                                Hoàn tất
-                            </Button>
-                        </Popconfirm>
 
-                    </Form.Item>
+                            </Form>
 
-                </Form>
+                        </div>
+                    </div>
+                    :
+                    <Result
+                        status="404"
+                        title="No questions"
+                        subTitle="Xin lỗi, giảng viên chưa thêm câu hỏi cho bài kiểm tra này"
+                    />
+            }
 
-            </div>
         </section>
     )
 }

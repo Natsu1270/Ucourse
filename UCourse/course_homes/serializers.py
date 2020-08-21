@@ -45,6 +45,17 @@ class AssignmentSerializer(serializers.ModelSerializer):
         ]
 
 
+class AssignmentMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
+
+    class Meta:
+        model = Assignment
+        fields = [
+            'id', 'name', 'learning_topic', 'max_score'
+        ]
+
+
 class LearningTopicSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
@@ -71,6 +82,18 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'assignment', 'student', 'score', 'student_assignment_files',
             'status', 'modified_date', 'assignment', 'submit_time'
+        ]
+
+
+class StudentAssignmentDetailGradeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    assignment = AssignmentSerializer(required=False)
+    student = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = StudentAssignment
+        fields = [
+            'id', 'assignment', 'student', 'score', 'status', 'assignment', 'modified_date'
         ]
 
 

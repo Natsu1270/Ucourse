@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from course_homes.models import LearningTopic
+from course_homes.models import LearningTopic, CourseHome
 from users.models import User
-from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice
+from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice, \
+    StudentExamResult
 from questions.serializers import QuestionSerializer
 from courses.serializers import CourseMinSerializer
 
@@ -19,7 +20,7 @@ class ExamSerializer(serializers.ModelSerializer):
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'views',
-            'exam_type', 'questions', 'students',
+            'exam_type', 'questions', 'students', 'enable_review',
             'topic', 'duration', 'pass_score', 'max_try',
             'status', 'expired_date', 'start_date', 'total_score'
         ]
@@ -42,8 +43,19 @@ class ExamShowSerializer(serializers.ModelSerializer):
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'max_try', 'expired_date', 'start_date',
-            'exam_type', 'duration', 'pass_score', 'views',
+            'exam_type', 'duration', 'pass_score', 'views', 'enable_review',
             'status'
+        ]
+
+
+class ExamMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam_type = serializers.CharField(source='get_exam_type_display')
+
+    class Meta:
+        model = Exam
+        fields = [
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score'
         ]
 
 
@@ -63,6 +75,28 @@ class StudentExamSerializer(serializers.ModelSerializer):
             'date_taken', 'result', 'duration',
             'topic'
         ]
+
+
+class StudentExamDetailSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam = ExamMinSerializer(read_only=True)
+
+    class Meta:
+        model = StudentExam
+        fields = [
+            'id', 'exam', 'student', 'date_taken', 'result', 'duration',
+        ]
+
+
+class StudentExamResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    student = serializers.StringRelatedField(required=False)
+    exam = ExamMinSerializer(required=False)
+    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
+
+    class Meta:
+        model = StudentExamResult
+        fields = ['id', 'student', 'exam', 'final_result', 'last_update', 'course_home']
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):

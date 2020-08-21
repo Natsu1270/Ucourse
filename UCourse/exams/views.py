@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import AbilityTest, UserAbilityTest, Exam, StudentExam
+from .models import AbilityTest, UserAbilityTest, Exam, StudentExam, StudentExamResult
 from . import serializers
 from api.utils import uc_response
 
@@ -58,13 +58,38 @@ class SubmitExamAPI(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        course_home_id = self.request.data['courseHomeId']
         student = request.user
         responses = request.data['responses']
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+        exam = data['exam']
         student_exam = serializer.save(
-            student=student, exam=data['exam'], result=data['result'], responses=responses
+            student=student, exam=exam, result=data['result'], responses=responses
         )
+
+        student_exam_result = StudentExamResult.objects.filter(
+            Q(student_id=student.id) & Q(exam_id=exam.id)
+        )
+        if len(student_exam_result) == 0:
+            StudentExamResult.objects.create(
+                student_id=student.id, exam_id=exam.id, final_result=data['result'], course_home_id=course_home_id)
+        else:
+            instance = student_exam_result[0]
+            get_result_type = exam.get_result_type
+            past_student_exams = StudentExam.objects.filter(
+                Q(student_id=student.id) & Q(exam_id=exam.id)
+            )
+            if len(past_student_exams) == 0 or get_result_type == 'last':
+                instance.final_result = data['result']
+            else:
+                result_list = [exam.result for exam in past_student_exams]
+                if get_result_type == 'best':
+                    instance.final_result = max(result_list)
+                else:
+                    instance.final_result = sum(result_list) / len(result_list)
+            instance.save()
+
         return Response({
             "data": {
                 "studentExam": self.get_serializer(student_exam).data,

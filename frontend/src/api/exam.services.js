@@ -28,7 +28,7 @@ export const getStudentExamList = ({ token, exam_id }) => {
 }
 
 export const submitExam = (params) => {
-    const { token, exam, result, responses } = params
+    const { token, exam, result, responses, courseHomeId } = params
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export const submitExam = (params) => {
         method: 'POST',
         url: `${API_URL}/submit`,
         data: {
-            exam, result, responses
+            exam, result, responses, courseHomeId
         }
     })
 }

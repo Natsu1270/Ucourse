@@ -126,7 +126,9 @@ const CourseDetail = () => {
                 isLoading={isFetching}
             />
 
-            <CourseDetailTab isOwn={ownCourse} course={course} isProgram={false} handleRegister={handleRegister} />
+            <CourseDetailTab
+                isOwn={ownCourse} course={course} isProgram={false} handleRegister={handleRegister}
+            />
 
             <CourseDetailOverview
                 full_description={courseDetail.full_description}

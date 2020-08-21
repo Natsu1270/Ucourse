@@ -32,7 +32,7 @@ const formItemLayout = {
 
 const { Option } = Select;
 
-const PrivateExamList = ({ userRole, token }) => {
+const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
 
     const { exam_id } = useParams()
     const dispatch = useDispatch()
@@ -277,7 +277,7 @@ const PrivateExamList = ({ userRole, token }) => {
                     </div>
                 }
             >
-                <ExamDetail exam={examDetail} token={token} />
+                <ExamDetail exam={examDetail} token={token} courseHomeId={courseHomeDetail.id} />
             </Drawer>
 
             {
