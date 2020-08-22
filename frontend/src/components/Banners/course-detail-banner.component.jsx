@@ -13,7 +13,7 @@ import LoginSignUpOverlay from '../RegisterOrLogin/login-signup-overlay.ulti';
 import Register from '../Register/register.component';
 import momo from "../../assets/momo-logo-80x80.png";
 
-const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister, isLoading }) => {
+const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister, isLoading, userRole }) => {
 
     const [showPayment, setShowPayment] = useState(false);
 
@@ -69,7 +69,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                     </h3>
 
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated">
+                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated" disabled ={userRole.code === 'TA'|| userRole.code ==='TC'}>
                             {isRegistering ? Constants.SPIN_ICON : own ? 'Đã sở hữu' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">
