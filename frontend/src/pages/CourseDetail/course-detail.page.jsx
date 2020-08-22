@@ -27,7 +27,7 @@ import {
     courseHomeShowSelector
 } from "../../redux/CourseHome/course-home.selects";
 import { getCourseHomeShowStart, registerCourseStart } from "../../redux/CourseHome/course-home.actions";
-import { tokenSelector } from "../../redux/Auth/auth.selects";
+import { tokenSelector, userRoleSelector } from "../../redux/Auth/auth.selects";
 import { registerCourseModalSelector } from "../../redux/UI/ui.selects";
 import { showRLModal, toggleRegisterCourseModal } from "../../redux/UI/ui.actions";
 import Constants from "../../constants";
@@ -40,7 +40,7 @@ const CourseDetail = () => {
     const { slug } = useParams();
     const {
         course, courseDetail, isFetching, errorResponse, myCourses,
-        token, registerCourseModal, errorRegister, classes, courseHomeShows,
+        token, registerCourseModal, errorRegister, classes, courseHomeShows, userRole
     } = useSelector(createStructuredSelector({
         course: courseDetailSelector,
         courseDetail: courseDetailDetailSelector,
@@ -51,7 +51,8 @@ const CourseDetail = () => {
         registerCourseModal: registerCourseModalSelector,
         errorRegister: errorResponseRegisterCourseSelector,
         classes: courseClassesSelector,
-        courseHomeShows: courseHomeShowSelector
+        courseHomeShows: courseHomeShowSelector,
+        userRole: userRoleSelector
     }));
 
     const [ownCourse, setOwnCourse] = useState(false);
@@ -124,6 +125,7 @@ const CourseDetail = () => {
                 own={ownCourse}
                 handleRegister={handleRegister}
                 isLoading={isFetching}
+                userRole={userRole}
             />
 
             <CourseDetailTab

@@ -6,7 +6,7 @@ import Constants from "../../constants";
 import programBg1 from '../../assets/program-bg1.png'
 import {Avatar, Button, Skeleton} from "antd";
 
-const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister}) => {
+const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister, userRole}) => {
     const s = {
         background: `linear-gradient(
           rgba(0, 0, 0, 0.2), 
@@ -34,7 +34,7 @@ const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister}) =>
                         </p>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
-                                <Button onClick={() => isOwn ? null: handleRegister()} className="register-btn cs-btn--animated">
+                                <Button onClick={() => isOwn ? null: handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code ==='TA'|| userRole.code ==='TC'}>
                                     {isOwn ? 'Đã sở hữu' : 'Đăng ký chương trình'}
                                 </Button>
                             </Skeleton>

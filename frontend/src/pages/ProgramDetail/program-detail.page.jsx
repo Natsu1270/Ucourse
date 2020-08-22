@@ -20,7 +20,7 @@ import ProgramDetailPrequire from "../../components/Program/program-detail-prequ
 import ProgramDetailComponents from "../../components/Program/program-detail-componenets.component";
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
 import {buyProgramAPI} from "../../api/program.services";
-import {tokenSelector} from "../../redux/Auth/auth.selects";
+import {tokenSelector, userRoleSelector} from "../../redux/Auth/auth.selects";
 import Constants from "../../constants";
 import {showRLModal} from "../../redux/UI/ui.actions";
 
@@ -31,12 +31,13 @@ const ProgramDetailPage = () => {
     const {slug} = useParams()
 
 
-    const {program, programCourses, isFetching, errorResponse, token} = useSelector(createStructuredSelector({
+    const {program, programCourses, isFetching, errorResponse, token, userRole} = useSelector(createStructuredSelector({
         program: programDetailSelector,
         programCourses: programCoursesSelector,
         isFetching: isFetchingSelector,
         errorResponse: errorResponseSelector,
-        token: tokenSelector
+        token: tokenSelector,
+        userRole: userRoleSelector
     }))
 
     useEffect(() => {
@@ -82,7 +83,7 @@ const ProgramDetailPage = () => {
             </Breadcrumb.Item>
         </Breadcrumb>
         <ProgramDetailBanner isOwn={own} isRegistering={isRegistering} handleRegister={handleRegister}
-                             program={program}/>
+                             program={program} userRole={userRole}/>
         <CourseDetailTab isRegistering={isRegistering} handleRegister={handleRegister} isProgram={true}/>
         <CourseDetailOverview
             benefits={program.benefits}

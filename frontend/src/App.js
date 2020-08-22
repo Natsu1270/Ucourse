@@ -26,6 +26,7 @@ import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
+const EventPage = lazy(() => import('./pages/EventPage/event.page'));
 const GuidePage = lazy(() => import('./pages/GuidePage/guide.page'));
 const ContactPage = lazy(() => import('./pages/ContactPage/contact.page'));
 const QuestionPage = lazy(() => import('./pages/QuestionPage/question.page'));
@@ -81,6 +82,7 @@ function App() {
                                     <Route exact path="/huongdan-thanhtoan" component={GuidePage} />
                                     <Route exact path="/lienhe" component={ContactPage} />
                                     <Route exact path="/cauhoi" component={QuestionPage} />
+                                    <Route exact path="/event" component={EventPage} />
                                     <AuthRoute exact path="/auth" component={LoginAndRegisterPage}
                                         redirectTo="/profile" />
                                     <PrivateRoute path="/profile" component={ProfilePage} />
