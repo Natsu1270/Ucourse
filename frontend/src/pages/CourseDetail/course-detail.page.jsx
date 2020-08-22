@@ -78,24 +78,13 @@ const CourseDetail = () => {
     }, [course])
 
     const handleRegister = () => {
-        // if (token) {
-        //     dispatch(buyCourseStart({ course: course.id, token }))
-        //     // dispatch(registerCourseStart({course_id: course.id, token}))
-        //     if (!errorRegister) {
-        //         dispatch(toggleRegisterCourseModal())
-        //         setOwnCourse(true)
-        //     }
-        // } else {
-        //     message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
-        //         1.5,
-        //         () => dispatch(showRLModal()))
-        // }
+
         if (token) {
             dispatch(buyCourseStart({ course: course.id, token }))
             // dispatch(registerCourseStart({course_id: course.id, token}))
-            if (!errorRegister) {
-                // dispatch(toggleRegisterCourseModal())
-                // setOwnCourse(true)
+            if (!errorRegister && course.fee_type === 'free') {
+                dispatch(toggleRegisterCourseModal())
+                setOwnCourse(true)
             }
         } else {
             message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
@@ -167,13 +156,7 @@ const CourseDetail = () => {
                     title="Đăng ký khóa học thành công!"
                     subTitle={`Bạn đã đăng ký khóa học ${course.title} thành công`}
                     extra={[
-                        <Button
-                            type="primary"
-                            key="console"
-                            onClick={() => window.open(`${Constants.COURSE_HOME_LINK}/${course.slug}`, '_self')}>
-                            Truy cập khóa học
-                        </Button>,
-                        <Button key="buy" onClick={() => dispatch(toggleRegisterCourseModal())}>Đóng</Button>,
+                        <Button key="buy" type="primary" onClick={() => dispatch(toggleRegisterCourseModal())}>Đóng</Button>,
                     ]}
                 />
             </Modal>

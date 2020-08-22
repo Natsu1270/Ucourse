@@ -65,6 +65,7 @@ const Constants = {
     EXAM_GET_BEST: 'best',
     EXAM_GET_AVERAGE: 'average',
     EXAM_GET_LAST: 'last',
+    RESULT_TYPE_NODATA: 'no_data'
 };
 
 export default Constants

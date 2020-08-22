@@ -50,7 +50,7 @@ class BuyCourseAPI(generics.GenericAPIView):
     ]
 
     def post(self, request, *args, **kwargs):
-        user = request.user
+        user = self.request.user
         course_id = request.data['course']
         course = Course.objects.get(pk=course_id)
         amount = course.get_price()
@@ -68,7 +68,6 @@ class BuyCourseAPI(generics.GenericAPIView):
             response_data = response.content.decode("utf-8")
             json_response = json.loads(response_data)
             payUrl = json_response['payUrl']
-
 
             return Response({
                 "data": {
@@ -89,10 +88,12 @@ class BuyCourseAPI(generics.GenericAPIView):
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
 
+
 class BuyCourseSuccessAPI(generics.GenericAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
     def post(self, request, *args, **kwargs):
         partnerRefId = request.data["partnerRefId"]
         requestId = request.data["requestId"]
@@ -103,7 +104,8 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
         resUrl = extraData.split("=")[1]
 
         print(extraData)
-        if (errorCode == "0"):
+
+        if errorCode == "0":
             query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
             response = query.call()
             response_data = response.content.decode("utf-8")
@@ -111,18 +113,19 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
             if json_response["data"]["status"] == 0:    
                 course = Course.objects.get(pk=course_id)
                 try:
-                   UserBuyCourse.objects.get(user=user, course_id=course_id)
-                except:
+                    UserBuyCourse.objects.get(user=user, course_id=course_id)
+                except UserBuyCourse.DoesNotExist:
                     instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
                 return Response({
                         "redirect": resUrl,
                         "ok": True,
-                    }, status=status.HTTP_201_CREATED)
+                }, status=status.HTTP_201_CREATED)
                     
         return Response({
             "redirect": resUrl,
             "ok": False,
         }, status=status.HTTP_201_CREATED)
+
 
 class CheckIsBought(generics.GenericAPIView):
     permission_classes = [

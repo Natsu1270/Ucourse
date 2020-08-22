@@ -59,7 +59,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                         actions={[
                             <Button
                                 onClick={() => registerClass(item)}
-                                disabled={!canRegister(item)}
+                                disabled={!canRegister(item) || item.is_my_class}
                                 type="primary"
                                 key="list-loadmore-edit">
                                 {

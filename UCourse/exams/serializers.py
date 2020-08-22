@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from course_homes.models import LearningTopic, CourseHome
 from users.models import User
+from users.serializers import UserMinSerializer
 from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice, \
     StudentExamResult
 from questions.serializers import QuestionSerializer
@@ -23,7 +24,7 @@ class ExamSerializer(serializers.ModelSerializer):
             'id', 'name', 'get_result_type', 'views',
             'exam_type', 'questions', 'students', 'enable_review',
             'topic', 'duration', 'pass_score', 'max_try', 'max_score',
-            'status', 'expired_date', 'start_date', 'total_score'
+            'status', 'expired_date', 'start_date', 'total_score', 'percentage'
         ]
 
     @staticmethod
@@ -46,7 +47,7 @@ class ExamShowSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'get_result_type', 'max_try', 'expired_date', 'start_date',
             'exam_type', 'duration', 'pass_score', 'views', 'enable_review', 'max_score',
-            'status'
+            'status', 'percentage'
         ]
 
 
@@ -58,7 +59,7 @@ class ExamMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score'
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score', 'percentage'
         ]
 
 
@@ -93,7 +94,7 @@ class StudentExamDetailSerializer(serializers.ModelSerializer):
 
 class StudentExamResultSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    student = serializers.StringRelatedField(required=False)
+    student = UserMinSerializer(required=False)
     exam = ExamMinSerializer(required=False)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
 

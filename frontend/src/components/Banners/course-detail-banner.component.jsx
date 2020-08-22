@@ -43,7 +43,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
         if (own) {
             return null;
         }
-        if (course.fee_type == 'paid') {
+        if (course.fee_type === 'paid') {
             return setShowPayment(true);
         }
         return handleRegister();

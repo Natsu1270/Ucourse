@@ -16,12 +16,9 @@ class Event(models.Model):
     created_date = models.DateTimeField(default=timezone.now, null=True)
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
-
     def __str__(self):
         return self.title
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Event, self).save(*args, **kwargs)
-
-   

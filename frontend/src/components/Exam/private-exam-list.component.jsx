@@ -176,6 +176,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 }
                 <p className="text--sub__bigger">Thời gian làm bài: {secondToTime(examDetail.duration)}</p>
                 <p className="text--sub__bigger">Số lần làm bài cho phép: {examDetail.max_try}</p>
+                <p className="text--sub__bigger">Phần trăm điểm: {examDetail.percentage}%</p>
                 <p className="text--sub__bigger">Hình thức chấm điểm: {
                     examDetail.get_result_type === "best" ? "Lấy kết quả cao nhất" :
                         examDetail.get_result_type === "last" ? "Lấy kết quả cuối cùng" : "Lấy kết quả trung bình"

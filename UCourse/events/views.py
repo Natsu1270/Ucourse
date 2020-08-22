@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, JSONParser
 from api.permissions import IsOwnerOrReadOnly
 from api.utils import uc_response
-from .models import Event, Teacher
-from .serializers import EventSerializer, TeacherEventSearchSerializer
+from .models import Event
+from .serializers import EventSerializer
 from api.utils import ImageUploadParser
 
 

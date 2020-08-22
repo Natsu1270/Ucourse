@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { message, Tabs, Table } from 'antd'
 import Constants from '../../constants'
 
-import { getStudentGradesAPI } from '../../api/grades.services'
+import { getStudentGradesByCourseHomeAPI } from '../../api/grades.services'
 import { formatDate } from '../../utils/text.utils'
 
 import { Chart, Line, Point } from 'bizcharts';
@@ -12,16 +12,15 @@ const { TabPane } = Tabs
 const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
 
     const [loading, setLoading] = useState(false)
-    const [assignments, setAssingments] = useState([])
+    const [assignments, setAssignments] = useState([])
     const [exams, setExams] = useState([])
 
     const getStudentGrades = async () => {
         setLoading(true)
         try {
-            const result = await getStudentGradesAPI({ token, courseHomeId })
+            const result = await getStudentGradesByCourseHomeAPI({ token, courseHomeId })
             setExams(result.data.student_exams)
-            setAssingments(result.data.student_assignments)
-            // calculateExam(result.data.student_exams)
+            setAssignments(result.data.student_assignments)
         } catch (err) {
             message.error(err.message)
         }
@@ -92,20 +91,27 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             dataIndex: 'result',
             key: 'result',
             render: result => <span>{result}</span>
+        },
+        {
+            title: 'Phần trăm điểm',
+            dataIndex: 'percentage',
+            key: 'percentage',
+            render: percentage => <span>{percentage}%</span>
         }
     ];
 
     let examData = []
     let examStudentChartData = []
-    exams.foreEach((exam, index) => {
+    exams.forEach((exam, index) => {
         examData.push({
             stt: index + 1,
             name: exam.exam.name,
             date: exam.last_update,
-            result: exam.final_result
+            result: exam.final_result,
+            percentage: exam.exam.percentage
         })
         examStudentChartData.push({
-            name: exam.name.name,
+            name: exam.exam.name,
             type: "Điểm đạt được",
             score: exam.final_result
         })
@@ -121,10 +127,9 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         stt: index + 1,
         name: assignment.assignment.name,
         date: assignment.modified_date,
-        result: assignment.score
+        result: assignment.score,
+        percentage: assignment.assignment.percentage
     }))
-
-
 
     return (
         <section className="section-5 page-2">
@@ -137,12 +142,16 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                     <Chart
                         scale={{ score: { min: 0 } }} padding={[30, 20, 50, 40]}
                         autoFit height={320} data={examStudentChartData} >
-                        <Line shape="smooth" position="name*score" color="name" label="score" />
-                        <Point position="name*score" color="name" />
+                        <Line shape="smooth" position="name*score" color="type" label="score" />
+                        <Point position="name*score" color="type" />
                     </Chart>
                 </TabPane>
                 <TabPane tab="Bài assignment" key="2">
                     <Table dataSource={assignmentData} columns={columns} />
+                </TabPane>
+
+                <TabPane tab="Điểm tổng kết" key="3">
+
                 </TabPane>
 
             </Tabs>

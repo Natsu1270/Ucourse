@@ -70,7 +70,7 @@ class Course(models.Model):
         return self.title
 
     def get_price(self):
-        if self.fee_type == "free" or self.fee_type == None:
+        if self.fee_type == "free" or self.fee_type is None:
             return 0
         return self.price
 

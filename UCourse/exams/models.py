@@ -47,6 +47,7 @@ class Exam(models.Model):
     )
     duration = models.IntegerField(blank=True, null=True)
     pass_score = models.FloatField(max_length=3, blank=True, null=True)
+    percentage = models.FloatField(blank=True, null=True)
     max_try = models.IntegerField(default=1)
     start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
     expired_date = models.DateTimeField(blank=True, null=True)

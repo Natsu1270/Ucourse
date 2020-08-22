@@ -5,7 +5,7 @@ from programs.serializers import FieldMinSerializer
 from users.models import User
 from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
 # from courses.serializers import CourseMinSerializer
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UserMinSerializer
 from exams.serializers import ExamShowSerializer
 from forums.serializers import ForumSerializer
 from profiles.serializers import ProfileMinSerializer
@@ -40,7 +40,7 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         fields = [
             'id', 'name', 'start_date', 'due_date', 'assignment_files', 'views',
-            'info', 'status', 'learning_topic', 'max_submit_time', 'max_score',
+            'info', 'status', 'learning_topic', 'max_submit_time', 'max_score', 'percentage',
             'students', 'created_date', 'created_by'
         ]
 
@@ -52,7 +52,7 @@ class AssignmentMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = [
-            'id', 'name', 'learning_topic', 'max_score'
+            'id', 'name', 'learning_topic', 'max_score', 'percentage'
         ]
 
 
@@ -85,9 +85,20 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
         ]
 
 
+class StudentAssignmentAllGradeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    assignment = AssignmentMinSerializer(required=False)
+    student = UserMinSerializer(read_only=True)
+
+    class Meta:
+        model = StudentAssignment
+        fields = [
+            'id', 'assignment', 'student', 'score', 'status', 'assignment', 'modified_date'
+        ]
+
 class StudentAssignmentDetailGradeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    assignment = AssignmentSerializer(required=False)
+    assignment = AssignmentMinSerializer(required=False)
     student = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
