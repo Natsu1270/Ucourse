@@ -65,6 +65,14 @@ class Exam(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def max_score(self):
+        questions = self.questions.all()
+        res = 0
+        for question in questions:
+            res += question.score
+        return res
+
     def set_created_by(self, user):
         self.created_by = user
 

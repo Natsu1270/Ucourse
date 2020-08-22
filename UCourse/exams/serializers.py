@@ -15,13 +15,14 @@ class ExamSerializer(serializers.ModelSerializer):
     topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
     total_score = serializers.SerializerMethodField(read_only=True)
     views = serializers.StringRelatedField(many=True, required=False)
+    max_score = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'views',
             'exam_type', 'questions', 'students', 'enable_review',
-            'topic', 'duration', 'pass_score', 'max_try',
+            'topic', 'duration', 'pass_score', 'max_try', 'max_score',
             'status', 'expired_date', 'start_date', 'total_score'
         ]
 
@@ -38,12 +39,13 @@ class ExamShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     exam_type = serializers.CharField(source='get_exam_type_display')
     views = serializers.StringRelatedField(many=True, required=False)
+    max_score = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'max_try', 'expired_date', 'start_date',
-            'exam_type', 'duration', 'pass_score', 'views', 'enable_review',
+            'exam_type', 'duration', 'pass_score', 'views', 'enable_review', 'max_score',
             'status'
         ]
 
@@ -51,11 +53,12 @@ class ExamShowSerializer(serializers.ModelSerializer):
 class ExamMinSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     exam_type = serializers.CharField(source='get_exam_type_display')
+    max_score = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score'
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score'
         ]
 
 

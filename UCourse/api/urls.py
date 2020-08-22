@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import SearchAPI, GetAllAPI, GetAllMyAPI, GetStudentGradesAPI
+from .views import SearchAPI, GetAllAPI, GetAllMyAPI
 
 urlpatterns = [
     path('auth/', include('users.urls')),
@@ -18,5 +18,5 @@ urlpatterns = [
     path('forums/', include('forums.urls')),
     path('questions/', include('questions.urls')),
     path('assignment/', include('assignment.urls')),
-    path('grade/student_grades', GetStudentGradesAPI.as_view())
+    path('grade/', include('grades.urls')),
 ]

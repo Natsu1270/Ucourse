@@ -20,6 +20,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.5.2",
     "axios": "^0.19.2",
+    "bizcharts": "^4.0.13",
     "chart.js": "^2.9.3",
     "firebase": "^7.9.3",
     "highlight.js": "^9.18.1",

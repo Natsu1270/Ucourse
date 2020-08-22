@@ -5,6 +5,8 @@ import Constants from '../../constants'
 import { getStudentGradesAPI } from '../../api/grades.services'
 import { formatDate } from '../../utils/text.utils'
 
+import { Chart, Line, Point } from 'bizcharts';
+
 const { TabPane } = Tabs
 
 const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
@@ -93,12 +95,27 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         }
     ];
 
-    const examData = exams.map((exam, index) => ({
-        stt: index + 1,
-        name: exam.exam.name,
-        date: exam.last_update,
-        result: exam.final_result
-    }));
+    let examData = []
+    let examStudentChartData = []
+    exams.foreEach((exam, index) => {
+        examData.push({
+            stt: index + 1,
+            name: exam.exam.name,
+            date: exam.last_update,
+            result: exam.final_result
+        })
+        examStudentChartData.push({
+            name: exam.name.name,
+            type: "Điểm đạt được",
+            score: exam.final_result
+        })
+
+        examStudentChartData.push({
+            name: exam.exam.name,
+            type: "Điểm tối đa",
+            score: exam.exam.max_score
+        })
+    });
 
     const assignmentData = assignments.map((assignment, index) => ({
         stt: index + 1,
@@ -106,6 +123,8 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         date: assignment.modified_date,
         result: assignment.score
     }))
+
+
 
     return (
         <section className="section-5 page-2">
@@ -115,6 +134,12 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             <Tabs defaultActiveKey="1">
                 <TabPane tab="Bài kiểm tra" key="1">
                     <Table dataSource={examData} columns={columns} />
+                    <Chart
+                        scale={{ score: { min: 0 } }} padding={[30, 20, 50, 40]}
+                        autoFit height={320} data={examStudentChartData} >
+                        <Line shape="smooth" position="name*score" color="name" label="score" />
+                        <Point position="name*score" color="name" />
+                    </Chart>
                 </TabPane>
                 <TabPane tab="Bài assignment" key="2">
                     <Table dataSource={assignmentData} columns={columns} />
