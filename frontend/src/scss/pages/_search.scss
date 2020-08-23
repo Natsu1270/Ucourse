@@ -1,64 +1,75 @@
 .search-filter {
-  padding: 0;
-  width: 20%;
-  align-self: flex-start;
-  h3 {
-    font-weight: 600;
-    font-size: 2rem;
-    color: $theme-green-color;
-    background-color: white;
-    border: 1px solid lightgrey;
-    text-align: center;
-    padding: 2.2rem 0;
-    border-radius: 4px;
-  }
+    padding: 0;
+    width: 20%;
+    align-self: flex-start;
+
+    h3 {
+        font-weight: 600;
+        font-size: 2rem;
+        color: $theme-green-color;
+        background-color: white;
+        border: 1px solid lightgrey;
+        text-align: center;
+        padding: 2.2rem 0;
+        border-radius: 4px;
+    }
 }
+
 .search-result {
-  padding: 0rem 10rem;
-  width: 75%;
+    padding: 0rem 10rem;
+    width: 75%;
 
+    &__title {
+        background-color: white;
+        border: 1px solid lightgrey;
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        border-radius: 4px;
 
-  &__title {
+        .text--main {
+            font-size: 2.7rem;
+        }
+
+        &--query {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.65);
+        }
+
+    }
+
+    &--search-bar {
+        margin-bottom: 4rem;
+    }
+
+    &--title {
+        border-bottom: 1px solid #0000000f;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+
+        &__small {
+            font-size: 1.6rem;
+            color: $color-grey-dark-3;
+        }
+    }
+
+    &--programs {
+        margin-bottom: 5rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
+        grid-column-gap: 3rem;
+        grid-row-gap: 2rem;
+    }
+
+    &--courses {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-row-gap: 2rem;
+    }
+}
+
+.search-result--c {
     background-color: white;
-    border: 1px solid lightgrey;
-    text-align: center;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: 4px;
-    .text--main {
-      font-size: 2.7rem;
-    }
-    &--query {
-      font-size: 2.5rem;
-      font-weight: 500;
-      color: rgba(0,0,0,0.65);
-    }
-  }
-  &--search-bar {
-    margin-bottom: 4rem;
-  }
-
-  &--title {
-    border-bottom: 1px solid #0000000f;
-    padding-bottom: 1rem;
-    margin-bottom: 2rem;
-
-    &__small {
-      font-size: 1.6rem;
-      color: $color-grey-dark-3;
-    }
-  }
-  &--programs {
-    margin-bottom: 5rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(35rem, 1fr));
-    grid-column-gap: 3rem;
-    grid-row-gap: 2rem;
-  }
-
-  &--courses {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-row-gap: 2rem;
-  }
+    padding: 2rem;
 }

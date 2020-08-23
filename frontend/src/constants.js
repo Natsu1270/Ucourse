@@ -43,6 +43,7 @@ const levelTypes = {
 
 const Constants = {
     DATE_FORMAT: 'YYYY/MM/DD',
+    YYYY_MM_DD: 'YYYY-MM-DD',
     DEFAULT_BIRTHDAY_PICK: '1996/01/01',
     // SPINNER_STYLE: override,
     MMM_Do_YYYY: 'MMM Do YY',

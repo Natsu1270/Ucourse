@@ -1,7 +1,7 @@
 import React from 'react'
 import Constants from "../../constants";
 
-const CourseSubInfo = ({class_count, level, open_date, rate}) => {
+const CourseSubInfo = ({ class_count, level, viewCount, rate }) => {
 
 
     return (
@@ -18,7 +18,7 @@ const CourseSubInfo = ({class_count, level, open_date, rate}) => {
             </li>
             <li className="search-course-card__body--content--info__item">
                 <span className="text--const">
-                    {open_date}
+                    {viewCount} lượt xem
                 </span>
             </li>
             <li className="search-course-card__body--content--info__item">

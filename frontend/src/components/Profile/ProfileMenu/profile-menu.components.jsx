@@ -31,11 +31,11 @@ const ProfileMenu = ({match, userProfile, currentUser}) => {
                 >
                     <Menu.Item key="1">
                         <Link className='link--no-decoration' to={match.url}>
-                            <UserOutlined /> Profile</Link>
+                            <UserOutlined /> Thông tin cá nhân</Link>
                     </Menu.Item>
                     <Menu.Item key="2">
                         <Link className='link--no-decoration' to={`${match.url}/account`}>
-                            <SettingOutlined /> Account</Link>
+                            <SettingOutlined /> Tài khoản</Link>
                     </Menu.Item>
                 </Menu>
             </div>

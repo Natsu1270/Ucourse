@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import SearchAPI, GetAllAPI, GetAllMyAPI
+from .views import SearchAPI, GetAllAPI, GetAllMyAPI, AdvancedSearch
 
 urlpatterns = [
     path('auth/', include('users.urls')),
@@ -8,6 +8,7 @@ urlpatterns = [
     path('courses/', include('courses.urls')),
     path('tags/', include('tags.urls')),
     path('search/', SearchAPI.as_view()),
+    path('search/advanced', AdvancedSearch.as_view()),
     path('field/', include('programs.field_urls')),
     path('programs/', include('programs.urls')),
     path('exams/', include('exams.urls')),

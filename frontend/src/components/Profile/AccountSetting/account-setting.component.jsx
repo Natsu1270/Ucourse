@@ -137,12 +137,12 @@ const AccountSetting = ({ currentUser, token, userProfile }) => {
 
                 <Form.Item
                     name="old_password"
-                    label="Current Password"
+                    label="Mật khẩu hiện tại"
                     hasFeedback
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your current password!',
+                            message: 'Hãy nhập mật khẩu hiện tại!',
                         },
                     ]}
                 >
@@ -151,7 +151,7 @@ const AccountSetting = ({ currentUser, token, userProfile }) => {
 
                 <Form.Item
                     name="password"
-                    label="New Password"
+                    label="Mật khẩu mới"
                     hasFeedback
                 >
                     <Input.Password />

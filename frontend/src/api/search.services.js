@@ -17,6 +17,15 @@ export function simpleSearch(keyword) {
     )
 }
 
+export function advancedSearchAPI(params) {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+        url: SEARCH_API_URL + '/advanced',
+        params
+    })
+}
+
 export function getPopularSearchKeywordsAPI() {
     return axios.request(
         {

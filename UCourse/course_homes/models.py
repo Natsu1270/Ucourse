@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -55,6 +57,15 @@ class CourseHome(models.Model):
     @property
     def full_name(self):
         return self.__str__()
+
+    @property
+    def can_register(self):
+        register_date = self.register_date
+        over_date = self.over_admission_days
+        last_register_date = register_date + timedelta(days=over_date)
+        if last_register_date >= date.today():
+            return True
+        return False
 
 
 class LearningTopic(models.Model):

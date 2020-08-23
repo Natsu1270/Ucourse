@@ -8,6 +8,7 @@ from ckeditor.fields import RichTextField
 from programs.models import Program, Field
 from tags.models import Tag
 from profiles.models import Profile
+from datetime import timedelta, date
 
 
 class Course(models.Model):
@@ -55,7 +56,8 @@ class Course(models.Model):
         Program, related_name='program_course', blank=True)
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
     tags = models.ManyToManyField(Tag, related_name='course_tags', blank=True)
-    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_viewed', blank=True)
+    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='course_viewed', through='UserViewCourse',
+                                   blank=True)
     created_date = models.DateTimeField(default=timezone.now)
     updated_date = models.DateTimeField(auto_now=True, null=True)
     created_by = models.ForeignKey(
@@ -92,6 +94,24 @@ class Course(models.Model):
         for c in self.c_homes.all():
             teachers.append(c.teacher)
         return teachers
+
+    @property
+    def can_register_class(self):
+        course_homes = self.c_homes.all()
+        for home in course_homes:
+            if home.can_register:
+                return True
+        return False
+
+
+class UserViewCourse(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='courses_viewed', on_delete=models.SET_NULL,
+                             null=True, blank=True)
+    course = models.ForeignKey(Course, related_name='course_user_viewed', on_delete=models.CASCADE)
+    view_date = models.DateField(default=timezone.now)
+
+    def __str__(self):
+        return "{0} - {1}".format(self.user.__str__(), self.course.__str__())
 
 
 class UserBuyCourse(models.Model):

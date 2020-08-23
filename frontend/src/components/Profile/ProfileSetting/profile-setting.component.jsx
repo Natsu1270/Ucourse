@@ -1,16 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-import {Form, Input, Button, DatePicker, Select, Switch, Checkbox} from "antd";
+import {Form, Input, Button, DatePicker, Select, Switch, Checkbox, message} from "antd";
 import moment from 'moment';
 import Constants from "../../../constants";
-import {useDispatch, useSelector} from "react-redux";
-import {createStructuredSelector} from "reselect";
-import {profileLoadingSelector} from "../../../redux/Profile/profile.selects";
 import WithSpinner from "../../Hocs/with-spinner.component";
-import {updateProfileStart} from "../../../redux/Profile/profile.actions";
+import {updateProfileAPI} from "../../../api/profile.services";
 
 const ProfileSetting = ({profile, isLoading, token}) => {
-    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(false)
     const [form] = Form.useForm();
     const initFormValues = {
         first_name: profile.first_name,
@@ -29,30 +26,42 @@ const ProfileSetting = ({profile, isLoading, token}) => {
         form.resetFields()
     };
     const layout = {
-        labelCol: {span: 4},
+        labelCol: {span: 6},
         wrapperCol: {span: 16},
     };
     const tailLayout = {
-        wrapperCol: {offset: 4, span: 16},
+        wrapperCol: {offset: 8, span: 16},
     };
     const {Option} = Select;
     const {TextArea} = Input;
     const config = {
         rules: [{type: 'object', required: false}],
     };
-    const onFinish = fieldValues => {
+    const onFinish = async fieldValues => {
+        setLoading(true)
         const values = {
             ...fieldValues,
             'birthday': fieldValues['birthday'] ? fieldValues['birthday'].format('YYYY-MM-DD') : undefined,
         };
         console.log('Received values of form: ', values);
-
-        dispatch(updateProfileStart(
-            {...values,
+        try {
+            await updateProfileAPI({
+                ...values,
                 birth_date: values.birth_date ? values.birth_date.format('YYYY-MM-DD') : undefined,
                 token
-            }
-            ))
+            })
+            message.success("Cập nhật thông tin cá nhân thành công!")
+        } catch (e) {
+            message.error("Có lỗi xảy ra: " + e.message)
+        }
+        setLoading(false)
+
+        // dispatch(updateProfileStart(
+        //     {...values,
+        //         birth_date: values.birth_date ? values.birth_date.format('YYYY-MM-DD') : undefined,
+        //         token
+        //     }
+        //     ))
     };
 
     return (
@@ -67,19 +76,19 @@ const ProfileSetting = ({profile, isLoading, token}) => {
                 onFinish={onFinish}
                 initialValues={initFormValues}
             >
-                <Form.Item name="first_name" label="First Name">
+                <Form.Item name="first_name" label="Họ và lót">
                     <Input placeholder="First name..."/>
                 </Form.Item>
-                <Form.Item name="last_name" label="Last Name">
+                <Form.Item name="last_name" label="Tên">
                     <Input placeholder="Last name..."/>
                 </Form.Item>
-                <Form.Item name="phone_number" label="Phone Number">
+                <Form.Item name="phone_number" label="Số điện thoại">
                     <Input placeholder="Phone number..."/>
                 </Form.Item>
-                <Form.Item name="birth_date" label="Birth Date" {...config}>
-                    <DatePicker />
+                <Form.Item name="birth_date" label="Ngày sinh" {...config}>
+                    <DatePicker/>
                 </Form.Item>
-                <Form.Item name="gender" label="Gender">
+                <Form.Item name="gender" label="Giới tính">
                     <Select placeholder="Gender..." style={{width: '25%'}}>
                         <Option value="M">Male</Option>
                         <Option value="F">Female</Option>
@@ -87,35 +96,35 @@ const ProfileSetting = ({profile, isLoading, token}) => {
                         <Option value="N">Rather not say</Option>
                     </Select>
                 </Form.Item>
-                <Form.Item name="address" label="Address">
+                <Form.Item name="address" label="Địa chỉ">
                     <Input placeholder="Address..."/>
                 </Form.Item>
-                <Form.Item name="bio" label="Bio">
+                <Form.Item name="bio" label="Giới thiệu bản thân">
                     <TextArea rows={4}/>
                 </Form.Item>
 
-                <Form.Item name="university" label="University">
-                    <Input placeholder="University..."/>
+                <Form.Item name="university" label="Trường đại học/ cao đẳng">
+                    <Input placeholder="BKU, HUTECH..."/>
                 </Form.Item>
 
-                <Form.Item name="major" label="Major">
-                    <Input placeholder="Major..."/>
+                <Form.Item name="major" label="Chuyên môn">
+                    <Input placeholder="Computer science..."/>
                 </Form.Item>
 
-                <Form.Item name="occupation" label="Occupation">
-                    <Input placeholder="Occupation..."/>
+                <Form.Item name="occupation" label="Nghê nghiệp">
+                    <Input placeholder="IT..."/>
                 </Form.Item>
 
-                <Form.Item name="public_info" valuePropName="checked" label="Show info">
+                <Form.Item name="public_info" valuePropName="checked" label="Công khai thông tin">
                     <Switch/>
                 </Form.Item>
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit" className="mr-3">Submit</Button>
-                    <Button htmlType="button" onClick={onReset} className="mr-3">
+                    <Button loading={loading} type="primary" htmlType="submit" className="mr-3">Cập nhật</Button>
+                    <Button loading={loading} danger htmlType="button" onClick={onReset} className="mr-3">
                         Reset
                     </Button>
-                    <Button htmlType="button" onClick={() => window.open('/', '_self')}>
-                        Cancel
+                    <Button loading={loading} htmlType="button" onClick={() => window.open('/', '_self')}>
+                        Hủy
                     </Button>
                 </Form.Item>
             </Form>

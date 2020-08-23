@@ -30,7 +30,7 @@ def uc_response(data, error, result, message, status_code):
 
 
 def create_search_keyword(keyword):
-    if keyword:
+    if keyword is not None and keyword != "":
         search_key = SearchKeyWord.objects.filter(name=keyword)
         if len(search_key) == 0:
             SearchKeyWord.objects.create(name=keyword)

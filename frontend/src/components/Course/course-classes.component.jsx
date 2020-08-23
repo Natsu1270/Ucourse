@@ -33,6 +33,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
 
     const registerBtn = (item) => {
         if (!canRegister(item)) return 'Hết hạn đăng ký'
+        if (item.maximum_number === item.student_count) return "Đủ số lượng học viên đăng ký"
         if (item.is_my_class) {
             let a = dayDiff(item.open_date, now);
             if (dayDiff(item.open_date, now) <= 0) {
@@ -59,7 +60,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                         actions={[
                             <Button
                                 onClick={() => registerClass(item)}
-                                disabled={!canRegister(item) || item.is_my_class}
+                                disabled={!canRegister(item) || item.is_my_class || item.student_count === item.maximum_number}
                                 type="primary"
                                 key="list-loadmore-edit">
                                 {

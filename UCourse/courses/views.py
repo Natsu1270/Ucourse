@@ -2,12 +2,11 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, views, status
 from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer
 from api.permissions import IsTeacherOrTARoleOrReadOnly
-from .models import Course, CourseDetail, UserBuyCourse
+from .models import Course, CourseDetail, UserBuyCourse, UserViewCourse
 import uuid
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from django.shortcuts import render, redirect, get_object_or_404, reverse
 import json
-
 
 
 class CourseListView(generics.ListCreateAPIView):
@@ -36,6 +35,15 @@ class CourseDetailView(generics.RetrieveUpdateDestroyAPIView):
         permissions.IsAuthenticatedOrReadOnly,
         IsTeacherOrTARoleOrReadOnly
     ]
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        if self.request.user.is_anonymous:
+            UserViewCourse.objects.create(course_id=instance.id)
+        else:
+            UserViewCourse.objects.create(user=self.request.user, course_id=instance.id)
+        return Response(serializer.data)
 
     def get_serializer_context(self):
         user = self.request.user

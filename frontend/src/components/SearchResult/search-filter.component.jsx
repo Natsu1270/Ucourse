@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react'
-import {useSelector, useDispatch} from "react-redux";
-import {Collapse, Checkbox, Row, Col, Spin, DatePicker, Rate} from "antd";
-import {getFieldStart} from "../../redux/Field/field.actions";
-import {createStructuredSelector} from "reselect";
-import {fieldsSelector, isFetchingSelector} from "../../redux/Field/field.selects";
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from "react-redux";
+import { Collapse, Checkbox, Row, Col, Spin, DatePicker, Rate } from "antd";
+import { getFieldStart } from "../../redux/Field/field.actions";
+import { createStructuredSelector } from "reselect";
+import { fieldsSelector, isFetchingSelector } from "../../redux/Field/field.selects";
 import Constants from "../../constants";
-import {getListTeacherStart} from "../../redux/Profile/profile.actions";
-import {profileLoadingSelector, teacherListSelector} from "../../redux/Profile/profile.selects";
+import { getListTeacherStart } from "../../redux/Profile/profile.actions";
+import { profileLoadingSelector, teacherListSelector } from "../../redux/Profile/profile.selects";
 import {
     updateSearchFilterField,
     updateSearchFilterLevel,
@@ -24,19 +24,19 @@ const SearchFilter = () => {
         dispatch(getListTeacherStart())
     }, [])
 
-    const {fields, isFetching, teacherList, isLoading} = useSelector(createStructuredSelector({
+    const { fields, isFetching, teacherList, isLoading } = useSelector(createStructuredSelector({
         fields: fieldsSelector,
         isFetching: isFetchingSelector,
         teacherList: teacherListSelector,
         isLoading: profileLoadingSelector
     }))
 
-    const {Panel} = Collapse
-    const {RangePicker} = DatePicker
+    const { Panel } = Collapse
+    const { RangePicker } = DatePicker
     const levelOptions = [
-        {label: 'Cơ bản', value: 'Beginner'},
-        {label: 'Trung cấp', value: 'Intermediate'},
-        {label: 'Nâng cao', value: 'Advanced'},
+        { label: 'Cơ bản', value: 'Beginner' },
+        { label: 'Trung cấp', value: 'Intermediate' },
+        { label: 'Nâng cao', value: 'Advanced' },
     ]
 
     // const rateOptions = [
@@ -67,11 +67,11 @@ const SearchFilter = () => {
         <Collapse>
             <Panel key="1" header="Lĩnh vực" className='white-bg'>
                 {
-                    isFetching ? <Spin/> :
-                        <Checkbox.Group style={{width: '100%'}} onChange={onChangeField}>
+                    isFetching ? <Spin /> :
+                        <Checkbox.Group style={{ width: '100%' }} onChange={onChangeField}>
                             <Row>
                                 {fields.map(field => (
-                                    <Col key={field.code} span={24} style={{marginBottom: '1rem'}}>
+                                    <Col key={field.code} span={24} style={{ marginBottom: '1rem' }}>
                                         <Checkbox value={field.slug}>{field.name}</Checkbox>
                                     </Col>
                                 ))}
@@ -80,10 +80,10 @@ const SearchFilter = () => {
                 }
             </Panel>
             <Panel key="2" header="Cấp độ" className='white-bg'>
-                <Checkbox.Group style={{width: '100%'}} onChange={onChangeLevel}>
+                <Checkbox.Group style={{ width: '100%' }} onChange={onChangeLevel}>
                     <Row>
                         {levelOptions.map(level => (
-                            <Col key={level.value} span={24} style={{marginBottom: '1rem'}}>
+                            <Col key={level.value} span={24} style={{ marginBottom: '1rem' }}>
                                 <Checkbox value={level.value}>{level.label}</Checkbox>
                             </Col>
                         ))}
@@ -91,9 +91,9 @@ const SearchFilter = () => {
 
                 </Checkbox.Group>
             </Panel>
-            <Panel key="3" header="Thời gian mở" className='white-bg'>
+            {/* <Panel key="3" header="Thời gian mở" className='white-bg'>
                 <RangePicker format={Constants.DD_MM_YYYY}/>
-            </Panel>
+            </Panel> */}
             {/*<Panel key="4" header="Điểm đánh giá" className='white-bg'>*/}
             {/*    <Checkbox.Group style={{width: '100%'}} onChange={onChangeRate}>*/}
             {/*        <Row>*/}
@@ -108,11 +108,11 @@ const SearchFilter = () => {
             {/*</Panel>*/}
             <Panel key="5" header="Giảng viên" className='white-bg'>
                 {
-                    isLoading ? <Spin/> :
-                        <Checkbox.Group style={{width: '100%'}} onChange={onChangeTeacher}>
+                    isLoading ? <Spin /> :
+                        <Checkbox.Group style={{ width: '100%' }} onChange={onChangeTeacher}>
                             <Row>
                                 {teacherList.map(teacher => (
-                                    <Col key={teacher.pk} span={24} style={{marginBottom: '1rem'}}>
+                                    <Col key={teacher.pk} span={24} style={{ marginBottom: '1rem' }}>
                                         <Checkbox value={teacher.pk}>{teacher.fullname}</Checkbox>
                                     </Col>
                                 ))}

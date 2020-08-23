@@ -1,12 +1,12 @@
 import React from "react";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import SearchCourseItem from "./search-course-item.component";
 
 
-const SearchCourses = ({courses}) => {
+const SearchCourses = ({ courses }) => {
     const history = useHistory();
     return (
-        <div className="search-result--c">
+        <div>
             {
                 courses.length ? (
                     <div className="search-result--c">
@@ -18,8 +18,7 @@ const SearchCourses = ({courses}) => {
                                 courses.map(course => {
                                     return (
                                         <SearchCourseItem
-                                            onClick = {() =>
-                                            {
+                                            onClick={() => {
                                                 history.push(`/courses/${course.slug}`)
                                             }}
                                             key={course.code}
@@ -27,15 +26,16 @@ const SearchCourses = ({courses}) => {
                                             img={course.icon}
                                             class_count={course.course_home_count}
                                             level={course.level}
-                                            open_date={1}
-                                            rate={1}
+                                            viewCount={course.view_count}
+                                        // open_date={1}
+                                        // rate={1}
                                         />
                                     )
                                 })
                             }
                         </div>
                     </div>
-                ) : <span/>
+                ) : <span />
             }
         </div>)
 };

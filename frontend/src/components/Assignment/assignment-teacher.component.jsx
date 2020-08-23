@@ -1,36 +1,24 @@
 import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 import {
-    Skeleton, message, Descriptions, Badge, Button, Form,
-    Upload, Tag, Statistic, Tree, Row, Col, Card, Space, List,
-    Popconfirm, Tabs, Table, Divider, InputNumber
+    Skeleton, message, Descriptions, Badge, Button,
+    Tree, Space, Tabs, Table, Divider, InputNumber
 } from "antd";
 import {
     getAssignmentDetailAPI, getStudentAssignmentListByTopicAPI,
     downloadAssignmentItem, downloadAllAssigment
 } from '../../api/assignment.services'
-import {formatDate, isTimeBefore, parseHtml, dayDiff} from '../../utils/text.utils';
+import {formatDate, isTimeBefore, parseHtml} from '../../utils/text.utils';
 import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';
 import {
-    InboxOutlined, UploadOutlined, DownOutlined,
-    SettingOutlined, PaperClipOutlined, ClockCircleTwoTone, DownloadOutlined
+    DownOutlined, DownloadOutlined
 } from '@ant-design/icons'
-
-import {Doughnut} from 'react-chartjs-2'
+import {Chart, Interval} from 'bizcharts'
 import fileDownload from 'js-file-download'
 import {updateStudentAssignmentGrade} from "../../api/grades.services";
 
-const {Dragger} = Upload
-const {Countdown} = Statistic
 const {TabPane} = Tabs
-
-const normFile = e => {
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
 
 const AssignmentTeacher = ({token, courseHomeDetail}) => {
 
@@ -80,7 +68,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
     useEffect(() => {
         if (studentAssignments.length > 0) {
             const listScore = {}
-            studentAssignments.forEach(a => listScore[a.id] = a.score )
+            studentAssignments.forEach(a => listScore[a.id] = a.score)
             setScoreList(listScore)
         }
     }, [studentAssignments])
@@ -212,7 +200,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
         const data = {token, score: editScore, studentAssignmentId: editAssignment.id}
         try {
             await updateStudentAssignmentGrade(data)
-            const newScoreList = {...scoreList, [editAssignment.id] : editScore}
+            const newScoreList = {...scoreList, [editAssignment.id]: editScore}
             setScoreList(newScoreList)
             message.success("Cập nhật thành công")
         } catch (err) {
@@ -244,6 +232,14 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
         setEditAssignment(null)
         setEditScore(null)
     }
+
+    const chartData = [
+        {type: "Số học viên đã xem", quantity: viewed},
+        {
+            type: "Số học viên đã nộp bài", quantity: assignmentDetail.students ?
+                assignmentDetail.students.length : 0
+        }
+    ]
 
     return (
         <section className="section-5 page-2 course-lecture">
@@ -315,6 +311,9 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                             </Descriptions.Item> : null
                                     }
                                 </Descriptions>
+                                <Chart scale={{ quantity: { max: studentNum } }}height={250} width={500} data={chartData}>
+                                    <Interval position="type*quantity"/>
+                                </Chart>
                             </TabPane>
                             <TabPane tab="Thống kê bài nộp" key="2">
                                 <Descriptions
@@ -338,7 +337,8 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                     dataSource={data}
                                 />
                                 <div className="text-center">
-                                    <Button onClick={downloadAllItem} loading={downloading} type="primary">Tải về toàn bộ bài nộp</Button>
+                                    <Button onClick={downloadAllItem} loading={downloading} type="primary">Tải về toàn
+                                        bộ bài nộp</Button>
                                 </div>
                             </TabPane>
                         </Tabs>
