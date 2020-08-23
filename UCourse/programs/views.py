@@ -8,7 +8,7 @@ from .models import Field, Program, UserBuyProgram
 
 class FieldListAPI(generics.ListAPIView):
     serializer_class = FieldSerializer
-    queryset = Field.objects.all().order_by('name')
+    queryset = Field.objects.all().order_by('id')
 
 
 class FieldListMinAPI(generics.ListAPIView):

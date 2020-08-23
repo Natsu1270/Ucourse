@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Modal, Skeleton } from "antd";
+import React, { useEffect, useState } from 'react'
+import { Modal, Skeleton, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { isAbilityTestModalActiveSelector } from "../../redux/UI/ui.selects";
@@ -13,24 +13,35 @@ import { toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import AbilityTestForm from './ability-test-form.component';
 
 import { Button } from 'antd'
+import { generateAbilityTestAPI } from '../../api/abilityTest.services';
 
-const AbilityTest = () => {
+const AbilityTest = ({ abilityTestId, token }) => {
 
     const {
-        isModalActive,
-        generatedAbilityTest,
-        isGenerating,
-        duration,
-        questions,
-        uATid,
+        isModalActive
     } = useSelector(createStructuredSelector({
         isModalActive: isAbilityTestModalActiveSelector,
-        generatedAbilityTest: generatedAbilityTestSelector,
-        isGenerating: isGeneratingAbilityTestSelector,
-        duration: atDurationSelector,
-        questions: atQuestionsSelector,
-        uATid: uatIdSelector,
     }));
+
+    const [loading, setLoading] = useState(true)
+    const [test, setTest] = useState({})
+
+    const generateTest = async () => {
+        setLoading(true)
+        try {
+            const { data } = await generateAbilityTestAPI({ token, ability_test: abilityTestId })
+            setTest(data.data.user_ability_test)
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setLoading(false)
+    }
+
+    useEffect(() => {
+        if (token && isModalActive) {
+            generateTest()
+        }
+    }, [token, abilityTestId, isModalActive])
 
     const dispatch = useDispatch();
 
@@ -50,6 +61,7 @@ const AbilityTest = () => {
 
     return (
         <Modal
+            destroyOnClose={true}
             className="ability-test-model"
             title="Bài kiểm tra năng lực"
             visible={isModalActive}
@@ -66,11 +78,13 @@ const AbilityTest = () => {
             bodyStyle={bodyStyle}
         >
             {
-                isGenerating ? <Skeleton active /> : <AbilityTestForm
-                    duration={duration}
-                    questions={questions}
-                    uATId={uATid}
-                />
+                <Skeleton active loading={loading}>
+                    <AbilityTestForm
+                        duration={test.duration}
+                        questions={test.questions}
+                        uATId={test.id}
+                    />
+                </Skeleton>
             }
         </Modal>
     )

@@ -53,6 +53,7 @@ const Constants = {
     LEVEL: 'level',
     RATING: 'rating',
     TEACHER: 'teacher',
+    LOADING_ICON: antIcon,
     SPIN_ICON: spin,
     SPIN_ICON_WHITE: spinWhite,
     COURSE_HOME_LINK: '/learn',

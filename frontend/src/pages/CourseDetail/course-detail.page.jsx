@@ -142,7 +142,7 @@ const CourseDetail = () => {
 
             {/*<CourseDetailRelated course={course}/>*/}
 
-            <AbilityTest />
+            <AbilityTest abilityTestId={course.ability_test} token={token} />
 
             <Modal title="Đăng ký khóa học thành công"
                 visible={registerCourseModal}

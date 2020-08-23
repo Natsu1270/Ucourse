@@ -4,7 +4,7 @@ const FIELD_API_URL = '/api/field/';
 
 export const getFieldsAPI = () => {
     return axios.request({
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         method: 'GET',
         url: FIELD_API_URL
     })
@@ -12,8 +12,17 @@ export const getFieldsAPI = () => {
 
 export const getFieldDetailAPI = (slug) => {
     return axios.request({
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         method: 'GET',
         url: `${FIELD_API_URL}/${slug}`
     })
 };
+
+
+export const getListFieldWithCourse = () => {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+        url: `${FIELD_API_URL}/all`
+    })
+}

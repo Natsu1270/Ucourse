@@ -5,7 +5,7 @@ import { showRLModal, toggleAbilityTestModal } from "../../redux/UI/ui.actions";
 import { genAbilityTestStart } from "../../redux/AbilityTest/abilityTest.actions";
 import { tokenSelector } from "../../redux/Auth/auth.selects";
 import { useHistory } from 'react-router-dom';
-import {isLoadingSelector, myCourseHomesSelector} from "../../redux/CourseHome/course-home.selects";
+import { isLoadingSelector, myCourseHomesSelector } from "../../redux/CourseHome/course-home.selects";
 import Constants from "../../constants";
 
 const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
@@ -36,7 +36,7 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
     const confirm = (e) => {
         if (token) {
             dispatch(toggleAbilityTestModal());
-            dispatch(genAbilityTestStart({ token, ability_test: course.ability_test }))
+            // dispatch(genAbilityTestStart({ token, ability_test: course.ability_test }))
         } else {
             message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
                 1.5,
@@ -44,10 +44,6 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
         }
 
     };
-
-    const gotoCourseLearn = () => {
-        history.push(`${Constants.COURSE_HOME_LINK}/${course.slug}`)
-    }
 
 
     return (
@@ -67,34 +63,12 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
 
                     {
                         !isProgram ? <li className="course-tab__address" id="tab-components">
-                        <a href="#cs-course-classes"
-                            className="course-tab__address--link">Đăng ký lớp</a>
-                    </li>:null
+                            <a href="#cs-course-classes"
+                                className="course-tab__address--link">Đăng ký lớp</a>
+                        </li> : null
                     }
-
-                    {/*<li className="course-tab__address" id="tab-review">*/}
-                    {/*    <a href="#cs-course-review"*/}
-                    {/*        className="course-tab__address--link">Đánh giá học viên</a>*/}
-                    {/*</li>*/}
-
                 </ul>
                 <div className="course-tab__btn">
-                    {/*{*/}
-                    {/*    isRegistering ?*/}
-                    {/*        <Button type="primary" className="cs-btn-tab">*/}
-                    {/*            {Constants.SPIN_ICON_WHITE}*/}
-                    {/*        </Button> :*/}
-                    {/*        isProgram ? <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
-                    {/*            Đăng ký ngay*/}
-                    {/*        </Button> :*/}
-                    {/*    isOwn ?*/}
-                    {/*        <Button type="primary" className="cs-btn-tab" >*/}
-                    {/*            Đã sở hữu*/}
-                    {/*        </Button> :*/}
-                    {/*        <Button onClick={handleRegister} type="primary" className="cs-btn-tab">*/}
-                    {/*            Đăng ký ngay*/}
-                    {/*        </Button>*/}
-                    {/*}*/}
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"

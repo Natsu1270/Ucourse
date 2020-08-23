@@ -56,20 +56,22 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
                     <h4 className="text--sub__smaller text-white">
                         Khóa học
                     </h4>
-                    <h1 className="text--main text--main__bigger text-white">
-                        {isLoading ? Constants.SPIN_ICON : courseDetail.verbose_name}
-                    </h1>
-                    <Skeleton active loading={isLoading}>
+
+                    <Skeleton active loading={isLoading} avatar paragraph={{ rows: 2 }}>
+                        <h1 className="text--main text--main__bigger text-white">
+                            {isLoading ? Constants.SPIN_ICON : courseDetail.verbose_name}
+                        </h1>
                         <p className="course-description text--sub text--sub__bigger mt-4">
                             {courseDetail.short_description}
                         </p>
+                        <h3 className="text-white">
+                            Học phí: {isLoading ? Constants.SPIN_ICON : renderPrice()}
+                        </h3>
                     </Skeleton>
-                    <h3 className="text-white">
-                        Học phí: {isLoading ? Constants.SPIN_ICON : renderPrice()}
-                    </h3>
+
 
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated" disabled ={userRole.code === 'TA'|| userRole.code ==='TC'}>
+                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
                             {isRegistering ? Constants.SPIN_ICON : own ? 'Đã sở hữu' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">
@@ -80,7 +82,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
             </div>
             <Modal
                 title={<h1>Thanh toán</h1>}
-                closeIcon={<i></i>}
+                closeIcon={<i>X</i>}
                 visible={showPayment}
                 onCancel={() => setShowPayment(false)}
                 footer={[

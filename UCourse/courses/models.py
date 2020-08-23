@@ -8,8 +8,6 @@ from ckeditor.fields import RichTextField
 from programs.models import Program, Field
 from tags.models import Tag
 from profiles.models import Profile
-from datetime import timedelta, date
-
 
 class Course(models.Model):
     BEGINNER = 'bg'
@@ -50,8 +48,6 @@ class Course(models.Model):
     outline_detail = RichTextField(blank=True, null=True)
     outline_file = models.FileField(upload_to='courses/outlines', blank=True, null=True)
     user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
-    # open_date = models.DateField(blank=True, null=True)
-    # end_date = models.DateField(blank=True, null=True)
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
