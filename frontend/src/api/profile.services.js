@@ -30,10 +30,13 @@ export const getListTeacherAPI = () => {
     )
 }
 
-export const getPublicUserProfileAPI = (username) => {
+export const getPublicUserProfileAPI = (username, token) => {
+    const headers = token ?
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
     return axios.request(
         {
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             method: 'GET',
             url: `${PROFILE_API_URL}/${username}`,
         }

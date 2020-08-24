@@ -19,7 +19,7 @@ urlpatterns = [
     path('forums/', include('forums.urls')),
     path('questions/', include('questions.urls')),
     path('assignment/', include('assignment.urls')),
-    # path('grade/student_grades', GetStudentGradesAPI.as_view()),
+    path('grade/', include('grades.urls')),
     path('events/', include('events.urls')),
 
 ]

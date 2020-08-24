@@ -62,7 +62,7 @@ class PublicUserProfile(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        if serializer.data['public_info']:
+        if (self.request.user.is_anonymous and serializer.data['public_info']) or self.request.user.id == serializer.data['id']:
             return Response(serializer.data)
         return Response({
             "result": False,

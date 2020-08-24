@@ -11,6 +11,10 @@ import {
 import { formatDate } from '../../utils/text.utils';
 import Constants from '../../constants';
 import ResultComponent from '../../components/Common/result.component'
+import { tokenSelector } from '../../redux/Auth/auth.selects'
+import { useSelector } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
+
 
 const { Sider, Content } = Layout;
 
@@ -24,10 +28,14 @@ const PublicProfilePage = () => {
     const [profileDetail, setProfileDetail] = useState({})
     const [canView, setCanView] = useState(false)
 
+    const { token } = useSelector(createStructuredSelector({
+        token: tokenSelector
+    }));
+
     const getProfile = async () => {
         setLoading(true)
         try {
-            const { data } = await getPublicUserProfileAPI(username)
+            const { data } = await getPublicUserProfileAPI(username, token)
             if (data.status === 401) {
                 setUserProfile(data.data)
                 setProfileDetail(data.data.user_profile)

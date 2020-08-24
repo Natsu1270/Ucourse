@@ -53,8 +53,10 @@ class Profile(models.Model):
 
     @property
     def age(self):
-        delta_day = date.today() - self.birth_date
-        return delta_day.days // 365
+        if self.birth_date:
+            delta_day = date.today() - self.birth_date
+            return delta_day.days // 365
+        return None
 
     @property
     def fullname(self):

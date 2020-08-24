@@ -1,21 +1,21 @@
-import React, {Suspense} from 'react'
-import {useDispatch} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logoutStart} from '../../redux/Auth/auth.actions';
-import {showRLModal} from '../../redux/UI/ui.actions'
+import React, { Suspense } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { logoutStart } from '../../redux/Auth/auth.actions';
+import { showRLModal } from '../../redux/UI/ui.actions'
 
-import {Button, Layout } from 'antd'
+import { Button, Layout } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
-import {clearCurrentProfile} from "../../redux/Profile/profile.actions";
+import { clearCurrentProfile } from "../../redux/Profile/profile.actions";
 
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
 
-const Header = ({token, currentUser}) => {
+const Header = ({ token, currentUser }) => {
     const dispatch = useDispatch();
 
-    const {Header} = Layout;
+    const { Header } = Layout;
 
     const handleLogout = () => {
         dispatch(logoutStart(token));
@@ -36,24 +36,24 @@ const Header = ({token, currentUser}) => {
                     <Link to="/event">Sự kiện</Link>
                 </li>
                 <li className='header-search'>
-                    <SearchInput width={200}/>
+                    <SearchInput width={400} />
                 </li>
-                    {
-                        currentUser ? (
-                            <li>
-                                <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout}/>
-                            </li>
-                        ) : (
+                {
+                    currentUser ? (
+                        <li>
+                            <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout} />
+                        </li>
+                    ) : (
                             <li className="nav-item active-nav" id="logout-btn">
                                 <Button type="primary" onClick={() => dispatch(showRLModal())}>
                                     Đăng ký
                                 </Button>
                             </li>
                         )
-                    }
+                }
             </ul>
-            <Suspense fallback={<span/>}>
-                <RegisterOrLogin/>
+            <Suspense fallback={<span />}>
+                <RegisterOrLogin />
             </Suspense>
         </Header>
     )
