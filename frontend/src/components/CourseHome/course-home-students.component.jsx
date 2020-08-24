@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table } from 'antd'
+import { message, Tabs, Table, Space, Tag } from 'antd'
 import Constants from '../../constants'
 import { getEventListAPI } from '../../api/event.services'
-import {getCourseHomeDetailAPI}  from '../../api/courseHome.services'
-import { formatDate } from '../../utils/text.utils'
-import { Link , useHistory} from 'react-router-dom'
+import { getCourseHomeDetailAPI } from '../../api/courseHome.services'
+import { formatDate, timeDiff } from '../../utils/text.utils'
+import { Link, useHistory } from 'react-router-dom'
+import Avatar from 'antd/lib/avatar/avatar'
 const { TabPane } = Tabs
 
-const CourseHomeStudent = ({students, isLoading}) => {
-    // const [loading, setLoading] = useState(false)
+const CourseHomeStudent = ({ students, isLoading }) => {
     const [studentData, setStudents] = useState([])
-   
     // getCourseHomeDetailAPI(studentId).then(response => {
     //     setStudents(response.CourseHomeStudent.data.data)
     // })
@@ -21,12 +20,13 @@ const CourseHomeStudent = ({students, isLoading}) => {
             username: student.username,
             email: student.email,
             status: student.status,
-            id: student.id
+            id: student.id,
+            avatar: student.user_profile.avatar,
+            lastLogin: student.last_login
         })));
-        console.log(studentData);
     }, [students])
 
-    
+
 
     const columns = [
         {
@@ -39,8 +39,12 @@ const CourseHomeStudent = ({students, isLoading}) => {
             title: 'Họ tên',
             dataIndex: 'username',
             key: 'username',
-            // render: (username, id) => <Link to={`user/${username}`}>{username}</Link >
-            render: (username) => <a href="#" onClick={() => history.push(`/user/${username}`)}>{username}</a>
+            render: (username, record) => (
+                <Space onClick={() => window.open(`/user/${username}`)} style={{ cursor: 'pointer' }}>
+                    <Avatar src={record.avatar} size={48} />
+                    <p style={{ fontSize: '1.6rem', color: '#048dfd' }}>{username}</p>
+                </Space>
+            )
         },
         {
             title: 'Email',
@@ -49,23 +53,20 @@ const CourseHomeStudent = ({students, isLoading}) => {
             render: email => <span>{email}</span>
         },
         {
-            title: 'Tình trạng',
-            dataIndex: 'status',
-            key: 'status',
-            render: status => <span>{status}</span>
-        }, 
-        
+            title: 'Đăng nhập lần cuối vào',
+            dataIndex: 'lastLogin',
+            key: 'lastLogin',
+            render: lastLogin => <span>{lastLogin !== null ? timeDiff(lastLogin) : 'Chưa truy cập'}</span>
+        },
+
     ];
 
     return (
-        // <div></div>
         <section className="section-5 page-2">
-            <h2 className="text--main mb-5">Danh sách học viên</h2>
-             <Tabs defaultActiveKey="1">
-                <TabPane tab="" key="">
-                    <Table dataSource={studentData} columns={columns} />
-                </TabPane>
-            </Tabs>
+            <h3 className="text--main mb-5">
+                Danh sách học viên
+            </h3>
+            <Table pagination={{ pageSize: 5 }} size="large" dataSource={studentData} columns={columns} />
         </section>
     )
 }

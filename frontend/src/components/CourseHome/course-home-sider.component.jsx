@@ -1,14 +1,14 @@
-import React, {useState} from 'react'
-import {Layout, Menu, Skeleton} from "antd";
-import {Link, useHistory} from 'react-router-dom';
-import {HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined} from '@ant-design/icons'
+import React, { useState } from 'react'
+import { Layout, Menu, Skeleton } from "antd";
+import { Link, useHistory } from 'react-router-dom';
+import { HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined, SolutionOutlined } from '@ant-design/icons'
 import Constants from "../../constants";
 
-const CourseHomeSider = ({isLoading, course, match}) => {
+const CourseHomeSider = ({ isLoading, course, match }) => {
 
     const [collapsed, setCollapsed] = useState(false);
-    const {SubMenu} = Menu;
-    const {Content, Sider} = Layout;
+    const { SubMenu } = Menu;
+    const { Content, Sider } = Layout;
     const onCollapse = () => {
         setCollapsed(!collapsed)
     }
@@ -18,13 +18,13 @@ const CourseHomeSider = ({isLoading, course, match}) => {
 
     return (
         <Sider collapsible
-               collapsed={collapsed}
-               onCollapse={onCollapse}
-               width={280}
-               className="course-home-sider">
+            collapsed={collapsed}
+            onCollapse={onCollapse}
+            width={280}
+            className="course-home-sider">
             <h3 className="text--main">
                 {isLoading ?
-                    Constants.SPIN_ICON_WHITE : collapsed ? <LaptopOutlined/> : course.title
+                    Constants.SPIN_ICON_WHITE : collapsed ? <LaptopOutlined /> : course.title
                 }
             </h3>
             <Menu
@@ -32,27 +32,27 @@ const CourseHomeSider = ({isLoading, course, match}) => {
                 mode="inline"
                 defaultSelectedKeys={[activeKey]}
                 defaultOpenKeys={['sub1']}
-                style={{height: '100%', borderRight: 0}}
+                style={{ height: '100%', borderRight: 0 }}
             >
 
-                <Menu.Item onClick={()=>history.push(`${match.url}`)} key="1">
-                    <HomeOutlined/>
+                <Menu.Item onClick={() => history.push(`${match.url}`)} key="1">
+                    <HomeOutlined />
                     <span>Giới thiệu khóa học</span>
                 </Menu.Item>
-                <Menu.Item onClick={()=>history.push(`${match.url}/schedule`)} key="schedule">
-                    <BookOutlined/>
+                <Menu.Item onClick={() => history.push(`${match.url}/schedule`)} key="schedule">
+                    <BookOutlined />
                     <span>Chương trình học</span>
                 </Menu.Item>
-                <Menu.Item onClick={()=>history.push(`${match.url}/grades`)} key="grades">
-                    <FileProtectOutlined/>
+                <Menu.Item onClick={() => history.push(`${match.url}/grades`)} key="grades">
+                    <FileProtectOutlined />
                     <span>Điểm</span>
                 </Menu.Item>
-                <Menu.Item onClick={()=>history.push(`${match.url}/forums`)} key="forums">
-                    <TeamOutlined/>
+                <Menu.Item onClick={() => history.push(`${match.url}/forums`)} key="forums">
+                    <SolutionOutlined />
                     <span>Forums</span>
                 </Menu.Item>
-                <Menu.Item onClick={()=>history.push(`${match.url}/students`)} key="students">
-                    <TeamOutlined/>
+                <Menu.Item onClick={() => history.push(`${match.url}/students`)} key="students">
+                    <TeamOutlined />
                     <span>Danh sách học viên</span>
                 </Menu.Item>
             </Menu>
