@@ -11,11 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, read_only=True)
     role = RoleSerializer(many=False, read_only=True)
     user_profile = ProfileSerializer(read_only=True)
+    public_info = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = get_user_model()
         fields = ('id', 'username', 'email', 'password', 'is_social_account', 'user_profile',
-                  'date_joined', 'is_active', 'role')
+                  'date_joined', 'is_active', 'role', 'public_info')
         extra_kwargs = {'password': {'write_only': True}, }
         read_only_fields = ('id', 'date_joined', 'is_active',)
 
@@ -29,6 +30,10 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+    @staticmethod
+    def get_public_info(obj):
+        return obj.user_profile.public_info
 
 
 class UserMinSerializer(serializers.ModelSerializer):

@@ -10,3 +10,22 @@
         justify-content: flex-start;
     }
 }
+
+
+.user-profile {
+    &--sider, &--content {
+        box-shadow: $shadow-light;
+        overflow: hidden;
+        border-radius: 1rem;
+        padding: 2rem;
+    }
+
+    &--info {
+        background-color: $theme-font-color-light;
+    }
+
+    &--content {
+        margin-left: 2rem;
+        background-color: white;
+    }
+}

@@ -39,6 +39,7 @@ const AbilityTestPage = lazy(() => import('./pages/AbilityTestPage/ability-tests
 const CourseHomePage = lazy(() => import('./pages/CourseHome/course-home.page'));
 const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page'));
 const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
+const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.page'))
 
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
                                     <Route path="/learn/:slug">
                                         <CourseHomePage myCourses={myCourses} userRole={userRole} />
                                     </Route>
+                                    <Route exact path="/user/:username" component={UserProfilePage} />
                                     <Route component={Page404NotFound} />
 
                                 </Switch>

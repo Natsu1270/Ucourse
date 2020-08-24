@@ -10,7 +10,9 @@ import {
     UserOutlined,
     AppstoreOutlined,
     LogoutOutlined,
-    ReadOutlined} from "@ant-design/icons";
+    ReadOutlined,
+    SmileOutlined
+} from "@ant-design/icons";
 
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -30,14 +32,17 @@ const ProfileHeaderDropdown = (props) => {
         backgroundColor: 'transparent',
         border: '1px solid white'
     };
-   
+
+    const username = props.currentUser.username ? props.currentUser.username : props.currentUser.displayName
+
     const menu = (
         <Menu>
             <Menu.Item>
-                <Link to="/profile" style={styles}>
-                   <UserOutlined /> Thông tin cá nhân
+                <Link to={`/user/${username}`} style={styles}>
+                    <SmileOutlined /> Trang cá nhân
                 </Link>
             </Menu.Item>
+
             <Menu.Item>
                 <Link to="/my-courses" style={styles}>
                     <ReadOutlined /> Khoá học của tôi
@@ -49,6 +54,11 @@ const ProfileHeaderDropdown = (props) => {
                 </Link>
             </Menu.Item>
             <Menu.Item>
+                <Link to="/profile" style={styles}>
+                    <UserOutlined /> Cài đặt thông tin cá nhân
+                </Link>
+            </Menu.Item>
+            <Menu.Item>
                 <Text type="danger" disabled={isLoading} onClick={props.handleLogout}>
                     {
                         isLoading ? <Spin indicator={antIcon} /> : <span><LogoutOutlined /> Logout</span>
@@ -56,7 +66,6 @@ const ProfileHeaderDropdown = (props) => {
                 </Text>
             </Menu.Item>
         </Menu>)
-    const username = props.currentUser.username ? props.currentUser.username : props.currentUser.displayName
     return (
         <Dropdown overlay={menu} placement="bottomCenter">
             <Card style={cardStyles} bordered={false}
