@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import SearchAPI, GetAllAPI, GetAllMyAPI, AdvancedSearch
+from .views import SearchAPI, AdvancedSearch
 
 urlpatterns = [
     path('auth/', include('users.urls')),
@@ -14,8 +14,7 @@ urlpatterns = [
     path('exams/', include('exams.urls')),
     path('ability-tests/', include('exams.at_urls')),
     path('course-home/', include('course_homes.urls')),
-    path('all/', GetAllAPI.as_view()),
-    path('all/my', GetAllMyAPI.as_view()),
+    path('all/', include('my.urls')),
     path('forums/', include('forums.urls')),
     path('questions/', include('questions.urls')),
     path('assignment/', include('assignment.urls')),
