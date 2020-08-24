@@ -36,7 +36,7 @@ const Header = ({token, currentUser}) => {
                     <Link to="/event">Sự kiện</Link>
                 </li>
                 <li className='header-search'>
-                    <SearchInput width={400}/>
+                    <SearchInput width={200}/>
                 </li>
                     {
                         currentUser ? (

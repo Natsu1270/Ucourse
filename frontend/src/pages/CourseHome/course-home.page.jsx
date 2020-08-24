@@ -24,6 +24,7 @@ import ForumDetail from "../../components/Forum/forum-detail.component";
 import ThreadDetail from "../../components/Forum/thread-detail.component";
 import RoleComponent from "../../components/RoleComponent"
 
+
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
 const CourseHomeForums = lazy(() => import("../../components/CourseHome/course-home-forums.component"))
 const CourseHomeLecture = lazy(() => import("../../components/CourseHome/course-home-lecture.component"))
@@ -34,6 +35,7 @@ const AssignmentTeacher = lazy(() => import("../../components/Assignment/assignm
 
 const CourseHomeGradesStudent = lazy(() => import("../../components/CourseHome/course-home-grades-student.component"))
 const CourseHomeGradesTeacher = lazy(() => import("../../components/CourseHome/course-home-grades-teacher.component"))
+
 
 
 const CourseHomePage = ({ myCourses, userRole }) => {
@@ -135,6 +137,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                         courseHomeDetail={courseHomeDetail}
                     />
                 </Route>
+                
 
             </Router>
         </Layout>

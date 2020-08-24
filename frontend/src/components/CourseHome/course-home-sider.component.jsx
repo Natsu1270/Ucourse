@@ -51,6 +51,10 @@ const CourseHomeSider = ({isLoading, course, match}) => {
                     <TeamOutlined/>
                     <span>Forums</span>
                 </Menu.Item>
+                <Menu.Item onClick={()=>history.push(`${match.url}/students`)} key="students">
+                    <TeamOutlined/>
+                    <span>Danh sách học viên</span>
+                </Menu.Item>
             </Menu>
         </Sider>
     )

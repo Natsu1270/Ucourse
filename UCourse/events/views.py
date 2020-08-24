@@ -47,6 +47,6 @@ class EventDetailAPI(generics.RetrieveUpdateDestroyAPIView):
         )
 
 
-class TeacherListAPI(generics.ListAPIView):
-    serializer_class = TeacherEventSearchSerializer
-    queryset = Teacher.objects.all().order_by('first_name')
+# class TeacherListAPI(generics.ListAPIView):
+#     serializer_class = TeacherEventSearchSerializer
+#     queryset = Teacher.objects.all().order_by('first_name')
