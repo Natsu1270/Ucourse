@@ -59,8 +59,8 @@ const CourseHomeStudent = ({students, isLoading}) => {
 
     return (
         // <div></div>
-        <section className="section-10 page section--about cs-about">
-            <h3 className="title--big text-center">Danh sách học viên</h3>
+        <section className="section-5 page-2">
+            <h2 className="text--main mb-5">Danh sách học viên</h2>
              <Tabs defaultActiveKey="1">
                 <TabPane tab="" key="">
                     <Table dataSource={studentData} columns={columns} />
