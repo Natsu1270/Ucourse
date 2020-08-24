@@ -19,7 +19,6 @@ const EventPage = ({eventId}) => {
     useEffect(() => {
         if (eventId) getEventListAPI()
     }, [eventId])
-    debugger
     const columns = [
         {
             title: '#',
@@ -65,7 +64,7 @@ const EventPage = ({eventId}) => {
         <section className="section-10 page section--about cs-about">
             <h2 className="title--big text-center">SỰ KIỆN</h2>
              <Tabs defaultActiveKey="1">
-                <TabPane tab="Danh sach" key="">
+                <TabPane tab="Danh sách sự kiện" key="">
                     <Table dataSource={eventData} columns={columns} />
                 </TabPane>
             </Tabs>
