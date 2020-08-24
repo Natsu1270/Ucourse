@@ -1,17 +1,20 @@
 import React from 'react'
-import {Route, Redirect} from 'react-router-dom'
-import {createStructuredSelector} from "reselect";
-import {useSelector} from "react-redux";
-import {Spin} from 'antd'
-import {LoadingOutlined} from '@ant-design/icons'
-import {currentUserSelector} from "../../redux/Auth/auth.selects";
+import { Route, Redirect, useHistory } from 'react-router-dom'
+import { createStructuredSelector } from "reselect";
+import { useSelector } from "react-redux";
+import { Spin } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { currentUserSelector } from "../../redux/Auth/auth.selects";
 
 
-const AuthRoute = ({component: Component, ...others}) => {
-    const {currentUser} = useSelector(createStructuredSelector({
+const AuthRoute = ({ component: Component, ...others }) => {
+
+    const history = useHistory()
+
+    const { currentUser } = useSelector(createStructuredSelector({
         currentUser: currentUserSelector,
     }))
-    const antIcon = <LoadingOutlined style={{fontSize: 24}} spin/>;
+    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
     return (
         <Route
@@ -21,7 +24,7 @@ const AuthRoute = ({component: Component, ...others}) => {
                     ?
                     <Component {...props} />
                     :
-                    <Redirect to={others.redirectTo ? others.redirectTo : '/'}/>
+                    <Redirect to={others.redirectTo ? others.redirectTo : '/'} />
             )}
         />
     )

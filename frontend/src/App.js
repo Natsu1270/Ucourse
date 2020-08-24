@@ -40,7 +40,7 @@ const CourseHomePage = lazy(() => import('./pages/CourseHome/course-home.page'))
 const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page'));
 const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
 const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.page'))
-
+const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
 
 function App() {
 
@@ -84,8 +84,7 @@ function App() {
                                     <Route exact path="/lienhe" component={ContactPage} />
                                     <Route exact path="/cauhoi" component={QuestionPage} />
                                     <Route exact path="/event" component={EventPage} />
-                                    <AuthRoute exact path="/auth" component={LoginAndRegisterPage}
-                                        redirectTo="/profile" />
+                                    <AuthRoute exact path="/auth" component={LoginAndRegisterPage} />
                                     <PrivateRoute path="/profile" component={ProfilePage} />
                                     <Route exact path="/search" component={SearchPage} />
                                     <Route exact path="/field" component={FieldPage} />
@@ -99,8 +98,15 @@ function App() {
                                         <CourseHomePage myCourses={myCourses} userRole={userRole} />
                                     </Route>
                                     <Route exact path="/user/:username" component={UserProfilePage} />
+                                    <PrivateRoute
+                                        referrer="/my-courses"
+                                        exact
+                                        path="/my-courses"
+                                        component={MyCoursePage}
+                                        courses={myCourses}
+                                        programs={myPrograms}
+                                    />
                                     <Route component={Page404NotFound} />
-                                                
                                 </Switch>
                             </Suspense>
                         </Content>

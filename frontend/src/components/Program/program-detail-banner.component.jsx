@@ -1,12 +1,27 @@
-import React from 'react'
-import {Link} from "react-router-dom";
-import {formatDate} from "../../utils/text.utils";
-import Constants from "../../constants";
+import React, { useState } from 'react'
+
 
 import programBg1 from '../../assets/program-bg1.png'
-import {Avatar, Button, Skeleton} from "antd";
+import { Avatar, Button, Skeleton, Row, Col, Modal, } from "antd";
 
-const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister, userRole}) => {
+import momo from "../../assets/momo-logo-80x80.png";
+import Constants from '../../constants';
+
+
+const ProgramDetailBanner = ({ isOwn, isRegistering, program, handleRegister, userRole, programCourses }) => {
+
+    const [showPayment, setShowPayment] = useState(false);
+
+    const renderPrice = () => {
+        let totalPrice = 0;
+        programCourses.forEach(p => {
+            if (p.fee_type === "paid") {
+                totalPrice += p.price
+            }
+        })
+        return totalPrice !== 0 ? totalPrice.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
+    }
+
     const s = {
         background: `linear-gradient(
           rgba(0, 0, 0, 0.2), 
@@ -20,7 +35,7 @@ const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister, use
             <div className="program-banner">
                 <div className="program-banner__content">
                     <div className="program-banner__content--icon mr-5">
-                        <Avatar size={52} src={program.icon}/>
+                        <Avatar size={52} src={program.icon} />
                     </div>
                     <div className="program-banner__content--des">
                         <h4 className="text--sub__smaller text-white">
@@ -32,9 +47,12 @@ const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister, use
                         <p className="course-description text--sub text--sub__bigger mt-2 text-white">
                             {program.short_description}
                         </p>
+                        <h3 className="text-white">
+                            Học phí: {isRegistering ? Constants.SPIN_ICON : renderPrice()}
+                        </h3>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
-                                <Button onClick={() => isOwn ? null: handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code ==='TA'|| userRole.code ==='TC'}>
+                                <Button onClick={() => isOwn ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
                                     {isOwn ? 'Đã sở hữu' : 'Đăng ký chương trình'}
                                 </Button>
                             </Skeleton>
@@ -44,6 +62,51 @@ const ProgramDetailBanner = ({isOwn, isRegistering, program, handleRegister, use
                     <div className="program-banner__content--tags"></div>
                 </div>
             </div>
+            <Modal
+                title={<h1>Thanh toán</h1>}
+                closeIcon={<i>X</i>}
+                visible={showPayment}
+                onCancel={() => setShowPayment(false)}
+                footer={[
+                    <Button type="primary" danger key="back" onClick={() => setShowPayment(false)}>
+                        Hủy
+                    </Button>
+                ]}
+                width={800}
+                style={{ top: 10, backgroundColor: 'white', paddingBottom: "0px" }}>
+                <div>
+                    <Row gutter={[16, 16]}>
+                        <Col span={12}>
+                            <Button
+                                className="ant-btn momo-btn cs-btn--animated"
+                                style={{
+                                    height: '7rem', color: '#b0006d',
+                                    fontWeight: '500', fontSize: '1.8rem', border: 'none'
+                                }}
+                                type="default"
+                                onClick={handleRegister}>
+                                <img src={momo} width={48} /> <span className="ml-3">Thanh toán bằng momo</span>
+                            </Button>
+                        </Col>
+                        <Col span={12}>
+                            <h4 className="text--sub__smaller">
+                                Chương trình học
+                            </h4>
+                            <h1 className="text--main text--main__bigger">
+                                {program.name}
+                            </h1>
+
+                            <p className="course-description text--sub text--sub__bigger mt-4">
+                                {program.short_description}
+                            </p>
+
+                            <h3>
+                                Học phí: {renderPrice()}
+                            </h3>
+                        </Col>
+                    </Row>
+                </div>
+            </Modal>
         </section>
     )
 }

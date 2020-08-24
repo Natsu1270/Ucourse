@@ -6,9 +6,9 @@ import { getPublicUserProfileAPI } from '../../api/profile.services';
 import Avatar from 'antd/lib/avatar/avatar';
 import {
     UserOutlined, MailOutlined, CalendarOutlined, EnvironmentOutlined,
-    PhoneOutlined, ManOutlined, HeartOutlined, HomeOutlined, SmileOutlined
+    PhoneOutlined, ManOutlined, HeartOutlined, HomeOutlined, SmileOutlined, DollarCircleOutlined, RocketOutlined
 } from '@ant-design/icons';
-import { formatDate } from '../../utils/text.utils';
+import { formatDate, timeDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import ResultComponent from '../../components/Common/result.component'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
@@ -26,7 +26,7 @@ const PublicProfilePage = () => {
     const [loading, setLoading] = useState(true)
     const [userProfile, setUserProfile] = useState({})
     const [profileDetail, setProfileDetail] = useState({})
-    const [canView, setCanView] = useState(false)
+    const [canView, setCanView] = useState(true)
 
     const { token } = useSelector(createStructuredSelector({
         token: tokenSelector
@@ -36,7 +36,7 @@ const PublicProfilePage = () => {
         setLoading(true)
         try {
             const { data } = await getPublicUserProfileAPI(username, token)
-            if (data.status === 401) {
+            if (data.status !== 401) {
                 setUserProfile(data.data)
                 setProfileDetail(data.data.user_profile)
             } else {
@@ -78,7 +78,7 @@ const PublicProfilePage = () => {
                                 </Row>
                                 <Row>
                                     <Space className="text--sub__bigger2">
-                                        <CalendarOutlined /> {formatDate(userProfile.date_joined, Constants.MMM_Do_YYYY)}
+                                        <CalendarOutlined /> Tham gia {timeDiff(userProfile.date_joined)}
                                     </Space>
                                 </Row>
 
@@ -93,7 +93,7 @@ const PublicProfilePage = () => {
                                     <Tag color="cyan">{userProfile.role ? userProfile.role.name : null}</Tag>
                                 </p>
                                 <Divider />
-                                <div className="user-profile--detail text--sub__bigger3 text-grey">
+                                <div className="user-profile--detail text--sub__bigger2 text-grey">
                                     <Row>
                                         <Col span={12}>
                                             <EnvironmentOutlined /> Địa chỉ: {profileDetail.address ? profileDetail.address : 'N/A'}
@@ -116,6 +116,12 @@ const PublicProfilePage = () => {
                                     </Row>
                                     <Row>
                                         <Col><HomeOutlined /> Trường: {profileDetail.university}</Col>
+                                    </Row>
+                                    <Row>
+                                        <Col><RocketOutlined /> Ngành: {profileDetail.major}</Col>
+                                    </Row>
+                                    <Row>
+                                        <Col><DollarCircleOutlined /> Công việc: {profileDetail.occupation}</Col>
                                     </Row>
                                 </div>
                             </Skeleton>

@@ -85,13 +85,13 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     level = serializers.CharField(source='get_level_display')
     course_home_count = serializers.IntegerField(read_only=True)
     course_teachers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    views = serializers.StringRelatedField(many=True, required=False)
+    # views = serializers.StringRelatedField(many=True, required=False)
     view_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type', 'views',
+            'id', 'title', 'code', 'fee_type', 'price',
             'icon', 'slug', 'level', 'status', 'view_count',
             'field', 'course_home_count', 'course_teachers'
         ]
