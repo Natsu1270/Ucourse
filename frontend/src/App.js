@@ -100,7 +100,7 @@ function App() {
                                     </Route>
                                     <Route exact path="/user/:username" component={UserProfilePage} />
                                     <Route component={Page404NotFound} />
-
+                                                
                                 </Switch>
                             </Suspense>
                         </Content>

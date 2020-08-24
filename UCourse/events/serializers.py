@@ -3,10 +3,11 @@ from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
-    fullname = serializers.CharField(read_only=True)
-    email = serializers.EmailField(read_only=True)
-    
+    # user = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    # fullname = serializers.CharField(read_only=True)
+    # email = serializers.EmailField(read_only=True)
+    #id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Event
         fields = ('title', 'content', 'img', 'location')
@@ -14,12 +15,12 @@ class EventSerializer(serializers.ModelSerializer):
 
 
 class EventMinSerializer(serializers.ModelSerializer):
-    fullname = serializers.CharField(read_only=True)
-    email = serializers.EmailField(read_only=True)
+    # fullname = serializers.CharField(read_only=True)
+    # email = serializers.EmailField(read_only=True)
 
     class Meta:
         model = Event
-        fields = ('title', 'content', 'img', 'location')
+        fields = ('title', 'content', 'img', 'location', 'id')
 
     class EventDetailSerializer(serializers.ModelSerializer):
         id = serializers.IntegerField(read_only=True)
