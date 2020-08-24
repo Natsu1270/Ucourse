@@ -11,18 +11,8 @@ const { TabPane } = Tabs
 const EventPage = ({eventId}) => {
     const [loading, setLoading] = useState(false)
     const [events, setEvents] = useState([])
-    // const getEventListAPI = async () => {
-    //     setLoading(true)
-    //     try {
-    //         const result = await getEventListAPI({ eventId})
 
-    //     } catch (err) {
-    //         message.error(err.message)
-    //     }
-    //     setLoading(false)
-    // }
     getEventListAPI(eventId).then(response => {
-        debugger
         setEvents(response.data.data)
     })
 

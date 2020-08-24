@@ -35,6 +35,7 @@ const AssignmentTeacher = lazy(() => import("../../components/Assignment/assignm
 
 const CourseHomeGradesStudent = lazy(() => import("../../components/CourseHome/course-home-grades-student.component"))
 const CourseHomeGradesTeacher = lazy(() => import("../../components/CourseHome/course-home-grades-teacher.component"))
+const CourseHomeStudent = lazy(() => import("../../components/CourseHome/course-home-students.component"))
 
 
 
@@ -57,7 +58,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
         course,
         courseInfo,
         topics,
-        forums
+        forums,
     } = useSelector(createStructuredSelector({
         token: tokenSelector,
         courseHomeDetail: courseHomeDetailSelector,
@@ -138,7 +139,9 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                     />
                 </Route>
                 
-
+                <Route exact path={`${match.url}/students`}>
+                        <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
+                </Route>
             </Router>
         </Layout>
     )
