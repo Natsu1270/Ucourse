@@ -62,6 +62,13 @@ class BuyCourseAPI(generics.GenericAPIView):
         course_id = request.data['course']
         course = Course.objects.get(pk=course_id)
         amount = course.get_price()
+        check_bought = UserBuyCourse.objects.filter(course_id=course_id, user_id=user.id).count()
+        if check_bought > 0:
+            return Response({
+                "result": False,
+                "message": "Already bought",
+            }, status=status.HTTP_406_NOT_ACCEPTABLE)
+
         if amount != 0:
             orderId = str(uuid.uuid4())
             requestId = str(uuid.uuid4())
@@ -86,11 +93,8 @@ class BuyCourseAPI(generics.GenericAPIView):
                 "status_code": 201
             }, status=status.HTTP_201_CREATED)
         
-        instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
+        UserBuyCourse.objects.create(user=user, course_id=course_id)
         return Response({
-            "data": {
-                
-            },
             "result": True,
             "message": "Register Successfully",
             "status_code": 201
