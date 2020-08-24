@@ -1,25 +1,70 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 
 import programBg1 from '../../assets/program-bg1.png'
-import { Avatar, Button, Skeleton, Row, Col, Modal, } from "antd";
+import { Avatar, Button, Skeleton, Row, Col, Modal, message } from "antd";
 
 import momo from "../../assets/momo-logo-80x80.png";
 import Constants from '../../constants';
+import { useDispatch } from "react-redux";
+import { showRLModal } from "../../redux/UI/ui.actions";
+import { buyProgramAPI } from "../../api/program.services"
 
 
-const ProgramDetailBanner = ({ isOwn, isRegistering, program, handleRegister, userRole, programCourses }) => {
+
+
+const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }) => {
 
     const [showPayment, setShowPayment] = useState(false);
+    const [own, setOwn] = useState(false)
+    const [isRegistering, setIsRegistering] = useState(false)
+    const [price, setPrice] = useState("0")
+    const dispatch = useDispatch()
 
-    const renderPrice = () => {
+    useEffect(() => {
+        setOwn(isOwn)
+    }, [isOwn])
+
+    useEffect(() => {
         let totalPrice = 0;
         programCourses.forEach(p => {
             if (p.fee_type === "paid") {
-                totalPrice += p.price
+                totalPrice += parseInt(p.price)
             }
         })
-        return totalPrice !== 0 ? totalPrice.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
+        setPrice(totalPrice.toString())
+    }, [programCourses])
+
+
+    const renderPrice = () => {
+        return price !== "0" ? price.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
+    }
+
+    const registerProgram = async () => {
+        setIsRegistering(true)
+        try {
+            const { data } = await buyProgramAPI({ token, program_id: program.id })
+            if (data.data.payUrl) {
+                window.open(data.data.payUrl, "_self")
+            } else {
+                message.success("Đăng ký chương trình thành công")
+                setOwn(true)
+            }
+        } catch (err) {
+            message.error("Có lỗi xả ra: " + err.message)
+        }
+        setIsRegistering(false)
+    }
+
+    const handleRegister = () => {
+        if (!token) {
+            message.error(Constants.UN_AUTHORIZATION_ERROR, 1.5, () => dispatch(showRLModal()))
+            return
+        }
+        if (price === "0") {
+            return registerProgram()
+        }
+        setShowPayment(true)
     }
 
     const s = {
@@ -52,8 +97,8 @@ const ProgramDetailBanner = ({ isOwn, isRegistering, program, handleRegister, us
                         </h3>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
-                                <Button onClick={() => isOwn ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
-                                    {isOwn ? 'Đã sở hữu' : 'Đăng ký chương trình'}
+                                <Button onClick={() => own ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
+                                    {own ? 'Đã sở hữu' : 'Đăng ký chương trình'}
                                 </Button>
                             </Skeleton>
 
@@ -84,7 +129,7 @@ const ProgramDetailBanner = ({ isOwn, isRegistering, program, handleRegister, us
                                     fontWeight: '500', fontSize: '1.8rem', border: 'none'
                                 }}
                                 type="default"
-                                onClick={handleRegister}>
+                                onClick={registerProgram}>
                                 <img src={momo} width={48} /> <span className="ml-3">Thanh toán bằng momo</span>
                             </Button>
                         </Col>

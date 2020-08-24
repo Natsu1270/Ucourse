@@ -1,7 +1,11 @@
+import json
+import uuid
+
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from courses.models import Course
+from services.momo_service import MoMoService, MoMoQueryStatusService
 from .serializers import FieldSerializer, FieldMinSerializer, ProgramDetailSerializer, ProgramSerializer
 from .models import Field, Program, UserBuyProgram
 
@@ -44,9 +48,36 @@ class BuyProgramAPI(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         user = request.user
         program_id = request.data['program_id']
-        UserBuyProgram.objects.create(user=user, program_id=program_id)
         program = Program.objects.get(pk=program_id)
         program_courses = program.program_course.all()
+
+        price = 0
+        for course in program_courses:
+            price += int(course.get_price())
+
+        if price != 0:
+            orderId = str(uuid.uuid4())
+            requestId = str(uuid.uuid4())
+            orderInfo = 'Card Payment'
+            returnUrl = request.META["HTTP_REFERER"] + "/redirect"
+            notifyUrl = request.build_absolute_uri() + "/success"
+            extraData = request.META["HTTP_REFERER"]
+            momo = MoMoService(orderInfo, returnUrl, notifyUrl, price, orderId, requestId, extraData)
+            response = momo.call()
+            response_data = response.content.decode("utf-8")
+            json_response = json.loads(response_data)
+            payUrl = json_response['payUrl']
+
+            return Response({
+                "data": {
+                    "payUrl": payUrl
+                },
+                "result": True,
+                "message": "Register Successfully",
+                "status_code": 201
+            }, status=status.HTTP_201_CREATED)
+
+        UserBuyProgram.objects.create(user=user, program_id=program_id)
         if program_courses.count() > 0:
             for course in program_courses:
                 if user not in course.user_buy.all():
@@ -59,3 +90,39 @@ class BuyProgramAPI(generics.GenericAPIView):
             "message": "Register Successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
+
+
+class BuyProgramSuccessAPI(generics.GenericAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+    def post(self, request, *args, **kwargs):
+        partnerRefId = request.data["partnerRefId"]
+        requestId = request.data["requestId"]
+        user = request.user
+        program_id = request.data['program']
+        errorCode = request.data['errorCode']
+        extraData = request.data['extraData']
+        resUrl = extraData.split("=")[1]
+
+        if errorCode == "0":
+            query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
+            response = query.call()
+            response_data = response.content.decode("utf-8")
+            json_response = json.loads(response_data)
+            if json_response["data"]["status"] == 0:
+                # Program.objects.get(pk=program_id)
+                try:
+                    UserBuyProgram.objects.get(user=user, program_id=program_id)
+                except UserBuyProgram.DoesNotExist:
+                    UserBuyProgram.objects.create(user=user, program_id=program_id)
+                return Response({
+                    "redirect": resUrl,
+                    "result": True,
+                }, status=status.HTTP_200_OK)
+
+        return Response({
+            "redirect": resUrl,
+            "result": False,
+        }, status=status.HTTP_200_OK)

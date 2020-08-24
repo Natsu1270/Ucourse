@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Breadcrumb, message, Skeleton } from "antd";
+import { Breadcrumb, message, Skeleton, Modal, Result, Button } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 
 import { slugifyString } from "../../utils/text.utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,17 +19,21 @@ import CourseDetailOverview from "../../components/Course/course-detail-overview
 import ProgramDetailPrequire from "../../components/Program/program-detail-prequire.component";
 import ProgramDetailComponents from "../../components/Program/program-detail-componenets.component";
 import ErrorBoundary from '../../components/ErrorBoundary/error-boundary.component'
-import { buyProgramAPI } from "../../api/program.services";
+import { buyProgramAPI, buyProgramSuccessAPI } from "../../api/program.services";
 import { tokenSelector, userRoleSelector } from "../../redux/Auth/auth.selects";
 import Constants from "../../constants";
-import { showRLModal } from "../../redux/UI/ui.actions";
+import { showRLModal, toggleRegisterCourseModal } from "../../redux/UI/ui.actions";
+import queryString from "query-string"
 
 const ProgramDetailPage = () => {
     const [isRegistering, setIsRegistering] = useState(false)
+    const [buyResult, setBuyResult] = useState(false)
     const [own, setOwn] = useState(false);
+    const [isCall, setIsCall] = useState(false)
     const dispatch = useDispatch()
     const { slug } = useParams()
-
+    const location = useLocation()
+    const queryValues = queryString.parse(location.search);
 
     const { program, programCourses, isFetching, errorResponse, token, userRole } = useSelector(createStructuredSelector({
         program: programDetailSelector,
@@ -39,6 +43,33 @@ const ProgramDetailPage = () => {
         token: tokenSelector,
         userRole: userRoleSelector
     }))
+
+    const updatePayment = async () => {
+        setIsRegistering(true)
+        setIsCall(true)
+        const partnerRefId = queryValues.orderId
+        const requestId = queryValues.requestId
+        const errorCode = queryValues.errorCode
+        const extraData = queryValues.extraData
+        try {
+            const { data } = await buyProgramSuccessAPI({ token, partnerRefId, requestId, errorCode, extraData, program: program.id })
+            if (data.result) {
+                setOwn(true)
+                setBuyResult(true)
+            } else {
+                message.error("Thanh toán thất bại!")
+            }
+        } catch (err) {
+            message.error("Lỗi: " + err.message)
+        }
+        setIsRegistering(false)
+    }
+
+    useEffect(() => {
+        if (queryValues.requestId && program.id && token && !isCall) {
+            updatePayment()
+        }
+    }, [queryValues, program, token])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -50,25 +81,6 @@ const ProgramDetailPage = () => {
             setOwn(program.is_my_program)
         }
     }, [program])
-
-    const registerProgram = async () => {
-        setIsRegistering(true)
-        const result = await buyProgramAPI({ token, program_id: program.id })
-    }
-
-    const handleRegister = () => {
-        if (!token) {
-            message.error(Constants.UN_AUTHORIZATION_ERROR, 1.5, () => dispatch(showRLModal()))
-            return
-        }
-        registerProgram()
-            .then(res => {
-                message.success("Đăng ký chương trình thành công")
-                setOwn(true)
-            })
-            .catch(err => message.error(err.message))
-            .finally(() => setIsRegistering(false))
-    }
 
     const programDetailComp = (<div className="program-detail">
         <Breadcrumb separator='>' className="course-detail__breadcrumb">
@@ -82,9 +94,10 @@ const ProgramDetailPage = () => {
                 {program.field}
             </Breadcrumb.Item>
         </Breadcrumb>
-        <ProgramDetailBanner isOwn={own} isRegistering={isRegistering} handleRegister={handleRegister}
-            program={program} userRole={userRole} programCourses={programCourses} />
-        <CourseDetailTab isRegistering={isRegistering} handleRegister={handleRegister} isProgram={true} />
+        <ProgramDetailBanner
+            isOwn={own} isRegistering={isRegistering} program={program}
+            userRole={userRole} programCourses={programCourses} token={token} />
+        <CourseDetailTab isRegistering={isRegistering} isProgram={true} />
         <CourseDetailOverview
             benefits={program.benefits}
             full_description={program.full_description}
@@ -102,6 +115,22 @@ const ProgramDetailPage = () => {
                     <ErrorBoundary errResponse={errorResponse} comp={programDetailComp} />
                     : <Skeleton active avatar />
             }
+            <Modal title="Đăng ký chương trình thành công"
+                visible={buyResult}
+                onCancel={() => setBuyResult(false)}
+                onOk={() => setBuyResult(false)}
+                footer={null}
+                bodyStyle={{ backgroundColor: 'white', height: '35rem', padding: '0' }}
+            >
+                <Result
+                    status="success"
+                    title="Đăng ký chương trình thành công!"
+                    subTitle={`Bạn đã đăng ký chương trình ${program.name} thành công`}
+                    extra={[
+                        <Button key="buy" type="primary" onClick={() => setBuyResult(false)}>Đóng</Button>,
+                    ]}
+                />
+            </Modal>
         </div>
     )
 };

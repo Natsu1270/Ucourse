@@ -66,12 +66,7 @@ const CourseDetail = () => {
 
     useEffect(() => {
         if (course.id) {
-            // const checkBought = async () => {
-            //     const result = await checkBoughtCourseAPI({token, course: course.id})
-            //     const isOwn = result.status === 200
-            //     setOwnCourse(isOwn)
-            // }
-            // checkBought().then(r => console.log(r))
+
             dispatch(getCourseHomeShowStart({ token, course_id: course.id }))
             setOwnCourse(course.is_my_course)
         }
@@ -81,7 +76,6 @@ const CourseDetail = () => {
 
         if (token) {
             dispatch(buyCourseStart({ course: course.id, token }))
-            // dispatch(registerCourseStart({course_id: course.id, token}))
             if (!errorRegister && course.fee_type === 'free') {
                 dispatch(toggleRegisterCourseModal())
                 setOwnCourse(true)

@@ -115,8 +115,6 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
         extraData = request.data['extraData']
         resUrl = extraData.split("=")[1]
 
-        print(extraData)
-
         if errorCode == "0":
             query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
             response = query.call()
