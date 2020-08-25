@@ -66,7 +66,7 @@ const CourseHomeStudent = ({ students, isLoading }) => {
             <h3 className="text--main mb-5">
                 Danh sách học viên
             </h3>
-            <Table pagination={{ pageSize: 5 }} size="large" dataSource={studentData} columns={columns} />
+            <Table bordered pagination={{ pageSize: 5 }} size="large" dataSource={studentData} columns={columns} />
         </section>
     )
 }
