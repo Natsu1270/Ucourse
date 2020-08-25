@@ -103,8 +103,7 @@ function App() {
                                         exact
                                         path="/my-courses"
                                         component={MyCoursePage}
-                                        courses={myCourses}
-                                        programs={myPrograms}
+                                        token={token}
                                     />
                                     <Route component={Page404NotFound} />
                                 </Switch>

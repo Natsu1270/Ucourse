@@ -38,10 +38,12 @@
 .search-course-card {
 	background-color: $white-color;
 	box-shadow: $small-box-shadow-black;
+	max-width: 100rem;
 	&:hover {
 		cursor: pointer;
 	}
  	&__body {
+		 padding: 1rem;
 		overflow:hidden;
 		width: 100%;
 		position: relative;

@@ -21,14 +21,7 @@ const SearchCourses = ({ courses }) => {
                                             onClick={() => {
                                                 history.push(`/courses/${course.slug}`)
                                             }}
-                                            key={course.code}
-                                            title={course.title}
-                                            img={course.icon}
-                                            class_count={course.course_home_count}
-                                            level={course.level}
-                                            viewCount={course.view_count}
-                                        // open_date={1}
-                                        // rate={1}
+                                            course={course}
                                         />
                                     )
                                 })

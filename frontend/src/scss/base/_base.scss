@@ -123,6 +123,13 @@ button, input {
 	  }
 }
 
+.page-card {
+	box-shadow: $shadow-light;
+	border-radius: 1rem;
+	padding: 4rem;
+	background-color: #ffffff;
+}
+
 .pd-5 {
 	padding: 0 5rem;
 }

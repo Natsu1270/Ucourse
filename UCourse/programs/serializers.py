@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Program, Field, UserBuyProgram
-from courses.serializers import CourseSerializer, CourseSearchSerializer
+from courses.serializers import CourseSerializer, CourseSearchSerializer, CourseMinSerializer
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -54,6 +54,31 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
             'id', 'name', 'code', 'icon', 'slug',
             'courses_count', 'status', 'field', 'program_course'
         ]
+
+
+class ProgramMinSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
+    courses_count = serializers.IntegerField(read_only=True)
+    program_course = CourseMinSerializer(many=True, read_only=True)
+    bought_date = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Program
+        fields = [
+            'id', 'name', 'code', 'icon', 'slug', 'bought_date',
+            'courses_count', 'status', 'field', 'program_course'
+        ]
+
+    def get_bought_date(self, obj):
+        user = self.context.get('user')
+        if user is not None:
+            try:
+                instance = UserBuyProgram.objects.get(user_id=user.id, program_id=obj.id)
+            except UserBuyProgram.DoesNotExist:
+                return None
+            return instance.bought_date
+        return None
 
 
 class FieldSerializer(serializers.ModelSerializer):

@@ -20,3 +20,14 @@ export function getAllMyAPI(token) {
         url: `${GET_ALL_URL}/my`
     })
 }
+
+export function getAllMyCoursesAndProgramsAPI(token) {
+    const headers = token ?
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
+    return axios.request({
+        headers,
+        method: 'GET',
+        url: `${GET_ALL_URL}/my-all`
+    })
+}

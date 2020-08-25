@@ -3,21 +3,24 @@ import { Avatar } from "antd";
 import CourseSubInfo from "../Course/course-sub-info.component";
 
 
-const SearchCourseItem = ({ img, title, class_count, level, viewCount, rate, onClick }) => {
+
+const SearchCourseItem = ({ course, onClick }) => {
     return (
         <div className="search-course-card" onClick={onClick}>
             <div className="search-course-card__body">
                 <div className="search-course-card__body--img">
-                    <Avatar shape="square" size={100} src={img} alt="" />
+                    <Avatar shape="square" size={100} src={course.icon} alt="" />
                 </div>
                 <div className="search-course-card__body--content">
                     <div className="search-course-card__body--content--title">
-                        {title}
+                        {course.title}
                     </div>
-                    <CourseSubInfo level={level} class_count={class_count} viewCount={viewCount} rate={rate} />
+                    <CourseSubInfo
+                        level={course.level}
+                        class_count={course.course_home_count}
+                        viewCount={course.view_count}
+                    />
                 </div>
-
-
             </div>
         </div>
     )

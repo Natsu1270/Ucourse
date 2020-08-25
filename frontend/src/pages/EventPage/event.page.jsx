@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 const { TabPane } = Tabs
 
 
-const EventPage = ({eventId}) => {
+const EventPage = ({ eventId }) => {
     const [loading, setLoading] = useState(false)
     const [events, setEvents] = useState([])
 
@@ -43,14 +43,14 @@ const EventPage = ({eventId}) => {
             dataIndex: 'location',
             key: 'location',
             render: location => <span>{location}</span>
-        }, 
+        },
         {
             title: 'Thời gian',
             dataIndex: 'date',
             key: 'date',
             render: date => <span>{formatDate(date, Constants.MMM_Do__YY__TIME)}</span>
         }
-        
+
     ];
 
     const eventData = events.map((event, index) => ({
@@ -62,8 +62,8 @@ const EventPage = ({eventId}) => {
 
     return (
         <section className="section-10 page section--about cs-about">
-            <h2 className="title--big text-center">SỰ KIỆN</h2>
-             <Tabs defaultActiveKey="1">
+            <h2 className="title--big text-center">Sự Kiện</h2>
+            <Tabs defaultActiveKey="1">
                 <TabPane tab="Danh sách sự kiện" key="">
                     <Table dataSource={eventData} columns={columns} />
                 </TabPane>

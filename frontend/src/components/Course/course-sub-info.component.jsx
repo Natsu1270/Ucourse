@@ -18,14 +18,14 @@ const CourseSubInfo = ({ class_count, level, viewCount, rate }) => {
             </li>
             <li className="search-course-card__body--content--info__item">
                 <span className="text--const">
-                    {viewCount} lượt xem
+                    {viewCount} Lượt xem
                 </span>
             </li>
-            <li className="search-course-card__body--content--info__item">
+            {/* <li className="search-course-card__body--content--info__item">
                 <span className="text--const">
                     {rate}
                 </span>
-            </li>
+            </li> */}
         </ul>
     )
 }

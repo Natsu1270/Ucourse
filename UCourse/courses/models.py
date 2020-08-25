@@ -9,6 +9,7 @@ from programs.models import Program, Field
 from tags.models import Tag
 from profiles.models import Profile
 
+
 class Course(models.Model):
     BEGINNER = 'bg'
     INTERMEDIATE = 'im'
