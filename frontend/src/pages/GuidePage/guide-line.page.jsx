@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { Steps, Button, message, Divider } from 'antd'
-import file from '../../assets/c1.jpg'
+import dangnhap from '../../assets/dang-nhap.png'
+import khampha from '../../assets/trang-kham-pha.png'
+import khoahoc from '../../assets/khoahoc.PNG'
+import chondangky from '../../assets/chondangky.png'
+import thanhtoan from '../../assets/thanhtoan.png'
+import chonlop from '../../assets/chon-lop.png'
+
 
 const { Step } = Steps;
 
@@ -19,34 +25,34 @@ const GuideLinePage = () => {
     const steps = [
         {
             title: 'Đăng nhập/ Đăng ký tài khoản',
-            content: 'Bước đầu tiên là đăng nhập',
-            src: file
+            content: 'Bước đầu tiên là đăng nhập, nếu chưa có tài khoản vui lòng đăng ký!',
+            src: dangnhap
 
         },
         {
             title: 'Tìm kiếm/ Khám phá',
-            content: 'Hình ở đây',
-            src: file
+            content: 'Khám phá các lĩnh vực bạn quan tâm tại đây',
+            src: khampha
         },
         {
             title: 'Click vào một khóa học',
-            content: 'Hình',
-            src: file
+            content: 'Xem thông tin chi tiết khóa học',
+            src: khoahoc
         },
         {
             title: 'Chọn đăng ký',
-            content: 'Hình',
-            src: file
+            content: 'Nhấn chọn nút "Đăng ký học"',
+            src: chondangky
         },
         {
             title: 'Thanh toán',
-            content: 'Hình',
-            src: file
+            content: 'Thanh toán qua ví điện tử MoMo',
+            src: thanhtoan
         },
         {
             title: 'Đăng ký lớp học',
-            content: 'Hình',
-            src: file
+            content: 'Chọn lớp muốn đăng ký và hoàn tất!',
+            src: chonlop
         },
     ];
 
