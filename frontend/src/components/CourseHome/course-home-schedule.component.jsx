@@ -130,7 +130,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
     const submitAssignment = async (values) => {
         setLoading(true)
         console.log(values)
-        const { assName: name, assInfo: info, assDate, assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile } = values
+        const { assName: name, assInfo: info, assDate, assPercentage: percentage,
+            assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile
+        } = values
         const files = assFile ? assFile.map(file => ({
             file: file.originFileObj,
             fileName: file.name
@@ -139,7 +141,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         const due_date = assDate[1] ? assDate[1].format('YYYY-MM-DD HH:MM') : undefined
 
         const data = {
-            token, learning_topic: editingTopic, name, info, max_score,
+            token, learning_topic: editingTopic, name, info, max_score, percentage,
             max_submit_time, start_date: start_date, due_date: due_date, files
         }
         try {
@@ -274,13 +276,13 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         const data = {
             token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
             duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date, id: editingQuize.id
+            start_date, expired_date, id: editingQuize.id, percentage: values.percentage
         }
 
         const editData = {
             token, name: values.name, get_result_type: values.resultType,
             duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date, id: editingQuize.id
+            start_date, expired_date, id: editingQuize.id, percentage: values.percentage
         }
         try {
             if (editingQuize.id === undefined) {
@@ -381,6 +383,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         assInfo: editingAssignment.info,
                         assMaxSubmit: editingAssignment.max_submit_time,
                         assMaxScore: editingAssignment.max_score,
+                        assPercentage: editingAssignment.percentage,
                         assDate: [initStartDate, initDueDate]
                     }}
                 >
@@ -402,6 +405,17 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         label="Mô tả bài assigment"
                     >
                         <Input placeholder="Nhập thông tin mô assignment" value={name} />
+                    </Form.Item>
+
+                    <Form.Item
+                        {...formItemLayout}
+                        hasFeedback
+                        rules={[
+                            { required: true, message: 'Vui lòng nhập phần trăm!', },
+                        ]}
+                        name="assPercentage"
+                        label="Phần trăm điểm tổng">
+                        <InputNumber style={{ width: '100%' }} placeholder="Nhập phần trăm điểm" />
                     </Form.Item>
 
                     <Form.Item
@@ -484,7 +498,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             format="DD-MM-YYYY HH:mm:ss"
                         />
                     </Form.Item>
-
 
                     <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
                         <Button type="primary" htmlType="submit" loading={loading}>
@@ -569,6 +582,11 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         )
     }
 
+    const closeDrawer = () => {
+        setShowDrawer(false)
+        setEditingQuize({})
+    }
+
     return (
         <section className="section-5 page-2">
 
@@ -641,12 +659,12 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 destroyOnClose={true}
                 title="Tạo bài kiểm tra"
                 width={850}
-                onClose={() => setShowDrawer(false)}
+                onClose={closeDrawer}
                 visible={showDrawer}
                 bodyStyle={{ paddingBottom: 80 }}
                 footer={
                     <div style={{ textAlign: 'right', }}>
-                        <Button type="primary" danger onClick={() => setShowDrawer(false)} style={{ marginRight: 8 }}>
+                        <Button type="primary" danger onClick={closeDrawer} style={{ marginRight: 8 }}>
                             Hủy
                         </Button>
                     </div>
@@ -662,7 +680,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             duration: editingQuize.duration,
                             max_try: editingQuize.maxTry,
                             pass_score: editingQuize.passScore,
-                            date: [moment(editingQuize.startDate), moment(editingQuize.expired)]
+                            date: [moment(editingQuize.startDate), moment(editingQuize.expired)],
+                            percentage: editingQuize.percentage
                         }
                     }
                 >
@@ -706,6 +725,25 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
                     <Row gutter={16}>
                         <Col span={12}>
+                            <Form.Item
+                                hasFeedback
+                                name="percentage"
+                                label="Phần trăm điểm tổng kết"
+                                rules={[{ required: true, message: 'Nhập phần trăm điểm' }]}
+                            >
+                                <InputNumber style={{ width: "100%" }} min={0} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item hasFeedback name="pass_score" label="Điểm để qua bài test"
+                            >
+                                <InputNumber style={{ width: "100%" }} min={0} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+                    <Row gutter={16}>
+                        <Col span={12}>
                             <Form.Item name="date" label="Thời gian bài kiểm tra">
                                 <RangePicker
                                     disabledDate={disabledDate}
@@ -716,12 +754,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                                     }}
                                     format="DD-MM-YYYY HH:mm:ss"
                                 />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item hasFeedback name="pass_score" label="Điểm để qua bài test"
-                            >
-                                <InputNumber style={{ width: "100%" }} min={0} />
                             </Form.Item>
                         </Col>
                     </Row>

@@ -58,7 +58,8 @@ const CourseHomeTopic = ({
                     duration: quiz.duration,
                     maxTry: quiz.max_try,
                     startDate: quiz.start_date,
-                    passScore: quiz.pass_score
+                    passScore: quiz.pass_score,
+                    percentage: quiz.percentage
                 })
             )
             setQuizes(topicQuizes)
@@ -69,7 +70,7 @@ const CourseHomeTopic = ({
                     id: ass.id, name: ass.name, info: ass.info,
                     start_date: ass.start_date, due_date: ass.due_date,
                     max_score: ass.max_score, max_submit_time: ass.max_submit_time,
-                    assignment_files: ass.assignment_files
+                    assignment_files: ass.assignment_files, percentage: ass.percentage
                 })
             )
             setAssignments(topicAssignments)

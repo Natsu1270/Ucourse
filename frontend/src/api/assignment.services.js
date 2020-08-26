@@ -16,7 +16,8 @@ export const getAssignmentDetailAPI = (data) => {
 
 export const createAssignment = (data) => {
 
-    const { token, name, info, learning_topic, max_score, max_submit_time, start_date, due_date, files } = data
+    const { token, name, info, learning_topic, max_score,
+        max_submit_time, start_date, due_date, files, percentage } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
@@ -25,19 +26,20 @@ export const createAssignment = (data) => {
     formData.set("max_submit_time", max_submit_time)
     formData.set("start_date", start_date)
     formData.set("due_date", due_date)
+    formData.set("percentage", percentage)
     files.forEach(file => formData.append("file[]", file.file, file.fileName))
 
     return axios.request({
         headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
         method: 'POST',
-        url: `${API_URL}`,
+        url: `${API_URL}/`,
         data: formData
     })
 }
 
 export const editAssignment = (data, id) => {
 
-    const { token, name, info, learning_topic, max_score, max_submit_time, start_date, due_date, files } = data
+    const { token, name, info, percentage, max_score, max_submit_time, start_date, due_date, files } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
@@ -45,6 +47,8 @@ export const editAssignment = (data, id) => {
     formData.set("max_submit_time", max_submit_time)
     formData.set("start_date", start_date)
     formData.set("due_date", due_date)
+    formData.set("percentage", percentage)
+
     files.forEach(file => formData.append("file[]", file.file, file.fileName))
 
     return axios.request({

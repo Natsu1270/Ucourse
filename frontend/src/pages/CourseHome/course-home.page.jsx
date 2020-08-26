@@ -109,6 +109,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                             TeacherTAComponent={CourseHomeGradesTeacher}
                             token={token}
                             courseHomeId={courseHomeDetail.id}
+                            students={courseHomeDetail.students}
                         />
                     </Route>
                     <Route exact path={`${match.url}/forums`}>

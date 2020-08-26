@@ -46,7 +46,7 @@ export const createExam = (params) => {
     const {
         token, topic, name, exam_type,
         get_result_type, duration, max_try,
-        pass_score, start_date, expired_date
+        pass_score, start_date, expired_date, percentage
     } = params
     return axios.request({
         headers: {
@@ -57,7 +57,7 @@ export const createExam = (params) => {
         url: `${API_URL}/create`,
         data: {
             topic, name, exam_type, get_result_type, duration,
-            max_try, pass_score, start_date, expired_date
+            max_try, pass_score, start_date, expired_date, percentage
         }
     })
 }

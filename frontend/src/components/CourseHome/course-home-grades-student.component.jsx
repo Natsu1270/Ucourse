@@ -131,6 +131,17 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         percentage: assignment.assignment.percentage
     }))
 
+    const calFinalScore = () => {
+        let finalResult = 0
+        exams.forEach(exam => {
+            finalResult += exam.final_result * exam.exam.percentage / 100
+        })
+        assignments.forEach(ass => {
+            finalResult += ass.score * ass.assignment.percentage / 100
+        })
+        return finalResult
+    }
+
     return (
         <section className="section-5 page-2">
             <h3 className="text--main mb-5">
@@ -151,7 +162,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                 </TabPane>
 
                 <TabPane tab="Điểm tổng kết" key="3">
-
+                    <h3 className="text--main">Điểm tổng kết tạm tính: {calFinalScore()}</h3>
                 </TabPane>
 
             </Tabs>

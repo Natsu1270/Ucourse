@@ -2,9 +2,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from course_homes.models import StudentAssignment, Assignment
-from course_homes.serializers import StudentAssignmentDetailGradeSerializer, StudentAssignmentAllGradeSerializer
+from course_homes.serializers import StudentAssignmentDetailGradeSerializer, StudentAssignmentAllGradeSerializer, \
+    AssignmentMinSerializer
 from exams.models import StudentExamResult, Exam
-from exams.serializers import StudentExamResultSerializer
+from exams.serializers import StudentExamResultSerializer, ExamMinSerializer
 
 
 class GetStudentGradesAPI(generics.GenericAPIView):
@@ -38,12 +39,14 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
 
         for exam in course_home_exams:
             student_exams = StudentExamResult.objects.filter(exam_id=exam.id)
-            filter_exams[exam.name] = StudentExamResultSerializer(instance=student_exams, many=True).data
+            filter_exams[exam.name] = [ExamMinSerializer(instance=exam).data,
+                                       StudentExamResultSerializer(instance=student_exams, many=True).data]
 
         for assignment in course_home_assignments:
             student_assignments = StudentAssignment.objects.filter(assignment_id=assignment.id)
-            filter_assignments[assignment.name] = StudentAssignmentAllGradeSerializer(instance=student_assignments,
-                                                                                      many=True).data
+            filter_assignments[assignment.name] = [AssignmentMinSerializer(instance=assignment).data,
+                                                   StudentAssignmentAllGradeSerializer(instance=student_assignments,
+                                                                                       many=True).data]
 
         return Response({
             "student_exams": filter_exams,
