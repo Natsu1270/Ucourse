@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Steps, Button, message, Divider } from 'antd'
+import file from '../../assets/c1.jpg'
 
 const { Step } = Steps;
 
@@ -18,27 +19,34 @@ const GuideLinePage = () => {
     const steps = [
         {
             title: 'Đăng nhập/ Đăng ký tài khoản',
-            content: 'Hình đăng nhập',
+            content: 'Bước đầu tiên là đăng nhập',
+            src: file
+
         },
         {
             title: 'Tìm kiếm/ Khám phá',
             content: 'Hình ở đây',
+            src: file
         },
         {
             title: 'Click vào một khóa học',
             content: 'Hình',
+            src: file
         },
         {
             title: 'Chọn đăng ký',
             content: 'Hình',
+            src: file
         },
         {
             title: 'Thanh toán',
             content: 'Hình',
+            src: file
         },
         {
             title: 'Đăng ký lớp học',
             content: 'Hình',
+            src: file
         },
     ];
 
@@ -53,7 +61,10 @@ const GuideLinePage = () => {
                         <Step key={item.title} title={item.title} />
                     ))}
                 </Steps>
-                <div className="steps-content">{steps[state].content}</div>
+                <div className="steps-content">
+                    <h3>{steps[state].content}</h3>
+                    <img width={500} src={steps[state].src} />
+                </div>
                 <div className="steps-action">
                     {state < steps.length - 1 && (
                         <Button type="primary" onClick={next}>
