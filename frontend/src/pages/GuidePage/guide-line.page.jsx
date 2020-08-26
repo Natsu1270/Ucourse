@@ -69,7 +69,7 @@ const GuideLinePage = () => {
                 </Steps>
                 <div className="steps-content">
                     <h3>{steps[state].content}</h3>
-                    <img width={500} src={steps[state].src} />
+                    <img width={800} src={steps[state].src} />
                 </div>
                 <div className="steps-action">
                     {state < steps.length - 1 && (
