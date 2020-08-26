@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Steps, Button, message } from 'antd'
+import { Steps, Button, message, Divider } from 'antd'
 
 const { Step } = Steps;
 
@@ -44,7 +44,10 @@ const GuideLinePage = () => {
 
     return (
         <section className="section-10 page-2">
+
             <div className="page-card">
+                <h2 className="title--big text-center">Các bước đăng ký lớp học</h2>
+                <Divider />
                 <Steps current={state}>
                     {steps.map(item => (
                         <Step key={item.title} title={item.title} />
