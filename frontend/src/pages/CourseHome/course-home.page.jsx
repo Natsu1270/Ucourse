@@ -122,7 +122,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                     </Route>
                 </Suspense>
                 <Route exact path={`${match.url}/lecture/:topic/:assetId`}>
-                    <CourseHomeLecture topics={topics} isLoading={isLoading} />
+                    <CourseHomeLecture topics={topics} isLoading={isLoading} token={token} />
                 </Route>
                 <Route exact path={`${match.url}/exams/:exam_id`}>
                     <PrivateExamList userRole={userRole} token={token} courseHomeDetail={courseHomeDetail} />
@@ -138,9 +138,9 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                         courseHomeDetail={courseHomeDetail}
                     />
                 </Route>
-                
+
                 <Route exact path={`${match.url}/students`}>
-                        <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
+                    <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
                 </Route>
             </Router>
         </Layout>

@@ -78,7 +78,12 @@ const CourseHomeTopic = ({
 
 
     function gotoLecture(assetId, fileUrl, type) {
-        if (type === Constants.VIDEO_FILE_TYPE) {
+        if (
+            type === Constants.VIDEO_FILE_TYPE
+            // ||
+            // type === Constants.DOC_FILE_TYPE ||
+            // type === Constants.PDF_FILE_TYPE) 
+        ) {
             history.push(`lecture/${topic.id}/${assetId}`)
         } else {
             window.open(fileUrl, '_blank')

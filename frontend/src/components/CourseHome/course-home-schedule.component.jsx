@@ -524,8 +524,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                     hasFeedback
                     name="fileType" label="Loại bài giảng">
                     <Radio.Group>
-                        <Radio value="doc">Tài liệu</Radio>
+                        <Radio value="pdf">PDF</Radio>
+                        <Radio value="doc">DOC</Radio>
                         <Radio value="video">Video</Radio>
+                        <Radio value="other">Loại khác</Radio>
                     </Radio.Group>
                 </Form.Item>
 

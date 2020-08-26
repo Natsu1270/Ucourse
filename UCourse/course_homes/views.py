@@ -9,7 +9,8 @@ import datetime
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 
 from . import serializers
-from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment, StudentAssignment
+from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment, StudentAssignment, StudentNote
+from .serializers import StudentNoteSerializer
 
 
 class RegisterClassAPI(generics.GenericAPIView):
@@ -133,6 +134,21 @@ class EditLearningTopic(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         IsTeacherOrTARoleOrReadOnly
     ]
+
+
+class CreateNote(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        content = self.request.data['content']
+        topic_asset_id = self.request.data['topicAsset']
+        user_id = self.request.user.id
+        instance = StudentNote.objects.create(content=content, topic_asset_id=topic_asset_id, student_id=user_id)
+
+        return Response({
+            "note": StudentNoteSerializer(instance=instance).data,
+            "result": True
+        }, status=status.HTTP_201_CREATED)
 
 
 class CourseHomeShowAPI(generics.ListAPIView):

@@ -159,7 +159,14 @@ export const createTopicAsset = (data) => {
     })
 }
 
-
+export const getTopicAssetAPI = (data) => {
+    const { token, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${API_URL}/topic_asset/${id}`,
+    })
+}
 
 export const editTopicAsset = (data) => {
     const { token, name, info, file_type, file, id } = data
@@ -171,7 +178,7 @@ export const editTopicAsset = (data) => {
         formData.append("file", file)
     }
     return axios.request({
-        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
         method: 'PUT',
         url: `${API_URL}/topic_asset/${id}`,
         data: formData
@@ -184,5 +191,16 @@ export const deleteTopicAsset = (data) => {
         headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
         method: 'DELETE',
         url: `${API_URL}/topic_asset/${id}`
+    })
+}
+
+
+export const createNoteAPI = (data) => {
+    const { token } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/topic_asset/notes/create`,
+        data: data
     })
 }

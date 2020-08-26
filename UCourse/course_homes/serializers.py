@@ -3,7 +3,7 @@ from rest_framework import serializers
 from courses.serializers import CourseMinSerializer
 from programs.serializers import FieldMinSerializer
 from users.models import User
-from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment
+from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment, StudentNote
 # from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer, UserMinSerializer
 from exams.serializers import ExamShowSerializer
@@ -12,7 +12,23 @@ from profiles.serializers import ProfileMinSerializer
 
 
 class RegisterCourseSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
     course_id = serializers.IntegerField()
+
+
+class StudentNoteSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    topic_asset = serializers.PrimaryKeyRelatedField(queryset=TopicAsset.objects.all(), required=False)
+    student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+
+    class Meta:
+        model = StudentNote
+        fields = ['id', 'topic_asset', 'student', 'content', 'created_date']
 
 
 class TopicAssetSerializer(serializers.ModelSerializer):
@@ -20,13 +36,20 @@ class TopicAssetSerializer(serializers.ModelSerializer):
     learning_topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
     file = serializers.FileField(required=False)
     views = serializers.StringRelatedField(many=True, required=False)
+    notes = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = TopicAsset
         fields = [
-            'id', 'name', 'learning_topic', 'views',
-            'file', 'file_type', 'status', 'info'
+            'id', 'name', 'learning_topic', 'views', 'notes',
+            'file', 'file_type', 'status', 'info',
         ]
+
+    def get_notes(self, obj):
+        request = self.context.get('request')
+        user = request.user
+        notes = StudentNote.objects.filter(topic_asset_id=obj.id, student_id=user.id).order_by('-created_date')
+        return StudentNoteSerializer(instance=notes, many=True).data
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -95,6 +118,7 @@ class StudentAssignmentAllGradeSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'assignment', 'student', 'score', 'status', 'assignment', 'modified_date'
         ]
+
 
 class StudentAssignmentDetailGradeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -190,4 +214,5 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'course', 'status', 'slug', 'full_name', 'teacher'
         ]
+
 

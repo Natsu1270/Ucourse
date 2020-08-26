@@ -110,12 +110,14 @@ def asset_upload_path(instance, filename):
 class TopicAsset(models.Model):
     VIDEO = 'video'
     DOCUMENT = 'doc'
-    UNKNOWN = 'unknown'
+    PDF = 'pdf'
+    OTHER = 'other'
 
     MEDIA_CHOICES = [
         (VIDEO, 'Video'),
         (DOCUMENT, 'Document'),
-        (UNKNOWN, 'Unknown'),
+        (PDF, 'PDF'),
+        (OTHER, 'Other'),
     ]
 
     name = models.CharField(max_length=255)
@@ -128,6 +130,8 @@ class TopicAsset(models.Model):
     student_assignment = models.ForeignKey(
         'StudentAssignment', related_name='student_assignment_files', on_delete=models.CASCADE, blank=True, null=True
     )
+    student_notes = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='lecture_notes', through='StudentNote')
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(
         max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)
@@ -147,6 +151,16 @@ class TopicAsset(models.Model):
         if self.student_assignment is not None:
             return 'courses/home/assignment/submit/' + str(self.student_assignment.id)
         return 'courses/home/assets'
+
+
+class StudentNote(models.Model):
+    topic_asset = models.ForeignKey(TopicAsset, on_delete=models.CASCADE)
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.CharField(max_length=2000, blank=True, null=True)
+    created_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.content[:10]
 
 
 class Assignment(models.Model):
