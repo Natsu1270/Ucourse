@@ -5,8 +5,8 @@ import VideoPlayer from "../Common/video.component";
 import 'plyr/dist/plyr.css'
 import FileViewer from 'react-file-viewer';
 
-import { getTopicAssetAPI, createNoteAPI } from '../../api/courseHome.services'
-import { BookOutlined, EditOutlined } from '@ant-design/icons';
+import { getTopicAssetAPI, createNoteAPI, deleteNoteAPI } from '../../api/courseHome.services'
+import { BookOutlined, EditOutlined, DeleteOutlined, DeleteTwoTone } from '@ant-design/icons';
 import { formatDate } from '../../utils/text.utils';
 import Constants from '../../constants';
 
@@ -17,6 +17,8 @@ const CourseHomeLecture = ({ token }) => {
     const [notes, setNotes] = useState([])
     const [showInput, setShowInput] = useState(false)
     const [content, setContent] = useState("")
+    const [noting, setNoting] = useState(false)
+
 
     const { topic, assetId } = useParams();
 
@@ -33,14 +35,31 @@ const CourseHomeLecture = ({ token }) => {
     }
 
     const createNote = async () => {
-        setLoading(true)
+        setNoting(true)
         try {
             const { data } = await createNoteAPI({ token, content, topicAsset: assetId })
+            notes.unshift(data.note)
+            setNotes(notes)
             message.success("Tạo ghi chú thành công")
+            setShowInput(false)
+            setContent("")
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
-        setLoading(false)
+        setNoting(false)
+    }
+
+    const deleteNote = async (id) => {
+        setNoting(true)
+        try {
+            const { data } = await deleteNoteAPI({ token, id })
+            const newNotes = notes.filter(note => note.id != id)
+            setNotes(newNotes)
+            message.success("Xóa ghi chú thành công")
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setNoting(false)
     }
 
     useEffect(() => {
@@ -67,8 +86,8 @@ const CourseHomeLecture = ({ token }) => {
                                 </Skeleton>
                             }
                         </div>
-                        <Row gutter={36}>
-                            <Col span={16}>
+                        <Row gutter={24}>
+                            <Col span={15}>
                                 <div className="page-card">
                                     {
                                         lecture.file_type === "video" ? (<div className="course-lecture--video">
@@ -77,7 +96,7 @@ const CourseHomeLecture = ({ token }) => {
                                     }
                                 </div>
                             </Col>
-                            <Col span={8}>
+                            <Col span={9}>
                                 <div className="page-card">
                                     <Row justify="space-between">
                                         <Col><h3 className="text--main__smaller theme-color"><BookOutlined /> Ghi chú</h3></Col>
@@ -100,9 +119,19 @@ const CourseHomeLecture = ({ token }) => {
                                         {
                                             notes.map(note => (
                                                 <Timeline.Item key={note.id}>
-                                                    <Skeleton loading={loading} active avatar paragraph={{ rows: 1 }}>
-                                                        <h4>{note.content}</h4>
-                                                        <p style={{ fontSize: '1.2rem', fontStyle: 'italic' }}>{formatDate(note.created_date, Constants.MMM_Do__YY__TIME)}</p>
+                                                    <Skeleton loading={loading || noting} active avatar paragraph={{ rows: 1 }}>
+                                                        <Row justify="space-between">
+                                                            <Col>
+                                                                <h4>{note.content}</h4>
+                                                                <p style={{ fontSize: '1.2rem', fontStyle: 'italic' }}>{formatDate(note.created_date, Constants.MMM_Do__YY__TIME)}</p>
+                                                            </Col>
+                                                            <Col>
+                                                                <Button onClick={() => deleteNote(note.id)} danger type="primary">
+                                                                    <DeleteTwoTone twoToneColor="#ffffff" />
+                                                                </Button>
+                                                            </Col>
+                                                        </Row>
+
                                                     </Skeleton>
                                                 </Timeline.Item>
                                             ))

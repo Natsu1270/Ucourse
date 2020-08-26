@@ -151,6 +151,12 @@ class CreateNote(generics.GenericAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = StudentNoteSerializer()
+    queryset = StudentNote.objects.all()
+
+
 class CourseHomeShowAPI(generics.ListAPIView):
     serializer_class = serializers.CourseHomeShowSerializer
     permission_classes = [

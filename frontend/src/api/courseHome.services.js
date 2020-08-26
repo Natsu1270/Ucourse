@@ -204,3 +204,12 @@ export const createNoteAPI = (data) => {
         data: data
     })
 }
+
+export const deleteNoteAPI = (data) => {
+    const { token, id } = data
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'DELETE',
+        url: `${API_URL}/topic_asset/notes/${id}`,
+    })
+}

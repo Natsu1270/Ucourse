@@ -28,6 +28,7 @@ const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
 const EventPage = lazy(() => import('./pages/EventPage/event.page'));
 const GuidePage = lazy(() => import('./pages/GuidePage/guide.page'));
+const GuideLinePage = lazy(() => import('./pages/GuidePage/guide-line.page'));
 const ContactPage = lazy(() => import('./pages/ContactPage/contact.page'));
 const QuestionPage = lazy(() => import('./pages/QuestionPage/question.page'));
 const SearchPage = lazy(() => import('./pages/SearchPage/search.page'));
@@ -81,6 +82,7 @@ function App() {
                                 <Switch>
                                     <Route exact path="/about" component={AboutPage} />
                                     <Route exact path="/huongdan-thanhtoan" component={GuidePage} />
+                                    <Route exact path="/guideline" component={GuideLinePage} />
                                     <Route exact path="/lienhe" component={ContactPage} />
                                     <Route exact path="/cauhoi" component={QuestionPage} />
                                     <Route exact path="/event" component={EventPage} />

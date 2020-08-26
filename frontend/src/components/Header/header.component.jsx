@@ -34,6 +34,7 @@ const Header = ({ token, currentUser }) => {
                     <Link to="/field">Khám phá</Link>
                     <Link to="/about">Giới Thiệu</Link>
                     <Link to="/event">Sự kiện</Link>
+                    <Link to="/guideline">Trợ giúp</Link>
                 </li>
                 <li className='header-search'>
                     <SearchInput width={400} />
