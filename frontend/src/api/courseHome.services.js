@@ -16,7 +16,7 @@ export const registerCourseAPI = ({ course_id, token, class_id }) => {
     })
 };
 
-export const unRegisterCourseAPI = ({ token, class_id }) => {
+export const unRegisterCourseAPI = ({ token, class_id, course_id }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export const unRegisterCourseAPI = ({ token, class_id }) => {
         },
         method: 'POST',
         url: `${API_URL}/unregister`,
-        data: { class_id }
+        data: { class_id, course_id }
     })
 };
 

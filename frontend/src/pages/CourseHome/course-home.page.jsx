@@ -36,7 +36,8 @@ const AssignmentTeacher = lazy(() => import("../../components/Assignment/assignm
 const CourseHomeGradesStudent = lazy(() => import("../../components/CourseHome/course-home-grades-student.component"))
 const CourseHomeGradesTeacher = lazy(() => import("../../components/CourseHome/course-home-grades-teacher.component"))
 const CourseHomeStudent = lazy(() => import("../../components/CourseHome/course-home-students.component"))
-
+const CertificateTeacher = lazy(() => import("../../components/Certificate/certificate-teacher.component"))
+const CertificateStudent = lazy(() => import("../../components/Certificate/certificate-student.component"))
 
 
 const CourseHomePage = ({ myCourses, userRole }) => {
@@ -142,6 +143,18 @@ const CourseHomePage = ({ myCourses, userRole }) => {
 
                 <Route exact path={`${match.url}/students`}>
                     <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
+                </Route>
+
+                <Route exact path={`${match.url}/certificate`}>
+                    <RoleComponent
+                        roleCode={userRole.code}
+                        StudentComponent={CertificateStudent}
+                        TeacherTAComponent={CertificateTeacher}
+                        AdminComponent={null}
+                        token={token}
+                        courseHome={courseHomeDetail}
+                        course={course}
+                    />
                 </Route>
             </Router>
         </Layout>

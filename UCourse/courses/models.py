@@ -49,6 +49,7 @@ class Course(models.Model):
     outline_detail = RichTextField(blank=True, null=True)
     outline_file = models.FileField(upload_to='courses/outlines', blank=True, null=True)
     user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserCourse', related_name='course_user')
     program = models.ManyToManyField(
         Program, related_name='program_course', blank=True)
     field = models.ForeignKey(Field, related_name='field_courses', on_delete=models.SET_NULL, null=True)
@@ -115,6 +116,36 @@ class UserBuyCourse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     bought_date = models.DateField(default=timezone.now)
+
+
+class UserCourse(models.Model):
+    PASS = 'pass'
+    FAIL = 'fail'
+    ON_GOING = 'on_going'
+
+    STATUS_CHOICES = [
+        (PASS, 'Pass course'),
+        (FAIL, 'Fail course'),
+        (ON_GOING, 'On Going')
+    ]
+
+    MEDIUM = 'medium'
+    GOOD = 'good'
+    VERY_GOOD = 'xgood'
+
+    RANK_CHOICES = [
+        (MEDIUM, 'Medium'), (GOOD, 'Good'), (VERY_GOOD, 'Very good')
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course_home = models.ForeignKey('course_homes.CourseHome', on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=ON_GOING, blank=True, null=True)
+    rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
+    received_certificate = models.BooleanField(default=False)
+    completed_date = models.DateField(null=True, blank=True)
+    started_date = models.DateField(default=timezone.now)
+    rate = models.IntegerField(null=True, blank=True)
 
 
 class Skill(models.Model):

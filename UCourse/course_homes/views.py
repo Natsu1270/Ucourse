@@ -7,6 +7,8 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 import datetime
 
 from api.permissions import IsTeacherOrTARoleOrReadOnly
+from courses.models import Course, UserCourse
+from courses.serializers import UserCourseSerializer
 
 from . import serializers
 from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment, StudentAssignment, StudentNote
@@ -18,13 +20,22 @@ class RegisterClassAPI(generics.GenericAPIView):
         permissions.IsAuthenticated
     ]
 
-    @staticmethod
-    def post(request):
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
         can_register = True
         class_id = request.data['class_id']
         course_id = request.data['course_id']
         course_home = CourseHome.objects.get(pk=class_id)
+
         # get registered class
+        if course_home.students.count() >= course_home.maximum_number:
+            return Response({
+                "data": {},
+                "result": can_register,
+                "message": "Full students",
+                "status_code": 400
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         registered_class = CourseHome.objects.filter(
             Q(course_id=course_id) & Q(students__in=[
                 request.user]) & ~Q(status__exact='closed')
@@ -39,10 +50,17 @@ class RegisterClassAPI(generics.GenericAPIView):
                     c.students.remove(request.user)
                     c.save()
 
-        course_home.students.add(request.user)
-        course_home.save()
-
         if can_register:
+            user_course = UserCourse.objects.filter(course_id=course_id, user_id=user.id)
+            if user_course.count() == 0:
+                UserCourse.objects.create(course_id=course_id, user_id=user.id, course_home_id=class_id)
+            else:
+                user_course = user_course[0]
+                user_course.course_home_id = class_id
+                user_course.save()
+
+            course_home.students.add(request.user)
+            course_home.save()
             return Response({
                 "data": {},
                 "result": can_register,
@@ -63,11 +81,15 @@ class UnRegisterClassAPI(generics.GenericAPIView):
         permissions.IsAuthenticated
     ]
 
-    @staticmethod
-    def post(request):
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
         class_id = request.data['class_id']
+        course_id = request.data['course_id']
+        course = Course.objects.get(pk=course_id)
         course_home = CourseHome.objects.get(pk=class_id)
+        course.users.remove(user)
         course_home.students.remove(request.user)
+        course.save()
         course_home.save()
 
         return Response({
@@ -203,6 +225,18 @@ class CheckClassOwnership(generics.GenericAPIView):
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
+class GetListSummary(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        course_id = self.request.query_params.get('course_id')
+        class_id = self.request.query_params.get('class_id')
+
+        queryset = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
+
+        return Response({
+            "userCourses": UserCourseSerializer(instance=queryset, many=True).data
+        }, status=status.HTTP_200_OK)
 
 
 

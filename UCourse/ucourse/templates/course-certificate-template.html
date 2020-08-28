@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+
+        @font-face {
+            font-family: LP, "LP";
+            src: url({% static 'font.ttf' %});
+        }
+
+        /* Normal */
+        @font-face {
+            font-family: FS;
+            src: url({% static 'fonts/FSR.ttf' %});
+        }
+
+        /* Bold */
+        @font-face {
+            font-family: FS;
+            src: url({% static 'fonts/FSB.ttf' %});
+            font-weight: bold;
+        }
+
+
+
+        @page {
+            background-image: url('https://i.imgur.com/uA2hPry.jpg');
+            size: letter landscape;
+            margin: 2cm;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+            padding-top: 30rem;
+
+        }
+
+        .student-name{
+            font-family: "LP", fantasy;
+        }
+
+        .info {
+            font-family: "FS", fantasy;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+
+    <div class="content">
+        <span class="student-name" style="font-weight:bold; font-size: 6rem">{{ name }}</span><br/>
+        <span class="info" style="font-size: 1.6rem; color: darkgrey"><i>has completed the course</i></span><br/><br/>
+        <span class="info" style="font-weight:bold; color: red; font-size: 3rem">{{ course_name }}</span><br/>
+        <span class="info" style="font-size: 1.6rem">Date completed: {{ date }}</span>
+
+        <p id="cdate"></p>
+    </div>
+</div>
+</body>
+</html>

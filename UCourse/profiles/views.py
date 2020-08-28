@@ -17,7 +17,7 @@ class ProfileAPI(generics.ListCreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     filter_backends = [filters.SearchFilter]
-    search_fields = ['first_name', 'last_name',]
+    search_fields = ['first_name', 'last_name', ]
 
 
 class ProfileDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -62,7 +62,8 @@ class PublicUserProfile(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        if (self.request.user.is_anonymous and serializer.data['public_info']) or self.request.user.id == serializer.data['id']:
+        if (self.request.user.is_anonymous and serializer.data['public_info']) or self.request.user.id == \
+                serializer.data['id'] or serializer.data['public_info']:
             return Response(serializer.data)
         return Response({
             "result": False,

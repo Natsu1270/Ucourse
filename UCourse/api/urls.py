@@ -1,4 +1,7 @@
+from django.conf.urls.static import static
 from django.urls import path, include
+
+from ucourse import settings
 from .views import SearchAPI, AdvancedSearch
 
 urlpatterns = [
@@ -20,5 +23,7 @@ urlpatterns = [
     path('assignment/', include('assignment.urls')),
     path('grade/', include('grades.urls')),
     path('events/', include('events.urls')),
+    path('certificates/', include('certificates.urls')),
+    path('summary/', include('summary.urls'))
 
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

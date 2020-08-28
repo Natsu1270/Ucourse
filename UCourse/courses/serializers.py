@@ -2,7 +2,8 @@ from rest_framework import serializers, exceptions
 
 from programs.models import UserBuyProgram
 from users.models import User
-from .models import Course, CourseDetail, Skill, UserBuyCourse, UserViewCourse
+from users.serializers import UserMinSerializer
+from .models import Course, CourseDetail, Skill, UserBuyCourse, UserViewCourse, UserCourse
 from course_homes.models import CourseHome
 from profiles.serializers import ProfileMinSerializer
 
@@ -25,6 +26,17 @@ class UserBuyProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBuyProgram
         fields = ['id', 'user', 'program', 'bought_date']
+
+
+class UserCourseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    user = UserMinSerializer(required=False)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
+
+    class Meta:
+        model = UserCourse
+        fields = ['id', 'user', 'course', 'course_home', 'status', 'rank', 'completed_date', 'rate', 'received_certificate']
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):

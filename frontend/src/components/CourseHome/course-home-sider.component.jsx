@@ -51,6 +51,10 @@ const CourseHomeSider = ({ isLoading, course, match }) => {
                     <SolutionOutlined />
                     <span>Forums</span>
                 </Menu.Item>
+                <Menu.Item onClick={() => history.push(`${match.url}/certificate`)} key="certificate">
+                    <FileProtectOutlined />
+                    <span>Chứng chỉ</span>
+                </Menu.Item>
                 <Menu.Item onClick={() => history.push(`${match.url}/students`)} key="students">
                     <TeamOutlined />
                     <span>Danh sách học viên</span>

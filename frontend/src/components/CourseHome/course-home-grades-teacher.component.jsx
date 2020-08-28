@@ -210,7 +210,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
         return (
             < Table
                 dataSource={data}
-                columns={columns}
+                columns={finalColumns}
             />
         )
     }

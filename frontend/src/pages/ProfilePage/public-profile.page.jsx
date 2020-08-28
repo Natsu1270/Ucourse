@@ -126,11 +126,13 @@ const PublicProfilePage = () => {
                                 </div>
                             </Skeleton>
                         </Content>
-                    </Layout> : <ResultComponent
-                        type={Constants.RESULT_TYPE_NODATA}
-                        title="Private User Profile"
-                        info="Người dùng này không bật chế độ công khai thông tin cá nhân"
-                    />
+                    </Layout> : <div className="page-card">
+                        <ResultComponent
+                            type={Constants.RESULT_TYPE_NODATA}
+                            title="Private User Profile"
+                            info="Người dùng này không bật chế độ công khai thông tin cá nhân"
+                        />
+                    </div>
 
             }
 
