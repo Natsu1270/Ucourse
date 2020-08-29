@@ -143,6 +143,7 @@ class UserCourse(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=ON_GOING, blank=True, null=True)
     rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
     received_certificate = models.BooleanField(default=False)
+    is_summarised = models.BooleanField(default=False)
     completed_date = models.DateField(null=True, blank=True)
     started_date = models.DateField(default=timezone.now)
     rate = models.IntegerField(null=True, blank=True)

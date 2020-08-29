@@ -58,9 +58,28 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
 
     const renderRank = (rank) => {
         if (rank === null) return <Tag color="red">Chưa phân loại</Tag>
+        if (rank === 'bad') return <Tag color="magenta">Yếu</Tag>
         if (rank === 'medium') return <Tag color="purple">Trung bình</Tag>
         if (rank === 'good') return <Tag color="green">Khá</Tag>
         return <Tag color="blue">Xuất sắc</Tag>
+    }
+
+    const renderCertificate = (received, record) => {
+        if (record.status == 'fail') {
+            return <Tag color="#ff8b94">Không đạt yêu cầu</Tag>
+        }
+        if (!received && record.status == 'pass') {
+            return <Button
+                type="primary"
+                style={{ background: "#8874a3", border: 'none' }}
+                onClick={() => genCertificate(record)}>
+                Cấp ngay
+        </Button>
+        }
+        if (!received) {
+            return <Tag color="#ffcc5c">Chưa tổng kết</Tag>
+        }
+        return <Tag color="#2db7f5">Đã cấp</Tag>
     }
 
     const onFinish = (values) => {
@@ -107,11 +126,24 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         });
     };
 
-    const summaryStudent = async (values) => {
+    const parseRankByScore = score => {
+        if (score < 5) return 'bad'
+        if (score < 7) return 'medium'
+        if (score < 9) return 'good'
+        return 'xgood'
+    }
+
+    const summaryStudent = async (values, record) => {
         setLoading(true)
+        let datas = null
+        if (values != null) {
+            datas = { token, userCourseId: currentItem.id, status: values.status, rank: values.rank }
+        } else {
+            const status = record.finalScore >= 5 ? 'pass' : 'fail'
+            datas = { token, userCourseId: record.id, status, rank: parseRankByScore(record.finalScore) }
+        }
         try {
-            const { data } = await updateSummary(
-                { token, userCourseId: currentItem.id, status: values.status, rank: values.rank })
+            const { data } = await updateSummary(datas)
             message.success("Tổng kết thành công")
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
@@ -119,6 +151,8 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         setLoading(false)
 
     }
+
+
 
 
     const columns = [
@@ -166,13 +200,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             title: 'Chứng chỉ',
             dataIndex: 'received',
             key: 'received',
-            render: (received, record) => <span>{!received ?
-                <Button
-                    type="primary"
-                    style={{ background: "#8874a3", border: 'none' }}
-                    onClick={() => genCertificate(record)}>
-                    Cấp ngay
-                </Button> : <Tag color="#2db7f5">Đã cấp</Tag>}</span>
+            render: (received, record) => renderCertificate(received, record)
         },
 
         {
@@ -181,7 +209,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             key: 'action',
             render: (action, record) => (<Space>
                 <Button type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
-                <Button onClick={() => genSummary(record)}>Tổng kết theo điểm</Button>
+                <Button onClick={() => summaryStudent(null, record, 2)}>Tổng kết theo điểm</Button>
             </Space>)
         },
     ]
@@ -190,6 +218,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
 
         return {
             stt: index + 1,
+            id: userCourse.id,
             username: userCourse.user.username,
             avatar: userCourse.user.user_profile.avatar,
             fullname: userCourse.user.user_profile.fullname,

@@ -39,7 +39,7 @@ class UserCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCourse
         fields = ['id', 'user', 'course', 'course_home', 'status', 'end_date', 'final_score',
-                  'rank', 'completed_date', 'rate', 'received_certificate']
+                  'rank', 'completed_date', 'rate', 'received_certificate', 'is_summarised']
 
     @staticmethod
     def get_end_date(obj):

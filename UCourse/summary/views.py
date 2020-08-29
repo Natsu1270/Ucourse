@@ -26,7 +26,7 @@ class UpdateSummary(generics.GenericAPIView):
         stt = self.request.data.get('status', None)
         rank = self.request.data.get('rank', None)
 
-        if summary_id:
+        if summary_id is None:
             return Response({
                 "message": "All fields required",
                 "result": False
@@ -35,6 +35,7 @@ class UpdateSummary(generics.GenericAPIView):
         user_course = UserCourse.objects.get(pk=summary_id)
         user_course.rank = rank
         user_course.status = stt
+        user_course.is_summarised=True
         user_course.save()
         return Response({
             "userCourses": UserCourseSerializer(instance=user_course).data
