@@ -21,3 +21,14 @@ export function searchSummary(params) {
         data: params
     })
 }
+
+
+export function updateSummary({ token, userCourseId, status, rank }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/update`,
+        data: { userCourseId, status, rank }
+    })
+}

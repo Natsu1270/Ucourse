@@ -1,9 +1,9 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
-from course_homes.models import StudentAssignment, Assignment
+from course_homes.models import StudentAssignment, Assignment, StudentCourseHome
 from course_homes.serializers import StudentAssignmentDetailGradeSerializer, StudentAssignmentAllGradeSerializer, \
-    AssignmentMinSerializer
+    AssignmentMinSerializer, StudentCourseHomeSerializer
 from exams.models import StudentExamResult, Exam
 from exams.serializers import StudentExamResultSerializer, ExamMinSerializer
 
@@ -34,6 +34,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
 
         course_home_exams = Exam.objects.filter(topic__course_home__course_id=course_home_id)
         course_home_assignments = Assignment.objects.filter(learning_topic__course_home_id=course_home_id)
+        student_course_homes = StudentCourseHome.objects.filter(course_home_id=course_home_id)
         filter_exams = {}
         filter_assignments = {}
 
@@ -51,6 +52,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
         return Response({
             "student_exams": filter_exams,
             "student_assignments": filter_assignments,
+            "student_course_homes": StudentCourseHomeSerializer(instance=student_course_homes, many=True).data,
             "result": True,
             "status_code": 200
         }, status=status.HTTP_200_OK)
@@ -72,6 +74,39 @@ class UpdateStudentAssigmentGrade(generics.GenericAPIView):
         student_assignment = StudentAssignment.objects.get(pk=student_assignment_id)
         student_assignment.score = score
         student_assignment.save()
+        return Response({
+            "result": True,
+            "status_code": 200
+        }, status=status.HTTP_200_OK)
+
+
+class UpdateStudentCourseHomeGrade(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        student_coursehome_id = self.request.data['studentCourseHomeId']
+        grade = self.request.data['grade']
+
+        student_coursehome = StudentCourseHome.objects.get(pk=student_coursehome_id)
+        student_coursehome.final_score = grade
+        student_coursehome.save()
+
+        return Response({
+            "result": True,
+            "status_code": 200
+        }, status=status.HTTP_200_OK)
+
+
+class UpdateMultiStudentCourseHomeGrade(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        rows = self.request.data
+        for row in rows:
+            student_coursehome = StudentCourseHome.objects.get(pk=row.get('key'))
+            student_coursehome.final_score = row.get('result')
+            student_coursehome.save()
+
         return Response({
             "result": True,
             "status_code": 200

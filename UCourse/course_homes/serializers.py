@@ -3,7 +3,7 @@ from rest_framework import serializers
 from courses.serializers import CourseMinSerializer
 from programs.serializers import FieldMinSerializer
 from users.models import User
-from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment, StudentNote
+from .models import CourseHome, TopicAsset, LearningTopic, Assignment, StudentAssignment, StudentNote, StudentCourseHome
 # from courses.serializers import CourseMinSerializer
 from users.serializers import UserSerializer, UserMinSerializer
 from exams.serializers import ExamShowSerializer
@@ -216,3 +216,11 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         ]
 
 
+class StudentCourseHomeSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
+
+    class Meta:
+        model = StudentCourseHome
+        fields = ['id', 'student', 'course_home', 'final_score', 'status', 'rank']

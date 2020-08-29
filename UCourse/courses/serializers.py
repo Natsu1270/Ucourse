@@ -1,10 +1,10 @@
 from rest_framework import serializers, exceptions
-
+from django.db.models import Q
 from programs.models import UserBuyProgram
 from users.models import User
 from users.serializers import UserMinSerializer
 from .models import Course, CourseDetail, Skill, UserBuyCourse, UserViewCourse, UserCourse
-from course_homes.models import CourseHome
+from course_homes.models import CourseHome, StudentCourseHome
 from profiles.serializers import ProfileMinSerializer
 
 
@@ -33,10 +33,26 @@ class UserCourseSerializer(serializers.ModelSerializer):
     user = UserMinSerializer(required=False)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
+    end_date = serializers.SerializerMethodField(read_only=True)
+    final_score = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserCourse
-        fields = ['id', 'user', 'course', 'course_home', 'status', 'rank', 'completed_date', 'rate', 'received_certificate']
+        fields = ['id', 'user', 'course', 'course_home', 'status', 'end_date', 'final_score',
+                  'rank', 'completed_date', 'rate', 'received_certificate']
+
+    @staticmethod
+    def get_end_date(obj):
+        return obj.course_home.end_date
+
+    @staticmethod
+    def get_final_score(obj):
+
+        student_course_home = StudentCourseHome.objects.filter(
+            Q(student_id=obj.user.id) & Q(course_home_id=obj.course_home.id))
+        if student_course_home.count() > 0:
+            return student_course_home[0].final_score
+        return None
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):

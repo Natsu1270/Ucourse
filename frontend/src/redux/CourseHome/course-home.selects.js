@@ -1,4 +1,4 @@
-import {createSelector} from 'reselect'
+import { createSelector } from 'reselect'
 
 const courseHomeSelector = state => state.courseHome;
 
@@ -25,6 +25,11 @@ export const myCourseHomesSelector = createSelector(
 export const courseHomeDetailSelector = createSelector(
     [courseHomeSelector],
     courseHome => courseHome.courseHomeDetail ? courseHome.courseHomeDetail : {}
+);
+
+export const courseHomeDetailStudentSelector = createSelector(
+    [courseHomeDetailSelector],
+    courseHomeDetail => courseHomeDetail.students ? courseHomeDetail.students : []
 );
 
 export const courseHomeShowSelector = createSelector(

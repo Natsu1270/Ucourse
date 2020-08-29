@@ -2,16 +2,19 @@ import React from 'react'
 import { Form, Input, Button, Tooltip, Avatar, Upload, Spin, message } from 'antd'
 import { UploadOutlined, LoadingOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { getBase64, beforeUpload } from '../../../utils/File/file.utils'
 import { updateAccountStart } from '../../../redux/Auth/auth.actions'
 import { Empt2Undefined } from '../../../utils/File/common.utils'
+import { updateAccountAPI } from '../../../api/auth.services'
 
 const AccountSetting = ({ currentUser, token, userProfile }) => {
     const dispatch = useDispatch()
+    const history = useHistory()
     const [isUploading, setIsUploading] = React.useState(false)
     const [imgUrl, setImgUrl] = React.useState(null)
+    const [loading, setLoading] = React.useState(false)
     const [form] = Form.useForm()
     const initValues = {
         email: currentUser.email,
@@ -38,9 +41,23 @@ const AccountSetting = ({ currentUser, token, userProfile }) => {
         if (password && !confirm) {
             return message.error('Please confirm the password!')
         }
-        dispatch(updateAccountStart({
-            token, username, email, old_password, password
-        }))
+
+        // dispatch(updateAccountStart({
+        //     token, username, email, old_password, password
+        // }))
+        updateProfile(values)
+    }
+
+    const updateProfile = async (values) => {
+        setLoading(true)
+        const { username, email, old_password, password } = values
+        try {
+            const { data } = await updateAccountAPI({ token, username, email, old_password, password })
+            message.success('Cập nhật thành công')
+        } catch (err) {
+            message.error('Có lỗi xảy ra: ' + err.message)
+        }
+        setLoading(false)
     }
 
     const onReset = () => {
@@ -178,9 +195,9 @@ const AccountSetting = ({ currentUser, token, userProfile }) => {
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
-                    <Button type="primary" htmlType="submit" className="mr-3">Save</Button>
-                    <Button htmlType="button" onClick={() => window.open('/', '_self')}>
-                        Cancel
+                    <Button loading={loading} type="primary" htmlType="submit" className="mr-3">Save</Button>
+                    <Button loading={loading} htmlType="button" onClick={() => window.open('/', '_self')}>
+                        Hủy
                     </Button>
 
                 </Form.Item>

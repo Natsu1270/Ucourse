@@ -128,13 +128,13 @@ class UserCourse(models.Model):
         (FAIL, 'Fail course'),
         (ON_GOING, 'On Going')
     ]
-
+    BAD = 'bad'
     MEDIUM = 'medium'
     GOOD = 'good'
     VERY_GOOD = 'xgood'
 
     RANK_CHOICES = [
-        (MEDIUM, 'Medium'), (GOOD, 'Good'), (VERY_GOOD, 'Very good')
+        (MEDIUM, 'Medium'), (GOOD, 'Good'), (VERY_GOOD, 'Very good'), (BAD, 'Bad')
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

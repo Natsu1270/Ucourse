@@ -39,3 +39,29 @@ export const updateStudentAssignmentGrade = ({ token, studentAssignmentId, score
     })
 };
 
+
+
+export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade }) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/student_coursehome/update`,
+        data: { studentCourseHomeId, grade }
+    })
+};
+
+
+export const updateMultiStudentCourseHomeGrade = ({ token, selectedRows }) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/student_coursehome/multi-update`,
+        data: selectedRows
+    })
+};

@@ -39,7 +39,7 @@ class CourseHome(models.Model):
     )
     slug = models.SlugField(null=True, blank=True, unique=True)
     students = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name='course_homes', blank=True)
+        settings.AUTH_USER_MODEL, through='StudentCourseHome', related_name='course_homes', blank=True)
     maximum_number = models.IntegerField(null=True, blank=True)
     status = models.CharField(
         max_length=10, choices=COURSE_STATUS_CHOICES, default=OPEN)
@@ -216,3 +216,31 @@ class StudentAssignment(models.Model):
     @property
     def upload_ass_path(self):
         return 'courses/home/' + self.assignment.learning_topic.course_slug + self.assignment.learning_topic.slug
+
+
+class StudentCourseHome(models.Model):
+    PASS = 'pass'
+    FAIL = 'fail'
+    ON_GOING = 'on_going'
+
+    STATUS_CHOICES = [
+        (PASS, 'Pass course'),
+        (FAIL, 'Fail course'),
+        (ON_GOING, 'On Going')
+    ]
+
+    MEDIUM = 'medium'
+    GOOD = 'good'
+    VERY_GOOD = 'xgood'
+
+    RANK_CHOICES = [
+        (MEDIUM, 'Medium'), (GOOD, 'Good'), (VERY_GOOD, 'Very good')
+    ]
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
+    final_score = models.FloatField(null=True, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True, blank=True)
+    rank = models.CharField(max_length=10, choices=RANK_CHOICES, null=True, blank=True)
+
+

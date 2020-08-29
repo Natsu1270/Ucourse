@@ -11,30 +11,31 @@ class GetListSummary(generics.GenericAPIView):
         course_id = self.request.query_params.get('course_id')
         class_id = self.request.query_params.get('class_id')
 
-        queryset = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
+        user_courses = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
 
         return Response({
-            "userCourses": UserCourseSerializer(instance=queryset, many=True).data
+            "userCourses": UserCourseSerializer(instance=user_courses, many=True).data
         }, status=status.HTTP_200_OK)
 
 
-# class SearchSummary(generics.GenericAPIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def post(self, request, *args, **kwargs):
-#         course_id = self.request.data.get('course_id')
-#         class_id = self.request.data.get('class_id')
-#         username = self.request.data.get('username', None)
-#         name = self.request.data.get('name', None)
-#         stt = self.request.data.get('status', None)
-#         rank = self.request.data.get('rank', None)
-#         received = self.request.data.get('received', None)
-#
-#         queryset = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
-#
-#         if username is not None:
-#             queryset.filter(user)
-#
-#         return Response({
-#             "userCourses": UserCourseSerializer(instance=queryset, many=True).data
-#         }, status=status.HTTP_200_OK)
+class UpdateSummary(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        summary_id = self.request.data.get('userCourseId', None)
+        stt = self.request.data.get('status', None)
+        rank = self.request.data.get('rank', None)
+
+        if summary_id:
+            return Response({
+                "message": "All fields required",
+                "result": False
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user_course = UserCourse.objects.get(pk=summary_id)
+        user_course.rank = rank
+        user_course.status = stt
+        user_course.save()
+        return Response({
+            "userCourses": UserCourseSerializer(instance=user_course).data
+        }, status=status.HTTP_200_OK)
