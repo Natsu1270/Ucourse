@@ -12,6 +12,25 @@ export function getListSummary({ token, course_id, class_id }) {
     })
 }
 
+export function getStudentSummary({ token, courseId, courseHomeId }) {
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${API_URL}/student`,
+        params: { courseId, courseHomeId }
+    })
+}
+
+
+export function getStudentCertificate({ token, courseId, courseHomeId }) {
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/student`,
+        params: { courseId, courseHomeId }
+    })
+}
+
 
 export function searchSummary(params) {
     const { token } = params

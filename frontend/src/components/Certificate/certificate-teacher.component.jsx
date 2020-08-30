@@ -71,7 +71,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
     }
 
     const renderRank = (rank) => {
-        if (rank === null) return <Tag color="red">Chưa phân loại</Tag>
+        if (rank === null || rank == "") return <Tag color="red">Chưa phân loại</Tag>
         if (rank === 'bad') return <Tag color="magenta">Yếu</Tag>
         if (rank === 'medium') return <Tag color="purple">Trung bình</Tag>
         if (rank === 'good') return <Tag color="green">Khá</Tag>
@@ -147,7 +147,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         formData.set('courseName', course.title)
         formData.set('studentName', cerItem.fullname)
         formData.set('id', cerItem.id)
-        formData.set('file', file, cerItem.fullname + course.title + "_Certificate.pdf")
+        formData.set('file', file, cerItem.username + course.slug + "_Certificate.pdf")
 
         try {
             const { data } = await handOutCertificateAPI({ token, formData })

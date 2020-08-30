@@ -1,6 +1,6 @@
 import datetime
 import io
-from django.core.mail import EmailMessage
+from django.db.models import Q
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -15,6 +15,7 @@ from certificates.models import StudentCertificate
 from courses.models import UserCourse
 from courses.serializers import UserCourseSerializer
 from services.mail_service import send_mail_with_attachments
+from . import serializers
 
 
 def link_callback(uri, rel):
@@ -104,9 +105,18 @@ class HandoutCertificate(generics.GenericAPIView):
             cc=["hungduy1270@gmail.com", "1610107@hcmut.edu.vn"],
             attachments=[file]
         )
-
-        StudentCertificate.objects.create(student_id=student_id, course_id=course_id, course_home_id=course_home_id,
-                                          file=file)
+        student_certificate = StudentCertificate.objects.filter(
+            student_id=student_id, course_id=course_id, course_home_id=course_home_id
+        )
+        if student_certificate.count() > 0:
+            student_certificate = student_certificate[0]
+            student_certificate.file = file
+            student_certificate.received_date = datetime.date.today()
+            student_certificate.save()
+        else:
+            StudentCertificate.objects.create(
+                student_id=student_id, course_id=course_id, course_home_id=course_home_id, file=file
+            )
 
         instance = UserCourse.objects.get(pk=student_course_id)
         instance.received_certificate = True
@@ -115,3 +125,26 @@ class HandoutCertificate(generics.GenericAPIView):
         return HttpResponse({
             "result": True
         }, status=status.HTTP_200_OK)
+
+
+class GetStudentCertificate(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        course_id = self.request.query_params.get('courseId')
+        class_id = self.request.query_params.get('courseHomeId')
+        student = self.request.user
+        try:
+            instance = StudentCertificate.objects.get(Q(student_id=student.id) & Q(course_home_id=class_id))
+        except StudentCertificate.DoesNotExist:
+            return Response(
+                {
+                    "result": False
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            data=serializers.StudentCertificateSerializer(
+                instance=instance, context=self.get_serializer_context()).data,
+            status=status.HTTP_200_OK
+        )

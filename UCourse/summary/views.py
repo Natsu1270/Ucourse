@@ -1,3 +1,5 @@
+import datetime
+
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from courses.models import UserCourse
@@ -18,6 +20,21 @@ class GetListSummary(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
+class GetStudentSummary(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        course_id = self.request.query_params.get('courseId')
+        class_id = self.request.query_params.get('courseHomeId')
+        student = self.request.user
+
+        instance = UserCourse.objects.get(course_id=course_id, course_home_id=class_id, user_id=student.id)
+
+        return Response(
+            data=UserCourseSerializer(instance=instance).data, status=status.HTTP_200_OK
+        )
+
+
 class UpdateSummary(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -35,7 +52,8 @@ class UpdateSummary(generics.GenericAPIView):
         user_course = UserCourse.objects.get(pk=summary_id)
         user_course.rank = rank
         user_course.status = stt
-        user_course.is_summarised=True
+        user_course.is_summarised = True
+        user_course.completed_date = datetime.date.today()
         user_course.save()
         return Response({
             "userCourses": UserCourseSerializer(instance=user_course).data

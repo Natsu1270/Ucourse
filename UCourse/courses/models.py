@@ -145,7 +145,7 @@ class UserCourse(models.Model):
     received_certificate = models.BooleanField(default=False)
     is_summarised = models.BooleanField(default=False)
     completed_date = models.DateField(null=True, blank=True)
-    started_date = models.DateField(default=timezone.now)
+    started_date = models.DateField(default=timezone.now, blank=True, null=True)
     rate = models.IntegerField(null=True, blank=True)
 
 
