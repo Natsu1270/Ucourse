@@ -120,7 +120,7 @@ const CertificateStudent = ({ token, course, courseHome }) => {
                                     <Col span={24}>
                                         <Row gutter={16}>
                                             <Col span={8}><FieldTimeOutlined /> Ngày cấp:</Col>
-                                            <Col span={8}>{formatDate(studentCertificate.received_date)}</Col>
+                                            <Col span={8}>{formatDate(studentCertificate.received_date, Constants.MMM_Do_YYYY)}</Col>
                                         </Row>
 
                                     </Col>

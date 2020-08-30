@@ -46,6 +46,7 @@ class Course(models.Model):
     fee_type = models.CharField(max_length=10, choices=FEE_TYPE_CHOICES, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     price = models.CharField(max_length=25, blank=True, null=True)
+    discount = models.FloatField(blank=True, null=True)
     outline_detail = RichTextField(blank=True, null=True)
     outline_file = models.FileField(upload_to='courses/outlines', blank=True, null=True)
     user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
@@ -81,6 +82,10 @@ class Course(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Course, self).save(*args, **kwargs)
+
+    def check_is_bought(self, student):
+        check = UserBuyCourse.objects.filter(user_id=student.id, course_id=self.id)
+        return check.count() > 0
 
     @property
     def course_home_count(self):

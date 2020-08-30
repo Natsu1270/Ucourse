@@ -29,6 +29,8 @@ class Program(models.Model):
     icon = models.ImageField(upload_to='programs/icon', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     price = models.CharField(max_length=25, blank=True, null=True)
+    discount = models.FloatField(blank=True, null=True)
+    discount_percentage = models.FloatField(blank=True, null=True)
     field = models.ForeignKey(
         Field, related_name='field_programs', on_delete=models.SET_NULL, null=True)
     short_description = models.CharField(max_length=255)
@@ -75,3 +77,22 @@ class UserBuyProgram(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     bought_date = models.DateField(default=timezone.now)
+
+
+class StudentProgram(models.Model):
+
+    ON_GOING = 'on_going'
+    COMPLETED = 'completed'
+    ABORTED = 'aborted'
+
+    Program_status_choices = [(ON_GOING, 'On Going'), (COMPLETED, 'Completed'), (ABORTED, 'Aborted')]
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    program = models.ForeignKey(Program, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=Program_status_choices, null=True, blank=True, default=ON_GOING)
+    started_date = models.DateField(default=timezone.now, null=True, blank=True)
+    completed_date = models.DateField(default=timezone.now, null=True, blank=True)
+    received_certificate = models.BooleanField(default=False, null=True, blank=True)
+
+    def __str__(self):
+        return "{0}-{1}".format(self.student.__str__(), self.program.__str__())

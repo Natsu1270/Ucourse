@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from courses.models import Course
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from .serializers import FieldSerializer, FieldMinSerializer, ProgramDetailSerializer, ProgramSerializer
-from .models import Field, Program, UserBuyProgram
+from .models import Field, Program, UserBuyProgram, StudentProgram
 
 
 class FieldListAPI(generics.ListAPIView):
@@ -78,6 +78,8 @@ class BuyProgramAPI(generics.GenericAPIView):
             }, status=status.HTTP_201_CREATED)
 
         UserBuyProgram.objects.create(user=user, program_id=program_id)
+        StudentProgram.objects.create(student_id=user.id, program_id=program_id)
+
         if program_courses.count() > 0:
             for course in program_courses:
                 if user not in course.user_buy.all():
@@ -117,6 +119,8 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
                     UserBuyProgram.objects.get(user=user, program_id=program_id)
                 except UserBuyProgram.DoesNotExist:
                     UserBuyProgram.objects.create(user=user, program_id=program_id)
+
+                StudentProgram.objects.create(student_id=user.id, program_id=program_id)
                 return Response({
                     "redirect": resUrl,
                     "result": True,

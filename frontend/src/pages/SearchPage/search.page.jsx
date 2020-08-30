@@ -25,6 +25,7 @@ import SearchFilter from "../../components/SearchResult/search-filter.component"
 import { slugifyString } from "../../utils/text.utils";
 import { disabledDate } from '../../utils/date.utils'
 import Constants from '../../constants';
+import { myCoursesSelector, myProgramsSelector } from '../../redux/Home/home.selects';
 
 const { RangePicker } = DatePicker
 const { Search } = Input
@@ -46,7 +47,7 @@ const CourseSearchPage = ({ location }) => {
         searchCourses, searchPrograms,
         filterField, filterLevel,
         filterRating, filterTeacher,
-        isSearching,
+        isSearching, myCourses, myPrograms
     } = useSelector(createStructuredSelector({
         searchCourses: searchCoursesSelector,
         searchPrograms: searchProgramsSelector,
@@ -55,6 +56,8 @@ const CourseSearchPage = ({ location }) => {
         filterLevel: searchLevelSelector,
         filterRating: searchRatingSelector,
         filterTeacher: searchTeacherSelector,
+        myCourses: myCoursesSelector,
+        myPrograms: myProgramsSelector
     }));
 
     const [courses, setCourses] = useState(searchCourses)
@@ -203,8 +206,10 @@ const CourseSearchPage = ({ location }) => {
                             {
                                 !programs.length && !courses.length ? <Empty className="white-bg p-5" /> :
                                     <div>
-                                        <SearchContainer component={SearchPrograms} programs={programs} />
-                                        <SearchContainer component={SearchCourses} courses={courses} />
+                                        <SearchContainer
+                                            component={SearchPrograms} programs={programs} myPrograms={myPrograms} />
+                                        <SearchContainer
+                                            component={SearchCourses} courses={courses} myCourses={myCourses} />
                                     </div>
                             }
                         </Skeleton>

@@ -25,19 +25,13 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
         setOwn(isOwn)
     }, [isOwn])
 
-    useEffect(() => {
-        let totalPrice = 0;
-        programCourses.forEach(p => {
-            if (p.fee_type === "paid") {
-                totalPrice += parseInt(p.price)
-            }
-        })
-        setPrice(totalPrice.toString())
-    }, [programCourses])
-
 
     const renderPrice = () => {
-        return price !== "0" ? price.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
+        if (program.price || program.price == 0) {
+            return program.price.toString() != "0" ? program.price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
+        } else {
+            return "Chưa xác định"
+        }
     }
 
     const registerProgram = async () => {

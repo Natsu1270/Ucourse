@@ -1,7 +1,8 @@
 import React from 'react'
 import Constants from "../../constants";
+import { Tag } from 'antd';
 
-const CourseSubInfo = ({ class_count, level, viewCount, rate }) => {
+const CourseSubInfo = ({ class_count, level, viewCount, isBought, rate }) => {
 
 
     return (
@@ -19,6 +20,11 @@ const CourseSubInfo = ({ class_count, level, viewCount, rate }) => {
             <li className="search-course-card__body--content--info__item">
                 <span className="text--const">
                     {viewCount} Lượt xem
+                </span>
+            </li>
+            <li className="search-course-card__body--content--info__item">
+                <span className="text--const">
+                    {isBought ? <Tag color="#f50">Đã sở hữu</Tag> : null}
                 </span>
             </li>
             {/* <li className="search-course-card__body--content--info__item">

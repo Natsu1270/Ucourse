@@ -2,7 +2,7 @@ import React from 'react'
 import { Card } from 'antd'
 import CourseCardSub from "./course-card-sub.component";
 
-const CourseCard = ({ course, onClick }) => {
+const CourseCard = ({ course, onClick, isBought }) => {
     // const coverStyle = {
     //     width: '100%',
     //     height: '17rem',
@@ -26,6 +26,7 @@ const CourseCard = ({ course, onClick }) => {
                 homeNum={course.course_home_count}
                 level={course.level}
                 open_date={course.open_date}
+                isBought={isBought}
             />
 
         </div>

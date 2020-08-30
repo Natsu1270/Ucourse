@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import SearchCourseItem from "./search-course-item.component";
 
 
-const SearchCourses = ({ courses }) => {
+const SearchCourses = ({ courses, myCourses }) => {
     const history = useHistory();
     return (
         <div>
@@ -16,12 +16,14 @@ const SearchCourses = ({ courses }) => {
                         <div className="search-result--courses">
                             {
                                 courses.map(course => {
+                                    const isBought = myCourses ? myCourses.some(c => c.id == course.id) : false
                                     return (
                                         <SearchCourseItem
                                             onClick={() => {
                                                 history.push(`/courses/${course.slug}`)
                                             }}
                                             course={course}
+                                            isBought={isBought}
                                         />
                                     )
                                 })

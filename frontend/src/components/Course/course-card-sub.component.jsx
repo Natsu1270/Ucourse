@@ -1,7 +1,8 @@
 import React from 'react'
 import { SmileTwoTone, MehTwoTone, FrownTwoTone } from '@ant-design/icons'
+import { Tag } from 'antd';
 
-const CourseCardSub = ({ title, homeNum, level, open_date }) => {
+const CourseCardSub = ({ title, homeNum, level, open_date, isBought }) => {
 
     const renderLevel = () => {
         if (level === 'Beginner') {
@@ -19,12 +20,15 @@ const CourseCardSub = ({ title, homeNum, level, open_date }) => {
             <div className="course-card-sub__teacher">
                 {homeNum === 0 ? "Chưa có lớp" : homeNum + " lớp"}
             </div>
-            <div className="course-card-sub__others dis-flex-start">
-                <span className="course-card-sub__others--item">
+            <div className="course-card-sub__others dis-flex-between">
+                <span className="course-card-sub__others--item text--sub__bigger">
                     {renderLevel()} {level}
                 </span>
+
                 <span className="course-card-sub__others--item">
-                    {open_date}
+                    {
+                        isBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                    }
                 </span>
             </div>
         </div>
