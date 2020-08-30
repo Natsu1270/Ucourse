@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.GenerateCertificate.as_view()),
+    path('generate', views.GenerateCertificate.as_view()),
+    path('handout', views.HandoutCertificate.as_view())
 ]

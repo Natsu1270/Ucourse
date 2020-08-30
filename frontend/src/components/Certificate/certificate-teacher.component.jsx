@@ -3,12 +3,15 @@ import {
     Row, Col, Table, List, Input, Modal, Space,
     message, Tag, Form, Button, Select, notification
 } from 'antd'
-import { getListSummary, updateSummary } from '../../api/summary.services'
+import { getListSummary, updateSummary, multiUpdateSummary, genCertificateAPI, handOutCertificateAPI } from '../../api/summary.services'
 import Avatar from 'antd/lib/avatar/avatar'
 import { Link } from 'react-router-dom'
 import { formatDate, dayDiff } from '../../utils/text.utils'
 import Constants from '../../constants'
 import moment from 'moment'
+import { CloudSyncOutlined, FileSearchOutlined, MailOutlined } from '@ant-design/icons'
+import { Document, Page } from 'react-pdf'
+import PDFViewer from 'pdf-viewer-reactjs'
 
 const { Search } = Input
 const { Option } = Select;
@@ -26,6 +29,17 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
     const [showModal, setShowModal] = useState(false)
     const [selectedRows, setSelectedRows] = useState([])
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
+    const [fileURL, setFileURL] = useState(null)
+    const [file, setFile] = useState(null)
+    const [cerItem, setCerItem] = useState({})
+
+    const [numPages, setNumPages] = useState(null);
+    const [pageNumber, setPageNumber] = useState(1);
+
+
+    function onDocumentLoadSuccess({ numPages }) {
+        setNumPages(numPages);
+    }
 
     const [form] = Form.useForm()
     const [sumForm] = Form.useForm()
@@ -35,7 +49,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
     const getAll = async () => {
         setLoading(true)
         try {
-            const { data } = await getListSummary({ token, course_id: course, class_id: courseHome.id })
+            const { data } = await getListSummary({ token, course_id: course.id, class_id: courseHome.id })
             setUserCourses(data.data.userCourses)
             setOrgUserCourse(data.data.userCourses)
         } catch (err) {
@@ -74,7 +88,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
                 style={{ background: "#8874a3", border: 'none' }}
                 onClick={() => genCertificate(record)}>
                 Cấp ngay
-        </Button>
+                    </Button>
         }
         if (!received) {
             return <Tag color="#ffcc5c">Chưa tổng kết</Tag>
@@ -102,8 +116,46 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         setUserCourses(query)
     }
 
-    const genCertificate = (item) => {
-        if (dayDiff(moment(), item.end_date) < 0) openNotification(item.end_date)
+    const genCertificate = async (item) => {
+        // if (dayDiff(moment(), item.end_date) < 0) openNotification(item.end_date)
+        setLoading(true)
+        setCerItem(item)
+        const params = {
+            courseName: course.title, name: item.fullname,
+            rank: parseRankByScore(item.rank)
+        }
+        try {
+            const { data } = await genCertificateAPI({ token, params })
+            const res = new Blob([data], { type: 'application/pdf' })
+            setFile(res)
+            const fileUrl = URL.createObjectURL(res)
+            setFileURL(fileUrl)
+            setShowModal(true)
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setLoading(false)
+    }
+
+    const handOut = async () => {
+        setLoading(true)
+        const formData = new FormData()
+        formData.set('email', cerItem.email)
+        formData.set('courseHomeId', courseHome.id)
+        formData.set('courseId', course.id)
+        formData.set('studentId', cerItem.studentId)
+        formData.set('courseName', course.title)
+        formData.set('studentName', cerItem.fullname)
+        formData.set('id', cerItem.id)
+        formData.set('file', file, cerItem.fullname + course.title + "_Certificate.pdf")
+
+        try {
+            const { data } = await handOutCertificateAPI({ token, formData })
+            message.success('Cấp chứng chỉ thành công', 1.5, () => window.location.reload())
+        } catch (err) {
+            message.error('Có lỗi xảy ra: ' + err.message)
+            setLoading(false)
+        }
     }
 
     const genSummary = (item) => {
@@ -133,27 +185,32 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         return 'xgood'
     }
 
-    const summaryStudent = async (values, record) => {
+    const summaryStudent = async (values, record, isMultiple) => {
         setLoading(true)
         let datas = null
         if (values != null) {
             datas = { token, userCourseId: currentItem.id, status: values.status, rank: values.rank }
-        } else {
+        } else if (record != null) {
             const status = record.finalScore >= 5 ? 'pass' : 'fail'
             datas = { token, userCourseId: record.id, status, rank: parseRankByScore(record.finalScore) }
+        } else {
+            datas = selectedRows.map(row => {
+                const status = row.finalScore >= 5 ? 'pass' : 'fail'
+                const rank = parseRankByScore(row.finalScore)
+                return {
+                    userCourseId: row.id, status, rank
+                }
+            })
         }
         try {
-            const { data } = await updateSummary(datas)
-            message.success("Tổng kết thành công")
+            const { data } = isMultiple == null ? await updateSummary(datas) : await multiUpdateSummary({ token, datas })
+            message.success("Tổng kết thành công", 1.5, () => window.location.reload())
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
         setLoading(false)
 
     }
-
-
-
 
     const columns = [
         {
@@ -209,7 +266,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             key: 'action',
             render: (action, record) => (<Space>
                 <Button type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
-                <Button onClick={() => summaryStudent(null, record, 2)}>Tổng kết theo điểm</Button>
+                <Button onClick={() => summaryStudent(null, record, null)}>Tổng kết theo điểm</Button>
             </Space>)
         },
     ]
@@ -222,11 +279,15 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             username: userCourse.user.username,
             avatar: userCourse.user.user_profile.avatar,
             fullname: userCourse.user.user_profile.fullname,
+            email: userCourse.user.email,
+            studentId: userCourse.user.id,
             status: userCourse.status,
             rank: userCourse.rank,
             received: userCourse.received_certificate,
             end_date: userCourse.end_date,
-            finalScore: userCourse.final_score
+            finalScore: userCourse.final_score,
+            is_summarised: userCourse.is_summarised,
+            key: userCourse.id,
         }
     })
 
@@ -242,7 +303,8 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
                         setSelectedRows(selectedRows)
                     },
                     getCheckboxProps: record => ({
-                        name: record.username
+                        name: record.username,
+                        disabled: record.is_summarised == true
                     })
                 }}
                 dataSource={finalData}
@@ -337,49 +399,78 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
                     </Row>
                 </Form>
             </div>
+            <Row className="mb-4">
+                <Col>
+                    {
+                        selectedRows.length > 0 ? <Button type="primary" onClick={() => summaryStudent(null, null, true)}
+                            style={{ background: "#3d1e6d", border: 'none' }}>
+                            <CloudSyncOutlined /> Tổng kết theo điểm các hàng đã chọn
+                        </Button> : <span style={{ fontSize: '1.6rem' }}>Chọn checkbox để tổng kết theo điểm hàng loạt</span>
+                    }
+                </Col>
+            </Row>
             <SummaryTable />
             <Modal
                 title="Tổng kết học viên"
                 style={{ background: 'white', paddingBottom: '0' }}
                 visible={showModal}
-                onCancel={() => setShowModal(false)}
+                onCancel={() => {
+                    setShowModal(false)
+                    setCurrentItem({})
+                }}
                 onOk={() => sumForm.submit()}
                 cancelText="Hủy"
             >
-                <Form
-                    form={sumForm}
-                    layout="vertical"
-                    name="summaryForm"
-                    onFinish={summaryStudent}
-                >
-                    <Form.Item
-                        name="status"
-                        label="Đạt chuẩn khóa học"
-                        hasFeedback
-                        rules={[{ required: true, message: 'Chọn 1 lựa chọn' }]}
+                {
+                    currentItem.id != null ? <Form
+                        form={sumForm}
+                        layout="vertical"
+                        name="summaryForm"
+                        onFinish={(values) => summaryStudent(values, null, null)}
                     >
-                        <Select placeholder="Chọn 1 lựa chọn">
-                            <Option value="pass">Đạt tiêu chuẩn</Option>
-                            <Option value="fail">Không đạt</Option>
-                        </Select>
-                    </Form.Item>
+                        <Form.Item
+                            name="status"
+                            label="Đạt chuẩn khóa học"
+                            hasFeedback
+                            rules={[{ required: true, message: 'Chọn 1 lựa chọn' }]}
+                        >
+                            <Select placeholder="Chọn 1 lựa chọn">
+                                <Option value="pass">Đạt tiêu chuẩn</Option>
+                                <Option value="fail">Không đạt</Option>
+                            </Select>
+                        </Form.Item>
 
-                    <Form.Item
-                        name="rank"
-                        label="Xếp loại"
-                    // hasFeedback
-                    // rules={[{ required: true, message: 'Hãy chọn xếp loại' }]}
-                    >
-                        <Select placeholder="Hãy chọn xếp loại">
-                            <Option value="bad">Yếu</Option>
-                            <Option value="medium">Trung bình</Option>
-                            <Option value="good">Khá</Option>
-                            <Option value="xgood">Xuất sắc</Option>
-                        </Select>
-                    </Form.Item>
+                        <Form.Item
+                            name="rank"
+                            label="Xếp loại"
+                        >
+                            <Select placeholder="Hãy chọn xếp loại">
+                                <Option value="bad">Yếu</Option>
+                                <Option value="medium">Trung bình</Option>
+                                <Option value="good">Khá</Option>
+                                <Option value="xgood">Xuất sắc</Option>
+                            </Select>
+                        </Form.Item>
 
-                </Form>
+                    </Form> : <Row gutter={20} justify="center">
+                            <Col>
+                                <Button
+                                    loading={loading}
+                                    onClick={() => window.open(fileURL)}>
+                                    <FileSearchOutlined /> Xem trước
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button
+                                    loading={loading}
+                                    type="primary" danger
+                                    onClick={handOut}><MailOutlined /> Cấp chứng chỉ</Button>
+                            </Col>
+                        </Row>
+
+                }
             </Modal>
+
         </section >
     )
 }

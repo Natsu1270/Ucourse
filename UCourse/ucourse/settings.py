@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'tags',
     'questions',
     'forums',
+    'certificates'
 
 ]
 
@@ -183,7 +184,7 @@ TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'ucourse/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 
@@ -224,3 +225,11 @@ CKEDITOR_CONFIGS = {
     },
 
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = '<your-server-port>'
+EMAIL_HOST_USER = 'ucourse.service@gmail.com'
+EMAIL_HOST_PASSWORD = '1234abcdok'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

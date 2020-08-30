@@ -23,7 +23,7 @@ urlpatterns = [
     path('assignment/', include('assignment.urls')),
     path('grade/', include('grades.urls')),
     path('events/', include('events.urls')),
-    path('certificates/', include('certificates.urls')),
+    path('certificate/', include('certificates.urls')),
     path('summary/', include('summary.urls'))
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

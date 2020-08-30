@@ -40,3 +40,21 @@ class UpdateSummary(generics.GenericAPIView):
         return Response({
             "userCourses": UserCourseSerializer(instance=user_course).data
         }, status=status.HTTP_200_OK)
+
+
+class MultiUpdateSummary(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        rows = self.request.data
+
+        for row in rows:
+            user_course = UserCourse.objects.get(pk=row.get('userCourseId'))
+            user_course.rank = row.get('rank')
+            user_course.status = row.get('status')
+            user_course.is_summarised = True
+            user_course.save()
+
+        return Response({
+            "result": True
+        }, status=status.HTTP_200_OK)

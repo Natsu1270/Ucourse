@@ -148,7 +148,7 @@ class StudentAssignmentDetailSerializer(serializers.ModelSerializer):
 
 class CourseHomeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    course = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    course = CourseMinSerializer(read_only=True, required=False)
     students = UserSerializer(many=True, required=False)
     learning_topics = LearningTopicSerializer(many=True, read_only=True)
     slug = serializers.CharField(read_only=True)

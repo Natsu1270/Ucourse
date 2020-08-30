@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = '/api/summary'
+const CERTIFCATE_API_URL = '/api/certificate'
 
 export function getListSummary({ token, course_id, class_id }) {
     return axios.request({
@@ -30,5 +31,39 @@ export function updateSummary({ token, userCourseId, status, rank }) {
         method: 'POST',
         url: `${API_URL}/update`,
         data: { userCourseId, status, rank }
+    })
+}
+
+
+export function multiUpdateSummary({ token, datas }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${API_URL}/multi-update`,
+        data: datas
+    })
+}
+
+
+export function genCertificateAPI({ token, params }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/generate`,
+        params: params,
+        responseType: 'blob'
+    })
+}
+
+
+export function handOutCertificateAPI({ token, formData }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'multipart/form-data', 'Authorization': `token ${token}` },
+        method: 'POST',
+        url: `${CERTIFCATE_API_URL}/handout`,
+        data: formData,
     })
 }
