@@ -38,8 +38,16 @@ class Program(models.Model):
     benefits = RichTextField(blank=True, null=True)
     pre_requisites = RichTextField(blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name='program_tags', blank=True)
-    views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='program_views', through='UserViewProgram', blank=True)
-    user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyProgram', related_name='buy_programs')
+    views = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='program_views',
+        through='UserViewProgram', blank=True
+    )
+    user_buy = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, through='UserBuyProgram', related_name='buy_programs'
+    )
+    students = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, through='StudentProgram', related_name='student_programs'
+    )
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True

@@ -7,9 +7,10 @@ from api.utils import uc_response
 from course_homes.models import CourseHome
 from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
-from programs.models import Program
+from programs.models import Program, StudentProgram
 from courses.serializers import CourseSearchSerializer
-from programs.serializers import ProgramSearchSerializer, ProgramMinSerializer
+from programs.serializers import ProgramSearchSerializer, ProgramMinSerializer, StudentProgramSerializer, \
+    ProgramProcessSerializer
 
 
 class GetAllAPI(views.APIView):
@@ -57,6 +58,28 @@ class GetAllBoughtAndRegister(generics.GenericAPIView):
             "courseHomes": CourseHomeMinSerializer(instance=course_homes, many=True).data,
             "courses": CourseSearchSerializer(instance=courses, context=self.get_serializer_context(), many=True).data,
             "programs": ProgramMinSerializer(instance=programs, context=self.get_serializer_context(), many=True).data,
+            "result": True
+        }, status=status.HTTP_200_OK)
+
+    def get_serializer_context(self):
+        user = self.request.user
+        if user.is_anonymous:
+            return {"user": None, "request": self.request}
+        return {"user": user, "request": self.request}
+
+
+class GetProgramProcess(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        student = self.request.user
+        # student_programs = StudentProgram.objects.filter(student_id=student.id)
+        programs = Program.objects.filter(user_buy=self.request.user)
+
+        return Response({
+            "programs": ProgramProcessSerializer(
+                instance=programs, context=self.get_serializer_context(), many=True
+            ).data,
             "result": True
         }, status=status.HTTP_200_OK)
 

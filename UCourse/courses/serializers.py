@@ -219,6 +219,31 @@ class CourseMySerializer(serializers.ModelSerializer):
         return None
 
 
+class CourseProcessSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    level = serializers.CharField(source='get_level_display')
+    bought_date = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'icon', 'slug', 'level', 'status',
+            'field', 'course_home_count', 'bought_date'
+        ]
+
+    def get_bought_date(self, obj):
+        user = self.context.get('user')
+        if user is not None:
+            try:
+                instance = UserBuyCourse.objects.get(user_id=user.id, course_id=obj.id)
+            except UserBuyCourse.DoesNotExist:
+                return None
+            return instance.bought_date
+        return None
+
+
+
+
 class SkillSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
 

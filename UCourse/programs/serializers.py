@@ -1,8 +1,11 @@
 from rest_framework import serializers
+from django.db.models import Q, QuerySet
 
+from courses.models import UserCourse
 from users.serializers import UserMinSerializer
 from .models import Program, Field, UserBuyProgram, StudentProgram
-from courses.serializers import CourseSerializer, CourseSearchSerializer, CourseMinSerializer
+from courses.serializers import CourseSerializer, CourseSearchSerializer, CourseMinSerializer, CourseProcessSerializer, \
+    UserCourseSerializer
 
 
 class ProgramSerializer(serializers.ModelSerializer):
@@ -105,6 +108,40 @@ class ProgramMinSerializer(serializers.ModelSerializer):
         return None
 
 
+class ProgramProcessSerializer(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
+    courses_count = serializers.IntegerField(read_only=True)
+    program_course = CourseProcessSerializer(many=True, read_only=True)
+    student_program = serializers.SerializerMethodField(read_only=True)
+    student_course = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Program
+        fields = [
+            'id', 'name', 'code', 'icon', 'slug', 'discount', 'student_program', 'student_course',
+            'courses_count', 'status', 'field', 'program_course',
+        ]
+
+    def get_student_program(self, obj):
+        user = self.context.get('user')
+        instance = StudentProgram.objects.get(student_id=user.id, program_id=obj.id)
+        return StudentProgramSerializer(instance=instance).data
+
+    def get_student_course(self, obj):
+        user = self.context.get('user')
+        queryset = list()
+        program_courses = obj.program_course.all()
+        for course in program_courses:
+            try:
+                instance = UserCourse.objects.get(Q(user_id=user) & Q(course_id=course.id))
+                queryset.append(instance)
+            except UserCourse.DoesNotExist:
+                pass
+        return UserCourseSerializer(instance=queryset, many=True).data
+
+
 class FieldSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field_programs = ProgramSearchSerializer(many=True, read_only=True)
@@ -143,8 +180,8 @@ class UserBuyProgramSerializer(serializers.ModelSerializer):
 
 class StudentProgramSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    user = UserMinSerializer(required=False)
-    program = ProgramMinSerializer(required=False)
+    student = UserMinSerializer(required=False)
+    program = serializers.PrimaryKeyRelatedField(queryset=Program.objects.all(), required=False)
 
     class Meta:
         model = StudentProgram
