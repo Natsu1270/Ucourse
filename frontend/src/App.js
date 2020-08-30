@@ -42,6 +42,7 @@ const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page
 const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
 const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.page'))
 const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
+const ProgramAndCertificate = lazy(() => import('./pages/ProgramAndCertificate/program-certificate.component'))
 
 function App() {
 
@@ -105,6 +106,13 @@ function App() {
                                         exact
                                         path="/my-courses"
                                         component={MyCoursePage}
+                                        token={token}
+                                    />
+                                    <PrivateRoute
+                                        referrer="/program-certificate"
+                                        exact
+                                        path="/program-certificate"
+                                        component={ProgramAndCertificate}
                                         token={token}
                                     />
                                     <Route component={Page404NotFound} />

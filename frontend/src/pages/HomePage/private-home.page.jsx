@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Card, Carousel, Skeleton, Collapse, Empty, List } from "antd";
+import { Avatar, Card, Carousel, Skeleton, Collapse, Empty, List, Space, Button } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
@@ -91,11 +91,18 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
                 </Collapse>
 
-                <div className="private-home__learning--link">
-                    <Link to='/my-courses'>
-                        Xem tất cả &rarr;
-                    </Link>
+                <div className="mt-4">
+                    <Space>
+                        <Button size="large" type="primary" onClick={() => history.push('/my-courses')}>
+                            Xem tất cả &rarr;
+                        </Button>
+                        <Button type="primary"
+                            size="large" onClick={() => history.push('/program-certificate')}>
+                            Tiến độ chương trình học - Chứng chỉ
+                        </Button>
+                    </Space>
                 </div>
+
 
             </section>
 

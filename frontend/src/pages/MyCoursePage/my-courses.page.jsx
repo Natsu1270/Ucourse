@@ -43,20 +43,6 @@ const MyCoursePage = () => {
         }
     }, [token])
 
-    const data = [
-        {
-            title: 'Ant Design Title 1',
-        },
-        {
-            title: 'Ant Design Title 2',
-        },
-        {
-            title: 'Ant Design Title 3',
-        },
-        {
-            title: 'Ant Design Title 4',
-        },
-    ];
 
     return (
         <section className="section-10 page">
@@ -132,6 +118,7 @@ const MyCoursePage = () => {
                             )}
                         />
                     </TabPane>
+
                 </Tabs>
 
             </div>
