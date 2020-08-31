@@ -38,7 +38,7 @@ const CourseHomeGradesTeacher = lazy(() => import("../../components/CourseHome/c
 const CourseHomeStudent = lazy(() => import("../../components/CourseHome/course-home-students.component"))
 const CertificateTeacher = lazy(() => import("../../components/Certificate/certificate-teacher.component"))
 const CertificateStudent = lazy(() => import("../../components/Certificate/certificate-student.component"))
-
+const CourseHomeCalendar = lazy(() => import("../../components/CourseHome/course-home-calendar.component"))
 
 const CourseHomePage = ({ myCourses, userRole }) => {
 
@@ -145,6 +145,10 @@ const CourseHomePage = ({ myCourses, userRole }) => {
 
                 <Route exact path={`${match.url}/students`}>
                     <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
+                </Route>
+
+                <Route exact path={`${match.url}/calendar`}>
+                    <CourseHomeCalendar courseHome={courseHomeDetail} />
                 </Route>
 
                 <Route exact path={`${match.url}/certificate`}>

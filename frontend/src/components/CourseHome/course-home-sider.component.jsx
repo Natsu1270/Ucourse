@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Layout, Menu, Skeleton } from "antd";
 import { Link, useHistory } from 'react-router-dom';
-import { HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined, SolutionOutlined } from '@ant-design/icons'
+import { HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined, SolutionOutlined, CalendarOutlined } from '@ant-design/icons'
 import Constants from "../../constants";
 
 const CourseHomeSider = ({ isLoading, course, match }) => {
@@ -50,6 +50,10 @@ const CourseHomeSider = ({ isLoading, course, match }) => {
                 <Menu.Item onClick={() => history.push(`${match.url}/forums`)} key="forums">
                     <SolutionOutlined />
                     <span>Forums</span>
+                </Menu.Item>
+                <Menu.Item onClick={() => history.push(`${match.url}/calendar`)} key="forums">
+                    <CalendarOutlined />
+                    <span>Lịch</span>
                 </Menu.Item>
                 <Menu.Item onClick={() => history.push(`${match.url}/certificate`)} key="certificate">
                     <FileProtectOutlined />
