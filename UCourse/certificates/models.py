@@ -24,3 +24,10 @@ class StudentCertificate(models.Model):
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
+
+
+class AllCourseCertificate(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
+    file = models.FileField(upload_to='certificates/file')
+    received_date = models.DateField(default=timezone.now)

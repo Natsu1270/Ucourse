@@ -57,7 +57,7 @@ const EventPage = ({ eventId }) => {
         stt: index + 1,
         title: event.title,
         content: event.content,
-        date: event.date
+        date: event.created_date
     }))
 
     return (

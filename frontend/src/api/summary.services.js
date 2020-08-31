@@ -31,6 +31,15 @@ export function getStudentCertificate({ token, courseId, courseHomeId }) {
     })
 }
 
+export function getAllCourseCertificate({ token }) {
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/all`,
+        params: {}
+    })
+}
+
 
 export function searchSummary(params) {
     const { token } = params

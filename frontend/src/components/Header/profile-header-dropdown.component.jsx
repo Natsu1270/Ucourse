@@ -11,7 +11,8 @@ import {
     AppstoreOutlined,
     LogoutOutlined,
     ReadOutlined,
-    SmileOutlined
+    SmileOutlined,
+    TrophyOutlined
 } from "@ant-design/icons";
 
 
@@ -46,6 +47,11 @@ const ProfileHeaderDropdown = (props) => {
             <Menu.Item>
                 <Link to="/my-courses" style={styles}>
                     <ReadOutlined /> Khoá học của tôi
+                </Link>
+            </Menu.Item>
+            <Menu.Item>
+                <Link to="/my-certificates" style={styles}>
+                    <TrophyOutlined /> Chứng chỉ của tôi
                 </Link>
             </Menu.Item>
             <Menu.Item>
