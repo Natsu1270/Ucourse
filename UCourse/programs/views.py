@@ -53,7 +53,8 @@ class BuyProgramAPI(generics.GenericAPIView):
 
         price = 0
         for course in program_courses:
-            price += int(course.get_price())
+            if course.check_is_bought(student=user) is not True:
+                price += int(course.get_price())
 
         if price != 0:
             orderId = str(uuid.uuid4())

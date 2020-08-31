@@ -97,7 +97,7 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                             Xem tất cả &rarr;
                         </Button>
                         <Button type="primary"
-                            size="large" onClick={() => history.push('/program-certificate')}>
+                            size="large" onClick={() => history.push('/program-process')}>
                             Tiến độ chương trình học - Chứng chỉ
                         </Button>
                     </Space>
