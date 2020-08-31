@@ -6,6 +6,7 @@ import Constants from '../../constants'
 
 import ResultComponent from '../Common/result.component'
 import { formatDate } from '../../utils/text.utils'
+import { renderCer, renderRank, renderStatus, renderSummary } from '../../utils/common'
 
 
 
@@ -41,30 +42,7 @@ const CertificateStudent = ({ token, course, courseHome }) => {
         }
     }, [course, courseHome])
 
-    const renderStatus = (status) => {
-        if (status === 'on_going') return <Tag color="purple"><span className="text--sub__bigger">Trong tiến trình</span></Tag>
-        if (status === 'fail') return <Tag color="red"><span className="text--sub__bigger">Chưa đạt tiêu chuẩn</span></Tag>
-        return <Tag color="blue"><span className="text--sub__bigger">Đạt</span></Tag>
-    }
 
-    const renderSummary = (isSum) => {
-        if (!isSum) return <Tag color="red"><span className="text--sub__bigger">Chưa được tông kết</span></Tag>
-        return <Tag color="blue"><span className="text--sub__bigger">Đã tổng kết lớp</span></Tag>
-    }
-
-    const renderCer = (isCer) => {
-        if (!isCer) return <Tag color="red"><span className="text--sub__bigger">Chưa được cấp</span></Tag>
-        return <Tag color="blue"><span className="text--sub__bigger">Đã được cấp</span></Tag>
-    }
-
-
-    const renderRank = (rank) => {
-        if (rank === null) return <Tag color="red"><span className="text--sub__bigger">Chưa phân loại</span></Tag>
-        if (rank === 'bad') return <Tag color="magenta"><span className="text--sub__bigger">Yếu</span></Tag>
-        if (rank === 'medium') return <Tag color="purple"><span className="text--sub__bigger">Trung bình</span></Tag>
-        if (rank === 'good') return <Tag color="green"><span className="text--sub__bigger">Khá</span></Tag>
-        return <Tag color="blue"><span className="text--sub__bigger">Xuất sắc</span></Tag>
-    }
 
     return (
         <section className="section-5 page-2">

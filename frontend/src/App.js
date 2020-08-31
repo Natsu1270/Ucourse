@@ -116,9 +116,9 @@ function App() {
                                         token={token}
                                     />
                                     <PrivateRoute
-                                        referrer="/program-certificate"
+                                        referrer="/program-process"
                                         exact
-                                        path="/program-certificate"
+                                        path="/program-process"
                                         component={ProgramProcess}
                                         token={token}
                                     />

@@ -86,6 +86,9 @@ class UserBuyProgram(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     bought_date = models.DateField(default=timezone.now)
 
+    class Meta:
+        unique_together = ('user', 'program')
+
 
 class StudentProgram(models.Model):
 
