@@ -44,6 +44,7 @@ const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page
 const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
 const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.page'))
 const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
+const MyCertificatePage = lazy(() => import('./pages/MyCertificatePage/my-certificates.page'))
 const ProgramProcess = lazy(() => import('./pages/ProgramProcess/program-process.component'))
 
 function App() {
@@ -66,7 +67,6 @@ function App() {
     }, [dispatch, currentUser, token]);
 
     const { Content } = Layout;
-
     return (
         <Router>
             <div className="App">
@@ -115,6 +115,13 @@ function App() {
                                         exact
                                         path="/my-courses"
                                         component={MyCoursePage}
+                                        token={token}
+                                    />
+                                    <PrivateRoute
+                                        referrer="/my-certificates"
+                                        exact
+                                        path="/my-certificates"
+                                        component={MyCertificatePage}
                                         token={token}
                                     />
                                     <PrivateRoute

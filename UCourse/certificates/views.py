@@ -148,3 +148,16 @@ class GetStudentCertificate(generics.GenericAPIView):
                 instance=instance, context=self.get_serializer_context()).data,
             status=status.HTTP_200_OK
         )
+
+
+class GetAllCourseCertificate(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        student = self.request.user
+        instance = StudentCertificate.objects.filter(Q(student_id=student.id))
+        return Response(
+            data=serializers.StudentCertificateSerializer(
+                instance=instance, context=self.get_serializer_context(), many=True).data,
+            status=status.HTTP_200_OK
+        )
