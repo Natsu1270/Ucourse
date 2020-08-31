@@ -99,7 +99,7 @@ class StudentProgram(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=Program_status_choices, null=True, blank=True, default=ON_GOING)
     started_date = models.DateField(default=timezone.now, null=True, blank=True)
-    completed_date = models.DateField(default=timezone.now, null=True, blank=True)
+    completed_date = models.DateField(null=True, blank=True)
     received_certificate = models.BooleanField(default=False, null=True, blank=True)
 
     def __str__(self):

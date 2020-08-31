@@ -73,8 +73,7 @@ class GetProgramProcess(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         student = self.request.user
-        # student_programs = StudentProgram.objects.filter(student_id=student.id)
-        programs = Program.objects.filter(user_buy=self.request.user)
+        programs = Program.objects.filter(user_buy=student)
 
         return Response({
             "programs": ProgramProcessSerializer(

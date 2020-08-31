@@ -42,7 +42,7 @@ const ClassDetailPage = lazy(() => import('./pages/ClassDetail/class-detail.page
 const CoursePaymentPage = lazy(() => import('./pages/CoursePayment/course-payment.page'));
 const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.page'))
 const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
-const ProgramAndCertificate = lazy(() => import('./pages/ProgramAndCertificate/program-certificate.component'))
+const ProgramProcess = lazy(() => import('./pages/ProgramProcess/program-process.component'))
 
 function App() {
 
@@ -112,7 +112,7 @@ function App() {
                                         referrer="/program-certificate"
                                         exact
                                         path="/program-certificate"
-                                        component={ProgramAndCertificate}
+                                        component={ProgramProcess}
                                         token={token}
                                     />
                                     <Route component={Page404NotFound} />
