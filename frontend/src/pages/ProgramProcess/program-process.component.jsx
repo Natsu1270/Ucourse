@@ -44,8 +44,8 @@ const ProgramProcess = ({ token }) => {
     }, [token])
 
 
-    const onSearch = () => {
-
+    const onSearch = (values) => {
+        console.log(values)
     }
 
 
