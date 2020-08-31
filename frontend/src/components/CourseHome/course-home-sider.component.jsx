@@ -51,7 +51,7 @@ const CourseHomeSider = ({ isLoading, course, match }) => {
                     <SolutionOutlined />
                     <span>Forums</span>
                 </Menu.Item>
-                <Menu.Item onClick={() => history.push(`${match.url}/calendar`)} key="forums">
+                <Menu.Item onClick={() => history.push(`${match.url}/calendar`)} key="calendar">
                     <CalendarOutlined />
                     <span>Lịch</span>
                 </Menu.Item>
