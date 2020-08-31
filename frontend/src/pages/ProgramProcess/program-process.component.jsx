@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { getAllMyCoursesAndProgramsAPI, getProgramProcessAPI } from '../../api/home.services'
-import { message, Skeleton, DatePicker, Tag, Button, Form, Row, Col, Input, Switch, Menu, Spin, Layout, Divider, Space } from 'antd'
+import { message, Avatar, DatePicker, Tag, Button, Form, Row, Col, Input, Switch, Menu, Spin, Layout, Divider, Space } from 'antd'
 import { dayDiff, formatDate } from '../../utils/text.utils'
 import { useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
@@ -11,7 +11,6 @@ import { DownOutlined, UserOutlined, NotificationOutlined, LaptopOutlined, BookO
 import Constants from '../../constants'
 import { disabledDate } from '../../utils/date.utils'
 import ProgramProcessItem from '../../components/ProgramProcess/program-process-item.component'
-import Avatar from 'antd/lib/avatar/avatar'
 import moment from 'moment'
 
 
@@ -40,9 +39,11 @@ const ProgramProcess = () => {
         setLoading(true)
         try {
             const { data } = await getProgramProcessAPI(token)
-            setPrograms(data.programs)
-            setOrgPrograms(data.programs)
-            setCurrentProgram(data.programs[0])
+            if (data.programs && data.programs.length) {
+                setPrograms(data.programs)
+                setOrgPrograms(data.programs)
+                setCurrentProgram(data.programs[0])
+            }
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
@@ -63,7 +64,7 @@ const ProgramProcess = () => {
             filterPrograms = programs.filter(p => p.name.includes(values.name))
         }
         if (values.completed) {
-            filterPrograms = filterPrograms.filter(p => p.status == true)
+            filterPrograms = filterPrograms.filter(p => p.student_program.status == 'completed')
         }
         if (values.date) {
             const startDate = values.date[0]
@@ -74,6 +75,7 @@ const ProgramProcess = () => {
             )
         }
         setPrograms(filterPrograms)
+        setCurrentProgram(filterPrograms.length ? filterPrograms[0] : {})
     }
 
 

@@ -213,3 +213,13 @@ export const deleteNoteAPI = (data) => {
         url: `${API_URL}/topic_asset/notes/${id}`,
     })
 }
+
+
+
+export const getCourseHomesByTeacher = (token) => {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${API_URL}/get_by_teacher`,
+    })
+}

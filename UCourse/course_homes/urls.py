@@ -17,6 +17,7 @@ urlpatterns = [
     path('topic_asset/create', views.CreateTopicAsset.as_view()),
     path('topic_asset/notes/create', views.CreateNote.as_view()),
     path('topic_asset/notes/<int:pk>', views.NoteDetail.as_view()),
+    path('get_by_teacher', views.GetByTeacher.as_view()),
     path('<str:slug>', views.CourseHomeDetailAPI.as_view(), name='course_home_detail'),
 
 ]

@@ -23,6 +23,8 @@ import { myCoursesSelector, myProgramsSelector } from "./redux/Home/home.selects
 // import PrivateCourseRoute from "./components/Common/private-course-route.component";
 import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
+import RoleComponent from './components/RoleComponent';
+import TeacherHomePage from './pages/HomePage/teacher-home.page';
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
@@ -74,7 +76,14 @@ function App() {
                         <Route exact path="/">
                             {
                                 currentUser ?
-                                    <PrivateHomePage ownCourses={myCourses} ownPrograms={myPrograms} /> :
+                                    <RoleComponent
+                                        StudentComponent={PrivateHomePage}
+                                        TeacherTAComponent={TeacherHomePage}
+                                        roleCode={userRole.code}
+                                        token={token}
+                                        ownCourses={myCourses} ownPrograms={myPrograms}
+                                    /> :
+
                                     <HomePage currentUser={currentUser} />
                             }
                         </Route>

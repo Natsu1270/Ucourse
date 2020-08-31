@@ -47,9 +47,11 @@ class TopicAssetSerializer(serializers.ModelSerializer):
 
     def get_notes(self, obj):
         request = self.context.get('request')
-        user = request.user
-        notes = StudentNote.objects.filter(topic_asset_id=obj.id, student_id=user.id).order_by('-created_date')
-        return StudentNoteSerializer(instance=notes, many=True).data
+        if request:
+            user = request.user
+            notes = StudentNote.objects.filter(topic_asset_id=obj.id, student_id=user.id).order_by('-created_date')
+            return StudentNoteSerializer(instance=notes, many=True).data
+        return None
 
 
 class AssignmentSerializer(serializers.ModelSerializer):
@@ -154,13 +156,17 @@ class CourseHomeSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(read_only=True)
     forums = ForumSerializer(many=True, read_only=True, required=False)
     is_my_class = serializers.SerializerMethodField(required=False)
+    full_name = serializers.CharField()
+    quiz_num = serializers.SerializerMethodField(read_only=True)
+    lecture_num = serializers.SerializerMethodField(read_only=True)
+    assignment_num = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = CourseHome
         fields = [
-            'id', 'course', 'status', 'students', 'slug',
-            'learning_topics', 'course_info', 'forums', 'is_my_class',
-            'maximum_number', 'created_date', 'modified_date'
+            'id', 'full_name', 'status', 'slug', 'maximum_number', 'quiz_num', 'lecture_num', 'assignment_num',
+            'course', 'course_info', 'learning_topics', 'students', 'forums', 'is_my_class',
+            'created_date', 'modified_date'
         ]
 
     def get_is_my_class(self, obj):
@@ -169,6 +175,28 @@ class CourseHomeSerializer(serializers.ModelSerializer):
             check_user = user.course_homes.filter(pk=obj.id).count() > 0
             return check_user
         return False
+
+    @staticmethod
+    def get_quiz_num(obj):
+        res = 0
+        for topic in obj.learning_topics.all():
+            res += topic.topic_exams.count()
+        return res
+
+    @staticmethod
+    def get_lecture_num(obj):
+        res = 0
+        for topic in obj.learning_topics.all():
+            res += topic.topic_assets.count()
+        return res
+
+    @staticmethod
+    def get_assignment_num(obj):
+        res = 0
+        for topic in obj.learning_topics.all():
+            res += topic.topic_assignments.count()
+        return res
+
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):

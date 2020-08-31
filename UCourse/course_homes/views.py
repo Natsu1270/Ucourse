@@ -239,5 +239,15 @@ class GetListSummary(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
+class GetByTeacher(generics.GenericAPIView):
 
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        teacher = self.request.user
+        queryset = CourseHome.objects.filter(teacher__user=teacher)
+
+        return Response(
+            data=serializers.CourseHomeSerializer(many=True, instance=queryset).data,
+            status=status.HTTP_200_OK
+        )
