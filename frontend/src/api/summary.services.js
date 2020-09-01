@@ -95,3 +95,13 @@ export function handOutCertificateAPI({ token, formData }) {
         data: formData,
     })
 }
+
+export function requestProgramCertificate({ token, programId }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/program/request`,
+        params: { programId }
+    })
+}

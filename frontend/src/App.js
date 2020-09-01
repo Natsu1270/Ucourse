@@ -25,6 +25,7 @@ import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 import RoleComponent from './components/RoleComponent';
 import TeacherHomePage from './pages/HomePage/teacher-home.page';
+import AdminHomePage from './pages/HomePage/admin-home.page';
 
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
@@ -79,6 +80,7 @@ function App() {
                                     <RoleComponent
                                         StudentComponent={PrivateHomePage}
                                         TeacherTAComponent={TeacherHomePage}
+                                        AdminComponent={AdminHomePage}
                                         roleCode={userRole.code}
                                         token={token}
                                         ownCourses={myCourses} ownPrograms={myPrograms}

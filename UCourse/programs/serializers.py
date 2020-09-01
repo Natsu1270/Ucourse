@@ -126,8 +126,11 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
 
     def get_student_program(self, obj):
         user = self.context.get('user')
-        instance = StudentProgram.objects.get(student_id=user.id, program_id=obj.id)
-        return StudentProgramSerializer(instance=instance).data
+        try:
+            instance = StudentProgram.objects.get(student_id=user.id, program_id=obj.id)
+            return StudentProgramSerializer(instance=instance).data
+        except StudentProgram.DoesNotExist:
+            return None
 
     def get_student_course(self, obj):
         user = self.context.get('user')
@@ -186,5 +189,5 @@ class StudentProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentProgram
         fields = [
-            'id', 'student', 'program', 'status', 'started_date', 'completed_date', 'received_certificate'
+            'id', 'file', 'student', 'program', 'status', 'started_date', 'completed_date', 'received_certificate'
         ]

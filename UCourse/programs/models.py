@@ -104,6 +104,7 @@ class StudentProgram(models.Model):
     started_date = models.DateField(default=timezone.now, null=True, blank=True)
     completed_date = models.DateField(null=True, blank=True)
     received_certificate = models.BooleanField(default=False, null=True, blank=True)
+    file = models.FileField(upload_to='certificates/program/files', null=True, blank=True)
 
     def __str__(self):
         return "{0}-{1}".format(self.student.__str__(), self.program.__str__())

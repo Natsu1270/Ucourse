@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 
 import { getCourseHomesByTeacher } from '../../api/courseHome.services'
 import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { DoubleRightOutlined } from '@ant-design/icons';
 
 import { Chart, Interval, Tooltip } from 'bizcharts';
@@ -84,7 +84,10 @@ const TeacherHomePage = ({ token }) => {
 
                                     <Descriptions title="Thông tin" bordered className="mb-5">
                                         <Descriptions.Item label="Khóa học">
-                                            <Space><Avatar size={48} src={courseHome.course.icon} /> <h3>{courseHome.course.title}</h3></Space>
+                                            <Space>
+                                                <Avatar size={48} src={courseHome.course.icon} />
+                                                <Link style={{ fontSize: '1.8rem' }} to={`courses/${courseHome.course.slug}`}>{courseHome.course.title}</Link>
+                                            </Space>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="Trạng thái">
                                             <Badge status="processing" text={courseHome.status} />

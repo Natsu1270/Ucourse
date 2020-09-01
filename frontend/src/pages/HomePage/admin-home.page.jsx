@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 
 
 import { getCourseHomesByTeacher } from '../../api/courseHome.services'
-import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, } from 'antd';
+import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, Layout, Menu, } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { DoubleRightOutlined } from '@ant-design/icons';
+import { DoubleRightOutlined, HomeOutlined, DashOutlined, DashboardOutlined, AppstoreOutlined, BorderOutlined } from '@ant-design/icons';
 
 import { Chart, Interval, Tooltip } from 'bizcharts';
 import { parseHtml } from '../../utils/text.utils';
@@ -13,7 +13,9 @@ import { parseHtml } from '../../utils/text.utils';
 const { Panel } = Collapse
 const { Paragraph } = Typography;
 
-const TeacherHomePage = ({ token }) => {
+const { Sider, Content } = Layout;
+
+const AdminHomePage = ({ token }) => {
 
     const history = useHistory()
     const [loading, setLoading] = useState(true)
@@ -37,26 +39,7 @@ const TeacherHomePage = ({ token }) => {
         }
     }, [token]);
 
-    const genExtra = (slug) => (
-        <Button type="primary"
-            onClick={event => {
-                // If you don't want click extra trigger collapse, you can prevent this:
-                event.stopPropagation();
-                history.push(`learn/${slug}`)
-            }}
-        >Truy cập</Button>
-    );
 
-    const chartData = courseHome => {
-        return [
-            { item: 'Forums', num: courseHome.forums.length },
-            { item: 'Chủ đề học', num: courseHome.learning_topics.length },
-            { item: 'Bài kiểm tra', num: courseHome.quiz_num },
-            { item: 'Bài assignment', num: courseHome.assignment_num },
-            { item: 'Bài giảng', num: courseHome.lecture_num },
-        ]
-
-    }
 
     return (
 
@@ -64,53 +47,18 @@ const TeacherHomePage = ({ token }) => {
 
         <section className="page section-10">
 
-            <div className="page-card-2">
-                <h3 className="text--main private-home--title">
-                    Trong tiến trình
-                </h3>
+            <Layout className="bg-white" style={{ padding: '3rem 0' }}>
+                <Sider width={200} className="bg-white" style={{ height: '100%' }}>
+                    <h3 className="text--main text-center mb-4">Quản trị</h3>
+                    <Menu mode="inline" theme="light" defaultSelectedKeys={['1']} >
+                        <Menu.Item key="1"><DashboardOutlined /> Dashboard</Menu.Item>
+                        <Menu.Item key="2"><BorderOutlined /> Báo cáo</Menu.Item>
+                    </Menu>
+                </Sider>
+                <Content style={{ padding: '2rem 4rem', minHeight: 300 }}>
+                </Content>
 
-                <Collapse
-                    expandIconPosition="left"
-                    accordion>
-                    {
-                        courseHomes.map(courseHome => {
-
-                            return (
-                                <Panel
-                                    key={courseHome.id}
-                                    header={<span className="text--sub__bigger">{courseHome.full_name}</span>}
-                                    extra={genExtra(courseHome.slug)}
-                                >
-
-                                    <Descriptions title="Thông tin" bordered className="mb-5">
-                                        <Descriptions.Item label="Khóa học">
-                                            <Space><Avatar size={48} src={courseHome.course.icon} /> <h3>{courseHome.course.title}</h3></Space>
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Trạng thái">
-                                            <Badge status="processing" text={courseHome.status} />
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Học viên">
-                                            {courseHome.students.length} / {courseHome.maximum_number}
-                                        </Descriptions.Item>
-
-                                    </Descriptions>
-                                    <h3 className="mb-4">Biểu đồ tài nguyên khóa học hiện tại</h3>
-                                    <Row justify="center">
-                                        <Col span={18}>
-                                            <Chart height={300} autoFit data={chartData(courseHome)}>
-                                                <Interval position="item*num" color="item" />
-                                                <Tooltip shared />
-                                            </Chart>
-                                        </Col>
-                                    </Row>
-
-                                </Panel>
-                            )
-                        })
-                    }
-                </Collapse>
-
-            </div>
+            </Layout>
 
         </section>
 
@@ -118,4 +66,4 @@ const TeacherHomePage = ({ token }) => {
 };
 
 
-export default TeacherHomePage
+export default AdminHomePage

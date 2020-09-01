@@ -97,8 +97,9 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                             Xem tất cả &rarr;
                         </Button>
                         <Button type="primary"
+                            style={{ background: '#cc2a36', border: 'none' }}
                             size="large" onClick={() => history.push('/program-process')}>
-                            Tiến độ chương trình học - Chứng chỉ
+                            Tiến độ chương trình học &rarr;
                         </Button>
                     </Space>
                 </div>

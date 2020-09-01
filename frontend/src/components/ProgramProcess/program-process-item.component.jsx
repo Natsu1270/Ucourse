@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Menu, Table, Space, Avatar, Row, Col, Tag, Skeleton, List } from 'antd';
+import { Menu, Table, Space, Avatar, Row, Col, Tag, Skeleton, List, Button, notification, message } from 'antd';
 import Constants from '../../constants';
 import { formatDate } from '../../utils/text.utils';
-import { FireOutlined, FileProtectOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { FireOutlined, FileProtectOutlined, FieldTimeOutlined, FileDoneOutlined } from '@ant-design/icons';
 import { renderCer, renderRank, renderStatus, renderSummary } from '../../utils/common'
+import certificateIcon from '../../assets/certificate.png'
+import { requestProgramCertificate } from '../../api/summary.services';
+import { BACKEND_HOST } from '../../configs';
 
 const { SubMenu } = Menu
 
-const ProgramProcessItem = ({ program, loading }) => {
+const ProgramProcessItem = ({ token, program, loading }) => {
 
     const [studentCourses, setStudentCourses] = useState([])
+    const [requesting, setRequesting] = useState(false)
 
     useEffect(() => {
         if (program.student_course) {
@@ -25,6 +29,8 @@ const ProgramProcessItem = ({ program, loading }) => {
     }
 
     const calPass = () => {
+        if (studentCourses == null || studentCourses.length < 1) return -1
+
         let total = 0
         if (program.program_course && studentCourses) {
             studentCourses.forEach(course => {
@@ -36,11 +42,81 @@ const ProgramProcessItem = ({ program, loading }) => {
         return total
     }
 
+    const requestCertificate = async () => {
+        setRequesting(true)
+        try {
+            const { data } = await requestProgramCertificate({ token, programId: program.id })
+            openNotification(data.resultCode)
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setRequesting(false)
+    }
+
+    const renderRemain = () => {
+        if (program.program_course) {
+            const passNum = calPass()
+            if (passNum == -1) return <Tag color="red" style={{ fontSize: '1.8rem', padding: '0.8rem' }}>
+                Bạn chưa hoàn thành khóa học nào trong chương trình
+                </Tag>
+            if (program.program_course.length - passNum == 0) {
+                return <Tag color="blue" style={{ fontSize: '1.8rem', padding: '0.8rem' }}>
+                    Bạn đã hoàn thành hết các khóa học, nhấn "Yêu cầu cấp phát chứng chỉ" để nhận chứng chỉ
+                    </Tag>
+            }
+            return <Tag color="red" style={{ fontSize: '1.8rem', padding: '0.5rem' }}>
+                {`Còn ${program.program_course.length - passNum}/${program.program_course.length} khóa để hoàn tất chương trình học`}
+            </Tag>
+        }
+    }
+
+    const openNotification = (code) => {
+        const key = `open${Date.now()}`;
+        const btn = (
+            <Button type="primary" danger size="small" onClick={() => {
+                notification.close(key)
+            }}>
+                Đóng
+            </Button>
+        );
+        notification.open({
+            message: 'Thông báo',
+            description: code == -1 ? 'Vui lòng hoàn thành hết khóa học để nhận chứng chỉ chương trình' :
+                'Chứng chỉ đã được cấp phát và gửi về email của bạn, hoặc tải lại trang để thấy file chứng chỉ'
+            ,
+            btn,
+            key,
+        });
+    };
+
     return (
         <div >
             <h1 className="text-grey mb-4 text-center">
                 Thông tin chương trình học: <Avatar src={program.icon} size={24} /> {program.name}
             </h1>
+            {
+                program.student_program ?
+                    <Row justify="center" className="mb-5">
+                        <Col>
+                            {
+                                !program.student_program.received_certificate ?
+                                    (<Button
+                                        loading={requesting}
+                                        size="large" type="primary"
+                                        style={{ background: '#4a91f2', border: 'none' }}
+                                        onClick={requestCertificate}>
+                                        <FileDoneOutlined /> Yêu cầu cấp phát chứng chỉ chương trình
+                                    </Button>) : <Space>
+                                        <Avatar src={certificateIcon} size={48} shape="square" /> <Button
+                                            onClick={() => window.open(BACKEND_HOST + program.student_program.file)}>
+                                            Click để xem chứng chỉ
+                                            </Button>
+                                    </Space>
+                            }
+                        </Col>
+                    </Row> : null
+            }
+
             <Row gutter={[18, 18]} className="text--sub__bigger" style={{ fontSize: '1.8rem' }}>
                 <Col span={24}>
                     <Row gutter={16}>
@@ -93,16 +169,10 @@ const ProgramProcessItem = ({ program, loading }) => {
             <List
                 header={<Row justify="space-between" className="text--sub__bigger3">
                     <Col>Khóa học thuộc chương trình</Col>
-                    <Col>
-                        <Tag color="#f50" style={{ fontSize: '2rem', fontWeight: 500, padding: '1rem' }}>
-                            {
-                                program.program_course ?
-                                    `Còn ${program.program_course.length - calPass()}/${program.program_course.length} khóa để hoàn tất chương trình học` : null
-                            }
-                        </Tag>
-                    </Col>
                 </Row>}
+                footer={renderRemain()}
                 size="large"
+                bordered
                 className="demo-loadmore-list"
                 loading={loading}
                 itemLayout="horizontal"

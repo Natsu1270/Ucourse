@@ -156,7 +156,7 @@ const ProgramProcess = () => {
                         </Menu>
                     </Sider>
                     <Content style={{ padding: '0 24px', minHeight: 200, background: '#fff' }}>
-                        <ProgramProcessItem program={currentProgram} loading={loading} />
+                        <ProgramProcessItem program={currentProgram} loading={loading} token={token} />
                     </Content>
                 </Layout>
 
