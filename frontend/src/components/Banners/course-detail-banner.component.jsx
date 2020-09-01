@@ -71,7 +71,7 @@ const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegiste
 
 
                     <div className="d-flex enroll-area mt-5">
-                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
+                        <Button to="#" onClick={handleCourseRegister} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC' || userRole.code === 'AD'}>
                             {isRegistering ? Constants.SPIN_ICON : own ? 'Đã sở hữu' : 'Đăng ký học'}
                         </Button>
                         <div className="course-info">

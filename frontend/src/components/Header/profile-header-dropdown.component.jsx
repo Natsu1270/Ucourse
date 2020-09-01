@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from "react-redux";
 import { Dropdown, Avatar, Card, Menu, Typography } from 'antd'
 import { userProfileSelector } from "../../redux/Profile/profile.selects";
-import { isLoadingSelector } from '../../redux/Auth/auth.selects';
+import { isLoadingSelector, userRoleSelector } from '../../redux/Auth/auth.selects';
 import { Spin } from 'antd';
 import {
     LoadingOutlined,
@@ -35,7 +35,7 @@ const ProfileHeaderDropdown = (props) => {
     };
 
     const username = props.currentUser.username ? props.currentUser.username : props.currentUser.displayName
-
+    const userrole = props.currentUser.role.code
     const menu = (
         <Menu>
             <Menu.Item>
@@ -49,16 +49,21 @@ const ProfileHeaderDropdown = (props) => {
                     <ReadOutlined /> Khoá học của tôi
                 </Link>
             </Menu.Item>
-            <Menu.Item>
+            
+            {userrole ? userrole === "SD" ?
+            <Menu.Item>  
                 <Link to="/my-certificates" style={styles}>
                     <TrophyOutlined /> Chứng chỉ của tôi
-                </Link>
-            </Menu.Item>
+                </Link> 
+            </Menu.Item> : null : null }
+
+            {userrole ? userrole === "SD" ?
             <Menu.Item>
                 <Link to="/ability-tests" style={styles}>
                     <AppstoreOutlined /> Tổng hợp
-                </Link>
-            </Menu.Item>
+                </Link>     
+            </Menu.Item> : null : null }
+
             <Menu.Item>
                 <Link to="/profile" style={styles}>
                     <UserOutlined /> Cài đặt thông tin cá nhân

@@ -9,6 +9,7 @@ import Constants from '../../constants';
 import { useDispatch } from "react-redux";
 import { showRLModal } from "../../redux/UI/ui.actions";
 import { buyProgramAPI } from "../../api/program.services"
+import { userRoleSelector } from '../../redux/Auth/auth.selects';
 
 
 
@@ -91,7 +92,7 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
                         </h3>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
-                                <Button onClick={() => own ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC'}>
+                                <Button onClick={() => own ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC' || userRole.code === 'AD'}>
                                     {own ? 'Đã sở hữu' : 'Đăng ký chương trình'}
                                 </Button>
                             </Skeleton>
