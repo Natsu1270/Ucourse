@@ -44,11 +44,12 @@ const ProfileHeaderDropdown = (props) => {
                 </Link>
             </Menu.Item>
 
+            {userrole ? userrole === "SD" || username === "TC" ?    
             <Menu.Item>
                 <Link to="/my-courses" style={styles}>
                     <ReadOutlined /> Khoá học của tôi
                 </Link>
-            </Menu.Item>
+            </Menu.Item> :null :null }
             
             {userrole ? userrole === "SD" ?
             <Menu.Item>  
