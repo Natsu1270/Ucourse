@@ -91,7 +91,7 @@ const ResourcesAdmin = ({ data, loading }) => {
                                     </Col>
                                 </Row>
                                 <Chart
-                                    scale={{ count: { min: 0, max: 20 } }}
+                                    scale={{ count: { min: 0, max: 100 } }}
                                     padding={[10, 20, 50, 40]} autoFit height={250} data={chartData} >
                                     <LineAdvance
                                         shape="smooth"
@@ -118,7 +118,7 @@ const ResourcesAdmin = ({ data, loading }) => {
                                     scale={{
                                         value: {
                                             min: 0,
-                                            max: 20,
+                                            max: 100,
                                         }
                                     }}
                                 >
