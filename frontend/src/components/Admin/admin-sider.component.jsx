@@ -36,7 +36,7 @@ const AdminSider = ({ match }) => {
                         key="c-3">
                         <MoneyCollectOutlined />Doanh thu</Menu.Item>
                 </SubMenu>
-                <Menu.Item key="3"><BorderOutlined /> Báo cáo</Menu.Item>
+                <Menu.Item onClick={() => history.push(`${match.url}/report`)} key="3"><BorderOutlined /> Báo cáo</Menu.Item>
             </Menu>
         </Sider>
     )
