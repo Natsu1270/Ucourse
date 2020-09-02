@@ -1,6 +1,7 @@
 import React from 'react'
 import ResultComponent from './Common/result.component'
 import Constants from '../constants'
+import { Redirect } from 'react-router-dom'
 
 const RoleComponent = ({
     roleCode, token, StudentComponent, TeacherTAComponent, AdminComponent, ...otherProps
@@ -13,7 +14,7 @@ const RoleComponent = ({
         </section>
     )
     if (roleCode === "AD") {
-        return <AdminComponent token={token} {...otherProps} />
+        return <Redirect to="/admin" />
     }
     if (roleCode === "TC" || roleCode === "TA") {
         return <TeacherTAComponent token={token} {...otherProps} />

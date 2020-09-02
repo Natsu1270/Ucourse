@@ -45,6 +45,15 @@ class UserMinSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'email', 'user_profile')
 
 
+class UserDataSerializer(serializers.ModelSerializer):
+    user_profile = ProfileSerializer(read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'email', 'is_social_account', 'is_active', 'last_login',
+                  'is_staff', 'date_joined', 'role_id', 'user_profile']
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()

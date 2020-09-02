@@ -3,7 +3,7 @@ from django.db.models import Q, QuerySet
 
 from courses.models import UserCourse
 from users.serializers import UserMinSerializer
-from .models import Program, Field, UserBuyProgram, StudentProgram
+from .models import Program, Field, UserBuyProgram, StudentProgram, UserViewProgram
 from courses.serializers import CourseSerializer, CourseSearchSerializer, CourseMinSerializer, CourseProcessSerializer, \
     UserCourseSerializer
 
@@ -143,6 +143,18 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
             except UserCourse.DoesNotExist:
                 pass
         return UserCourseSerializer(instance=queryset, many=True).data
+
+
+class ProgramDataSerializer(serializers.ModelSerializer):
+    view_count = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Program
+        fields = ['id', 'created_date', 'name', 'view_count']
+
+    @staticmethod
+    def get_view_count(obj):
+        return UserViewProgram.objects.filter(program_id=obj.id).count()
 
 
 class FieldSerializer(serializers.ModelSerializer):

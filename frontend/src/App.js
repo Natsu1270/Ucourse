@@ -25,8 +25,9 @@ import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 import RoleComponent from './components/RoleComponent';
 import TeacherHomePage from './pages/HomePage/teacher-home.page';
-import AdminHomePage from './pages/HomePage/admin-home.page';
 
+
+const AdminHomePage = lazy(() => import('./pages/HomePage/admin-home.page'));
 const Page404NotFound = lazy(() => import("./pages/404.page"));
 const AboutPage = lazy(() => import('./pages/AboutPage/about.page'));
 const EventPage = lazy(() => import('./pages/EventPage/event.page'));
@@ -133,6 +134,7 @@ function App() {
                                         component={ProgramProcess}
                                         token={token}
                                     />
+                                    <Route path="/admin" component={AdminHomePage} />
                                     <Route component={Page404NotFound} />
                                 </Switch>
                             </Suspense>

@@ -92,6 +92,10 @@ class Course(models.Model):
         return self.c_homes.count()
 
     @property
+    def view_count(self):
+        return UserViewCourse.objects.filter(course_id=self.id).count()
+
+    @property
     def course_teachers(self):
         teachers = []
         for c in self.c_homes.all():

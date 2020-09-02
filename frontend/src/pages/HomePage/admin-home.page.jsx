@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 
 
-import { getCourseHomesByTeacher } from '../../api/courseHome.services'
+import { getUserAdminData, getProgramCourseAdminData } from '../../api/admin.services'
 import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, Layout, Menu, } from 'antd';
-import { useHistory } from 'react-router-dom';
-import { DoubleRightOutlined, HomeOutlined, DashOutlined, DashboardOutlined, AppstoreOutlined, BorderOutlined } from '@ant-design/icons';
-
-import { Chart, Interval, Tooltip } from 'bizcharts';
+import { DoubleRightOutlined, HomeOutlined, DashOutlined, DashboardOutlined, AppstoreOutlined, BorderOutlined, MoneyCollectOutlined, BarChartOutlined } from '@ant-design/icons';
+import {
+    useParams, Route, BrowserRouter as Router,
+    Switch, useRouteMatch, useLocation, useHistory, Redirect
+} from 'react-router-dom'
 import { parseHtml } from '../../utils/text.utils';
-
+import { TeamOutlined } from '@ant-design/icons'
+import './admin-home.styles.scss'
+import UserAdmin from '../../components/Admin/user-admin.component';
+import SubMenu from 'antd/lib/menu/SubMenu';
+import ResourcesAdmin from '../../components/Admin/resources-admin.component';
+import Constants from '../../constants';
+import AdminSider from '../../components/Admin/admin-sider.component';
 
 const { Panel } = Collapse
 const { Paragraph } = Typography;
@@ -18,48 +25,55 @@ const { Sider, Content } = Layout;
 const AdminHomePage = ({ token }) => {
 
     const history = useHistory()
+    const match = useRouteMatch();
     const [loading, setLoading] = useState(true)
-    const [courseHomes, setCourseHomes] = useState([])
+    const [userData, setUserData] = useState({})
+    const [programCourseData, setProgramCourseData] = useState({})
 
-    const getCourseHomes = async () => {
+    const getAdminData = async () => {
         setLoading(true)
         try {
-            const { data } = await getCourseHomesByTeacher(token)
-            setCourseHomes(data.data)
+            const [userDataRes, programCourseRes] = await Promise.all([
+                getUserAdminData(),
+                getProgramCourseAdminData()
+            ])
+            setUserData(userDataRes.data.data)
+            setProgramCourseData(programCourseRes.data.data)
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
+        setLoading(false)
     }
 
 
     useEffect(() => {
-        window.scrollTo(0, 0)
-        if (token) {
-            getCourseHomes()
-        }
-    }, [token]);
+        getAdminData()
+    }, []);
 
 
 
     return (
+        <section>
+            <Layout style={{ paddingTop: '64px' }}>
+                <Router>
 
-        // 
-
-        <section className="page section-10">
-
-            <Layout className="bg-white" style={{ padding: '3rem 0' }}>
-                <Sider width={200} className="bg-white" style={{ height: '100%' }}>
-                    <h3 className="text--main text-center mb-4">Quản trị</h3>
-                    <Menu mode="inline" theme="light" defaultSelectedKeys={['1']} >
-                        <Menu.Item key="1"><DashboardOutlined /> Dashboard</Menu.Item>
-                        <Menu.Item key="2"><BorderOutlined /> Báo cáo</Menu.Item>
-                    </Menu>
-                </Sider>
-                <Content style={{ padding: '2rem 4rem', minHeight: 300 }}>
-                </Content>
-
+                    <AdminSider match={match} />
+                    <Route exact path={match.url}>
+                        <UserAdmin
+                            userData={userData}
+                            loading={loading}
+                        />
+                    </Route>
+                    <Suspense fallback={Constants.SPIN_ICON}>
+                        <Route exact path={`${match.url}/resources`}>
+                            <ResourcesAdmin
+                                data={programCourseData}
+                                loading={loading}
+                            />
+                        </Route>
+                    </Suspense>
+                </Router>
             </Layout>
-
         </section>
 
     )

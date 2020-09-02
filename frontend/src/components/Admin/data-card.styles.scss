@@ -1,0 +1,38 @@
+.data-card {
+    // color: #ffffff;
+    padding: 2rem 0; 
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,0.03),
+                0 0.9375rem 1.40625rem rgba(4,9,20,0.03), 
+                0 0.25rem 0.53125rem rgba(4,9,20,0.05), 
+                0 0.125rem 0.1875rem rgba(4,9,20,0.03);
+    border-radius: .25rem;
+    background-color: #ffffff;
+
+    &__number {
+        font-weight: bold;
+        font-size: 4rem;
+        display: block;
+        line-height: 1;
+    }
+
+    &__icon {
+        font-size: 5rem;
+        color: black;
+    }
+
+    &__info {
+        padding: 0 3rem;
+    }
+
+    // &__user {
+    //     border-left: 1rem solid #63ace5;
+    // }
+
+    // &__program {
+    //     border-left: 1rem solid #f64e60;
+    // }
+
+    // &__course {
+    //     border-left: 1rem solid #8874a3;
+    // }
+}

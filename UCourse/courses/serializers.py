@@ -8,6 +8,23 @@ from course_homes.models import CourseHome, StudentCourseHome
 from profiles.serializers import ProfileMinSerializer
 
 
+class CourseMinSerializer(serializers.ModelSerializer):
+    is_my_course = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'slug', 'icon', 'status', 'is_my_course',
+        ]
+
+    def get_is_my_course(self, obj):
+        user = self.context.get('user')
+        if user:
+            return obj.user_buy.filter(pk=user.id).count() > 0
+        else:
+            return False
+
+
 class UserBuyCourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
@@ -16,6 +33,15 @@ class UserBuyCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBuyCourse
         fields = ['id', 'user', 'course', 'bought_date']
+
+
+class UserBuyCourseDataSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course = CourseMinSerializer(required=False)
+
+    class Meta:
+        model = UserBuyCourse
+        fields = ['id', 'course', 'bought_date']
 
 
 class UserBuyProgramSerializer(serializers.ModelSerializer):
@@ -162,21 +188,7 @@ class CourseSearchSerializer(serializers.ModelSerializer):
         return UserViewCourse.objects.filter(course_id=obj.id).count()
 
 
-class CourseMinSerializer(serializers.ModelSerializer):
-    is_my_course = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Course
-        fields = [
-            'id', 'title', 'slug', 'icon', 'status', 'is_my_course',
-        ]
-
-    def get_is_my_course(self, obj):
-        user = self.context.get('user')
-        if user:
-            return obj.user_buy.filter(pk=user.id).count() > 0
-        else:
-            return False
 
 
 class CourseMySerializer(serializers.ModelSerializer):
@@ -242,6 +254,16 @@ class CourseProcessSerializer(serializers.ModelSerializer):
         return None
 
 
+class CourseDataSerializer(serializers.ModelSerializer):
+    view_count = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Course
+        fields = ['id', 'title', 'created_date', 'view_count']
+
+    @staticmethod
+    def get_view_count(obj):
+        return UserViewCourse.objects.filter(course_id=obj.id).count()
 
 
 class SkillSerializer(serializers.ModelSerializer):

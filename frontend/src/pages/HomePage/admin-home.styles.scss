@@ -1,0 +1,20 @@
+.income {
+    padding: 2rem 5rem;
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: bold;
+    background: #e53935;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #e35d5b, #e53935);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #e35d5b, #e53935); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+.admin-sider {
+    box-shadow: 0 0.46875rem 2.1875rem rgba(4,9,20,0.03),
+                0 0.9375rem 1.40625rem rgba(4,9,20,0.03), 
+                0 0.25rem 0.53125rem rgba(4,9,20,0.05), 
+                0 0.125rem 0.1875rem rgba(4,9,20,0.03);
+
+                min-height: 100vh; 
+                padding: 5rem 0;
+}

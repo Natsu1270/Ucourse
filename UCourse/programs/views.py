@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from courses.models import Course
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from .serializers import FieldSerializer, FieldMinSerializer, ProgramDetailSerializer, ProgramSerializer
-from .models import Field, Program, UserBuyProgram, StudentProgram
+from .models import Field, Program, UserBuyProgram, StudentProgram, UserViewProgram
 
 
 class FieldListAPI(generics.ListAPIView):
@@ -35,6 +35,15 @@ class ProgramDetailAPI(generics.RetrieveAPIView):
     lookup_field = 'slug'
     serializer_class = ProgramDetailSerializer
     queryset = Program.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        if self.request.user.is_anonymous:
+            UserViewProgram.objects.create(program_id=instance.id)
+        else:
+            UserViewProgram.objects.create(user=self.request.user, program_id=instance.id)
+        return Response(serializer.data)
 
     def get_serializer_context(self):
         return {"user": self.request.user}
