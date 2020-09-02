@@ -19,3 +19,11 @@ export const getProgramCourseAdminData = () => {
         url: `${API_URL}/data/program-course`,
     })
 }
+
+export const getIncomeAdminData = () => {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', },
+        method: 'GET',
+        url: `${API_URL}/data/income`,
+    })
+}

@@ -10,8 +10,8 @@ from courses.models import Course, UserBuyCourse, UserViewCourse
 from courses.serializers import CourseDataSerializer, UserBuyCourseSerializer, UserBuyCourseDataSerializer, \
     CourseMinSerializer
 from exams.models import Exam
-from programs.models import Program
-from programs.serializers import ProgramDataSerializer
+from programs.models import Program, UserBuyProgram
+from programs.serializers import ProgramDataSerializer, UserBuyProgramSerializer
 from users.models import User
 from users.serializers import UserDataSerializer
 
@@ -96,3 +96,15 @@ class GetAdminProgramCourseData(generics.GenericAPIView):
                 "classCount": course_home_count
             }, status=status.HTTP_200_OK
         )
+
+
+class GetAdminIncomeData(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        course_buys = UserBuyCourse.objects.all()
+        program_buys = UserBuyProgram.objects.all()
+
+        return Response({
+            "buyCourses": UserBuyCourseSerializer(instance=course_buys, many=True).data,
+            "buyPrograms": UserBuyProgramSerializer(instance=program_buys, many=True).data
+        }, status=status.HTTP_200_OK)

@@ -58,7 +58,7 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
         if obj.discount:
             price -= int(obj.discount)
         if obj.discount_percentage:
-            price *= obj.discount_percentages
+            price *= obj.discount_percentage
         return price
 
     def get_bought_courses(self, obj):
@@ -189,7 +189,7 @@ class UserBuyProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBuyProgram
         fields = [
-            'id', 'user', 'program', 'bought_date'
+            'id', 'user', 'program', 'bought_date', 'money'
         ]
 
 

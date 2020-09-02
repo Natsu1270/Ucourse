@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense, lazy } from 'react'
 
 
-import { getUserAdminData, getProgramCourseAdminData } from '../../api/admin.services'
+import { getUserAdminData, getProgramCourseAdminData, getIncomeAdminData } from '../../api/admin.services'
 import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, Layout, Menu, } from 'antd';
 import { DoubleRightOutlined, HomeOutlined, DashOutlined, DashboardOutlined, AppstoreOutlined, BorderOutlined, MoneyCollectOutlined, BarChartOutlined } from '@ant-design/icons';
 import {
@@ -13,9 +13,10 @@ import { TeamOutlined } from '@ant-design/icons'
 import './admin-home.styles.scss'
 import UserAdmin from '../../components/Admin/user-admin.component';
 import SubMenu from 'antd/lib/menu/SubMenu';
-import ResourcesAdmin from '../../components/Admin/resources-admin.component';
 import Constants from '../../constants';
 import AdminSider from '../../components/Admin/admin-sider.component';
+const IncomeAdmin = lazy(() => import('../../components/Admin/income-admin.component'))
+const ResourcesAdmin = lazy(() => import('../../components/Admin/resources-admin.component'))
 
 const { Panel } = Collapse
 const { Paragraph } = Typography;
@@ -29,16 +30,20 @@ const AdminHomePage = ({ token }) => {
     const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState({})
     const [programCourseData, setProgramCourseData] = useState({})
+    const [incomeData, setIncomeData] = useState({})
+
 
     const getAdminData = async () => {
         setLoading(true)
         try {
-            const [userDataRes, programCourseRes] = await Promise.all([
+            const [userDataRes, programCourseRes, incomeRes] = await Promise.all([
                 getUserAdminData(),
-                getProgramCourseAdminData()
+                getProgramCourseAdminData(),
+                getIncomeAdminData()
             ])
             setUserData(userDataRes.data.data)
             setProgramCourseData(programCourseRes.data.data)
+            setIncomeData(incomeRes.data.data)
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
@@ -68,6 +73,12 @@ const AdminHomePage = ({ token }) => {
                         <Route exact path={`${match.url}/resources`}>
                             <ResourcesAdmin
                                 data={programCourseData}
+                                loading={loading}
+                            />
+                        </Route>
+                        <Route exact path={`${match.url}/income`}>
+                            <IncomeAdmin
+                                data={incomeData}
                                 loading={loading}
                             />
                         </Route>

@@ -27,7 +27,7 @@ const UserDataCard = ({ data, num }) => {
             </Row>
             <Row>
                 <Col span={24}>
-                    <Chart scale={{ count: { min: 0, max: 50 } }}
+                    <Chart scale={{ count: { min: 0, max: 80 } }}
                         padding={[10, 20, 50, 40]} autoFit height={280} data={chartData} >
                         <LineAdvance
                             shape="smooth"

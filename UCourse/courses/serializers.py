@@ -29,10 +29,15 @@ class UserBuyCourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+    money = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserBuyCourse
-        fields = ['id', 'user', 'course', 'bought_date']
+        fields = ['id', 'user', 'course', 'bought_date', 'money']
+
+    @staticmethod
+    def get_money(obj):
+        return obj.course.get_price()
 
 
 class UserBuyCourseDataSerializer(serializers.ModelSerializer):

@@ -125,10 +125,13 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
             json_response = json.loads(response_data)
             if json_response["data"]["status"] == 0:
                 # Program.objects.get(pk=program_id)
+                amount = json_response["data"]["amount"]
                 try:
-                    UserBuyProgram.objects.get(user=user, program_id=program_id)
+                    instance = UserBuyProgram.objects.get(user=user, program_id=program_id)
+                    instance.money = amount
+                    instance.save()
                 except UserBuyProgram.DoesNotExist:
-                    UserBuyProgram.objects.create(user=user, program_id=program_id)
+                    UserBuyProgram.objects.create(user=user, program_id=program_id, money=amount)
 
                 StudentProgram.objects.create(student_id=user.id, program_id=program_id)
                 return Response({

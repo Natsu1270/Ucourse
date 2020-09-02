@@ -23,6 +23,87 @@ export const dataByMonth = (dataset, key) => {
     }
 }
 
+const calMoney = (dataList) => {
+    return dataList.reduce((total, item) => total + parseInt(item.money), 0)
+}
+
+export const moneyChartData = (dataset, type) => {
+    if (dataset) {
+        return [
+            {
+                month: "Jan",
+                type: type,
+                count: calMoney(dataset['jan'])
+            },
+
+            {
+                month: "Feb",
+                type: type,
+                count: calMoney(dataset['feb'])
+            },
+
+            {
+                month: "Mar",
+                type: type,
+                count: calMoney(dataset['mar'])
+            },
+
+            {
+                month: "Apr",
+                type: type,
+                count: calMoney(dataset['apr'])
+            },
+
+            {
+                month: "May",
+                type: type,
+                count: calMoney(dataset['may'])
+            },
+
+            {
+                month: "Jun",
+                type: type,
+                count: calMoney(dataset['jun'])
+            },
+
+            {
+                month: "Jul",
+                type: type,
+                count: calMoney(dataset['jul'])
+            },
+
+            {
+                month: "Aug",
+                type: type,
+                count: calMoney(dataset['aug'])
+            },
+
+            {
+                month: "Sep",
+                type: type,
+                count: calMoney(dataset['sep'])
+            },
+
+            {
+                month: "Oct",
+                type: type,
+                count: calMoney(dataset['oct'])
+            },
+            {
+                month: "Nov",
+                type: type,
+                count: calMoney(dataset['nov'])
+            },
+            {
+                month: "Dec",
+                type: type,
+                count: calMoney(dataset['dec'])
+            },
+
+        ];
+    }
+}
+
 export const lineChartDataByMonth = (dataset, type) => {
     if (dataset) {
         return [

@@ -85,6 +85,7 @@ class UserBuyProgram(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     bought_date = models.DateField(default=timezone.now)
+    money = models.CharField(max_length=100, null=True, blank=True, default=0)
 
     class Meta:
         unique_together = ('user', 'program')
