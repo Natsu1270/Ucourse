@@ -5,6 +5,7 @@
   "proxy": "http://127.0.0.1:8000/",
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@antv/data-set": "^0.11.5",
     "@ckeditor/ckeditor5-build-classic": "^19.0.0",
     "@ckeditor/ckeditor5-build-inline": "^21.0.0",
     "@ckeditor/ckeditor5-highlight": "^19.0.0",
@@ -21,12 +22,15 @@
     "antd": "^4.5.2",
     "axios": "^0.19.2",
     "bizcharts": "^4.0.13",
+    "bulma": "^0.9.0",
+    "bulma-helpers": "^0.3.12",
     "chart.js": "^2.9.3",
     "firebase": "^7.9.3",
     "highlight.js": "^9.18.1",
     "html-react-parser": "^0.10.3",
     "js-file-download": "^0.4.12",
     "lodash": "^4.17.15",
+    "material-design-icons-iconfont": "^6.0.1",
     "moment": "^2.24.0",
     "pdf-viewer-reactjs": "^2.0.7",
     "plyr": "^3.6.1",
@@ -76,6 +80,7 @@
     ]
   },
   "devDependencies": {
+    "css-loader": "^4.2.2",
     "node-sass": "^4.13.1"
   }
 }
