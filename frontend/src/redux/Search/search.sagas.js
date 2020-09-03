@@ -4,9 +4,9 @@ import SearchActionTypes from "./search.types"
 import * as SearchActions from './search.actions'
 import * as SearchService from '../../api/search.services'
 
-export function* simpleSearch({ payload }) {
+export function* simpleSearch({ payload: { query, token } }) {
     try {
-        let { data } = yield call(SearchService.simpleSearch, payload)
+        let { data } = yield call(SearchService.simpleSearch, { token, query })
         yield put(SearchActions.simpleSearchSuccess(data.data))
     } catch (err) {
         yield put(SearchActions.simpleSearchFail(err.response))

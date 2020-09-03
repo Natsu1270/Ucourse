@@ -110,7 +110,7 @@ class SearchRegisterCourses(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
 
         keyword = self.request.query_params.get("keyword", "")
-        courses = Course.objects.filter(title__icontains=keyword)
+        courses = Course.objects.filter(Q(title__icontains=keyword) | Q(code__icontains=keyword))
         return Response(
             data=CourseMySerializer(instance=courses, context=self.get_serializer_context(), many=True).data,
             status=status.HTTP_200_OK

@@ -16,14 +16,14 @@ const SearchCourses = ({ courses, myCourses }) => {
                         <div className="search-result--courses">
                             {
                                 courses.map(course => {
-                                    const isBought = myCourses ? myCourses.some(c => c.id == course.id) : false
+                                    // const isBought = myCourses ? myCourses.some(c => c.id == course.id) : false
                                     return (
                                         <SearchCourseItem
                                             onClick={() => {
                                                 history.push(`/courses/${course.slug}`)
                                             }}
                                             course={course}
-                                            isBought={isBought}
+                                            isBought={course.is_my_course}
                                         />
                                     )
                                 })

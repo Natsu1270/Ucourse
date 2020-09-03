@@ -507,9 +507,8 @@
     }
 
     .class-sub-info {
-        display: flex;
-        flex-wrap: wrap;
         &__item {
+        color: black !important;
             flex: 0 0 25rem;
         }
     }

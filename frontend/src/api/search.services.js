@@ -4,22 +4,25 @@ import axios from 'axios'
 const SEARCH_API_URL = '/api/search';
 const TAGS_API_URL = '/api/tags/';
 
-export function simpleSearch(keyword) {
+export function simpleSearch({ token, query }) {
+    const headers = token ? { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } : { 'Content-Type': 'application/json' }
     return axios.request(
         {
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             method: 'GET',
             url: SEARCH_API_URL,
             params: {
-                query: keyword
+                query
             }
         }
     )
 }
 
 export function advancedSearchAPI(params) {
+    const { token } = params
+    const headers = token ? { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } : { 'Content-Type': 'application/json' }
     return axios.request({
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         method: 'GET',
         url: SEARCH_API_URL + '/advanced',
         params

@@ -26,21 +26,23 @@ import { slugifyString } from "../../utils/text.utils";
 import { disabledDate } from '../../utils/date.utils'
 import Constants from '../../constants';
 import { myCoursesSelector, myProgramsSelector } from '../../redux/Home/home.selects';
+import { useLocation } from 'react-router-dom'
 
 const { RangePicker } = DatePicker
 const { Search } = Input
 
 
-const CourseSearchPage = ({ location }) => {
+const CourseSearchPage = ({ token }) => {
     const dispatch = useDispatch();
 
+    const location = useLocation()
     const queryValues = queryString.parse(location.search);
     const query = queryValues.query;
     const [keyword, setKeyword] = useState(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        dispatch(simpleSearchStart(query))
+        dispatch(simpleSearchStart({ query, token }))
     }, [query]);
 
     const {
@@ -144,7 +146,7 @@ const CourseSearchPage = ({ location }) => {
 
         try {
             const { data } = await advancedSearchAPI({
-                keyword, canRegister,
+                keyword, canRegister, token,
                 fromDate: date ? date[0].format(Constants.YYYY_MM_DD) : null,
                 toDate: date ? date[1].format(Constants.YYYY_MM_DD) : null
             })

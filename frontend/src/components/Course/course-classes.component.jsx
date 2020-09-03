@@ -97,16 +97,20 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
     }
 
     const registerBtn = (item) => {
-        if (!canRegister(item)) return 'Hết hạn đăng ký'
-        if (item.maximum_number === item.student_count) return "Đủ số lượng học viên đăng ký"
         if (item.is_my_class) {
-            let a = dayDiff(item.open_date, now);
-            if (dayDiff(item.open_date, now) <= 0) {
-                return 'Đăng ký thành công'
+            if (canRegister(item)) {
+                if (dayDiff(item.open_date, now) <= 0) {
+                    return 'Đăng ký thành công'
+                } else {
+                    return 'Hủy đăng ký'
+                }
             } else {
-                return 'Hủy đăng ký'
+                return 'Đăng ký thành công'
             }
         }
+        if (!canRegister(item)) return 'Hết hạn đăng ký'
+        if (item.maximum_number === item.student_count) return "Đủ số lượng học viên đăng ký"
+
         return 'Đăng ký'
     }
 
@@ -147,25 +151,31 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                                 title={
                                     <Link to={`${course.slug}/${item.name}`} className="text--sub__bigger3 text-black">{item.full_name}</Link>}
                                 description={
-                                    <Row gutter={24}>
-                                        <Col>
+                                    <Row gutter={[12, 12]}>
+                                        <Col span={6}>
                                             <span className="class-sub-info__item">Giảng viên: {item.teacher.fullname}</span>
                                         </Col>
-                                        <Col>
+                                        <Col span={8}>
                                             <span className="class-sub-info__item">Ngày bắt đầu: {item.open_date}</span>
                                         </Col>
-                                        <Col>
+                                        <Col span={8}>
                                             <span className="class-sub-info__item">{courseHomeStatus(item)}</span>
                                         </Col>
-                                        <Col>
+                                        <Col span={6}>
                                             <span
                                                 className="class-sub-info__item">Đăng ký: {item.student_count}/{item.maximum_number}</span>
                                         </Col>
+                                        <Col span={8}>
+                                            <span className="class-sub-info__item">Ngày mở đăng ký {item.register_date}</span>
+                                        </Col>
+                                        <Col span={10}>
+                                            <span className="class-sub-info__item">Gia hạn đăng ký khi khóa học đã mở: {item.over_admission_days} ngày</span>
+                                        </Col>
+
                                     </Row>
                                 }
 
                             />
-
 
                         </Skeleton>
                     </List.Item>

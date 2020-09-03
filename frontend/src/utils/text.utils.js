@@ -47,3 +47,11 @@ export function dayDiff(time1, time2) {
 export function isTimeBefore(timestamp) {
     return moment(timestamp).isBefore(moment())
 }
+
+export function isSameOrAfterNow(timestamp) {
+    return moment(timestamp).isSameOrAfter(moment(), 'days')
+}
+
+export function isAfterNow(timestamp) {
+    return moment(timestamp).isAfter(moment(), 'days')
+}

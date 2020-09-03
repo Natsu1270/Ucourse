@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from rest_framework import views, status
+from rest_framework import views, status, generics
 from rest_framework.response import Response
 
 from api.utils import uc_response, create_search_keyword
@@ -10,9 +10,9 @@ from courses.serializers import CourseSearchSerializer
 from programs.serializers import ProgramSearchSerializer
 
 
-class SearchAPI(views.APIView):
+class SearchAPI(generics.GenericAPIView):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         query = request.query_params.get('query', None)
         courses = Course.objects.all()
         programs = Program.objects.all()
@@ -22,8 +22,10 @@ class SearchAPI(views.APIView):
             courses = courses.filter(Q(title__icontains=query))
             programs = programs.filter(name__icontains=query)
         data = {
-            "courses": CourseSearchSerializer(instance=courses, many=True).data,
-            "programs": ProgramSearchSerializer(instance=programs, many=True).data
+            "courses": CourseSearchSerializer(
+                instance=courses, context=self.get_serializer_context(), many=True).data,
+            "programs": ProgramSearchSerializer(
+                instance=programs, context=self.get_serializer_context(), many=True).data
         }
 
         return Response(
@@ -31,7 +33,7 @@ class SearchAPI(views.APIView):
             status=status.HTTP_200_OK)
 
 
-class AdvancedSearch(views.APIView):
+class AdvancedSearch(generics.GenericAPIView):
 
     def get(self, request):
         keyword = request.query_params.get('keyword', "")
@@ -55,8 +57,9 @@ class AdvancedSearch(views.APIView):
             courses = [course for course in courses if course.can_register_class]
 
         return Response({
-            "courses": CourseSearchSerializer(instance=courses, many=True).data,
-            "programs":ProgramSearchSerializer(instance=programs, many=True).data,
+            "courses": CourseSearchSerializer(
+                instance=courses, context=self.get_serializer_context(), many=True).data,
+            "programs": ProgramSearchSerializer(instance=programs, context=self.get_serializer_context(), many=True).data,
             "result": True
         }, status=status.HTTP_200_OK)
 

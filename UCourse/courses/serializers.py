@@ -165,15 +165,14 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     level = serializers.CharField(source='get_level_display')
     course_home_count = serializers.IntegerField(read_only=True)
     course_teachers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    # views = serializers.StringRelatedField(many=True, required=False)
     view_count = serializers.SerializerMethodField(read_only=True)
-    # user_buy = UserBuyCourseSerializer(read_only=True)
     bought_date = serializers.SerializerMethodField(read_only=True)
+    is_my_course = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type', 'price',
+            'id', 'title', 'code', 'fee_type', 'price', 'is_my_course',
             'icon', 'slug', 'level', 'status', 'view_count',
             'field', 'course_home_count', 'course_teachers', 'bought_date'
         ]
@@ -187,6 +186,17 @@ class CourseSearchSerializer(serializers.ModelSerializer):
                 return None
             return instance.bought_date
         return None
+
+    def get_is_my_course(self, obj):
+        request = self.context.get('request', None)
+        user_ctx = None
+        if request is not None:
+            user_ctx = request.user
+        user = self.context.get('user', user_ctx)
+        if user:
+            return obj.user_buy.filter(pk=user.id).count() > 0
+        else:
+            return False
 
     @staticmethod
     def get_view_count(obj):
@@ -203,11 +213,12 @@ class CourseMySerializer(serializers.ModelSerializer):
     my_course_homes = serializers.SerializerMethodField(read_only=True)
     view_count = serializers.SerializerMethodField(read_only=True)
     c_homes = CourseHomeShowSerializer(many=True, required=False)
+    is_my_course = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type', 'price', 'view_count',
+            'id', 'title', 'code', 'fee_type', 'price', 'view_count', 'is_my_course',
             'icon', 'slug', 'level', 'status', 'field', 'c_homes',
             'course_home_count', 'course_teachers', 'bought_date', 'my_course_homes'
         ]
@@ -215,6 +226,14 @@ class CourseMySerializer(serializers.ModelSerializer):
     @staticmethod
     def get_view_count(obj):
         return UserViewCourse.objects.filter(course_id=obj.id).count()
+
+    def get_is_my_course(self, obj):
+        request = self.context.get('request')
+        user = self.context.get('user', request.user)
+        if user:
+            return obj.user_buy.filter(pk=user.id).count() > 0
+        else:
+            return False
 
     def get_my_course_homes(self, obj):
         request = self.context.get('request')

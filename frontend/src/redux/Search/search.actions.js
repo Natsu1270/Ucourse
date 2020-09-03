@@ -1,8 +1,8 @@
 import SearchActionTypes from "./search.types";
 
-export const simpleSearchStart = (keyword) => ({
+export const simpleSearchStart = (param) => ({
     type: SearchActionTypes.SIMPLE_SEARCH_START,
-    payload: keyword
+    payload: param
 });
 
 export const simpleSearchSuccess = (results) => ({

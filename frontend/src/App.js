@@ -102,7 +102,7 @@ function App() {
                                     <Route exact path="/event" component={EventPage} />
                                     <AuthRoute exact path="/auth" component={LoginAndRegisterPage} />
                                     <PrivateRoute path="/profile" component={ProfilePage} />
-                                    <Route exact path="/search" component={SearchPage} />
+                                    <Route exact path="/search"> <SearchPage token={token} /></Route>
                                     <Route exact path="/field" component={FieldPage} />
                                     <Route path="/field/:slug" component={FieldDetailPage} />
                                     <Route path="/programs/:slug" component={ProgramDetail} />

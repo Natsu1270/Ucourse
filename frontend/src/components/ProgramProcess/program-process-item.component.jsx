@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Menu, Table, Space, Avatar, Row, Col, Tag, Skeleton, List, Button, notification, message } from 'antd';
+import { Menu, Table, Space, Avatar, Row, Col, Tag, Skeleton, List, Button, notification, message, Divider } from 'antd';
 import Constants from '../../constants';
 import { formatDate } from '../../utils/text.utils';
 import { FireOutlined, FileProtectOutlined, FieldTimeOutlined, FileDoneOutlined } from '@ant-design/icons';
@@ -166,11 +166,13 @@ const ProgramProcessItem = ({ token, program, loading }) => {
 
             </Row>
 
+            <Row justify="center" className="mb-3">
+                {renderRemain()}
+            </Row>
             <List
                 header={<Row justify="space-between" className="text--sub__bigger3">
                     <Col>Khóa học thuộc chương trình</Col>
                 </Row>}
-                footer={renderRemain()}
                 size="large"
                 bordered
                 className="demo-loadmore-list"
