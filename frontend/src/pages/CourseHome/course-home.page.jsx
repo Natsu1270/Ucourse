@@ -84,7 +84,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
 
 
 
-    if (!own || !token) {
+    if ((!own || !token) && userRole.code != 'TC' && userRole.code != 'TA') {
         return <Redirect to='/' />
     }
     return (

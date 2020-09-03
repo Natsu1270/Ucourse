@@ -20,6 +20,8 @@ const ResourcesAdmin = lazy(() => import('../../components/Admin/resources-admin
 
 const AdminHomePage = ({ token }) => {
 
+
+
     const history = useHistory()
     const match = useRouteMatch();
     const [loading, setLoading] = useState(true)
@@ -51,6 +53,9 @@ const AdminHomePage = ({ token }) => {
     }, []);
 
 
+    if (!token) {
+        return <Redirect to='/' />
+    }
 
     return (
         <section>

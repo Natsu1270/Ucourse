@@ -48,6 +48,7 @@ const UserProfilePage = lazy(() => import('./pages/ProfilePage/public-profile.pa
 const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
 const MyCertificatePage = lazy(() => import('./pages/MyCertificatePage/my-certificates.page'))
 const ProgramProcess = lazy(() => import('./pages/ProgramProcess/program-process.component'))
+const RegisterClassPage = lazy(() => import('./pages/RegisterClass/register-class.page'))
 
 function App() {
 
@@ -134,7 +135,16 @@ function App() {
                                         component={ProgramProcess}
                                         token={token}
                                     />
-                                    <Route path="/admin" component={AdminHomePage} />
+                                    <Route path="/admin">
+                                        <AdminHomePage token={token} />
+                                    </Route>
+                                    <PrivateRoute
+                                        path="/register-class"
+                                        component={RegisterClassPage}
+                                        token={token}
+                                    />
+
+
                                     <Route component={Page404NotFound} />
                                 </Switch>
                             </Suspense>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { SmileTwoTone, MehTwoTone, FrownTwoTone } from '@ant-design/icons'
-import { Tag } from 'antd';
+import { Tag, Divider } from 'antd';
 
 const CourseCardSub = ({ title, homeNum, level, open_date, isBought }) => {
 
@@ -17,6 +17,7 @@ const CourseCardSub = ({ title, homeNum, level, open_date, isBought }) => {
     return (
         <div className="course-card-sub">
             <div className="course-card-sub__title text--sub__bigger2">{title}</div>
+            <Divider />
             <div className="course-card-sub__teacher">
                 {homeNum === 0 ? "Chưa có lớp" : homeNum + " lớp"}
             </div>

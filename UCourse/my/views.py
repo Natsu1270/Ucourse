@@ -8,7 +8,7 @@ from course_homes.models import CourseHome
 from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
 from programs.models import Program, StudentProgram
-from courses.serializers import CourseSearchSerializer
+from courses.serializers import CourseSearchSerializer, CourseMySerializer
 from programs.serializers import ProgramSearchSerializer, ProgramMinSerializer, StudentProgramSerializer, \
     ProgramProcessSerializer
 
@@ -87,3 +87,31 @@ class GetProgramProcess(generics.GenericAPIView):
         if user.is_anonymous:
             return {"user": None, "request": self.request}
         return {"user": user, "request": self.request}
+
+
+class GetMyCourses(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        my_courses = Course.objects.filter(user_buy=user)
+
+        return Response(
+            data=CourseMySerializer(instance=my_courses,context=self.get_serializer_context(), many=True).data,
+            status=status.HTTP_200_OK
+        )
+
+
+class SearchRegisterCourses(generics.GenericAPIView):
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+
+        keyword = self.request.query_params.get("keyword", "")
+        courses = Course.objects.filter(title__icontains=keyword)
+        return Response(
+            data=CourseMySerializer(instance=courses, context=self.get_serializer_context(), many=True).data,
+            status=status.HTTP_200_OK
+        )

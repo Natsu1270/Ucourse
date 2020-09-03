@@ -40,3 +40,20 @@ export function getProgramProcessAPI(token) {
         url: `${GET_ALL_URL}/program-process`
     })
 }
+
+export function getMyCoursesAPI(token) {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${GET_ALL_URL}/courses`
+    })
+}
+
+export function searchRegisterCourseAPI(token, keyword) {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
+        method: 'GET',
+        url: `${GET_ALL_URL}/search`,
+        params: { keyword }
+    })
+}

@@ -198,7 +198,6 @@ class CourseHomeSerializer(serializers.ModelSerializer):
         return res
 
 
-
 class CourseHomeShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     teacher = ProfileMinSerializer(read_only=True)

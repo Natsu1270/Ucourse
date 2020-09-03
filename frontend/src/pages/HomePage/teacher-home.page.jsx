@@ -70,6 +70,7 @@ const TeacherHomePage = ({ token }) => {
                 </h3>
 
                 <Collapse
+                    defaultActiveKey={[courseHomes[0] ? courseHomes[0].id.toString() : '1']}
                     expandIconPosition="left"
                     accordion>
                     {
@@ -77,7 +78,7 @@ const TeacherHomePage = ({ token }) => {
 
                             return (
                                 <Panel
-                                    key={courseHome.id}
+                                    key={courseHome.id.toString()}
                                     header={<span className="text--sub__bigger">{courseHome.full_name}</span>}
                                     extra={genExtra(courseHome.slug)}
                                 >

@@ -67,7 +67,7 @@ const GuideLinePage = () => {
                         <Step key={item.title} title={item.title} />
                     ))}
                 </Steps>
-                <div className="steps-content">
+                <div className="steps-content" style={{ maxHeight: '50vh', overflow: 'auto' }}>
                     <h3>{steps[state].content}</h3>
                     <img width={800} src={steps[state].src} />
                 </div>
@@ -78,7 +78,7 @@ const GuideLinePage = () => {
                         </Button>
                     )}
                     {state === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                        <Button type="primary" onClick={() => message.success('Hoàn thành')}>
                             Hoàn tất
                         </Button>
                     )}

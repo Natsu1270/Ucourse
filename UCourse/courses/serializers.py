@@ -200,14 +200,15 @@ class CourseMySerializer(serializers.ModelSerializer):
     course_home_count = serializers.IntegerField(read_only=True)
     course_teachers = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     bought_date = serializers.SerializerMethodField(read_only=True)
-    my_course_homes= serializers.SerializerMethodField(read_only=True)
+    my_course_homes = serializers.SerializerMethodField(read_only=True)
     view_count = serializers.SerializerMethodField(read_only=True)
+    c_homes = CourseHomeShowSerializer(many=True, required=False)
 
     class Meta:
         model = Course
         fields = [
             'id', 'title', 'code', 'fee_type', 'price', 'view_count',
-            'icon', 'slug', 'level', 'status', 'field',
+            'icon', 'slug', 'level', 'status', 'field', 'c_homes',
             'course_home_count', 'course_teachers', 'bought_date', 'my_course_homes'
         ]
 
@@ -216,7 +217,8 @@ class CourseMySerializer(serializers.ModelSerializer):
         return UserViewCourse.objects.filter(course_id=obj.id).count()
 
     def get_my_course_homes(self, obj):
-        user = self.context.get('user')
+        request = self.context.get('request')
+        user = self.context.get('user', request.user)
         if user is not None:
             queryset = obj.c_homes.filter(students__in=[user])
             return CourseHomeShowSerializer(instance=queryset, many=True).data

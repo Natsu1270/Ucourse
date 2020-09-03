@@ -62,7 +62,8 @@ INSTALLED_APPS = [
     'tags',
     'questions',
     'forums',
-    'certificates'
+    'certificates',
+    'notifications'
 
 ]
 

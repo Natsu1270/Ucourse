@@ -1,5 +1,5 @@
 .search-program-card {
-	max-width: 35rem;
+	max-width: 40rem;
 	cursor: pointer;
 	background-color: $white-color;
 	box-shadow: $small-box-shadow-black;
@@ -33,6 +33,11 @@
 			}
 		}
 	}
+}
+
+
+.program-card {
+	box-shadow: $small-box-shadow-black;
 }
 
 .search-course-card {
@@ -145,9 +150,10 @@
 .course-card {
 	cursor: pointer;
 	background-color: #fff;
-	max-width: 28rem;
+	width: 28rem;
 	box-shadow: 0 5px 10px rgba(0,0,0,0.08);
 	transition: all 0.1s ease-in-out;
+	height: 38rem;
 	img {
 		width: 100%;
 		height: 20rem;
