@@ -27,8 +27,8 @@ class CourseMinSerializer(serializers.ModelSerializer):
 
 class UserBuyCourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+    user = serializers.StringRelatedField(required=False)
+    course = serializers.StringRelatedField(required=False)
     money = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -193,9 +193,6 @@ class CourseSearchSerializer(serializers.ModelSerializer):
         return UserViewCourse.objects.filter(course_id=obj.id).count()
 
 
-
-
-
 class CourseMySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     field = serializers.StringRelatedField(read_only=True)
@@ -261,10 +258,12 @@ class CourseProcessSerializer(serializers.ModelSerializer):
 
 class CourseDataSerializer(serializers.ModelSerializer):
     view_count = serializers.SerializerMethodField(read_only=True)
+    field = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'created_date', 'view_count']
+        fields = ['id', 'title', 'created_date', 'view_count',
+                  'fee_type', 'price', 'level', 'field']
 
     @staticmethod
     def get_view_count(obj):

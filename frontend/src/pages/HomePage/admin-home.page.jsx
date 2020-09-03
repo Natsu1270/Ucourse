@@ -79,8 +79,11 @@ const AdminHomePage = ({ token }) => {
                         </Route>
                         <Route exact path={`${match.url}/report`}>
                             <AdminReport
-                                data={incomeData}
-                                loading={loading}
+                                userData={userData.users}
+                                courseData={programCourseData.courses}
+                                programData={programCourseData.programs}
+                                courseIncomeData={incomeData.buyCourses}
+                                programIncomeData={incomeData.buyPrograms}
                             />
                         </Route>
                     </Suspense>

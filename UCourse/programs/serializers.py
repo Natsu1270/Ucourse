@@ -147,10 +147,12 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
 
 class ProgramDataSerializer(serializers.ModelSerializer):
     view_count = serializers.SerializerMethodField(read_only=True)
+    courses_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Program
-        fields = ['id', 'created_date', 'name', 'view_count']
+        fields = ['id', 'created_date', 'name', 'view_count',
+                  'courses_count', 'field', 'status', 'discount', 'discount_percentage']
 
     @staticmethod
     def get_view_count(obj):
@@ -183,8 +185,8 @@ class FieldMinSerializer(serializers.ModelSerializer):
 
 
 class UserBuyProgramSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
-    program = serializers.PrimaryKeyRelatedField(queryset=Program.objects.all())
+    user = serializers.StringRelatedField(read_only=True, required=False)
+    program = serializers.StringRelatedField()
 
     class Meta:
         model = UserBuyProgram

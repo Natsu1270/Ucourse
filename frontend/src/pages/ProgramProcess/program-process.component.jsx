@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { getAllMyCoursesAndProgramsAPI, getProgramProcessAPI } from '../../api/home.services'
-import { message, Avatar, DatePicker, Tag, Button, Form, Row, Col, Input, Switch, Menu, Spin, Layout, Divider, Space } from 'antd'
-import { dayDiff, formatDate } from '../../utils/text.utils'
+import { getProgramProcessAPI } from '../../api/home.services'
+import { message, DatePicker, Tag, Button, Form, Row, Col, Input, Switch, Menu, Spin, Layout, Divider, Space } from 'antd'
 import { useSelector } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
-import SearchProgramItem from '../../components/SearchResult/search-program-item.component'
-import SearchCourseItem from '../../components/SearchResult/search-course-item.component'
-import { DownOutlined, UserOutlined, NotificationOutlined, LaptopOutlined, BookOutlined } from '@ant-design/icons'
-import Constants from '../../constants'
+import { BookOutlined } from '@ant-design/icons'
 import { disabledDate } from '../../utils/date.utils'
 import ProgramProcessItem from '../../components/ProgramProcess/program-process-item.component'
 import moment from 'moment'
@@ -16,7 +12,6 @@ import moment from 'moment'
 
 const { RangePicker } = DatePicker
 const { Sider, Content } = Layout
-const { SubMenu } = Menu
 
 const formItemLayout = {
     labelCol: { span: 8 },
