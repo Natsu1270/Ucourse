@@ -64,7 +64,7 @@ const AdminReport = ({ userData, courseData, programData, courseIncomeData, prog
                 <h3 className="text--main">Báo cáo</h3>
                 <Divider />
 
-                <Row gutter={[16, 16]}>
+                <Row gutter={[32, 32]}>
                     <Col span={8}>
                         <div className="data-card report-card">
                             <p className="text--sub__bigger"><TeamOutlined className='data-card__icon' />
