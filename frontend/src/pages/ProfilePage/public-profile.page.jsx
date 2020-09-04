@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { Layout, message, Skeleton, Space, Row, Divider, Col, Tag } from 'antd'
-import { useParams } from 'react-router-dom'
+import { Layout, message, Skeleton, Space, Row, Divider, Col, Tag, List } from 'antd'
+import { useParams, useHistory } from 'react-router-dom'
 import { getPublicUserProfileAPI } from '../../api/profile.services';
 import Avatar from 'antd/lib/avatar/avatar';
 import {
@@ -19,13 +19,14 @@ import { createStructuredSelector } from 'reselect'
 const { Sider, Content } = Layout;
 
 
-const PublicProfilePage = () => {
+const PublicProfilePage = ({ userRole }) => {
 
     const { username } = useParams()
-
+    const history = useHistory()
     const [loading, setLoading] = useState(true)
     const [userProfile, setUserProfile] = useState({})
     const [profileDetail, setProfileDetail] = useState({})
+    const [classes, setClasses] = useState([])
     const [canView, setCanView] = useState(true)
 
     const { token } = useSelector(createStructuredSelector({
@@ -39,6 +40,7 @@ const PublicProfilePage = () => {
             if (data.status !== 401) {
                 setUserProfile(data.data)
                 setProfileDetail(data.data.user_profile)
+                setClasses(data.data.classes)
             } else {
                 setCanView(false)
             }
@@ -49,6 +51,7 @@ const PublicProfilePage = () => {
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         getProfile()
     }, [])
 
@@ -124,6 +127,38 @@ const PublicProfilePage = () => {
                                         <Col><DollarCircleOutlined /> Công việc: {profileDetail.occupation}</Col>
                                     </Row>
                                 </div>
+                                {
+                                    userProfile.role ? userProfile.role.code == 'TC' ? (
+                                        <Row className="mt-5">
+                                            <Col span={24}>
+                                                <h3 className="text--main">Danh sách lớp giảng dạy</h3>
+                                            </Col>
+                                            <Col span={24}>
+                                                <List
+                                                    bordered
+                                                    itemLayout="horizontal"
+                                                    dataSource={classes}
+                                                    loading={loading}
+                                                    renderItem={item => {
+                                                        return (
+                                                            <List.Item
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => history.push(`/courses/${item.course.slug}`)}>
+                                                                <List.Item.Meta
+                                                                    title={<Space>{item.full_name}</Space>}
+                                                                    avatar={<Avatar src={item.course.icon} />}
+                                                                />
+                                                            </List.Item>
+                                                        )
+                                                    }}
+
+                                                >
+
+                                                </List>
+                                            </Col>
+                                        </Row>
+                                    ) : null : null
+                                }
                             </Skeleton>
                         </Content>
                     </Layout> : <div className="page-card">

@@ -134,7 +134,7 @@ class CourseSerializer(serializers.ModelSerializer):
     ability_test = serializers.PrimaryKeyRelatedField(read_only=True)
     c_homes = CourseHomeShowSerializer(many=True, read_only=True)
     is_my_course = serializers.SerializerMethodField()
-    views = serializers.StringRelatedField(many=True, required=False)
+    # views = serializers.StringRelatedField(many=True, required=False)
     view_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -142,7 +142,7 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'code', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
             'fee_type', 'status', 'course_detail', 'program', 'view_count',
-            'field', 'tags', 'ability_test', 'views', 'created_date',
+            'field', 'tags', 'ability_test', 'created_date',
             'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
         ]
         read_only_fields = ('created_date', 'updated_date', 'created_by')

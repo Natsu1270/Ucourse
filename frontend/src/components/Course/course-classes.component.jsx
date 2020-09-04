@@ -153,7 +153,12 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                                 description={
                                     <Row gutter={[12, 12]}>
                                         <Col span={6}>
-                                            <span className="class-sub-info__item">Giảng viên: {item.teacher.fullname}</span>
+                                            <Link
+                                                style={{ color: 'blue' }}
+
+                                                to={`/user/${item.teacher.username}`}>
+                                                Giảng viên: {item.teacher.fullname}
+                                            </Link>
                                         </Col>
                                         <Col span={8}>
                                             <span className="class-sub-info__item">Ngày bắt đầu: {item.open_date}</span>

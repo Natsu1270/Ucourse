@@ -124,7 +124,9 @@ function App() {
                                 <Route path="/notification">
                                     <NotificationPage notifications={notifications} loading={fetchingNotify} />
                                 </Route>
-                                <Route exact path="/user/:username" component={UserProfilePage} />
+                                <Route exact path="/user/:username">
+                                    <UserProfilePage userRole={userRole} />
+                                </Route>
                                 <PrivateRoute
                                     referrer="/my-courses"
                                     exact

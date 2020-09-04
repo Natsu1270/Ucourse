@@ -19,10 +19,15 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileMinSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'fullname', 'avatar', 'email', 'phone_number')
+        fields = ('first_name', 'last_name', 'username', 'fullname', 'avatar', 'email', 'phone_number')
+
+    @staticmethod
+    def get_username(obj):
+        return obj.user.username
 
 
 class TeacherProfileSearchSerializer(serializers.ModelSerializer):

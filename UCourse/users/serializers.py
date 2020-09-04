@@ -2,9 +2,33 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import update_last_login
 
+from course_homes.models import CourseHome
+from courses.models import Course
 from roles.serializers import RoleSerializer
 from roles.models import Role
 from profiles.serializers import ProfileSerializer, ProfileMinSerializer
+
+
+class CourseProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'slug', 'icon', 'status',
+        ]
+
+
+class CourseHomeProfileSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    # course = serializers.PrimaryKeyRelatedField(read_only=True)
+    teacher = serializers.StringRelatedField(read_only=True)
+    course = CourseProfileSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'course', 'status', 'slug', 'full_name', 'teacher'
+        ]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,10 +36,17 @@ class UserSerializer(serializers.ModelSerializer):
     role = RoleSerializer(many=False, read_only=True)
     user_profile = ProfileSerializer(read_only=True)
     public_info = serializers.SerializerMethodField(read_only=True)
+    classes = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def get_classes(obj):
+        if obj.role.code == 'TC':
+            course_homes = CourseHome.objects.filter(teacher_id=obj.id)
+            return CourseHomeProfileSerializer(instance=course_homes, many=True).data
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'email', 'password', 'is_social_account', 'user_profile',
+        fields = ('id', 'username', 'email', 'password', 'is_social_account','classes', 'user_profile',
                   'date_joined', 'is_active', 'role', 'public_info', 'last_login')
         extra_kwargs = {'password': {'write_only': True}, }
         read_only_fields = ('id', 'date_joined', 'is_active',)
