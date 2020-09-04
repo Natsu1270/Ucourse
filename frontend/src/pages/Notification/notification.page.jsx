@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Timeline, Spin, Divider, Row, Col, message } from 'antd'
+import { Timeline, Spin, Divider, Row, Col, message, Space } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import Constants from '../../constants'
 import { formatDate } from '../../utils/text.utils'
 import './notification.styles.scss'
 import { readNotification } from '../../api/notification.services'
+import { TeamOutlined, ReadOutlined, RocketOutlined, LaptopOutlined } from '@ant-design/icons'
 
 const NotificationPage = ({ notifications, loading }) => {
 
@@ -35,36 +36,36 @@ const NotificationPage = ({ notifications, loading }) => {
                         window.open(`/courses/${reference.slug}`, '_self')
                     }
 
-                    content = <span>
-                        Đăng ký thành công khóa học <span className="b-500">{reference.title}</span>
-                    </span>
+                    content = <Space>
+                        <ReadOutlined /> Đăng ký thành công khóa học <span className="b-500">{reference.title}</span>
+                    </Space>
                 }
                 if (n.type === "2") {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/program/${reference.slug}`, '_self')
                     }
-                    content = <span>
-                        Đăng ký thành công chương trình học <span className="b-500">{reference.name}</span>
-                    </span>
+                    content = <Space>
+                        <RocketOutlined /> Đăng ký thành công chương trình học <span className="b-500">{reference.name}</span>
+                    </Space>
                 }
                 if (n.type === "3") {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/learn/${reference.slug}`, '_self')
                     }
-                    content = <span>
-                        Đăng ký thành công lớp <span className="b-500">{reference.full_name}</span>
-                    </span>
+                    content = <Space>
+                        <LaptopOutlined /> Đăng ký thành công lớp <span className="b-500">{reference.full_name}</span>
+                    </Space>
                 }
                 if (n.type === "4") {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/learn/${reference.course_home.slug}/forums`, '_self')
                     }
-                    content = <span>
-                        Có diễn đàn mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
-                    </span>
+                    content = <Space>
+                        <TeamOutlined /> Có diễn đàn mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
+                    </Space>
                 }
 
                 if (n.type === "5") {
@@ -75,7 +76,7 @@ const NotificationPage = ({ notifications, loading }) => {
                         )
                     }
                     content = <span>
-                        Có chủ đề mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
+                        <TeamOutlined /> Có chủ đề mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
                     </span>
                 }
                 return { ...n, content, onClick }
@@ -100,7 +101,7 @@ const NotificationPage = ({ notifications, loading }) => {
                                     <Timeline.Item
                                         onClick={n.onClick}
                                         key={n.id} color={n.is_read ? 'green' : 'red'}>
-                                        <Row className={`noti-item ${!n.is_read ? 'is-read' : null}`} gutter={6}>
+                                        <Row className={`noti-item ${!n.is_read ? 'is-read' : null}`} gutter={16}>
                                             <Col>
                                                 <span style={{ fontStyle: 'italic', fontSize: '1.4rem' }}>{formatDate(n.created_date, Constants.MMM_Do_YYYY)}</span>
                                             </Col>
