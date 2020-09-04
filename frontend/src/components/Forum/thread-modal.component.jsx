@@ -11,7 +11,7 @@ import { errorResponseSelector, isGettingSelector } from "../../redux/Forum/foru
 import { createThreadsStart, modifyThreadStart } from "../../redux/Forum/forum.actions";
 import Constants from "../../constants";
 
-const ThreadModal = ({ token, forum_id, thread_id, isCreate, name, content }) => {
+const ThreadModal = ({ token, forum_id, thread_id, isCreate, name, content, courseHomeId }) => {
 
     const dispatch = useDispatch()
     const { createThreadModal, isCreating, errorResponse } = useSelector(createStructuredSelector({
@@ -28,7 +28,7 @@ const ThreadModal = ({ token, forum_id, thread_id, isCreate, name, content }) =>
 
     const onFinish = (values) => {
         if (isCreate) {
-            dispatch(createThreadsStart({ token, forum: forum_id, name: values['name'], content: editorState }))
+            dispatch(createThreadsStart({ token, forum: forum_id, name: values['name'], content: editorState, courseHomeId }))
         } else {
             dispatch(modifyThreadStart({ token, forum: forum_id, thread_id, name: values['name'], content: editorState }))
         }

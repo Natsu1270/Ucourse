@@ -4,6 +4,8 @@ from course_homes.models import CourseHome
 from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
 from courses.serializers import CourseMinSerializer
+from forums.models import Forum, Thread
+from forums.serializers import ForumSerializer, ThreadSerializer
 from programs.models import Program
 from programs.serializers import ProgramMinSerializer
 from users.serializers import UserMinSerializer
@@ -32,3 +34,10 @@ class NotificationsSerializer(serializers.ModelSerializer):
         if obj.type == '3':
             instance = CourseHome.objects.get(pk=reference)
             return CourseHomeMinSerializer(instance=instance).data
+        if obj.type == '4':
+            instance = Forum.objects.get(pk=reference)
+            return ForumSerializer(instance=instance).data
+
+        if obj.type == '5':
+            instance = Thread.objects.get(pk=reference)
+            return ThreadSerializer(instance=instance).data

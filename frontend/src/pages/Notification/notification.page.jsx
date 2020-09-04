@@ -57,6 +57,27 @@ const NotificationPage = ({ notifications, loading }) => {
                         Đăng ký thành công lớp <span className="b-500">{reference.full_name}</span>
                     </span>
                 }
+                if (n.type === "4") {
+                    onClick = () => {
+                        readNoti(n.id)
+                        window.open(`/learn/${reference.course_home.slug}/forums`, '_self')
+                    }
+                    content = <span>
+                        Có diễn đàn mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
+                    </span>
+                }
+
+                if (n.type === "5") {
+                    onClick = () => {
+                        readNoti(n.id)
+                        window.open(
+                            `/learn/${reference.course_home.slug}/forums/${reference.forum}/threads/${reference.id}`, '_self'
+                        )
+                    }
+                    content = <span>
+                        Có chủ đề mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
+                    </span>
+                }
                 return { ...n, content, onClick }
             })
             setMyNotifications(notiList)
@@ -81,7 +102,7 @@ const NotificationPage = ({ notifications, loading }) => {
                                         key={n.id} color={n.is_read ? 'green' : 'red'}>
                                         <Row className={`noti-item ${!n.is_read ? 'is-read' : null}`} gutter={6}>
                                             <Col>
-                                                <span style={{ fontStyle: 'italic', fontSize: '1.6rem' }}>{formatDate(n.created_date, Constants.MMM_Do_YYYY)}</span>
+                                                <span style={{ fontStyle: 'italic', fontSize: '1.4rem' }}>{formatDate(n.created_date, Constants.MMM_Do_YYYY)}</span>
                                             </Col>
                                             <Col>
                                                 <span className="text--sub__bigger2">{n.content}</span>

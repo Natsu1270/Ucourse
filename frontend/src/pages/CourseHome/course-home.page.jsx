@@ -116,10 +116,15 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                         />
                     </Route>
                     <Route exact path={`${match.url}/forums`}>
-                        <Forums forums={forums} isLoading={isLoading} />
+                        <Forums
+                            token={token}
+                            courseHome={courseHomeDetail}
+                            forums={forums}
+                            isLoading={isLoading}
+                            userRole={userRole} />
                     </Route>
                     <Route exact path={`${match.url}/forums/:forum_id`}>
-                        <ForumDetail token={token} />
+                        <ForumDetail token={token} courseHomeId={courseHomeDetail.id} />
                     </Route>
                     <Route exact path={`${match.url}/forums/:forum_id/threads/:thread_id`}>
                         <ThreadDetail token={token} />

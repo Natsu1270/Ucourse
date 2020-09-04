@@ -1,6 +1,8 @@
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 
+from course_homes.models import CourseHome
+from notifications.models import Notification
 from .models import Forum, Thread, ThreadResponse
 from . import serializers
 from api.utils import uc_response
@@ -11,6 +13,19 @@ class ForumListAPI(generics.ListCreateAPIView):
         permissions.IsAuthenticated
     ]
     serializer_class = serializers.ForumSerializer
+
+    def post(self, request, *args, **kwargs):
+        course_home_id = self.request.data['courseHomeId']
+        name = self.request.data['name']
+        instance = Forum.objects.create(name=name, course_home_id=course_home_id)
+        try:
+            course_home = CourseHome.objects.get(pk=course_home_id)
+            students = course_home.students.all()
+            for student in students:
+                Notification.objects.create(user=student, type="4", reference=instance.id)
+        except CourseHome.DoesNotExist:
+            pass
+        return Response(data=serializers.ForumSerializer(instance=instance).data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
         course_home = self.request.query_params['course_home_id']
@@ -38,6 +53,7 @@ class ThreadListAPI(generics.ListCreateAPIView):
         return queryset
 
     def post(self, request, *args, **kwargs):
+        course_home_id = self.request.data['courseHomeId']
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
@@ -45,6 +61,15 @@ class ThreadListAPI(generics.ListCreateAPIView):
             created_by=request.user, forum=data['forum'], name=data['name'],
             content=data['content']
         )
+
+        try:
+            course_home = CourseHome.objects.get(pk=course_home_id)
+            students = course_home.students.all()
+            for student in students:
+                Notification.objects.create(user=student, type="5", reference=thread.id)
+        except CourseHome.DoesNotExist:
+            pass
+
 
         return Response({
             "data": {},

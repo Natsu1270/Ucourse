@@ -11,7 +11,7 @@ class Forum(models.Model):
     info = RichTextField(blank=True, null=True)
     course_home = models.ForeignKey(CourseHome, related_name='forums', on_delete=models.CASCADE)
     status = models.BooleanField(default=True)
-    created_date = models.DateField(default=timezone.now)
+    created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
