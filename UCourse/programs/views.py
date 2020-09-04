@@ -118,7 +118,7 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
         program_id = request.data['program']
         errorCode = request.data['errorCode']
         extraData = request.data['extraData']
-        resUrl = extraData.split("=")[1]
+        # resUrl = extraData.split("=")[1]
 
         if errorCode == "0":
             query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
@@ -137,11 +137,11 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
 
                 StudentProgram.objects.create(student_id=user.id, program_id=program_id)
                 return Response({
-                    "redirect": resUrl,
+                    "redirect": None,
                     "result": True,
                 }, status=status.HTTP_200_OK)
 
         return Response({
-            "redirect": resUrl,
+            "redirect": None,
             "result": False,
         }, status=status.HTTP_200_OK)

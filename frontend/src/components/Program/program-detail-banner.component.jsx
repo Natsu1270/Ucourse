@@ -45,7 +45,7 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
                 setOwn(true)
             }
         } catch (err) {
-            message.error("Có lỗi xả ra: " + err.message)
+            message.error("Có lỗi xảy ra: " + err.message)
         }
         setIsRegistering(false)
     }
@@ -55,7 +55,7 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
             message.error(Constants.UN_AUTHORIZATION_ERROR, 1.5, () => dispatch(showRLModal()))
             return
         }
-        if (price === "0") {
+        if (!program.price && program.price == 0) {
             return registerProgram()
         }
         setShowPayment(true)
@@ -87,7 +87,7 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
                             {program.short_description}
                         </p>
                         <h3 className="text-white">
-                            Học phí: {isRegistering ? Constants.SPIN_ICON : renderPrice()}
+                            Học phí: {isRegistering ? Constants.SPIN_ICON : renderPrice()} {program.discount_percentage || (program.price && program.price != 0) ? `(Giảm ${program.discount_percentage}%)` : null}
                         </h3>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
@@ -105,7 +105,10 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
                 title={<h1>Thanh toán</h1>}
                 closeIcon={<i>X</i>}
                 visible={showPayment}
-                onCancel={() => setShowPayment(false)}
+                onCancel={() => {
+                    setShowPayment(false)
+                    setIsRegistering(false)
+                }}
                 footer={[
                     <Button type="primary" danger key="back" onClick={() => setShowPayment(false)}>
                         Hủy

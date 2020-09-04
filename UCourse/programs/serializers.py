@@ -38,7 +38,7 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'discount', 'price',
+            'id', 'name', 'code', 'icon', 'slug', 'discount', 'discount_percentage', 'price',
             'program_course', 'benefits', 'pre_requisites',
             'courses_count', 'status', 'field', 'bought_courses',
             'short_description', 'full_description', 'is_my_program'
@@ -58,8 +58,8 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
         if obj.discount:
             price -= int(obj.discount)
         if obj.discount_percentage:
-            price *= obj.discount_percentage
-        return price
+            price *= (100-obj.discount_percentage)/100
+        return int(price)
 
     def get_bought_courses(self, obj):
         user = self.context.get('user')

@@ -98,7 +98,7 @@ class ThreadSerializer(ModelSerializer):
     def get_course_home(obj):
         course_home = obj.forum.course_home
         return CourseHomeForumSerializer(instance=course_home).data
-    
+
     @staticmethod
     def get_reply_count(obj):
         return obj.thread_replies.count()
