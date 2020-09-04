@@ -48,6 +48,15 @@ const NotificationPage = ({ notifications, loading }) => {
                         Đăng ký thành công chương trình học <span className="b-500">{reference.name}</span>
                     </span>
                 }
+                if (n.type === "3") {
+                    onClick = () => {
+                        readNoti(n.id)
+                        window.open(`/learn/${reference.slug}`, '_self')
+                    }
+                    content = <span>
+                        Đăng ký thành công lớp <span className="b-500">{reference.full_name}</span>
+                    </span>
+                }
                 return { ...n, content, onClick }
             })
             setMyNotifications(notiList)

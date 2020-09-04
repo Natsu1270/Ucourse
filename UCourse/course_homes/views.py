@@ -9,6 +9,7 @@ import datetime
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 from courses.models import Course, UserCourse
 from courses.serializers import UserCourseSerializer
+from notifications.models import Notification
 
 from . import serializers
 from course_homes.models import CourseHome, LearningTopic, TopicAsset, Assignment, StudentAssignment, StudentNote
@@ -61,6 +62,7 @@ class RegisterClassAPI(generics.GenericAPIView):
 
             course_home.students.add(request.user)
             course_home.save()
+            Notification.objects.create(user_id=user.id, reference=course_home.id, type='3')
             return Response({
                 "data": {},
                 "result": can_register,
