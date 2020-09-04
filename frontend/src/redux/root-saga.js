@@ -1,7 +1,7 @@
 import { all, call } from 'redux-saga/effects'
 
 import { authSaga } from './Auth/auth.sagas'
-import { profileSaga} from './Profile/profile.sagas'
+import { profileSaga } from './Profile/profile.sagas'
 import { searchSaga } from './Search/search.sagas'
 import { fieldSaga } from './Field/field.saga'
 import { courseSaga } from './Course/course.sagas'
@@ -11,6 +11,7 @@ import courseHomeSaga from './CourseHome/course-home.sagas'
 import homeSaga from "./Home/home.sagas"
 import examSaga from './Exam/exam.sagas'
 import forumSaga from './Forum/forum.sagas'
+import notificationSaga from './Notification/notification.sagas'
 
 export default function* rootSaga() {
     yield all([
@@ -25,5 +26,6 @@ export default function* rootSaga() {
         call(homeSaga),
         call(examSaga),
         call(forumSaga),
+        call(notificationSaga)
     ])
 }

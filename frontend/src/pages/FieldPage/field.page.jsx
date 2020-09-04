@@ -1,9 +1,8 @@
-import React, { useEffect, lazy, Suspense } from 'react'
+import React, { useEffect, lazy } from 'react'
 import { useDispatch } from 'react-redux';
 import { getFieldStart } from '../../redux/Field/field.actions';
 
 const FieldOverview = lazy(() => import('../../components/Field/field-overview.component'));
-const FieldDetailPage = lazy(() => import('./field-detail.page'));
 
 
 const FieldPage = () => {

@@ -1,5 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import generics, permissions, views, status
+
+from notifications.models import Notification
 from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer
 from api.permissions import IsTeacherOrTARoleOrReadOnly
 from .models import Course, CourseDetail, UserBuyCourse, UserViewCourse
@@ -94,6 +96,7 @@ class BuyCourseAPI(generics.GenericAPIView):
             }, status=status.HTTP_201_CREATED)
         
         UserBuyCourse.objects.create(user=user, course_id=course_id)
+        Notification.objects.create(user=user, reference=course_id, type='1')
         return Response({
             "result": True,
             "message": "Register Successfully",
@@ -122,6 +125,7 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
             json_response = json.loads(response_data)
             if json_response["data"]["status"] == 0:    
                 course = Course.objects.get(pk=course_id)
+                Notification.objects.create(user=user, reference=course_id, type='1')
                 try:
                     UserBuyCourse.objects.get(user=user, course_id=course_id)
                 except UserBuyCourse.DoesNotExist:

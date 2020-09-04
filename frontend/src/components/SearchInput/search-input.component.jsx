@@ -85,7 +85,7 @@ const SearchInput = ({ width, value }) => {
                 dropdownStyle={{ width: 300 }}
                 style={{ width: '100%' }}
                 options={options}
-                optionLabelProp="value"
+                // optionLabelProp="value"
                 onChange={(value) => setSearch(value)}
             >
                 <Input

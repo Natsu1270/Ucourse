@@ -8,7 +8,7 @@ import {
     UserOutlined, MailOutlined, CalendarOutlined, EnvironmentOutlined,
     PhoneOutlined, ManOutlined, HeartOutlined, HomeOutlined, SmileOutlined, DollarCircleOutlined, RocketOutlined
 } from '@ant-design/icons';
-import { formatDate, timeDiff } from '../../utils/text.utils';
+import { timeDiff } from '../../utils/text.utils';
 import Constants from '../../constants';
 import ResultComponent from '../../components/Common/result.component'
 import { tokenSelector } from '../../redux/Auth/auth.selects'

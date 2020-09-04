@@ -7,7 +7,6 @@ import assignmentAvatar from '../../assets/exam.png';
 import quizIcon from '../../assets/quiz.png';
 import Constants from "../../constants";
 import { parseHtml, formatDate, isTimeBefore } from "../../utils/text.utils"
-import { BACKEND_HOST } from '../../configs';
 
 import {
     CaretDownOutlined, SettingTwoTone, DeleteOutlined,
@@ -109,15 +108,15 @@ const CourseHomeTopic = ({
         try {
             if (type === "asset") {
                 const result = await deleteTopicAsset(data)
-                const updateAssets = assets.filter(asset => asset.id != id)
+                const updateAssets = assets.filter(asset => asset.id !== id)
                 setAssets(updateAssets)
             } else if (type === "assignment") {
                 const result = await deleteAssigment(data)
-                const updateAssignments = assignments.filter(ass => ass.id != id)
+                const updateAssignments = assignments.filter(ass => ass.id !== id)
                 setAssignments(updateAssignments)
             } else {
                 const result = await deleteExam(data)
-                const updateExams = quizes.filter(q => q.id != id)
+                const updateExams = quizes.filter(q => q.id !== id)
                 setQuizes(updateExams)
             }
             message.success("Xoá thành công")

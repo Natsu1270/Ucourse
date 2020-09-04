@@ -5,6 +5,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from courses.models import Course
+from notifications.models import Notification
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from .serializers import FieldSerializer, FieldMinSerializer, ProgramDetailSerializer, ProgramSerializer
 from .models import Field, Program, UserBuyProgram, StudentProgram, UserViewProgram
@@ -89,6 +90,7 @@ class BuyProgramAPI(generics.GenericAPIView):
 
         UserBuyProgram.objects.create(user=user, program_id=program_id)
         StudentProgram.objects.create(student_id=user.id, program_id=program_id)
+        Notification.objects.create(user=user, reference=program_id, type='2')
 
         if program_courses.count() > 0:
             for course in program_courses:
@@ -124,7 +126,7 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
             response_data = response.content.decode("utf-8")
             json_response = json.loads(response_data)
             if json_response["data"]["status"] == 0:
-                # Program.objects.get(pk=program_id)
+                Notification.objects.create(user=user, reference=program_id, type='2')
                 amount = json_response["data"]["amount"]
                 try:
                     instance = UserBuyProgram.objects.get(user=user, program_id=program_id)

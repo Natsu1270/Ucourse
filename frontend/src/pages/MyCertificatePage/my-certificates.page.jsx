@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getAllMyCoursesAndProgramsAPI } from '../../api/home.services'
-import { message, Skeleton, Timeline, Tree, Tabs, Table, Tag, Button, List, Avatar, Space } from 'antd'
+import { message, Tabs, Table, Tag, Button, Avatar, Space } from 'antd'
 import { dayDiff, formatDate } from '../../utils/text.utils'
 import { useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'

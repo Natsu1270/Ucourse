@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { message, Tabs, Table } from 'antd'
 import Constants from '../../constants'
 import { getEventListAPI } from '../../api/event.services'
-//import { getEventDetailAPI } from '../../api/event.services'
 import { formatDate } from '../../utils/text.utils'
 import { Link } from 'react-router-dom'
 const { TabPane } = Tabs

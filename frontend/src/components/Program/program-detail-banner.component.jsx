@@ -9,7 +9,6 @@ import Constants from '../../constants';
 import { useDispatch } from "react-redux";
 import { showRLModal } from "../../redux/UI/ui.actions";
 import { buyProgramAPI } from "../../api/program.services"
-import { userRoleSelector } from '../../redux/Auth/auth.selects';
 
 
 

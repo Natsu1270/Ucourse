@@ -1,0 +1,14 @@
+.noti-item {
+    padding: 1rem 1rem !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,.01);
+    }
+}
+
+
+.is-read {
+    background: rgba($color: #0057e7, $alpha: 0.02);
+}

@@ -19,6 +19,7 @@ const SearchCourses = ({ courses, myCourses }) => {
                                     // const isBought = myCourses ? myCourses.some(c => c.id == course.id) : false
                                     return (
                                         <SearchCourseItem
+                                            key={course.id}
                                             onClick={() => {
                                                 history.push(`/courses/${course.slug}`)
                                             }}

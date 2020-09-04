@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import ErrorBoundary from "../../components/ErrorBoundary/error-boundary.component";
@@ -37,7 +37,6 @@ const ClassDetailPage = () => {
     const { slug, name } = useParams()
     const dispatch = useDispatch()
     const className = slugifyString(slug + name)
-    const [ownCourse, setOwnCourse] = useState(false)
 
     const {
         token, classDetail, classField, classCourse,

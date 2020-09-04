@@ -3,11 +3,10 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Card, Carousel, Skeleton, Collapse, Empty, List, Space, Button } from "antd";
+import { Avatar, Skeleton, Collapse, Empty, List, Space, Button } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
-import HomeCourseCard from "./home-course-card"
 import MyCourseTable from './my-courses-table'
 
 const { Panel } = Collapse;
@@ -116,6 +115,7 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                         isGetting ? <Skeleton active avatar /> :
                             suggestCourses.map(course => (
                                 <CourseCard
+                                    key={course.id}
                                     course={course}
                                     onClick={() => history.push(`/courses/${course.slug}`)} />
                             ))
@@ -127,6 +127,7 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                         isGetting ? <Skeleton active avatar /> :
                             suggestPrograms.map(program => (
                                 <SearchProgramItem
+                                    key={program.id}
                                     img={program.icon}
                                     title={program.name}
                                     num_course={program.courses_count}

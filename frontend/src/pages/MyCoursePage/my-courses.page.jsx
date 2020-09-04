@@ -82,7 +82,7 @@ const MyCoursePage = () => {
                                 {
                                     courses.map(course => {
                                         return (
-                                            <Timeline.Item>
+                                            <Timeline.Item key={course.is}>
                                                 <Tag color="#108ee9" className="mb-4" style={{ fontSize: '1.8rem', padding: '0.4rem' }}>
                                                     {formatDate(course.bought_date, Constants.MMM_Do_YYYY)}
                                                 </Tag>

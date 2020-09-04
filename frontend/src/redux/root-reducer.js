@@ -12,6 +12,7 @@ import courseHomeReducer from './CourseHome/course-home.reducer'
 import homeReducer from "./Home/home.reducer";
 import examReducer from "./Exam/exam.reducer";
 import forumReducer from "./Forum/forum.reducer";
+import notificationReducer from "./Notification/notification.reducers"
 
 
 const rootReducer = combineReducers({
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
     home: homeReducer,
     exam: examReducer,
     forum: forumReducer,
+    notifications: notificationReducer
 });
 
 export default rootReducer

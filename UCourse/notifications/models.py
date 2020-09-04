@@ -4,7 +4,7 @@ from django.utils import timezone
 from users.models import User
 
 
-class Notifications(models.Model):
+class Notification(models.Model):
 
     REGISTER_COURSE = '1'
     REGISTER_PROGRAM = '2'
@@ -17,11 +17,9 @@ class Notifications(models.Model):
     ]
 
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True, blank=True)
+    reference = models.IntegerField(null=True, blank=True)
     content = models.TextField(max_length=200, null=True, blank=True)
     user = models.ForeignKey(User, related_name='notifications', on_delete=models.CASCADE)
     is_read = models.BooleanField(default=False)
-    read_date = models.DateTimeField(null=True, blank=True, auto_now=True)
+    read_date = models.DateTimeField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return "{0} - {1}".format(self.type, self.content[:10])

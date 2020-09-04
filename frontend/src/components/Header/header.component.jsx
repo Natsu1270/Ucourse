@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { logoutStart } from '../../redux/Auth/auth.actions';
@@ -8,13 +8,21 @@ import { Button, Layout, Badge } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import { clearCurrentProfile } from "../../redux/Profile/profile.actions";
-import { NotificationOutlined, NotificationTwoTone } from '@ant-design/icons';
+import { NotificationTwoTone, BellTwoTone } from '@ant-design/icons';
 
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
 
-const Header = ({ token, currentUser }) => {
+const Header = ({ token, currentUser, notifications, isFetching }) => {
     const dispatch = useDispatch();
+    const [unRead, setUnRead] = useState([])
+
+    useEffect(() => {
+        if (notifications.length) {
+            const unRead = notifications.filter(n => n.is_read == false)
+            setUnRead(unRead)
+        }
+    }, [notifications])
 
     const { Header } = Layout;
 
@@ -37,12 +45,14 @@ const Header = ({ token, currentUser }) => {
                     <Link to="/event">Sự kiện</Link>
                     <Link to="/guideline">Trợ giúp</Link>
                     <Link to="/register-class">Đăng ký lớp</Link>
-                    <Badge count={5}>
-                        <Button
-                            type="ghost"
-                            style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
-                            <NotificationTwoTone twoToneColor="white" />Thông báo</Button>
-                    </Badge>
+                    <Link to="/notification">
+                        <Badge count={unRead.length} >
+                            <Button
+                                type="ghost"
+                                style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
+                                <BellTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
+                        </Badge>
+                    </Link>
                 </li>
                 <li className='header-search'>
                     <SearchInput width={400} />

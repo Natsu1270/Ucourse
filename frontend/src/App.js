@@ -17,6 +17,7 @@ import { Spin, Layout } from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import { getProfileStart } from "./redux/Profile/profile.actions";
+import { getMyNotificationsStart } from './redux/Notification/notification.actions'
 import { fetchMyCoursesStart } from "./redux/CourseHome/course-home.actions";
 import { myCourseHomesSelector } from "./redux/CourseHome/course-home.selects";
 import { myCoursesSelector, myProgramsSelector } from "./redux/Home/home.selects"
@@ -25,6 +26,7 @@ import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 import RoleComponent from './components/RoleComponent';
 import TeacherHomePage from './pages/HomePage/teacher-home.page';
+import { myNotificationsSelector, fetchingNotificationSelector } from './redux/Notification/notification.selects';
 
 
 const AdminHomePage = lazy(() => import('./pages/HomePage/admin-home.page'));
@@ -49,16 +51,22 @@ const MyCoursePage = lazy(() => import('./pages/MyCoursePage/my-courses.page'))
 const MyCertificatePage = lazy(() => import('./pages/MyCertificatePage/my-certificates.page'))
 const ProgramProcess = lazy(() => import('./pages/ProgramProcess/program-process.component'))
 const RegisterClassPage = lazy(() => import('./pages/RegisterClass/register-class.page'))
+const NotificationPage = lazy(() => import('./pages/Notification/notification.page'))
+
 
 function App() {
 
     const dispatch = useDispatch();
-    const { token, currentUser, userRole, myCourses, myPrograms } = useSelector(createStructuredSelector({
+    const {
+        token, currentUser, userRole, myCourses, myPrograms, notifications, fetchingNotify
+    } = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
         userRole: userRoleSelector,
         myCourses: myCoursesSelector,
-        myPrograms: myProgramsSelector
+        myPrograms: myProgramsSelector,
+        notifications: myNotificationsSelector,
+        fetchingNotify: fetchingNotificationSelector
     }));
 
     useEffect(() => {
@@ -66,6 +74,7 @@ function App() {
             dispatch(getProfileStart(token));
             dispatch(getAllMyStart(token));
             dispatch(getAllStart());
+            dispatch(getMyNotificationsStart(token))
         }
     }, [dispatch, currentUser, token]);
 
@@ -74,82 +83,83 @@ function App() {
         <Router>
             <div className="App">
                 <Layout>
-                    <Header token={token} currentUser={currentUser} />
-                    <Switch>
-                        <Route exact path="/">
-                            {
-                                currentUser ?
-                                    <RoleComponent
-                                        StudentComponent={PrivateHomePage}
-                                        TeacherTAComponent={TeacherHomePage}
-                                        AdminComponent={AdminHomePage}
-                                        roleCode={userRole.code}
-                                        token={token}
-                                        ownCourses={myCourses} ownPrograms={myPrograms}
-                                    /> :
+                    <Header token={token} currentUser={currentUser} notifications={notifications} isFetching={fetchingNotify} />
+                    <Route exact path="/">
+                        {
+                            currentUser ?
+                                <RoleComponent
+                                    StudentComponent={PrivateHomePage}
+                                    TeacherTAComponent={TeacherHomePage}
+                                    AdminComponent={AdminHomePage}
+                                    roleCode={userRole.code}
+                                    token={token}
+                                    ownCourses={myCourses} ownPrograms={myPrograms}
+                                /> :
 
-                                    <HomePage currentUser={currentUser} />
-                            }
-                        </Route>
-                        <Content className="content">
-                            <Suspense fallback={<Spin />}>
-                                <Switch>
-                                    <Route exact path="/about" component={AboutPage} />
-                                    <Route exact path="/huongdan-thanhtoan" component={GuidePage} />
-                                    <Route exact path="/guideline" component={GuideLinePage} />
-                                    <Route exact path="/lienhe" component={ContactPage} />
-                                    <Route exact path="/cauhoi" component={QuestionPage} />
-                                    <Route exact path="/event" component={EventPage} />
-                                    <AuthRoute exact path="/auth" component={LoginAndRegisterPage} />
-                                    <PrivateRoute path="/profile" component={ProfilePage} />
-                                    <Route exact path="/search"> <SearchPage token={token} /></Route>
-                                    <Route exact path="/field" component={FieldPage} />
-                                    <Route path="/field/:slug" component={FieldDetailPage} />
-                                    <Route path="/programs/:slug" component={ProgramDetail} />
-                                    <Route exact path="/courses/:slug" component={CourseDetail} />
-                                    <Route exact path="/courses/:slug/redirect" component={CoursePaymentPage} />
-                                    <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
-                                    <Route exact path="/ability-tests" component={AbilityTestPage} />
-                                    <Route path="/learn/:slug">
-                                        <CourseHomePage myCourses={myCourses} userRole={userRole} />
-                                    </Route>
-                                    <Route exact path="/user/:username" component={UserProfilePage} />
-                                    <PrivateRoute
-                                        referrer="/my-courses"
-                                        exact
-                                        path="/my-courses"
-                                        component={MyCoursePage}
-                                        token={token}
-                                    />
-                                    <PrivateRoute
-                                        referrer="/my-certificates"
-                                        exact
-                                        path="/my-certificates"
-                                        component={MyCertificatePage}
-                                        token={token}
-                                    />
-                                    <PrivateRoute
-                                        referrer="/program-process"
-                                        exact
-                                        path="/program-process"
-                                        component={ProgramProcess}
-                                        token={token}
-                                    />
-                                    <Route path="/admin">
-                                        <AdminHomePage token={token} />
-                                    </Route>
-                                    <PrivateRoute
-                                        path="/register-class"
-                                        component={RegisterClassPage}
-                                        token={token}
-                                    />
+                                <HomePage currentUser={currentUser} />
+                        }
+                    </Route>
+                    <Content className="content">
+                        <Suspense fallback={<Spin />}>
+                            <Switch>
+                                <Route exact path="/about" component={AboutPage} />
+                                <Route exact path="/huongdan-thanhtoan" component={GuidePage} />
+                                <Route exact path="/guideline" component={GuideLinePage} />
+                                <Route exact path="/lienhe" component={ContactPage} />
+                                <Route exact path="/cauhoi" component={QuestionPage} />
+                                <Route exact path="/event" component={EventPage} />
+                                <AuthRoute exact path="/auth" component={LoginAndRegisterPage} />
+                                <PrivateRoute path="/profile" component={ProfilePage} />
+                                <Route exact path="/search"> <SearchPage token={token} /></Route>
+                                <Route exact path="/field" component={FieldPage} />
+                                <Route path="/field/:slug" component={FieldDetailPage} />
+                                <Route path="/programs/:slug" component={ProgramDetail} />
+                                <Route exact path="/courses/:slug" component={CourseDetail} />
+                                <Route exact path="/courses/:slug/redirect" component={CoursePaymentPage} />
+                                <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
+                                <Route exact path="/ability-tests" component={AbilityTestPage} />
+                                <Route path="/learn/:slug">
+                                    <CourseHomePage myCourses={myCourses} userRole={userRole} />
+                                </Route>
+                                <Route path="/notification">
+                                    <NotificationPage notifications={notifications} loading={fetchingNotify} />
+                                </Route>
+                                <Route exact path="/user/:username" component={UserProfilePage} />
+                                <PrivateRoute
+                                    referrer="/my-courses"
+                                    exact
+                                    path="/my-courses"
+                                    component={MyCoursePage}
+                                    token={token}
+                                />
+                                <PrivateRoute
+                                    referrer="/my-certificates"
+                                    exact
+                                    path="/my-certificates"
+                                    component={MyCertificatePage}
+                                    token={token}
+                                />
+                                <PrivateRoute
+                                    referrer="/program-process"
+                                    exact
+                                    path="/program-process"
+                                    component={ProgramProcess}
+                                    token={token}
+                                />
+                                <Route path="/admin">
+                                    <AdminHomePage token={token} />
+                                </Route>
+                                <PrivateRoute
+                                    path="/register-class"
+                                    component={RegisterClassPage}
+                                    token={token}
+                                />
 
 
-                                    <Route component={Page404NotFound} />
-                                </Switch>
-                            </Suspense>
-                        </Content>
-                    </Switch>
+                                <Route component={Page404NotFound} />
+                            </Switch>
+                        </Suspense>
+                    </Content>
                     <Footer />
                 </Layout>
             </div>

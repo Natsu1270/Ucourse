@@ -25,6 +25,7 @@ urlpatterns = [
     path('events/', include('events.urls')),
     path('certificate/', include('certificates.urls')),
     path('summary/', include('summary.urls')),
-    path('admin/', include('admin.urls'))
+    path('admin/', include('admin.urls')),
+    path('notification/', include('notifications.urls'))
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
