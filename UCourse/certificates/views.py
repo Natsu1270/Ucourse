@@ -17,6 +17,7 @@ from certificates.models import StudentCertificate
 from courses.models import UserCourse
 from courses.serializers import UserCourseSerializer
 from programs.models import StudentProgram, Program
+from programs.serializers import StudentProgramSerializer
 from services.mail_service import send_mail_with_attachments, send_mail_with_attachment
 from . import serializers
 
@@ -243,6 +244,17 @@ class GetAllCourseCertificate(generics.GenericAPIView):
         instance = StudentCertificate.objects.filter(Q(student_id=student.id))
         return Response(
             data=serializers.StudentCertificateSerializer(
+                instance=instance, context=self.get_serializer_context(), many=True).data,
+            status=status.HTTP_200_OK
+        )
+
+
+class GetALLProgramCertificate(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        instance = StudentProgram.objects.all()
+        return Response(
+            data=StudentProgramSerializer(
                 instance=instance, context=self.get_serializer_context(), many=True).data,
             status=status.HTTP_200_OK
         )

@@ -95,7 +95,7 @@ class BuyCourseAPI(generics.GenericAPIView):
                 "status_code": 201
             }, status=status.HTTP_201_CREATED)
         
-        UserBuyCourse.objects.create(user=user, course_id=course_id)
+        UserBuyCourse.objects.create(user=user, course_id=course_id, money='0')
         Notification.objects.create(user=user, reference=course_id, type='1')
         return Response({
             "result": True,
@@ -123,13 +123,14 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
             response = query.call()
             response_data = response.content.decode("utf-8")
             json_response = json.loads(response_data)
-            if json_response["data"]["status"] == 0:    
+            if json_response["data"]["status"] == 0:
+                amount = json_response["data"]["amount"]
                 course = Course.objects.get(pk=course_id)
                 Notification.objects.create(user=user, reference=course_id, type='1')
                 try:
                     UserBuyCourse.objects.get(user=user, course_id=course_id)
                 except UserBuyCourse.DoesNotExist:
-                    instance = UserBuyCourse.objects.create(user=user, course_id=course_id)
+                    instance = UserBuyCourse.objects.create(user=user, course_id=course_id, money=amount)
                 return Response({
                         "redirect": resUrl,
                         "ok": True,

@@ -1,7 +1,11 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { Collapse } from 'antd'
+import { Collapse, Row, Col, Card, Avatar, Space, Tabs, Tag } from 'antd'
 import CourseCard from "../Course/course-card.component";
+import { renderPrice } from '../../utils/text.utils';
+
+const { Meta } = Card;
+const { TabPane } = Tabs;
 
 const ProgramDetailComponents = ({ courses, boughtCourses }) => {
 
@@ -14,78 +18,138 @@ const ProgramDetailComponents = ({ courses, boughtCourses }) => {
     const allLvCourses = courses.filter(course => course.level == 'All level')
 
     return (
-        <section className="mt-10 section-course-components" id="cs-course-components">
+        <section className="mt-5 page-card" id="cs-course-components">
             <div className="section-course-components__content">
                 <h2 className="text--main section-header" id="cs-course-overview">
                     Các khóa học của chương trình
                 </h2>
-                <Collapse bordered accordion>
-                    {
-                        bgCourses.length ? (
-                            <Panel key="1" style={{ fontSize: '2rem' }} header="Khóa cơ bản" className="white-bg">
-                                <div className="dis-flex-start pl-5">
-                                    {
-                                        bgCourses.map(course => {
-                                            const checkBought = boughtCourses.some(c => c.id == course.id)
-                                            return (
-                                                <div className="mr-5" key={course.code}>
-                                                    <CourseCard
-                                                        onClick={() => history.push(`/courses/${course.slug}`)}
-                                                        course={course} isBought={checkBought} />
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </Panel>
-                        ) : <span />
-                    }
-                    {
-                        mdCourses.length ? (
-                            <Panel key="2" style={{ fontSize: '2rem' }} header="Khóa trung cấp" className="white-bg">
-                                {
-                                    <div className="dis-flex-start pl-5">
-                                        {
-                                            mdCourses.map(course => <div className="mr-5">
-                                                <CourseCard course={course} />
-                                            </div>)
-                                        }
-                                    </div>
-                                }
-                            </Panel>
-                        ) : <span />
-                    }
-                    {
-                        adCourses.length ? (
-                            <Panel key="3" style={{ fontSize: '2rem' }} header="Khóa nâng cao" className="white-bg">
-                                {
-                                    <div className="dis-flex-start pl-5">
-                                        {
-                                            adCourses.map(course => <div className="mr-5">
-                                                <CourseCard course={course} />
-                                            </div>)
-                                        }
-                                    </div>
-                                }
-                            </Panel>
-                        ) : <span />
-                    }
-                    {
-                        allLvCourses.length ? (
-                            <Panel key="4" style={{ fontSize: '2rem' }} header="Khóa tổng hợp" className="white-bg">
-                                {
-                                    <div className="dis-flex-start pl-5">
-                                        {
-                                            allLvCourses.map(course => <div className="mr-5">
-                                                <CourseCard course={course} />
-                                            </div>)
-                                        }
-                                    </div>
-                                }
-                            </Panel>
-                        ) : <span />
-                    }
-                </Collapse>
+                <Tabs defaultActiveKey="1">
+
+                    <TabPane tab="Khóa cơ bản" key="1" style={{ fontSize: '2rem' }}>
+                        <Row gutter={[16, 16]}>
+                            {
+                                bgCourses.map(course => {
+                                    const checkBought = boughtCourses.some(c => c.id == course.id)
+                                    return (
+                                        <Col key={course.code}>
+                                            <Card
+                                                hoverable
+                                                className="program-card"
+                                                style={{ width: 300 }}
+                                                onClick={() => history.push(`/courses/${course.slug}`)}
+                                            >
+                                                <Meta
+                                                    avatar={<Avatar size={48} src={course.icon} />}
+                                                    title={course.title}
+                                                    description={<Space>
+                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                                        {
+                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                                        }
+                                                    </Space>}
+                                                />
+                                            </Card>
+
+                                        </Col>
+                                    )
+                                })
+                            }
+                        </Row>
+                    </TabPane>
+                    <TabPane key="2" style={{ fontSize: '2rem' }} tab="Khóa trung cấp" >
+                        <Row gutter={[16, 16]}>
+                            {
+                                mdCourses.map(course => {
+                                    const checkBought = boughtCourses.some(c => c.id == course.id)
+                                    return (
+                                        <Col key={course.code}>
+                                            <Card
+                                                hoverable
+                                                className="program-card"
+                                                style={{ width: 300 }}
+                                                onClick={() => history.push(`/courses/${course.slug}`)}
+                                            >
+                                                <Meta
+                                                    avatar={<Avatar size={48} src={course.icon} />}
+                                                    title={course.title}
+                                                    description={<Space>
+                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                                        {
+                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                                        }
+                                                    </Space>}
+                                                />
+                                            </Card>
+
+                                        </Col>
+                                    )
+                                })
+                            }
+                        </Row>
+                    </TabPane>
+                    <TabPane key="3" style={{ fontSize: '2rem' }} tab="Khóa nâng cao" >
+                        <Row gutter={[16, 16]}>
+                            {
+                                adCourses.map(course => {
+                                    const checkBought = boughtCourses.some(c => c.id == course.id)
+                                    return (
+                                        <Col key={course.code}>
+                                            <Card
+                                                hoverable
+                                                className="program-card"
+                                                style={{ width: 300 }}
+                                                onClick={() => history.push(`/courses/${course.slug}`)}
+                                            >
+                                                <Meta
+                                                    avatar={<Avatar size={48} src={course.icon} />}
+                                                    title={course.title}
+                                                    description={<Space>
+                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                                        {
+                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                                        }
+                                                    </Space>}
+                                                />
+                                            </Card>
+
+                                        </Col>
+                                    )
+                                })
+                            }
+                        </Row>
+                    </TabPane>
+
+                    <TabPane key="4" style={{ fontSize: '2rem' }} tab="Khóa tổng hợp" >
+                        <Row gutter={[16, 16]}>
+                            {
+                                allLvCourses.map(course => {
+                                    const checkBought = boughtCourses.some(c => c.id == course.id)
+                                    return (
+                                        <Col key={course.code}>
+                                            <Card
+                                                hoverable
+                                                className="program-card"
+                                                style={{ width: 300 }}
+                                                onClick={() => history.push(`/courses/${course.slug}`)}
+                                            >
+                                                <Meta
+                                                    avatar={<Avatar size={48} src={course.icon} />}
+                                                    title={course.title}
+                                                    description={<Space>
+                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                                        {
+                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                                        }
+                                                    </Space>}
+                                                />
+                                            </Card>
+                                        </Col>
+                                    )
+                                })
+                            }
+                        </Row>
+                    </TabPane>
+                </Tabs>
             </div>
         </section>
     )

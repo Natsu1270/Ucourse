@@ -124,6 +124,7 @@ class UserViewCourse(models.Model):
 class UserBuyCourse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    money = models.CharField(max_length=20, null=True, blank=True)
     bought_date = models.DateField(default=timezone.now)
 
     class Meta:

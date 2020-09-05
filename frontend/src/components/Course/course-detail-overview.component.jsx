@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react'
+import React, { useRef, useState } from 'react'
 import Truncate from 'react-truncate'
-import {parseHtml} from "../../utils/text.utils";
+import { parseHtml } from "../../utils/text.utils";
 import Constants from "../../constants";
-import {ArrowDownOutlined, ArrowUpOutlined} from '@ant-design/icons'
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 import Skill from "./skill.component";
-import {Skeleton} from "antd";
+import { Skeleton } from "antd";
 
-const CourseDetailOverview = ({full_description, open_date, end_date, level, benefits, skills, num_course, isLoading}) => {
+const CourseDetailOverview = ({ full_description, open_date, end_date, level, benefits, skills, num_course, isLoading }) => {
     const overviewRef = useRef();
     const [expanded, setExpand] = useState(false);
     const [truncated, setTruncate] = useState(false);
@@ -27,20 +27,20 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
         window.scrollTo(0, overviewRef.current.offsetTop)
     };
     return (
-        <section ref={overviewRef} className="mt-10 section-course-overview" id="cs-course-overview">
+        <section ref={overviewRef} className="mt-5 page-card" id="cs-course-overview">
             <div className="section-course-overview__content">
                 <h2 className="text--main section-header" id="cs-course-overview">
                     Tổng quan về khóa học
                 </h2>
 
-                <Skeleton active paragraph={{rows: 4}} loading={isLoading}>
+                <Skeleton active paragraph={{ rows: 4 }} loading={isLoading}>
                     {
                         full_description ? <div className="text--sub__bigger section-course-overview__description">
                             <Truncate
                                 lines={!expanded && 3}
                                 ellipsis={(
                                     <span>... <p className='toggle-text'
-                                                 onClick={toggleLines}>Hiện thêm<ArrowDownOutlined/></p></span>
+                                        onClick={toggleLines}>Hiện thêm<ArrowDownOutlined /></p></span>
                                 )}
                                 onTruncate={handleTruncate}
                             >
@@ -48,7 +48,7 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                             </Truncate>
                             {!truncated && expanded && (
                                 <span> <p className='toggle-text'
-                                          onClick={toggleLinesAndScrollback}>Ẩn bớt<ArrowUpOutlined/></p></span>
+                                    onClick={toggleLinesAndScrollback}>Ẩn bớt<ArrowUpOutlined /></p></span>
                             )}
                         </div> : null
                     }
@@ -66,16 +66,16 @@ const CourseDetailOverview = ({full_description, open_date, end_date, level, ben
                             </div>
                         </div>
                     </div>
-                </div> : <span/>}
+                </div> : <span />}
                 {
                     skills ? (<div className="section-course-overview__skill mt-5">
                         <h3 className="theme-font-color">Các kỹ năng sẽ đạt được</h3>
                         <ul className="section-course-overview__skill--sets">
                             {
-                                skills.map(skill => <Skill key={skill} skill={skill}/>)
+                                skills.map(skill => <Skill key={skill} skill={skill} />)
                             }
                         </ul>
-                    </div>) : <span/>
+                    </div>) : <span />
                 }
             </div>
         </section>

@@ -87,8 +87,12 @@ const ProgramDetailBanner = ({ isOwn, program, userRole, programCourses, token }
                             {program.short_description}
                         </p>
                         <h3 className="text-white">
-                            Học phí: {isRegistering ? Constants.SPIN_ICON : renderPrice()} {program.discount_percentage || (program.price && program.price != 0) ? `(Giảm ${program.discount_percentage}%)` : null}
+                            Học phí: {isRegistering ? Constants.SPIN_ICON : renderPrice()} {program.discount_percentage && (program.price && program.price != 0) ? `(Giảm ${program.discount_percentage}%)` : null}
                         </h3>
+                        <p style={{ color: '#fff', fontSize: '1.4rem', fontStyle: 'italic' }}>
+                            *Ghi chú: giá của chương trình được tính từ tổng giá của tất cả các khóa học, nhân với phần trăm được giảm giá,<br />
+                            Nếu có khóa học đã hoàn thành thì sẽ không tính thêm khóa học đó nữa
+                        </p>
                         <div className="d-flex enroll-area mt-5">
                             <Skeleton active loading={isRegistering}>
                                 <Button onClick={() => own ? null : handleRegister()} className="register-btn cs-btn--animated" disabled={userRole.code === 'TA' || userRole.code === 'TC' || userRole.code === 'AD'}>

@@ -103,3 +103,16 @@ class EditQuestionAPI(generics.GenericAPIView):
             "data": serializers.QuestionSerializer(instance=question).data,
             "result": True, "message": "Edit question successfully", "status_code": 201
         }, status=status.HTTP_200_OK)
+
+
+class GetQuestionsByTeacher(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        queryset = Question.objects.filter(created_by=user).order_by('-created_date')
+
+        return Response(
+            data=serializers.QuestionSerializer(instance=queryset, many=True).data,
+            status=status.HTTP_200_OK
+        )

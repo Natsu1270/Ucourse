@@ -40,3 +40,16 @@ export const editQuestion = (params) => {
         data: params
     })
 }
+
+
+export const getQuestionsByTeacher = (token) => {
+
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'GET',
+        url: `${API_URL}/questions-by-teacher`,
+    })
+}

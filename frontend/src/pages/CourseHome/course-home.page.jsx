@@ -23,6 +23,7 @@ import Forums from "../../components/Forum/forums.component";
 import ForumDetail from "../../components/Forum/forum-detail.component";
 import ThreadDetail from "../../components/Forum/thread-detail.component";
 import RoleComponent from "../../components/RoleComponent"
+import QuestionBank from '../../components/CourseHome/Questions/course-home-questions.component';
 
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))
@@ -90,7 +91,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
     return (
         <Layout className="course-home">
             <Router>
-                <CourseHomeSider course={course} isLoading={isLoading} match={match} />
+                <CourseHomeSider course={course} isLoading={isLoading} match={match} userRole={userRole} />
                 <Route exact path={match.url}>
                     <CourseHomeInfo
                         courseInfo={courseInfo}
@@ -154,6 +155,10 @@ const CourseHomePage = ({ myCourses, userRole }) => {
 
                 <Route exact path={`${match.url}/calendar`}>
                     <CourseHomeCalendar courseHome={courseHomeDetail} />
+                </Route>
+
+                <Route exact path={`${match.url}/questions`}>
+                    <QuestionBank token={token} />
                 </Route>
 
                 <Route exact path={`${match.url}/certificate`}>

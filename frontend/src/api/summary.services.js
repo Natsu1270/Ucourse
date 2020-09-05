@@ -105,3 +105,14 @@ export function requestProgramCertificate({ token, programId }) {
         params: { programId }
     })
 }
+
+
+
+export function getAllProgramCertificate() {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json' },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/all-program-cer`,
+    })
+}

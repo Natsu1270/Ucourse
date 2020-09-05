@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Layout, Menu, Skeleton } from "antd";
 import { Link, useHistory } from 'react-router-dom';
-import { HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined, SolutionOutlined, CalendarOutlined } from '@ant-design/icons'
+import { HomeOutlined, LaptopOutlined, BookOutlined, FileProtectOutlined, TeamOutlined, SolutionOutlined, CalendarOutlined, QuestionOutlined } from '@ant-design/icons'
 import Constants from "../../constants";
 
-const CourseHomeSider = ({ isLoading, course, match }) => {
+const CourseHomeSider = ({ isLoading, course, match, userRole }) => {
 
     const [collapsed, setCollapsed] = useState(false);
     const { SubMenu } = Menu;
@@ -55,6 +55,12 @@ const CourseHomeSider = ({ isLoading, course, match }) => {
                     <CalendarOutlined />
                     <span>Lịch</span>
                 </Menu.Item>
+                {
+                    userRole ? userRole.code == 'TC' ? <Menu.Item onClick={() => history.push(`${match.url}/questions`)} key="question">
+                        <QuestionOutlined />
+                        <span>Ngân hàng câu hỏi</span>
+                    </Menu.Item> : null : null
+                }
                 <Menu.Item onClick={() => history.push(`${match.url}/certificate`)} key="certificate">
                     <FileProtectOutlined />
                     <span>Chứng chỉ</span>

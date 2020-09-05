@@ -7,5 +7,6 @@ urlpatterns = [
     # path('student_exams', views.StudentExamPrivateListAPI.as_view(), name='student_exam_detail'),
     # path('submit', views.SubmitExamAPI.as_view()),
     path('create', views.CreateQuestionAPI.as_view()),
-    path('edit', views.EditQuestionAPI.as_view())
+    path('edit', views.EditQuestionAPI.as_view()),
+    path('questions-by-teacher', views.GetQuestionsByTeacher.as_view())
 ]

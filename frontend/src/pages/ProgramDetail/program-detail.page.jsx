@@ -103,7 +103,7 @@ const ProgramDetailPage = () => {
             full_description={program.full_description}
             num_course={program.courses_count}
         />
-        <ProgramDetailPrequire prequire={program.pre_requisites} />
+        {/* <ProgramDetailPrequire prequire={program.pre_requisites} /> */}
         <ProgramDetailComponents courses={programCourses} boughtCourses={program.bought_courses} />
 
     </div>)
