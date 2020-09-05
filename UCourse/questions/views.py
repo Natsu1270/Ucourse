@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from questions import serializers
@@ -31,12 +32,15 @@ class CreateQuestionAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        exam = Exam.objects.get(pk=request.data['exam'])
-        choices = request.data['choices']
+        exam_id = request.data.get('exam', None)
+        choices = request.data.get('choices', [])
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         question = serializer.save()
-        question.question_exams.add(exam)
+        if exam_id is not None:
+            exam = Exam.objects.get(pk=request.data['exam'])
+            question.question_exams.add(exam)
+            question.save()
 
         for choice in choices:
             new_choice = Choice.objects.create(content=choice['content'])
@@ -116,3 +120,34 @@ class GetQuestionsByTeacher(generics.GenericAPIView):
             data=serializers.QuestionSerializer(instance=queryset, many=True).data,
             status=status.HTTP_200_OK
         )
+
+
+class GetQuestionsByTeacherRemain(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        exam_id = self.request.query_params.get('examId')
+        exam = Exam.objects.get(pk=exam_id)
+        queryset = Question.objects.filter(Q(created_by=user) & ~Q(question_exams__in=[exam])).order_by('-created_date')
+
+        return Response(
+            data=serializers.QuestionSerializer(instance=queryset, many=True).data,
+            status=status.HTTP_200_OK
+        )
+
+
+class AddToExam(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        exam_id = self.request.data.get('examId')
+        exam = Exam.objects.get(pk=exam_id)
+        rows = self.request.data.get('rows')
+        for question_id in rows:
+            exam.questions.add(question_id)
+        exam.save()
+
+        return Response({
+            "result": True
+        }, status=status.HTTP_200_OK)

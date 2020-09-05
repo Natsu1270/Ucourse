@@ -54,7 +54,7 @@ const CourseDetailOverview = ({ full_description, open_date, end_date, level, be
                     }
                 </Skeleton>
 
-                {benefits ? <div className="section-course-overview__detail">
+                {benefits ? <div>
                     <h3 className="theme-font-color">Bạn sẽ học được từ khóa học</h3>
                     <div className="section-course-overview__detail-items">
                         <div className="section-course-overview__detail-item">

@@ -39,7 +39,6 @@ class Course(models.Model):
     ]
 
     title = models.CharField(max_length=50)
-    code = models.CharField(max_length=50, unique=True)
     icon = models.ImageField(upload_to='courses/icon', blank=True, null=True)
     level = models.CharField(max_length=2, choices=COURSE_LEVEL_CHOICES)
     status = models.CharField(max_length=10, choices=COURSE_STATUS_CHOICES)
@@ -164,7 +163,6 @@ class UserCourse(models.Model):
 
 class Skill(models.Model):
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
         return self.name

@@ -45,14 +45,16 @@ const Header = ({ token, currentUser, notifications, isFetching }) => {
                     <Link to="/event">Sự kiện</Link>
                     <Link to="/guideline">Trợ giúp</Link>
                     <Link to="/register-class">Đăng ký lớp</Link>
-                    <Link to="/notification">
-                        <Badge count={unRead.length} >
-                            <Button
-                                type="ghost"
-                                style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
-                                <BellTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
-                        </Badge>
-                    </Link>
+                    {
+                        token ? <Link to="/notification">
+                            <Badge count={unRead.length} >
+                                <Button
+                                    type="ghost"
+                                    style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
+                                    <BellTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
+                            </Badge>
+                        </Link> : null
+                    }
                 </li>
                 <li className='header-search'>
                     <SearchInput width={400} />

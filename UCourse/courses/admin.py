@@ -3,10 +3,10 @@ from .models import Course, CourseDetail, Skill, UserBuyCourse
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code', 'level', 'status')
+    list_display = ('__str__', 'level', 'status')
     list_filter = ('level', 'status')
-    list_display_links = ('__str__', 'code')
-    search_fields = ('title', 'code')
+    list_display_links = ('__str__',)
+    search_fields = ('title',)
     ordering = ('id',)
     readonly_fields = ('created_by', 'created_by_name', 'created_date', 'updated_date')
 

@@ -17,7 +17,6 @@ class Asset(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     info = models.TextField(blank=True, null=True)
     resource_type = models.CharField(max_length=10, choices=LESSON_MATERIAL_TYPES)
     content = models.FileField(upload_to="resource/assets/")

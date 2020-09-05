@@ -8,9 +8,9 @@ class CourseInline(admin.TabularInline):
 
 
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "code")
+    list_display = ("__str__", )
     list_filter = ("status",)
-    search_fields = ("name", "code")
+    search_fields = ("name",)
     readonly_fields = ("created_by", "created_date", "created_by_name", "modified_date")
     inlines = [CourseInline]
 
@@ -21,8 +21,8 @@ class ProgramAdmin(admin.ModelAdmin):
 
 
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "code")
-    search_fields = ("name", "code")
+    list_display = ("__str__", )
+    search_fields = ("name", )
     readonly_fields = ("created_date", "slug")
 
 

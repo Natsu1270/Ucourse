@@ -129,12 +129,6 @@ const CourseDetail = () => {
             <CourseClasses token={token} course={course} isOwn={ownCourse} classes={courseHomeShows}
                 isLoading={isFetching} />
 
-            {/*<CourseDetailTeacher />*/}
-
-            {/*<CourseDetailReview course={course}/>*/}
-
-            {/*<CourseDetailRelated course={course}/>*/}
-
             <AbilityTest abilityTestId={course.ability_test} token={token} />
 
             <Modal title="Đăng ký khóa học thành công"

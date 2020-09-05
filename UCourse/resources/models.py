@@ -17,7 +17,6 @@ class Resource(models.Model):
     ]
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     icon = models.ImageField(upload_to='resource/icon', null=True, blank=True)
     info = models.TextField(blank=True, null=True)
     resource_type = models.CharField(max_length=10, choices=LESSON_MATERIAL_TYPES)

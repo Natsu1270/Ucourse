@@ -26,7 +26,7 @@ class StudentExamAdmin(admin.ModelAdmin):
 
 @admin.register(AbilityTest)
 class AbilityTestAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code', 'course')
+    list_display = ('__str__', 'course')
     list_filter = ('status', 'course')
     readonly_fields = ('created_date', 'created_by')
     # inlines = [UserTakenInline]

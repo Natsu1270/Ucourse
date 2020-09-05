@@ -62,7 +62,6 @@ class Question(models.Model):
 class QuestionKit(models.Model):
 
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     skill = models.ForeignKey(Skill, related_name='skill_question_kits', on_delete=models.SET_NULL, null=True)
     status = models.BooleanField(default=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='kit_creator')

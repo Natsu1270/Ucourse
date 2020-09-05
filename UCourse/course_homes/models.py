@@ -81,7 +81,6 @@ class LearningTopic(models.Model):
     ]
 
     name = models.CharField(max_length=50)
-    code = models.CharField(max_length=10, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
     info = RichTextField(blank=True, null=True)
     course_home = models.ForeignKey(

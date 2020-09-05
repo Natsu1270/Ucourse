@@ -14,6 +14,7 @@ import Constants from '../../constants';
 import AdminSider from '../../components/Admin/admin-sider.component';
 const AdminReport = lazy(() => import('../../components/Admin/report-admin.component'))
 const IncomeAdmin = lazy(() => import('../../components/Admin/income-admin.component'))
+const CertificateAdmin = lazy(() => import('../../components/Admin/certificate-admin.component'))
 const ResourcesAdmin = lazy(() => import('../../components/Admin/resources-admin.component'))
 
 
@@ -79,6 +80,11 @@ const AdminHomePage = ({ token }) => {
                         <Route exact path={`${match.url}/income`}>
                             <IncomeAdmin
                                 data={incomeData}
+                                loading={loading}
+                            />
+                        </Route>
+                        <Route exact path={`${match.url}/certificate`}>
+                            <CertificateAdmin
                                 loading={loading}
                             />
                         </Route>

@@ -3,10 +3,10 @@ from .models import Tag, SearchKeyWord
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code')
-    list_display_links = ('__str__', 'code')
-    search_fields = ('name', 'code')
-    ordering = ('name', 'code')
+    list_display = ('__str__', )
+    list_display_links = ('__str__', )
+    search_fields = ('name', )
+    ordering = ('name', )
     readonly_fields = ('created_by', 'created_date')
 
     def save_model(self, request, obj, form, change):

@@ -22,11 +22,11 @@ const CourseHomeInfo = ({ courseInfo, isLoading, userRole, token, slug }) => {
 
     const updateInfo = async () => {
         setUpdating(true)
-        const result = await updateCourseHomeInfo({ token, slug, info })
-        if (result.status === 200) {
-            message.success("Cập nhật thành công")
-        } else {
-            message.error("Có lỗi xảy ra")
+        try {
+            const result = await updateCourseHomeInfo({ token, slug, info })
+            message.success('Cập nhật thông tin khóa học thành công!')
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
             setInfo(courseInfo)
         }
         setUpdating(false);
@@ -38,10 +38,11 @@ const CourseHomeInfo = ({ courseInfo, isLoading, userRole, token, slug }) => {
             return (
                 <Space>
                     <Button
-                        disabled={updating}
+                        loading={updating}
                         type="danger" onClick={() => setEditing(false)}><CloseOutlined /> Huỷ</Button>
                     <Button
-                        disabled={updating || info === courseInfo}
+                        disabled={info === courseInfo}
+                        loading={updating}
                         type="primary" onClick={() => updateInfo()}><CheckOutlined /> Xong</Button>
                 </Space>
             )

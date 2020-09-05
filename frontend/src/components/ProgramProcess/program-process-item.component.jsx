@@ -56,7 +56,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
     const renderRemain = () => {
         if (program.program_course) {
             const passNum = calPass()
-            if (passNum == -1) return <Tag color="red" style={{ fontSize: '1.8rem', padding: '0.8rem' }}>
+            if (passNum == -1) return <Tag color="#f50" style={{ fontSize: '1.8rem', padding: '0.8rem' }}>
                 Bạn chưa hoàn thành khóa học nào trong chương trình
                 </Tag>
             if (program.program_course.length - passNum == 0) {
@@ -64,7 +64,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                     Bạn đã hoàn thành hết các khóa học, nhấn "Yêu cầu cấp phát chứng chỉ" để nhận chứng chỉ
                     </Tag>
             }
-            return <Tag color="red" style={{ fontSize: '1.8rem', padding: '0.5rem' }}>
+            return <Tag color="#f50" style={{ fontSize: '1.8rem', padding: '0.5rem' }}>
                 {`Còn ${program.program_course.length - passNum}/${program.program_course.length} khóa để hoàn tất chương trình học`}
             </Tag>
         }
@@ -99,28 +99,22 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                     <Row justify="center" className="mb-5">
                         <Col>
                             {
-                                !program.student_program.received_certificate ?
-                                    (<Button
-                                        loading={requesting}
-                                        size="large" type="primary"
-                                        style={{ background: '#4a91f2', border: 'none' }}
-                                        onClick={requestCertificate}>
-                                        <FileDoneOutlined /> Yêu cầu cấp phát chứng chỉ chương trình
-                                    </Button>) : <Space>
+                                program.student_program.received_certificate ?
+                                    <Space>
                                         <Avatar src={certificateIcon} size={48} shape="square" /> <Button
                                             onClick={() => window.open(BACKEND_HOST + program.student_program.file)}>
                                             Click để xem chứng chỉ
                                             </Button>
-                                    </Space>
+                                    </Space> : null
                             }
                         </Col>
                     </Row> : null
             }
 
             <Row gutter={[18, 18]} className="text--sub__bigger" style={{ fontSize: '1.8rem' }}>
-                <Col span={24}>
+                <Col span={12}>
                     <Row gutter={16}>
-                        <Col span={8}>
+                        <Col span={10}>
                             <FireOutlined /> Trạng thái
                     </Col>
                         <Col>
@@ -129,9 +123,9 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                     </Row>
                 </Col>
 
-                <Col span={24}>
+                <Col span={12}>
                     <Row gutter={16}>
-                        <Col span={8}>
+                        <Col span={10}>
                             <FieldTimeOutlined /> Ngày bắt đầu
                         </Col>
                         <Col>
@@ -140,9 +134,9 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                     </Row>
                 </Col>
 
-                <Col span={24}>
+                <Col span={12}>
                     <Row gutter={16}>
-                        <Col span={8}>
+                        <Col span={10}>
                             <FieldTimeOutlined /> Ngày hoàn tất
                         </Col>
                         <Col>
@@ -151,9 +145,9 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                     </Row>
                 </Col>
 
-                <Col span={24}>
+                <Col span={12}>
                     <Row gutter={16}>
-                        <Col span={8}>
+                        <Col span={10}>
                             <FileProtectOutlined /> Tình trạng chứng chỉ
                         </Col>
                         <Col>
@@ -166,7 +160,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
 
             </Row>
 
-            <Row justify="center" className="mb-3">
+            <Row className="mb-3">
                 {renderRemain()}
             </Row>
             <List

@@ -83,7 +83,9 @@ function App() {
         <Router>
             <div className="App">
                 <Layout>
-                    <Header token={token} currentUser={currentUser} notifications={notifications} isFetching={fetchingNotify} />
+                    <Header
+                        token={token} currentUser={currentUser} notifications={notifications}
+                        isFetching={fetchingNotify} />
 
                     <Switch>
                         <Route exact path="/">

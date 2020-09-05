@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Layout, Menu, Skeleton } from "antd";
 import { Link, useHistory } from 'react-router-dom';
-import { TeamOutlined, MoneyCollectOutlined, AppstoreOutlined, BorderOutlined, BarChartOutlined } from '@ant-design/icons'
+import { TeamOutlined, MoneyCollectOutlined, AppstoreOutlined, BorderOutlined, BarChartOutlined, FileProtectOutlined } from '@ant-design/icons'
 import Constants from "../../constants";
 
 const AdminSider = ({ match }) => {
@@ -24,6 +24,7 @@ const AdminSider = ({ match }) => {
                 defaultOpenKeys={["p-1"]}
                 style={{ height: '100%' }} >
                 <h3 className="text--main text-center mb-4">Quản trị</h3>
+
                 <SubMenu key='p-1' icon={<BarChartOutlined />} title="Biểu đồ">
                     <Menu.Item
                         onClick={() => history.push(match.url)}
@@ -36,6 +37,9 @@ const AdminSider = ({ match }) => {
                         key="c-3">
                         <MoneyCollectOutlined />Doanh thu</Menu.Item>
                 </SubMenu>
+                <Menu.Item key={"2"} onClick={() => history.push(`${match.url}/certificate`)}>
+                    <FileProtectOutlined />Chứng chỉ chương trình
+                </Menu.Item>
                 <Menu.Item onClick={() => history.push(`${match.url}/report`)} key="3"><BorderOutlined /> Báo cáo</Menu.Item>
             </Menu>
         </Sider>

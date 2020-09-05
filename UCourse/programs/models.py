@@ -8,7 +8,6 @@ from tags.models import Tag
 
 class Field(models.Model):
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     slug = models.SlugField(unique=True)
     icon = models.ImageField(upload_to='field/icon', blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -24,7 +23,6 @@ class Field(models.Model):
 
 class Program(models.Model):
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=50, unique=True)
     status = models.BooleanField(default=True)
     icon = models.ImageField(upload_to='programs/icon', blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True, null=True)

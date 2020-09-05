@@ -53,3 +53,31 @@ export const getQuestionsByTeacher = (token) => {
         url: `${API_URL}/questions-by-teacher`,
     })
 }
+
+
+
+export const getQuestionsRemainByTeacher = (token, examId) => {
+
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'GET',
+        url: `${API_URL}/questions-teacher-remain`,
+        params: { examId }
+    })
+}
+
+export const addQuestionToExam = ({ token, examId, rows }) => {
+
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/add-to-exam`,
+        data: { examId, rows }
+    })
+}

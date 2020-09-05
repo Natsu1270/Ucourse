@@ -134,7 +134,6 @@ class QuestionResponse(models.Model):
 
 class AbilityTest(models.Model):
     name = models.CharField(max_length=255)
-    code = models.CharField(max_length=10, unique=True)
     duration = models.IntegerField()
     status = models.BooleanField(default=True)
     num_questions = models.IntegerField(default=10, blank=True, null=True)

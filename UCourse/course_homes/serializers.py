@@ -156,7 +156,7 @@ class CourseHomeSerializer(serializers.ModelSerializer):
     slug = serializers.CharField(read_only=True)
     forums = ForumSerializer(many=True, read_only=True, required=False)
     is_my_class = serializers.SerializerMethodField(required=False)
-    full_name = serializers.CharField()
+    full_name = serializers.CharField(required=False)
     quiz_num = serializers.SerializerMethodField(read_only=True)
     lecture_num = serializers.SerializerMethodField(read_only=True)
     assignment_num = serializers.SerializerMethodField(read_only=True)

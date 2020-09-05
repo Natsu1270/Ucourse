@@ -20,7 +20,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(QuestionKit)
 class QuestionKitAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'code', 'skill')
+    list_display = ('__str__', 'skill')
     list_filter = ('status', 'skill')
     readonly_fields = ('created_date', 'created_by', 'modified_by', 'modified_date')
     inlines = [QuestionInline]

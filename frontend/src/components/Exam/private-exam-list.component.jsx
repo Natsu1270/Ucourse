@@ -12,7 +12,7 @@ import {
     Skeleton, Button, Drawer, Empty, List,
     Space, message, Row, Col, Modal, Form,
     Input, Select, Switch, Popconfirm,
-    InputNumber
+    InputNumber, Table
 } from 'antd'
 import ExamDetail from "./exam-detail.component";
 import ExamHistoryTable from "./exam-history-table.component";
@@ -20,10 +20,14 @@ import { isTimeBefore, formatDate, secondToTime, parseHtml } from '../../utils/t
 import { isRoleTeacherOrTA } from '../../utils/account.utils'
 import Constants from '../../constants'
 
-import { SettingTwoTone, DeleteTwoTone, PlusCircleOutlined, PlusOutlined, MinusCircleTwoTone } from '@ant-design/icons'
-import { deleteQuestion, createQuestion, editQuestion } from '../../api/question.services'
+import { SettingTwoTone, DeleteTwoTone, PlusCircleOutlined, PlusOutlined, MinusCircleTwoTone, AppstoreAddOutlined } from '@ant-design/icons'
+import { deleteQuestion, createQuestion, editQuestion, getQuestionsRemainByTeacher, addQuestionToExam } from '../../api/question.services'
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
+import { columns } from '../CourseHome/Questions/questions.utils'
+
+const { Search } = Input
 
 const formItemLayout = {
     labelCol: { span: 6 },
@@ -45,6 +49,12 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     const [questionContent, setQuestionContent] = useState('')
     const [editingExam, setEditingExam] = useState({})
     const [oldChoices, setOldChoices] = useState([])
+    const [fromBank, setFromBank] = useState(false)
+    const [bankQuestions, setBankQuestions] = useState([])
+    const [selectedRows, setSelectedRows] = useState([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState([])
+    const [orgQuesitons, setOrgQuestions] = useState([])
+
 
     const { studentExams, examDetail, isProcessing } = useSelector(createStructuredSelector({
         studentExams: studentExamsSelector,
@@ -52,12 +62,23 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
         examDetail: examDetailSelector
     }))
 
+    const getQuestions = async () => {
+        try {
+            const result = await getQuestionsRemainByTeacher(token, exam_id)
+            setBankQuestions(result.data.data)
+            setOrgQuestions(result.data.data)
+        } catch (err) {
+            message.error(err.message)
+        }
+    }
+
     useEffect(() => {
         window.scrollTo(0, 0)
         dispatch(getStudentExamsStart(
             { token, exam_id: parseInt(exam_id) }
         ))
         dispatch(getExamStart({ token, exam_id }))
+        getQuestions()
     }, [dispatch])
 
 
@@ -67,6 +88,14 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
             setQuestions(examDetail.questions)
         }
     }, [isProcessing, examDetail])
+
+    const searchQuestion = (name) => {
+        let filterQuesitons = orgQuesitons
+        if (name.trim() != "") {
+            filterQuesitons = filterQuesitons.filter(q => q.name.includes(name))
+        }
+        setBankQuestions(filterQuesitons)
+    }
 
     const delQuestion = async id => {
         const data = { token, id }
@@ -120,6 +149,9 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
         setEditingExam({})
         setQuestionContent('')
         setOldChoices([])
+        setFromBank(false)
+        setSelectedRowKeys([])
+        setSelectedRows([])
     }
 
     const canDoExam = () => {
@@ -154,6 +186,43 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 return resultList[0] + '/' + examDetail.total_score
             }
         }
+    }
+
+    const questionBankData = bankQuestions.map((question, index) => {
+
+        return {
+            stt: index + 1,
+            id: question.id,
+            name: question.name,
+            content: question.content,
+            key: question.id
+        }
+    })
+
+    const addToExam = async () => {
+        try {
+            await addQuestionToExam({ token, examId: exam_id, rows: selectedRowKeys })
+            message.success('Thêm thành công!', 1.5, () => window.location.reload())
+        } catch (err) {
+            message.error('Có lỗi xảy ra: ' + err.message)
+        }
+    }
+
+    const QuestionBankTable = () => {
+        return (
+            <Table
+                rowSelection={{
+                    type: "checkbox",
+                    selectedRowKeys,
+                    onChange: (selectedRowKeys, selectedRows) => {
+                        setSelectedRowKeys(selectedRowKeys)
+                        setSelectedRows(selectedRows)
+                    }
+                }}
+                dataSource={questionBankData}
+                columns={columns}
+            />
+        )
     }
 
     return (
@@ -199,14 +268,22 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                     <Skeleton loading={isProcessing || processing} active>
                         <List
                             header={
-                                <Row>
-                                    <Col span={21}>
+                                <Row justify="space-between">
+                                    <Col>
                                         <h1 className="theme-color">Quản lý câu hỏi</h1>
                                     </Col>
-                                    <Col span={3}>
-                                        <Button type="primary" onClick={() => setShowModal(true)}>
-                                            <PlusCircleOutlined /> Thêm câu hỏi
+                                    <Col>
+                                        <Space>
+                                            <Button type="primary" onClick={() => setShowModal(true)}>
+                                                <PlusCircleOutlined /> Thêm câu hỏi
                                         </Button>
+                                            <Button type="primary" onClick={() => {
+                                                setFromBank(true)
+                                                setShowModal(true)
+                                            }}>
+                                                <AppstoreAddOutlined /> Thêm câu hỏi từ ngân hàng câu hỏi
+                                        </Button>
+                                        </Space>
                                     </Col>
                                 </Row>
 
@@ -295,170 +372,191 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                             <Button type="primary" danger key="back" onClick={handleClose}>
                                 Hủy
                             </Button>,]}>
-                        <Form
-                            layout="vertical"
-                            name="topic_form"
-                            onFinish={onFinish}
-                            initialValues={{
-                                name: editingExam.name, questionContent, score: editingExam.score,
-                                question_type: editingExam.question_type, difficulity: editingExam.difficult_level,
-                            }}
-                        >
-                            <Form.Item
-                                name="name"
-                                label="Tên câu hỏi"
-                                hasFeedback
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Vui lòng nhập tên câu hỏi',
-                                    },
-                                ]}
-                            >
-                                <Input placeholder="Nhập tên câu hỏi" />
-                            </Form.Item>
-                            <Form.Item
-                                hasFeedback
-                                name="score"
-                                label="Điểm câu hỏi"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Vui lòng nhập điểm câu hỏi',
-                                    },
-                                ]}
-                            >
-                                <InputNumber min={0} style={{ width: "100%" }} placeholder="Nhập điểm câu hỏi" />
-                            </Form.Item>
-                            <Form.Item
-                                name="difficulity"
-                                label="Chọn độ khó"
-                                hasFeedback
-                                rules={[{ required: true, message: 'Chọn độ khó câu hỏi' }]}
-                            >
-                                <Select placeholder="Hãy chọn độ khó của câu hỏi">
-                                    <Option value="e">Dễ</Option>
-                                    <Option value="m">Trung bình</Option>
-                                    <Option value="h">Khó</Option>
-                                </Select>
-                            </Form.Item>
+                        {
+                            fromBank ?
+                                <div style={{ maxHeight: '70vh', overflow: 'auto' }}>
+                                    <Row justify="center" gutter={16} className="mb-3" align="middle">
+                                        <Col>
+                                            {
+                                                selectedRows.length ? <Button onClick={addToExam} type="primary">
+                                                    Thêm vào bài kiểm tra
+                                            </Button> : 'Click vào checkbox để thêm'
+                                            }
+                                        </Col>
 
-                            <Form.Item
-                                name="question_type"
-                                label="Chọn loại câu hỏi"
-                                hasFeedback
-                                rules={[{ required: true, message: 'Chọn loại câu hỏi' }]}
-                            >
-                                <Select placeholder="Chọn loại câu hỏi">
-                                    <Option value="mc">Chọn một đáp án</Option>
-                                    <Option value="cb">Chọn nhiều đáp án</Option>
-                                    <Option value="tx">Câu hỏi văn bản</Option>
-                                </Select>
-                            </Form.Item>
-
-                            <Form.Item
-                                name="questionContent"
-                                label="Nội dung câu hỏi"
-                                rules={[{ required: true, message: 'Vui lòng nhập nội dung câu hỏi', },]}
-                            >
-                                <CKEditor
-                                    key="editor"
-                                    editor={ClassicEditor}
-                                    data={questionContent}
-                                    onChange={(event, editor) => {
-                                        const data = editor.getData();
-                                        setQuestionContent(data)
+                                        <Col>
+                                            <Search
+                                                onChange={e => searchQuestion(e.target.value)}
+                                                size="large" enterButton onSearch={value => searchQuestion(value)} placeholder="Tìm theo tên" />
+                                        </Col>
+                                    </Row>
+                                    <QuestionBankTable />
+                                </div> :
+                                <Form
+                                    layout="vertical"
+                                    name="topic_form"
+                                    onFinish={onFinish}
+                                    initialValues={{
+                                        name: editingExam.name, questionContent, score: editingExam.score,
+                                        question_type: editingExam.question_type, difficulity: editingExam.difficult_level,
                                     }}
                                 >
-                                </CKEditor>
-                            </Form.Item>
-                            <Form.List name="choices">
-                                {(fields, { add, remove }) => {
-                                    if (oldChoices.length > 0) {
-                                        oldChoices.forEach((choice, index) => {
-                                            let isAnswer = false;
-                                            if (editingExam.answers.includes(choice.id)) {
-                                                isAnswer = true
+                                    <Form.Item
+                                        name="name"
+                                        label="Tên câu hỏi"
+                                        hasFeedback
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập tên câu hỏi',
+                                            },
+                                        ]}
+                                    >
+                                        <Input placeholder="Nhập tên câu hỏi" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        hasFeedback
+                                        name="score"
+                                        label="Điểm câu hỏi"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Vui lòng nhập điểm câu hỏi',
+                                            },
+                                        ]}
+                                    >
+                                        <InputNumber min={0} style={{ width: "100%" }} placeholder="Nhập điểm câu hỏi" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="difficulity"
+                                        label="Chọn độ khó"
+                                        hasFeedback
+                                        rules={[{ required: true, message: 'Chọn độ khó câu hỏi' }]}
+                                    >
+                                        <Select placeholder="Hãy chọn độ khó của câu hỏi">
+                                            <Option value="e">Dễ</Option>
+                                            <Option value="m">Trung bình</Option>
+                                            <Option value="h">Khó</Option>
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="question_type"
+                                        label="Chọn loại câu hỏi"
+                                        hasFeedback
+                                        rules={[{ required: true, message: 'Chọn loại câu hỏi' }]}
+                                    >
+                                        <Select placeholder="Chọn loại câu hỏi">
+                                            <Option value="mc">Chọn một đáp án</Option>
+                                            <Option value="cb">Chọn nhiều đáp án</Option>
+                                            <Option value="tx">Câu hỏi văn bản</Option>
+                                        </Select>
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="questionContent"
+                                        label="Nội dung câu hỏi"
+                                        rules={[{ required: true, message: 'Vui lòng nhập nội dung câu hỏi', },]}
+                                    >
+                                        <CKEditor
+                                            key="editor"
+                                            editor={ClassicEditor}
+                                            data={questionContent}
+                                            onChange={(event, editor) => {
+                                                const data = editor.getData();
+                                                setQuestionContent(data)
+                                            }}
+                                        >
+                                        </CKEditor>
+                                    </Form.Item>
+                                    <Form.List name="choices">
+                                        {(fields, { add, remove }) => {
+                                            if (oldChoices.length > 0) {
+                                                oldChoices.forEach((choice, index) => {
+                                                    let isAnswer = false;
+                                                    if (editingExam.answers.includes(choice.id)) {
+                                                        isAnswer = true
+                                                    }
+                                                    fields.push({
+                                                        name: index,
+                                                        key: index,
+                                                        isListField: true, fieldKey: index,
+                                                        content: choice.content,
+                                                        isAnswer,
+                                                        id: choice.id
+                                                    })
+                                                })
+                                                setOldChoices([])
                                             }
-                                            fields.push({
-                                                name: index,
-                                                key: index,
-                                                isListField: true, fieldKey: index,
-                                                content: choice.content,
-                                                isAnswer,
-                                                id: choice.id
-                                            })
-                                        })
-                                        setOldChoices([])
-                                    }
-                                    return (
-                                        <div>
-                                            {fields.map(field => (
-                                                <div
-                                                    key={field.key} style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }} align="middle">
-                                                    <Form.Item
-                                                        initialValue={parseHtml(field.content)}
-                                                        hasFeedback
-                                                        style={{ width: '80%' }}
-                                                        wrapperCol={{ span: 23 }}
-                                                        label="Nội dung câu trả lời"
-                                                        {...field}
-                                                        name={[field.name, 'content']}
-                                                        fieldKey={[field.fieldKey, 'content' + field.key]}
-                                                        rules={[{ required: true, message: 'Nhập nội dung câu trả lời' }]}
-                                                    >
-                                                        <Input placeholder="Nội dung" />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        initialValue={field.isAnswer !== undefined ? field.isAnswer : false}
-                                                        name={[field.name, 'isAnswer']}
-                                                        fieldKey={[field.fieldKey, 'isAnswer' + field.key]}
-                                                        label="Đáp án đúng"
-                                                        valuePropName="checked"
-                                                        className="mr-5">
-                                                        <Switch />
-                                                    </Form.Item>
-                                                    <Form.Item
-                                                        hidden={true}
-                                                        initialValue={field.id}
-                                                        label="Nội dung câu trả lời"
-                                                        {...field}
-                                                        name={[field.name, 'id']}
-                                                        fieldKey={[field.fieldKey, 'id' + field.key]}
-                                                    >
-                                                        <Input />
-                                                    </Form.Item>
+                                            return (
+                                                <div>
+                                                    {fields.map(field => (
+                                                        <div
+                                                            key={field.key} style={{ display: 'flex', marginBottom: 8, alignItems: 'center' }} align="middle">
+                                                            <Form.Item
+                                                                initialValue={parseHtml(field.content)}
+                                                                hasFeedback
+                                                                style={{ width: '80%' }}
+                                                                wrapperCol={{ span: 23 }}
+                                                                label="Nội dung câu trả lời"
+                                                                {...field}
+                                                                name={[field.name, 'content']}
+                                                                fieldKey={[field.fieldKey, 'content' + field.key]}
+                                                                rules={[{ required: true, message: 'Nhập nội dung câu trả lời' }]}
+                                                            >
+                                                                <Input placeholder="Nội dung" />
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                initialValue={field.isAnswer !== undefined ? field.isAnswer : false}
+                                                                name={[field.name, 'isAnswer']}
+                                                                fieldKey={[field.fieldKey, 'isAnswer' + field.key]}
+                                                                label="Đáp án đúng"
+                                                                valuePropName="checked"
+                                                                className="mr-5">
+                                                                <Switch />
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                hidden={true}
+                                                                initialValue={field.id}
+                                                                label="Nội dung câu trả lời"
+                                                                {...field}
+                                                                name={[field.name, 'id']}
+                                                                fieldKey={[field.fieldKey, 'id' + field.key]}
+                                                            >
+                                                                <Input />
+                                                            </Form.Item>
 
-                                                    <MinusCircleTwoTone
-                                                        style={{ fontSize: '2rem' }}
-                                                        twoToneColor="red"
-                                                        onClick={() => {
-                                                            remove(field.name);
-                                                        }}
-                                                    />
-                                                </div>
-                                            ))}
+                                                            <MinusCircleTwoTone
+                                                                style={{ fontSize: '2rem' }}
+                                                                twoToneColor="red"
+                                                                onClick={() => {
+                                                                    remove(field.name);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    ))}
 
-                                            <Form.Item wrapperCol={{ span: 6 }}>
-                                                <Button
-                                                    type="primary"
-                                                    onClick={() => { add(); }}
-                                                    block
-                                                >
-                                                    <PlusOutlined /> Thêm đáp án trả lời
+                                                    <Form.Item wrapperCol={{ span: 6 }}>
+                                                        <Button
+                                                            type="primary"
+                                                            onClick={() => { add(); }}
+                                                            block
+                                                        >
+                                                            <PlusOutlined /> Thêm đáp án trả lời
                                                 </Button>
-                                            </Form.Item>
-                                        </div>
-                                    );
-                                }}
-                            </Form.List>
-                            <Form.Item className="text-center">
-                                <Button type="primary" htmlType="submit" loading={processing}>
-                                    Xác nhận
+                                                    </Form.Item>
+                                                </div>
+                                            );
+                                        }}
+                                    </Form.List>
+                                    <Form.Item className="text-center">
+                                        <Button type="primary" htmlType="submit" loading={processing}>
+                                            Xác nhận
                                 </Button>
-                            </Form.Item>
-                        </Form>
+                                    </Form.Item>
+                                </Form>
 
+                        }
                     </Modal> : null
             }
 
