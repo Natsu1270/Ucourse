@@ -88,4 +88,4 @@ Trang web được hiển thị tại `http://127.0.0.1:8000/`.
 ```
 Tài khoản Admin:
 - email: admin@admin.com
-- password: 1212
+- password: 1212qwqw
