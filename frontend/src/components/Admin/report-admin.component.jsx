@@ -34,7 +34,7 @@ const AdminReport = ({ userData, courseData, programData, courseIncomeData, prog
         id: program.id,
         name: program.name,
         courseNum: program.courses_count,
-        discount: program.discount,
+        // discount: program.discount,
         discount_percentage: program.discount_percentage,
         field: program.field,
         createdDate: formatDate(program.created_date, Constants.DD_MM_YYYY),

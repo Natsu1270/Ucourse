@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Avatar, List, Row, Col, Dropdown, Menu, message, Typography } from 'antd'
+import { Avatar, List, Row, Col, Dropdown, Menu, message, Typography, Tag } from 'antd'
 import { useHistory } from 'react-router-dom'
 import videoAvatar from '../../assets/file.png';
 import documentAvatar from '../../assets/word.png';
@@ -58,7 +58,8 @@ const CourseHomeTopic = ({
                     maxTry: quiz.max_try,
                     startDate: quiz.start_date,
                     passScore: quiz.pass_score,
-                    percentage: quiz.percentage
+                    percentage: quiz.percentage,
+                    mandatory: quiz.mandatory
                 })
             )
             setQuizes(topicQuizes)
@@ -69,7 +70,7 @@ const CourseHomeTopic = ({
                     id: ass.id, name: ass.name, info: ass.info,
                     start_date: ass.start_date, due_date: ass.due_date,
                     max_score: ass.max_score, max_submit_time: ass.max_submit_time,
-                    assignment_files: ass.assignment_files, percentage: ass.percentage
+                    assignment_files: ass.assignment_files, percentage: ass.percentage, mandatory: ass.mandatory
                 })
             )
             setAssignments(topicAssignments)
@@ -243,11 +244,24 @@ const CourseHomeTopic = ({
                                         avatar={<Avatar src={quizIcon} />}
                                         title={<span>{item.title}</span>}
                                         description={
-                                            item.expired ?
-                                                !isTimeBefore(item.expired) ?
-                                                    <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
-                                                    <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
-                                                : null}
+                                            <Row gutter={16}>
+                                                {item.expired ?
+                                                    <Col>
+
+                                                        !isTimeBefore(item.expired) ?
+                                                            <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
+                                                            <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
+
+                                                    </Col>
+                                                    : null}
+                                                <Col>
+                                                    {
+                                                        item.mandatory ? <Tag color="#f50">Bắt buộc</Tag> :
+                                                            <Tag color="#2db7f5">Không bắt buộc, không tính điểm</Tag>
+                                                    }
+                                                </Col>
+                                            </Row>
+                                        }
                                     />
                                 </List.Item>
                             )}

@@ -18,7 +18,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         model = Program
         fields = [
             'id', 'name',  'icon', 'slug', 'program_course',
-            'status', 'field', 'created_date', 'discount',
+            'status', 'field', 'created_date', 'discount_percentage',
             'short_description', 'full_description', 'created_date', 'created_by',
             'created_by_name', 'modified_date'
         ]
@@ -38,7 +38,7 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'icon', 'slug', 'discount', 'discount_percentage', 'price',
+            'id', 'name', 'icon', 'slug', 'discount_percentage', 'price',
             'program_course', 'benefits', 'pre_requisites',
             'courses_count', 'status', 'field', 'bought_courses',
             'short_description', 'full_description', 'is_my_program'
@@ -55,8 +55,8 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
         for course in program_courses:
             if course.check_is_bought(user) is not True:
                 price += int(course.get_price())
-        if obj.discount:
-            price -= int(obj.discount)
+        # if obj.discount:
+        #     price -= int(obj.discount)
         if obj.discount_percentage:
             price *= (100-obj.discount_percentage)/100
         return int(price)
@@ -78,7 +78,7 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'icon', 'slug', 'discount',
+            'id', 'name', 'icon', 'slug', 'discount_percentage',
             'courses_count', 'status', 'field', 'program_course'
         ]
 
@@ -93,7 +93,7 @@ class ProgramMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'icon', 'slug', 'bought_date', 'discount',
+            'id', 'name', 'icon', 'slug', 'bought_date', 'discount_percentage',
             'courses_count', 'status', 'field', 'program_course'
         ]
 
@@ -120,7 +120,7 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'icon', 'slug', 'discount', 'student_program', 'student_course',
+            'id', 'name', 'icon', 'slug', 'discount_percentage', 'student_program', 'student_course',
             'courses_count', 'status', 'field', 'program_course',
         ]
 
@@ -152,7 +152,7 @@ class ProgramDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ['id', 'created_date', 'name', 'view_count',
-                  'courses_count', 'field', 'status', 'discount', 'discount_percentage']
+                  'courses_count', 'field', 'status', 'discount_percentage', 'discount_percentage']
 
     @staticmethod
     def get_view_count(obj):

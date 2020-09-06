@@ -169,6 +169,7 @@ class Assignment(models.Model):
     info = RichTextField(blank=True, null=True)
     status = models.BooleanField(default=True)
     percentage = models.FloatField(null=True, blank=True)
+    mandatory = models.BooleanField(default=True, blank=True, null=True)
     max_submit_time = models.IntegerField(blank=True, null=True)
     max_score = models.FloatField(blank=True, null=True)
     learning_topic = models.ForeignKey(
