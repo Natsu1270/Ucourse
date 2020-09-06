@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelTable(
-            name='allcoursecertificate',
-            table='AllCourseCertificate',
-        ),
-        migrations.AlterModelTable(
             name='certificate',
             table='Certificate',
         ),

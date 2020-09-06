@@ -245,15 +245,17 @@ const CourseHomeTopic = ({
                                         title={<span>{item.title}</span>}
                                         description={
                                             <Row gutter={16}>
+
                                                 {item.expired ?
                                                     <Col>
+                                                        {
+                                                            !isTimeBefore(item.expired) ?
+                                                                <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
+                                                                <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
+                                                        }
+                                                    </Col> : null
+                                                }
 
-                                                        !isTimeBefore(item.expired) ?
-                                                            <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
-                                                            <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
-
-                                                    </Col>
-                                                    : null}
                                                 <Col>
                                                     {
                                                         item.mandatory ? <Tag color="#f50">Bắt buộc</Tag> :
@@ -292,6 +294,10 @@ const CourseHomeTopic = ({
                                         title={<span>{item.name}</span>}
                                         description={item.info}
                                     />
+                                    {
+                                        item.mandatory ? <Tag color="#f50">Bắt buộc</Tag> :
+                                            <Tag color="#2db7f5">Không bắt buộc, không tính điểm</Tag>
+                                    }
                                 </List.Item>
                             )}
                         /> : null

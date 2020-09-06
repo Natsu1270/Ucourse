@@ -7,17 +7,25 @@ import { Link } from 'react-router-dom'
 const { TabPane } = Tabs
 
 
-const EventPage = ({ eventId }) => {
+const EventPage = () => {
     const [loading, setLoading] = useState(false)
     const [events, setEvents] = useState([])
 
-    getEventListAPI(eventId).then(response => {
-        setEvents(response.data.data)
-    })
+    const getEventList = async () => {
+        setLoading(true)
+        try {
+            const { data } = getEventListAPI()
+            setEvents(data.data)
+        } catch (err) {
+            message.error('Có lỗi xảy ra')
+        }
+        setLoading(false)
+    }
+
 
     useEffect(() => {
-        if (eventId) getEventListAPI()
-    }, [eventId])
+        getEventList()
+    }, [])
     const columns = [
         {
             title: '#',

@@ -15,7 +15,7 @@ import {
     Skeleton, Button, Modal, Row,
     Col, Form, Upload, Input, Radio,
     message, Drawer, Select, InputNumber,
-    DatePicker, List, Popconfirm, Space
+    DatePicker, List, Popconfirm, Space, Switch
 } from "antd";
 
 import { UploadOutlined, PaperClipOutlined } from '@ant-design/icons';
@@ -131,7 +131,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setLoading(true)
         console.log(values)
         const { assName: name, assInfo: info, assDate, assPercentage: percentage,
-            assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile
+            assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile, mandatory
         } = values
         const files = assFile ? assFile.map(file => ({
             file: file.originFileObj,
@@ -142,7 +142,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
         const data = {
             token, learning_topic: editingTopic, name, info, max_score, percentage,
-            max_submit_time, start_date: start_date, due_date: due_date, files
+            max_submit_time, start_date: start_date, due_date: due_date, files, mandatory
         }
         try {
             const result = isCreateAssignment ?
@@ -276,13 +276,13 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         const data = {
             token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
             duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date, id: editingQuize.id, percentage: values.percentage
+            start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory
         }
 
         const editData = {
             token, name: values.name, get_result_type: values.resultType,
             duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date, id: editingQuize.id, percentage: values.percentage
+            start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory
         }
         try {
             if (editingQuize.id === undefined) {
@@ -384,7 +384,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                         assMaxSubmit: editingAssignment.max_submit_time,
                         assMaxScore: editingAssignment.max_score,
                         assPercentage: editingAssignment.percentage,
-                        assDate: [initStartDate, initDueDate]
+                        assDate: [initStartDate, initDueDate],
+                        mandatory: editingAssignment.mandatory
                     }}
                 >
                     <Form.Item
@@ -396,6 +397,10 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             { required: true, message: 'Vui lòng nhập tên assignment!', },
                         ]} >
                         <Input placeholder="Nhập tên assignment" value={name} />
+                    </Form.Item>
+
+                    <Form.Item name="mandatory" label="Bắt buộc" valuePropName="checked">
+                        <Switch />
                     </Form.Item>
 
                     <Form.Item
@@ -680,8 +685,12 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                             duration: editingQuize.duration,
                             max_try: editingQuize.maxTry,
                             pass_score: editingQuize.passScore,
-                            date: [moment(editingQuize.startDate), moment(editingQuize.expired)],
-                            percentage: editingQuize.percentage
+                            date: [
+                                editingQuize.startDate ?
+                                    moment(editingQuize.startDate) : null,
+                                editingQuize.expired ? moment(editingQuize.expired) : null
+                            ],
+                            percentage: editingQuize.percentage, mandatory: editingQuize.mandatory
                         }
                     }
                 >
@@ -743,6 +752,11 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                     </Row>
 
                     <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item name="mandatory" label="Bắt buộc" valuePropName="checked">
+                                <Switch />
+                            </Form.Item>
+                        </Col>
                         <Col span={12}>
                             <Form.Item name="date" label="Thời gian bài kiểm tra">
                                 <RangePicker
