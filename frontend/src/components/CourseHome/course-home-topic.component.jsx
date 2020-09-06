@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Avatar, List, Row, Col, Dropdown, Menu, message, Typography, Tag } from 'antd'
 import { useHistory } from 'react-router-dom'
-import videoAvatar from '../../assets/file.png';
-import documentAvatar from '../../assets/word.png';
-import assignmentAvatar from '../../assets/exam.png';
-import quizIcon from '../../assets/quiz.png';
+
 import Constants from "../../constants";
-import { parseHtml, formatDate, isTimeBefore } from "../../utils/text.utils"
+import { parseHtml } from "../../utils/text.utils"
 
 import {
-    CaretDownOutlined, SettingTwoTone, DeleteOutlined,
+    SettingTwoTone, DeleteOutlined,
     SettingOutlined, BookOutlined, ReadOutlined, ProfileOutlined
 } from '@ant-design/icons'
 import { deleteTopicAsset } from '../../api/courseHome.services';
 import { deleteAssigment } from '../../api/assignment.services';
 import { deleteExam } from '../../api/exam.services';
+import QuizList from './Topic/quizes.component';
+import AssignmentList from './Topic/assigments.component';
+import AssetList from './Topic/assets.component';
 
-const { Text } = Typography
 
 const CourseHomeTopic = ({
     topic, userRole, handleDelete,
@@ -81,9 +80,6 @@ const CourseHomeTopic = ({
     function gotoLecture(assetId, fileUrl, type) {
         if (
             type === Constants.VIDEO_FILE_TYPE
-            // ||
-            // type === Constants.DOC_FILE_TYPE ||
-            // type === Constants.PDF_FILE_TYPE) 
         ) {
             history.push(`lecture/${topic.id}/${assetId}`)
         } else {
@@ -97,11 +93,6 @@ const CourseHomeTopic = ({
 
     function gotoAssignment(assignment_id) {
         history.push(`${topic.id}/assignment/${assignment_id}`)
-    }
-
-    const assetAvatar = (icon, type) => {
-        return icon ? icon : type === Constants.VIDEO_FILE_TYPE ? videoAvatar : documentAvatar
-
     }
 
     const deleteAsset = async (id, type) => {
@@ -139,11 +130,6 @@ const CourseHomeTopic = ({
             message.error(err.message)
         }
     }
-
-    const addAsset = async () => {
-        alert('adding asset')
-    }
-
 
     const menu = (
         <Menu style={{ fontSize: '2rem' }}>
@@ -196,110 +182,33 @@ const CourseHomeTopic = ({
             <div className="course-topic__content">
                 {
                     assets.length > 0 ?
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={assets}
-                            renderItem={item => (
-                                <List.Item
-                                    actions={[userRole.code ?
-                                        userRole.code === 'TC' || userRole.code === "TA" ?
-                                            <Dropdown overlay={<Menu>
-                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "asset")}>
-                                                    Xóa bài giảng
-                                                </Menu.Item>
-                                                <Menu.Item onClick={() => triggerEditAsset(item)}>Sửa bài giảng</Menu.Item>
-                                            </Menu>} placement="topCenter">
-                                                <CaretDownOutlined className="down-indict" />
-                                            </Dropdown> : null : null]}
-                                    className="course-topic__content--item"
-                                >
-                                    <List.Item.Meta
-                                        avatar={<Avatar src={assetAvatar(item.icon, item.file_type)} />}
-                                        title={<span onClick={() => gotoLecture(item.id, item.content, item.file_type)}>{item.title}</span>}
-                                        description={item.info}
-                                    />
-                                </List.Item>
-                            )}
-                        /> : null
+                        <AssetList
+                            assets={assets}
+                            triggerEditAsset={triggerEditAsset}
+                            triggerCreateAsset={triggerCreateAsset}
+                            deleteAsset={deleteAsset}
+                            gotoLecture={gotoLecture}
+                            userRole={userRole} /> : null
                 }
                 {
                     quizes.length > 0 ?
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={quizes}
-                            renderItem={item => (
-                                <List.Item
-                                    actions={[userRole.code ?
-                                        userRole.code === 'TC' || userRole.code === "TA" ?
-                                            <Dropdown overlay={<Menu>
-                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "quizes")}>Xóa bài kiểm tra</Menu.Item>
-                                                <Menu.Item onClick={() => triggerEditQuize(item)}>Sửa bài kiểm tra</Menu.Item>
-                                            </Menu>} placement="topCenter">
-                                                <CaretDownOutlined className="down-indict" />
-                                            </Dropdown> : null : null]}
-                                    className="course-topic__content--item"
-                                >
-                                    <List.Item.Meta
-                                        onClick={() => gotoExam(item.id)}
-                                        avatar={<Avatar src={quizIcon} />}
-                                        title={<span>{item.title}</span>}
-                                        description={
-                                            <Row gutter={16}>
-
-                                                {item.expired ?
-                                                    <Col>
-                                                        {
-                                                            !isTimeBefore(item.expired) ?
-                                                                <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
-                                                                <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
-                                                        }
-                                                    </Col> : null
-                                                }
-
-                                                <Col>
-                                                    {
-                                                        item.mandatory ? <Tag color="#f50">Bắt buộc</Tag> :
-                                                            <Tag color="#2db7f5">Không bắt buộc, không tính điểm</Tag>
-                                                    }
-                                                </Col>
-                                            </Row>
-                                        }
-                                    />
-                                </List.Item>
-                            )}
+                        <QuizList
+                            quizes={quizes}
+                            triggerEditQuize={triggerEditQuize}
+                            deleteAsset={deleteAsset}
+                            gotoExam={gotoExam}
+                            userRole={userRole}
                         /> : null
                 }
                 {
                     assignments.length > 0 ?
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={assignments}
-                            renderItem={item => (
-                                <List.Item
-                                    actions={[userRole.code ?
-                                        userRole.code === 'TC' || userRole.code === "TA" ?
-                                            <Dropdown overlay={<Menu>
-                                                <Menu.Item danger onClick={() => deleteAsset(item.id, "assignment")}>
-                                                    Xóa bài assignment
-                                                </Menu.Item>
-                                                <Menu.Item onClick={() => triggerCreateAssignment(null, false, item)}>Sửa bài assignment</Menu.Item>
-                                            </Menu>} placement="topCenter">
-                                                <CaretDownOutlined className="down-indict" />
-                                            </Dropdown> : null : null]}
-                                    className="course-topic__content--item"
-                                >
-                                    <List.Item.Meta
-                                        onClick={() => gotoAssignment(item.id)}
-                                        avatar={<Avatar src={assignmentAvatar} />}
-                                        title={<span>{item.name}</span>}
-                                        description={item.info}
-                                    />
-                                    {
-                                        item.mandatory ? <Tag color="#f50">Bắt buộc</Tag> :
-                                            <Tag color="#2db7f5">Không bắt buộc, không tính điểm</Tag>
-                                    }
-                                </List.Item>
-                            )}
+                        <AssignmentList
+                            gotoAssignment={gotoAssignment}
+                            assignments={assignments}
+                            deleteAsset={deleteAsset}
+                            gotoExam={gotoExam}
+                            userRole={userRole}
+                            triggerCreateAssignment={triggerCreateAsset}
                         /> : null
                 }
             </div>

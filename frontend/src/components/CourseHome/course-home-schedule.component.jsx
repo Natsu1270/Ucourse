@@ -1,43 +1,20 @@
 import React, { useState, useEffect } from 'react'
-
 import CourseHomeTopic from "./course-home-topic.component";
-import CKEditor from '@ckeditor/ckeditor5-react'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import moment from 'moment'
 import {
     createLearningTopic, editLearningTopic, deleteTopicAsset,
     createTopicAsset, editTopicAsset
 } from '../../api/courseHome.services'
-
 import { createAssignment, editAssignment } from '../../api/assignment.services'
-
 import {
     Skeleton, Button, Modal, Row,
-    Col, Form, Upload, Input, Radio,
-    message, Drawer, Select, InputNumber,
-    DatePicker, List, Popconfirm, Space, Switch
+    Col, message
 } from "antd";
-
-import { UploadOutlined, PaperClipOutlined } from '@ant-design/icons';
 import slugify from 'slugify';
 import { deleteLearningTopic } from '../../api/courseHome.services';
-import { disabledDate, disabledDateTime, disabledRangeTime } from '../../utils/date.utils'
 import { createExam, editExam } from '../../api/exam.services';
+import QuestionDrawer from './Schedule/question-drawer.component';
+import ScheduleForm from './Schedule/schedule-form.component';
 
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-
-const formItemLayout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 14 },
-};
-const normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-        return e;
-    }
-    return e && e.fileList;
-};
 
 const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
@@ -53,11 +30,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
     const [isCreateAssignment, setIsCreateAssignment] = useState(false)
     const [fileList, setFile] = useState([])
     const [isEditAsset, setIsEditAsset] = useState(false)
-
     const [editingAsset, setEditingAsset] = useState({})
-
     const [editingQuize, setEditingQuize] = useState({})
-
     const [editingAssignment, setEditingAssignment] = useState({})
     const [assignmentFiles, setAssignmentFiles] = useState([])
 
@@ -68,32 +42,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         }
     }, [topics])
 
-
-    const props = {
-        onRemove: file => {
-            setFile([])
-        },
-        beforeUpload: file => {
-            setFile([file])
-            return false;
-        },
-        fileList,
-    };
-
-    const assFileProps = {
-        onRemove: file => {
-            const index = fileList.indexOf(file)
-            const newFileList = fileList.slice()
-            newFileList.splice(index, 1)
-            setFile(newFileList)
-        },
-        beforeUpload: file => {
-            const newFileList = [...fileList, file]
-            setFile(newFileList)
-            return false;
-        },
-        fileList,
-    }
 
     const onFinish = values => {
         if (editingTopic === null) {
@@ -317,276 +265,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
         setLoading(false)
     }
 
-    const renderForm = () => {
-        if (isCreateTopic) {
-            return (<Form
-                name="topic_form"
-                {...formItemLayout}
-                onFinish={onFinish}
-                initialValues={{
-                    name: name
-                }}
-            >
-                <Form.Item
-                    hasFeedback
-                    {...formItemLayout}
-                    name="name"
-                    label="Tên chủ đề"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập tên chủ đề',
-                        },
-                    ]}
-                >
-                    <Input placeholder="Nhập tên chủ đề" value={name} />
-                </Form.Item>
-
-                <Form.Item
-                    hasFeedback
-                    {...formItemLayout}
-                    name="info"
-                    label="Mô tả chủ đề"
-                >
-
-                    <CKEditor
-                        key="editor"
-                        editor={ClassicEditor}
-                        data={info}
-                        onChange={(event, editor) => {
-                            const data = editor.getData();
-                            setInfo(data)
-                        }}
-                    >
-
-                    </CKEditor>
-                </Form.Item>
-                <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Xác nhận
-                                </Button>
-                </Form.Item>
-            </Form>)
-
-        }
-        if (isCreateAssignment || editingAssignment.id) {
-
-            const initStartDate = editingAssignment.start_date ? moment(editingAssignment.start_date) : null
-            const initDueDate = editingAssignment.due_date ? moment(editingAssignment.due_date) : null
-
-            return (
-                <Form
-                    name="assignment_form" {...formItemLayout}
-                    onFinish={submitAssignment}
-                    initialValues={{
-                        assName: editingAssignment.name,
-                        assInfo: editingAssignment.info,
-                        assMaxSubmit: editingAssignment.max_submit_time,
-                        assMaxScore: editingAssignment.max_score,
-                        assPercentage: editingAssignment.percentage,
-                        assDate: [initStartDate, initDueDate],
-                        mandatory: editingAssignment.mandatory
-                    }}
-                >
-                    <Form.Item
-                        {...formItemLayout}
-                        hasFeedback
-                        name="assName"
-                        label="Tên"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập tên assignment!', },
-                        ]} >
-                        <Input placeholder="Nhập tên assignment" value={name} />
-                    </Form.Item>
-
-                    <Form.Item name="mandatory" label="Bắt buộc" valuePropName="checked">
-                        <Switch />
-                    </Form.Item>
-
-                    <Form.Item
-                        {...formItemLayout}
-                        hasFeedback
-                        name="assInfo"
-                        label="Mô tả bài assigment"
-                    >
-                        <Input placeholder="Nhập thông tin mô assignment" value={name} />
-                    </Form.Item>
-
-                    <Form.Item
-                        {...formItemLayout}
-                        hasFeedback
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập phần trăm!', },
-                        ]}
-                        name="assPercentage"
-                        label="Phần trăm điểm tổng">
-                        <InputNumber style={{ width: '100%' }} placeholder="Nhập phần trăm điểm" />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="assFile"
-                        label="File đính kèm"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                    >
-                        <Upload {...assFileProps} name="assFile" multiple={true}>
-                            <Button>
-                                <UploadOutlined /> Nhấn để chọn file
-                            </Button>
-                        </Upload>
-                    </Form.Item>
-
-                    {
-                        !isCreateAssignment && assignmentFiles.length > 0 ?
-                            <Form.Item
-                                {...formItemLayout}
-                                label="File đính kèm"
-                            >
-                                <List
-                                    loading={loading}
-                                    itemLayout="horizontal"
-                                    dataSource={assignmentFiles}
-                                    renderItem={item => (
-                                        <List.Item
-                                            actions={
-                                                [
-                                                    <Popconfirm
-                                                        title="Bạn có chắc chắn muốn xóa file này?"
-                                                        onConfirm={() => deleteAttachment(item.id)}
-                                                        okText="Xác nhận"
-                                                        cancelText="Hủy"
-                                                    >
-                                                        <Button
-                                                            danger type="primary" key="delete">Xóa</Button>
-                                                    </Popconfirm>
-
-                                                ]
-                                            }>
-                                            <Skeleton avatar title={false} loading={item.loading} active>
-                                                <List.Item.Meta
-                                                    title={<Space><PaperClipOutlined />{item.name}</Space>}
-                                                />
-                                            </Skeleton>
-                                        </List.Item>
-                                    )}
-                                />
-                            </Form.Item> : null
-
-                    }
-
-                    <Form.Item
-                        {...formItemLayout}
-                        hasFeedback
-                        name="assMaxSubmit"
-                        label="Giới hạn số lần nộp bài">
-                        <InputNumber style={{ width: '100%' }} placeholder="Nhập số lần nộp bài cho phép" />
-                    </Form.Item>
-
-                    <Form.Item
-                        {...formItemLayout}
-                        hasFeedback
-                        name="assMaxScore"
-                        label="Điểm bài assignment"
-                        rules={[
-                            { required: true, message: 'Vui lòng nhập điểm bài assignment!', },
-                        ]}>
-                        <InputNumber style={{ width: '100%' }} placeholder="Nhập điểm" />
-                    </Form.Item>
-
-                    <Form.Item name="assDate" label="Thời gian bài assignment">
-                        <RangePicker
-                            disabledDate={disabledDate}
-                            showTime={{
-                                hideDisabledOptions: true,
-                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                            }}
-                            format="DD-MM-YYYY HH:mm:ss"
-                        />
-                    </Form.Item>
-
-                    <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                        <Button type="primary" htmlType="submit" loading={loading}>
-                            Xác nhận
-                    </Button>
-                    </Form.Item>
-                </Form>
-            )
-        }
-        return (
-            <Form
-                name="asset_form"
-                {...formItemLayout}
-                onFinish={submitCreateAsset}
-                initialValues={{
-                    assetName: editingAsset.title,
-                    description: editingAsset.info,
-                    fileType: editingAsset.file_type
-                }}
-            >
-                <Form.Item
-                    {...formItemLayout}
-                    hasFeedback
-                    name="assetName"
-                    label="Tên"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Vui lòng nhập tên bài giảng',
-                        },
-                    ]}
-                >
-                    <Input placeholder="Nhập tên bài giảng" value={name} />
-                </Form.Item>
-
-                <Form.Item
-                    hasFeedback
-                    name="fileType" label="Loại bài giảng">
-                    <Radio.Group>
-                        <Radio value="pdf">PDF</Radio>
-                        <Radio value="doc">DOC</Radio>
-                        <Radio value="video">Video</Radio>
-                        <Radio value="other">Loại khác</Radio>
-                    </Radio.Group>
-                </Form.Item>
-
-                <Form.Item
-                    hasFeedback
-                    name="file"
-                    label="File bài giảng"
-                    valuePropName="fileList"
-                    getValueFromEvent={normFile}
-                    rules={[
-                        {
-                            required: !isEditAsset,
-                            message: 'Vui lòng tải lên file bài giảng',
-                        },
-                    ]}
-                >
-                    <Upload {...props} name="file" multiple={false}>
-                        <Button disabled={fileList.length > 0}>
-                            <UploadOutlined /> Nhấn để chọn file
-                    </Button>
-                    </Upload>
-                </Form.Item>
-
-                <Form.Item
-                    hasFeedback
-                    {...formItemLayout}
-                    name="description"
-                    label="Mô tả"
-                >
-                    <Input placeholder="Nhập mô tả bải giảng" value={name} />
-                </Form.Item>
-                <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Xác nhận
-                </Button>
-                </Form.Item>
-
-            </Form>
-        )
-    }
-
     const closeDrawer = () => {
         setShowDrawer(false)
         setEditingQuize({})
@@ -638,7 +316,6 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                 )
             }
 
-
             <Modal
                 destroyOnClose={true}
                 width={920}
@@ -653,137 +330,24 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
                     </Button>
                 ]}
                 onCancel={handleClose}
-
             >
                 {
-                    renderForm()
+                    <ScheduleForm
+                        name={name} onFinish={onFinish} editingAssignment={editingAssignment}
+                        editingAsset={editingAsset} setFile={setFile} fileList={fileList}
+                        deleteAttachment={deleteAttachment} submitAssignment={submitAssignment}
+                        submitCreateAsset={submitCreateAsset} isCreateTopic={isCreateTopic}
+                        isCreateAssignment={isCreateAssignment} isEditAsset={isEditAsset}
+                        info={info} loading={loading} setInfo={setInfo} assignmentFiles={assignmentFiles}
+                    />
                 }
             </Modal>
 
-            <Drawer
-                destroyOnClose={true}
-                title="Tạo bài kiểm tra"
-                width={850}
-                onClose={closeDrawer}
-                visible={showDrawer}
-                bodyStyle={{ paddingBottom: 80 }}
-                footer={
-                    <div style={{ textAlign: 'right', }}>
-                        <Button type="primary" danger onClick={closeDrawer} style={{ marginRight: 8 }}>
-                            Hủy
-                        </Button>
-                    </div>
-                }
-            >
-                <Form
-                    layout="vertical"
-                    onFinish={createQuize}
-                    initialValues={
-                        {
-                            name: editingQuize.title,
-                            resultType: editingQuize.resultType,
-                            duration: editingQuize.duration,
-                            max_try: editingQuize.maxTry,
-                            pass_score: editingQuize.passScore,
-                            date: [
-                                editingQuize.startDate ?
-                                    moment(editingQuize.startDate) : null,
-                                editingQuize.expired ? moment(editingQuize.expired) : null
-                            ],
-                            percentage: editingQuize.percentage, mandatory: editingQuize.mandatory
-                        }
-                    }
-                >
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                name="name" label="Tên"
-                                rules={[{ required: true, message: 'Vui lòng nhập tên bài kiểm tra' }]}
-                            >
-                                <Input placeholder="Nhập tên bài kiểm tra" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                name="resultType"
-                                label="Cách tính điểm"
-                                rules={[{ required: true, message: 'Vui lòng chọn hình thức tính điểm' }]}
-                            >
-                                <Select placeholder="Hình thức tính điểm">
-                                    <Option value="best">Lấy điểm cao nhất</Option>
-                                    <Option value="last">Lấy điểm bài làm cuối cùng</Option>
-                                    <Option value="average">Lấy điểm trung bình</Option>
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item hasFeedback name="duration" label="Thời gian làm bài (giây)"
-                                rules={[{ required: true, message: 'Xác định thời gian làm bài' }]}>
-                                <InputNumber style={{ width: "100%" }} min={1} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item hasFeedback name="max_try" label="Số lần làm bài cho phép (để trống nêu không giới hạn)"
-                            >
-                                <InputNumber style={{ width: "100%" }} min={1} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item
-                                hasFeedback
-                                name="percentage"
-                                label="Phần trăm điểm tổng kết"
-                                rules={[{ required: true, message: 'Nhập phần trăm điểm' }]}
-                            >
-                                <InputNumber style={{ width: "100%" }} min={0} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item hasFeedback name="pass_score" label="Điểm để qua bài test"
-                            >
-                                <InputNumber style={{ width: "100%" }} min={0} />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Form.Item name="mandatory" label="Bắt buộc" valuePropName="checked">
-                                <Switch />
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item name="date" label="Thời gian bài kiểm tra">
-                                <RangePicker
-                                    disabledDate={disabledDate}
-                                    // disabledTime={disabledRangeTime}
-                                    showTime={{
-                                        hideDisabledOptions: true,
-                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
-                                    }}
-                                    format="DD-MM-YYYY HH:mm:ss"
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Form.Item >
-                        <Button type="primary" htmlType="submit" loading={loading}>
-                            Xác nhận
-                        </Button>
-                    </Form.Item>
-
-                </Form>
-            </Drawer>
-
+            <QuestionDrawer
+                loading={loading} closeDrawer={closeDrawer} showDrawer={showDrawer}
+                editingQuize={editingQuize} createQuize={createQuize}
+            />
         </section>
-
-
     )
 };
 

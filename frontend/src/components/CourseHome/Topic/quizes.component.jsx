@@ -1,9 +1,15 @@
 import React from 'react'
+import quizIcon from '../../../assets/quiz.png';
 
-import { List, Dropdown, Menu, Avatar, Tag } from 'antd'
-import { isTimeBefore } from '../../../utils/text.utils'
+import { List, Dropdown, Menu, Avatar, Tag, Row, Col, Typography } from 'antd'
+import { CaretDownOutlined } from '@ant-design/icons'
+import { isTimeBefore, formatDate } from '../../../utils/text.utils'
+import Constants from '../../../constants'
 
-const QuizList = ({ quizes, deleteAsset, triggerEditQuize, gotoExam, }) => {
+
+const { Text } = Typography
+
+const QuizList = ({ quizes, deleteAsset, triggerEditQuize, gotoExam, userRole }) => {
 
     return (
         <List
