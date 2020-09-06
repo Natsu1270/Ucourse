@@ -11,6 +11,9 @@ class Choice(models.Model):
     status = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        db_table = 'Choice'
+
     def __str__(self):
         return self.content[:50]
 
@@ -52,6 +55,9 @@ class Question(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        db_table = 'Question'
+
     def __str__(self):
         return self.name
 
@@ -68,6 +74,9 @@ class QuestionKit(models.Model):
     created_date = models.DateField(auto_now_add=True)
     modified_by = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='kit_modifier')
     modified_date = models.DateField(auto_now=True)
+
+    class Meta:
+        db_table = 'QuestionKit'
 
     def __str__(self):
         return self.name

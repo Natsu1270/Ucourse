@@ -16,6 +16,9 @@ class Event(models.Model):
     created_date = models.DateTimeField(default=timezone.now, null=True)
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
+    class Meta:
+        db_table = 'Event'
+
     def __str__(self):
         return self.title
 

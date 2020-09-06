@@ -24,6 +24,9 @@ class SearchKeyWord(models.Model):
     count = models.IntegerField(default=0)
     created_date = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        db_table = 'SearchKeyWord'
+
     def __str__(self):
         return self.name
 

@@ -63,6 +63,10 @@ class Exam(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_modifier'
     )
 
+
+    class Meta:
+        db_table = 'Exam'
+
     def __str__(self):
         return self.name
 
@@ -91,6 +95,9 @@ class StudentExam(models.Model):
     date_taken = models.DateTimeField(default=timezone.now)
     result = models.FloatField(null=True, blank=True)
 
+    class Meta:
+        db_table = 'StudentExam'
+
     def __str__(self):
         return '{0}-{1}-{2}'.format(self.student, self.exam.name, self.date_taken)
     
@@ -115,6 +122,8 @@ class StudentExamResult(models.Model):
     course_home = models.ForeignKey(
         CourseHome, on_delete=models.CASCADE, null=True, blank=True
     )
+    class Meta:
+        db_table = 'StudentExamResult'
 
     def __str__(self):
         return self.student.__str__() + self.exam.__str__()
@@ -127,6 +136,9 @@ class QuestionResponse(models.Model):
         StudentExam,
         related_name='responses',
         on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = 'QuestionResponse'
 
     def __str__(self):
         return '{0}-{1}'.format(self.student_exam, self.question)
@@ -146,6 +158,9 @@ class AbilityTest(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='ability_creator'
     )
 
+    class Meta:
+        db_table = 'AbilityTest'
+
     def __str__(self):
         return self.name
 
@@ -154,6 +169,9 @@ class AbilityTest(models.Model):
 
 
 class UserAbilityTestManager(models.Manager):
+
+    class Meta:
+        db_table = 'UserAbilityTestManager'
 
     def gen_test(self, ability_test, user, **extra_fields):
         question_kits, questions, test_questions = list(), list(), list()
@@ -192,6 +210,9 @@ class UserAbilityTest(models.Model):
 
     objects = UserAbilityTestManager()
 
+    class Meta:
+        db_table = 'UserAbilityTest'
+
     def __str__(self):
         return '{0} - {1}'.format(self.ability_test.name, self.user)
 
@@ -209,3 +230,6 @@ class UserResponse(models.Model):
     user_ability_test = models.ForeignKey(
         UserAbilityTest, related_name='user_r', on_delete=models.CASCADE)
 
+
+    class Meta:
+        db_table = 'UserResponse'

@@ -18,5 +18,8 @@ class Role(models.Model):
     code = models.CharField(max_length=2, choices=ROLE_CHOICES, unique=True)
     created_date = models.DateField(default=date.today)
 
+    class Meta:
+        db_table = 'Role'
+
     def __str__(self):
         return self.name

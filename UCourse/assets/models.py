@@ -25,6 +25,8 @@ class Asset(models.Model):
     created_by = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
     )
+    class Meta:
+        db_table ='Asset'
 
     def __str__(self):
         return self.name

@@ -23,3 +23,7 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     read_date = models.DateTimeField(null=True, blank=True)
     created_date = models.DateTimeField(default=timezone.now)
+
+
+    class Meta:
+        db_table = 'Notification'

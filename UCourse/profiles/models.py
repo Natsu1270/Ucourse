@@ -42,6 +42,9 @@ class Profile(models.Model):
     created_date = models.DateTimeField(default=timezone.now, null=True)
     modified_date = models.DateTimeField(auto_now=True, null=True)
 
+    class Meta:
+        db_table = 'Profile'
+
     def __str__(self):
         return self.fullname
 
@@ -70,12 +73,16 @@ class Profile(models.Model):
 class TeacherManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_teacher=True)
+    class Meta:
+        db_table = 'TeacherManager'
 
 
 class StudentManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(is_student=True)
 
+    class Meta:
+        db_table = 'StudentManager'
 
 class Teacher(Profile):
     class Meta:

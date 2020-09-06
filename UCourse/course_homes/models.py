@@ -46,6 +46,8 @@ class CourseHome(models.Model):
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
     course_info = RichTextField(blank=True, null=True)
+    class Meta:
+        db_table = 'CourseHome'
 
     def __str__(self):
         return '{0} - {1}'.format(self.course.title, self.name)
@@ -89,6 +91,9 @@ class LearningTopic(models.Model):
         max_length=10, choices=TOPIC_STATUS_CHOICES, default=ACTIVE)
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
+
+    class Meta:
+        db_table = 'LearningTopic'
 
     def __str__(self):
         return '{0} - {1}'.format(self.course_home.course.title, self.name)
@@ -138,6 +143,9 @@ class TopicAsset(models.Model):
     status = models.BooleanField(default=True)
     info = models.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        db_table = 'TopicAsset'
+
     def __str__(self):
         return '{0} - {1}'.format(self.name, self.file_type)
 
@@ -157,6 +165,9 @@ class StudentNote(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.CharField(max_length=2000, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = 'StudentNote'
 
     def __str__(self):
         return self.content[:10]
@@ -183,6 +194,10 @@ class Assignment(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+    
+    class Meta:
+        db_table = 'Assignment'
 
     def __str__(self):
         return self.name
@@ -211,6 +226,9 @@ class StudentAssignment(models.Model):
     score = models.FloatField(blank=True, null=True)
     submit_time = models.IntegerField(blank=True, null=True, default=0)
     modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        db_table = 'StudentAssignment'
 
     @property
     def upload_ass_path(self):
@@ -243,3 +261,5 @@ class StudentCourseHome(models.Model):
     rank = models.CharField(max_length=10, choices=RANK_CHOICES, null=True, blank=True)
 
 
+    class Meta:
+        db_table = 'StudentCourseHome'

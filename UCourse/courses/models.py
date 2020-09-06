@@ -66,6 +66,10 @@ class Course(models.Model):
     )
     created_by_name = models.CharField(max_length=255, blank=True, null=True)
 
+
+    class Meta:
+        db_table = 'Course'
+
     def __str__(self):
         return self.title
 
@@ -116,6 +120,9 @@ class UserViewCourse(models.Model):
     course = models.ForeignKey(Course, related_name='course_user_viewed', on_delete=models.CASCADE)
     view_date = models.DateField(default=timezone.now)
 
+    class Meta:
+        db_table = 'UserViewCourse'
+
     def __str__(self):
         return "{0} - {1}".format(self.user.__str__(), self.course.__str__())
 
@@ -128,6 +135,7 @@ class UserBuyCourse(models.Model):
 
     class Meta:
         unique_together = ('user', 'course')
+        db_table = 'UserBuyCourse'
 
 
 class UserCourse(models.Model):
@@ -161,12 +169,16 @@ class UserCourse(models.Model):
     rate = models.IntegerField(null=True, blank=True)
 
 
+    class Meta:
+        db_table = 'UserCourse'
+
 class Skill(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        db_table = 'Skill'
 
 class CourseDetail(models.Model):
     verbose_name = models.CharField(max_length=255)
@@ -178,6 +190,9 @@ class CourseDetail(models.Model):
     )
     skills = models.ManyToManyField(Skill, related_name='course_skills')
     pre_requisites = RichTextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'CourseDetail'
 
     def __str__(self):
         return self.course.title

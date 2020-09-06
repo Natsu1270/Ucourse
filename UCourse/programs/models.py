@@ -13,6 +13,9 @@ class Field(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     created_date = models.DateTimeField(default=timezone.now)
 
+    class Meta:
+        db_table = 'Field'
+
     def __str__(self):
         return self.name
 
@@ -53,6 +56,9 @@ class Program(models.Model):
     created_by_name = models.CharField(max_length=255, blank=True, null=True)
     modified_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'Program'
+
     def __str__(self):
         return self.name
 
@@ -75,6 +81,9 @@ class UserViewProgram(models.Model):
     program = models.ForeignKey(Program, related_name='program_user_viewed', on_delete=models.CASCADE)
     view_date = models.DateField(default=timezone.now)
 
+    class Meta:
+        db_table = 'UserViewProgram'
+
     def __str__(self):
         return "{0} - {1}".format(self.user.__str__(), self.program.__str__())
 
@@ -87,6 +96,7 @@ class UserBuyProgram(models.Model):
 
     class Meta:
         unique_together = ('user', 'program')
+        db_table = 'UserBuyProgram'
 
 
 class StudentProgram(models.Model):
@@ -104,6 +114,9 @@ class StudentProgram(models.Model):
     completed_date = models.DateField(null=True, blank=True)
     received_certificate = models.BooleanField(default=False, null=True, blank=True)
     file = models.FileField(upload_to='certificates/program/files', null=True, blank=True)
+
+    class Meta:
+        db_table = 'StudentProgram'
 
     def __str__(self):
         return "{0}-{1}".format(self.student.__str__(), self.program.__str__())
