@@ -49,6 +49,6 @@ class QuestionKitSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionKit
         fields = [
-            'id', 'name', 'code', 'skill', 'status',
+            'id', 'name',  'skill', 'status',
             'created_date'
         ]

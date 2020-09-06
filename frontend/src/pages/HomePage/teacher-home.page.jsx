@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 
 import { getCourseHomesByTeacher } from '../../api/courseHome.services'
-import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, } from 'antd';
+import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, Skeleton, } from 'antd';
 import { useHistory, Link } from 'react-router-dom';
 import { DoubleRightOutlined } from '@ant-design/icons';
 
@@ -27,6 +27,7 @@ const TeacherHomePage = ({ token }) => {
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
+        setLoading(false)
     }
 
 
@@ -69,50 +70,53 @@ const TeacherHomePage = ({ token }) => {
                     Trong tiến trình
                 </h3>
 
-                <Collapse
-                    defaultActiveKey={[courseHomes[0] ? courseHomes[0].id.toString() : '1']}
-                    expandIconPosition="left"
-                    accordion>
-                    {
-                        courseHomes.map(courseHome => {
+                <Skeleton loading={loading} active paragraph={{ rows: 5 }}>
+                    <Collapse
+                        defaultActiveKey={[courseHomes[0] ? courseHomes[0].id.toString() : '1']}
+                        expandIconPosition="left"
+                        accordion>
+                        {
+                            courseHomes.map(courseHome => {
 
-                            return (
-                                <Panel
-                                    key={courseHome.id.toString()}
-                                    header={<span className="text--sub__bigger">{courseHome.full_name}</span>}
-                                    extra={genExtra(courseHome.slug)}
-                                >
+                                return (
+                                    <Panel
+                                        key={courseHome.id.toString()}
+                                        header={<span className="text--sub__bigger">{courseHome.full_name}</span>}
+                                        extra={genExtra(courseHome.slug)}
+                                    >
 
-                                    <Descriptions title="Thông tin" bordered className="mb-5">
-                                        <Descriptions.Item label="Khóa học">
-                                            <Space>
-                                                <Avatar size={48} src={courseHome.course.icon} />
-                                                <Link style={{ fontSize: '1.8rem' }} to={`courses/${courseHome.course.slug}`}>{courseHome.course.title}</Link>
-                                            </Space>
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Trạng thái">
-                                            <Badge status="processing" text={courseHome.status} />
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Học viên">
-                                            {courseHome.students.length} / {courseHome.maximum_number}
-                                        </Descriptions.Item>
+                                        <Descriptions title="Thông tin" bordered className="mb-5">
+                                            <Descriptions.Item label="Khóa học">
+                                                <Space>
+                                                    <Avatar size={48} src={courseHome.course.icon} />
+                                                    <Link style={{ fontSize: '1.8rem' }} to={`courses/${courseHome.course.slug}`}>{courseHome.course.title}</Link>
+                                                </Space>
+                                            </Descriptions.Item>
+                                            <Descriptions.Item label="Trạng thái">
+                                                <Badge status="processing" text={courseHome.status} />
+                                            </Descriptions.Item>
+                                            <Descriptions.Item label="Học viên">
+                                                {courseHome.students.length} / {courseHome.maximum_number}
+                                            </Descriptions.Item>
 
-                                    </Descriptions>
-                                    <h3 className="mb-4">Biểu đồ tài nguyên khóa học hiện tại</h3>
-                                    <Row justify="center">
-                                        <Col span={18}>
-                                            <Chart height={300} autoFit data={chartData(courseHome)}>
-                                                <Interval position="item*num" color="item" />
-                                                <Tooltip shared />
-                                            </Chart>
-                                        </Col>
-                                    </Row>
+                                        </Descriptions>
+                                        <h3 className="mb-4">Biểu đồ tài nguyên khóa học hiện tại</h3>
+                                        <Row justify="center">
+                                            <Col span={18}>
+                                                <Chart height={300} autoFit data={chartData(courseHome)}>
+                                                    <Interval position="item*num" color="item" />
+                                                    <Tooltip shared />
+                                                </Chart>
+                                            </Col>
+                                        </Row>
 
-                                </Panel>
-                            )
-                        })
-                    }
-                </Collapse>
+                                    </Panel>
+                                )
+                            })
+                        }
+                    </Collapse>
+
+                </Skeleton>
 
             </div>
 

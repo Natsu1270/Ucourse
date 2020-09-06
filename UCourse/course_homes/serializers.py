@@ -91,7 +91,7 @@ class LearningTopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = LearningTopic
         fields = [
-            'id', 'name', 'code', 'info', 'course_home', 'topic_assets', 'topic_assignments',
+            'id', 'name', 'info', 'course_home', 'topic_assets', 'topic_assignments',
             'topic_exams', 'status'
         ]
 

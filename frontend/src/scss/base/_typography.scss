@@ -222,3 +222,10 @@ body {
 .f-18 {
 	font-size: 1.8rem;
 }
+
+.truncate {
+	width: 250px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+  }

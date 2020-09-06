@@ -11,7 +11,7 @@ const CourseCards = ({courses}) => {
         <div className="course-cards">
             <div className="course-cards__items">
                 {
-                    courses.map(course => <CourseCard key={course.code}
+                    courses.map(course => <CourseCard key={course.id}
                         onClick={() => history.push(`/courses/${course.slug}`)}
                         course={course} />)
                 }

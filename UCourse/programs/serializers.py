@@ -17,7 +17,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'program_course',
+            'id', 'name',  'icon', 'slug', 'program_course',
             'status', 'field', 'created_date', 'discount',
             'short_description', 'full_description', 'created_date', 'created_by',
             'created_by_name', 'modified_date'
@@ -38,7 +38,7 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'discount', 'discount_percentage', 'price',
+            'id', 'name', 'icon', 'slug', 'discount', 'discount_percentage', 'price',
             'program_course', 'benefits', 'pre_requisites',
             'courses_count', 'status', 'field', 'bought_courses',
             'short_description', 'full_description', 'is_my_program'
@@ -78,7 +78,7 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'discount',
+            'id', 'name', 'icon', 'slug', 'discount',
             'courses_count', 'status', 'field', 'program_course'
         ]
 
@@ -93,7 +93,7 @@ class ProgramMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'bought_date', 'discount',
+            'id', 'name', 'icon', 'slug', 'bought_date', 'discount',
             'courses_count', 'status', 'field', 'program_course'
         ]
 
@@ -120,7 +120,7 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'code', 'icon', 'slug', 'discount', 'student_program', 'student_course',
+            'id', 'name', 'icon', 'slug', 'discount', 'student_program', 'student_course',
             'courses_count', 'status', 'field', 'program_course',
         ]
 
@@ -168,7 +168,7 @@ class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = [
-            'id', 'name', 'code', 'icon', 'description', 'field_programs', 'field_courses', 'field', 'created_date'
+            'id', 'name', 'icon', 'description', 'field_programs', 'field_courses', 'field', 'created_date'
         ]
         read_only_fields = ('created_date',)
 
@@ -180,7 +180,7 @@ class FieldMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
         fields = [
-            'id', 'name', 'code', 'slug', 'icon', 'description'
+            'id', 'name',  'slug', 'icon', 'description'
         ]
 
 

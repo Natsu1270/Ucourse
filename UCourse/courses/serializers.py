@@ -140,7 +140,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
+            'id', 'title', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
             'fee_type', 'status', 'course_detail', 'program', 'view_count',
             'field', 'tags', 'ability_test', 'created_date',
             'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
@@ -172,7 +172,7 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type', 'price', 'is_my_course',
+            'id', 'title',  'fee_type', 'price', 'is_my_course',
             'icon', 'slug', 'level', 'status', 'view_count',
             'field', 'course_home_count', 'course_teachers', 'bought_date'
         ]
@@ -218,7 +218,7 @@ class CourseMySerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'code', 'fee_type', 'price', 'view_count', 'is_my_course',
+            'id', 'title', 'fee_type', 'price', 'view_count', 'is_my_course',
             'icon', 'slug', 'level', 'status', 'field', 'c_homes',
             'course_home_count', 'course_teachers', 'bought_date', 'my_course_homes'
         ]
@@ -296,4 +296,4 @@ class SkillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Skill
-        fields = ['id', 'name', 'code']
+        fields = ['id', 'name']

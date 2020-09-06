@@ -71,7 +71,7 @@ const SearchFilter = () => {
                         <Checkbox.Group style={{ width: '100%' }} onChange={onChangeField}>
                             <Row>
                                 {fields.map(field => (
-                                    <Col key={field.code} span={24} style={{ marginBottom: '1rem' }}>
+                                    <Col key={field.id} span={24} style={{ marginBottom: '1rem' }}>
                                         <Checkbox value={field.slug}>{field.name}</Checkbox>
                                     </Col>
                                 ))}

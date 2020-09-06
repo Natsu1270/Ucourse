@@ -1,7 +1,6 @@
 import slugify from 'slugify';
 import moment from 'moment';
 import parse from 'html-react-parser'
-import Constants from "../constants";
 
 export function slugifyString(str) {
     if (str) {

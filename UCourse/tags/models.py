@@ -9,6 +9,9 @@ class Tag(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     created_date = models.DateField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'Tag'
+
     def __str__(self):
         return self.name
 

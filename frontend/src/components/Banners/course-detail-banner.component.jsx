@@ -13,16 +13,12 @@ import LoginSignUpOverlay from '../RegisterOrLogin/login-signup-overlay.ulti';
 import Register from '../Register/register.component';
 import momo from "../../assets/momo-logo-80x80.png";
 
-const CourseDetailBanner = ({ course, courseDetail, teachers, own, handleRegister, isLoading, userRole }) => {
+const CourseDetailBanner = ({ course, courseDetail, own, handleRegister, isLoading, userRole }) => {
 
     const [showPayment, setShowPayment] = useState(false);
 
-    const dispatch = useDispatch();
-
     const history = useHistory();
-    const gotoCourseLearn = () => {
-        history.push(`${Constants.COURSE_HOME_LINK}/${course.slug}`)
-    }
+
     const isRegistering = useSelector(state => isLoadingSelector(state));
     const s = {
         background: `linear-gradient(

@@ -23,11 +23,11 @@ class CourseHome(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name='c_homes')
+    exam_percentage = models.IntegerField(default=80, blank=True, null=True)
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     register_date = models.DateField(blank=True, null=True)
     expected_date = models.DateField(blank=True, null=True)
-    # maximum days after open date
     over_admission_days = models.IntegerField(blank=True, null=True)
     teacher = models.ForeignKey(
         Profile,

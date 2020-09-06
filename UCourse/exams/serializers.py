@@ -171,7 +171,7 @@ class AbilityTestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AbilityTest
         fields = [
-            'id', 'name', 'code', 'duration',
+            'id', 'name','duration',
             'status', 'num_questions', 'course',
             'taken_users', 'created_date'
         ]

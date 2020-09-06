@@ -115,7 +115,7 @@ const RegisterClassPage = () => {
                     <Col span={16}>
                         <Search
                             loading={loading}
-                            placeholder="Nhập tên khóa học/ mã khóa học"
+                            placeholder="Nhập tên khóa học"
                             enterButton={<Space><SearchOutlined />Tìm</Space>}
                             size="large"
                             onSearch={value => {
@@ -149,7 +149,7 @@ const RegisterClassPage = () => {
                                                 return { ...c, isOwn }
                                             })
                                             return (
-                                                <SubMenu key={course.id} title={course.title + " - " + course.code}>
+                                                <SubMenu key={course.id} title={course.title}>
                                                     <List
                                                         bordered
                                                         itemLayout="horizontal"

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table, Input, Row, Col, List, Skeleton, Button, Form, Modal, Select, Switch, InputNumber } from 'antd'
+import {
+    message, Tabs, Table, Input, Row, Col, List, Typography,
+    Skeleton, Button, Form, Modal, Select, Switch, InputNumber
+} from 'antd'
 import { getQuestionsByTeacher, deleteQuestion, createQuestion, editQuestion } from '../../../api/question.services'
 import { parseHtml } from '../../../utils/text.utils'
 import { AppstoreAddOutlined, EditOutlined, DeleteOutlined, PlusOutlined, MinusCircleTwoTone, } from '@ant-design/icons'
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
-const { TabPane } = Tabs
 const { Option } = Select;
 const { Search } = Input
+const { Paragraph } = Typography
 
 const QuestionBank = ({ token }) => {
 
@@ -144,7 +147,9 @@ const QuestionBank = ({ token }) => {
                                 <Skeleton avatar title={false} loading={item.loading} active>
                                     <List.Item.Meta
                                         title={<p className="text--sub__bigger text-black">{item.name}</p>}
-                                        description={<p className="text--sub__bigger text-black">{parseHtml(item.content)}</p>}
+                                    // description={<p className="text--sub__bigger text-black">
+                                    //     <Paragraph ellipsis >{parseHtml(item.content)}</Paragraph>
+                                    // </p>}
                                     />
                                 </Skeleton>
                             </List.Item>

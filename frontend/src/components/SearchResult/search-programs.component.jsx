@@ -20,7 +20,7 @@ const SearchPrograms = ({ programs, myPrograms }) => {
                                 return (
                                     <SearchProgramItem
                                         onClick={() => history.push(`/programs/${program.slug}`)}
-                                        key={program.code}
+                                        key={program.id}
                                         img={program.icon}
                                         title={program.name}
                                         slug={program.slug}
