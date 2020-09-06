@@ -24,4 +24,5 @@ class StudentCertificate(models.Model):
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
-
+    class Meta:
+        db_table = 'StudentCertificate'
