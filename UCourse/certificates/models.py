@@ -17,6 +17,9 @@ class Certificate(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = 'Certificate'
+
 
 class StudentCertificate(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -24,3 +27,6 @@ class StudentCertificate(models.Model):
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
+
+    class Meta:
+        db_table = 'StudentCertificate'

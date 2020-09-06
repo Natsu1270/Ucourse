@@ -35,6 +35,7 @@ class Exam(models.Model):
     mandatory = models.BooleanField(default=True, null=True, blank=True)
     get_result_type = models.CharField(max_length=10, choices=EXAM_RESULT_CHOICES, default=PICK_BEST, blank=True)
     questions = models.ManyToManyField(Question, related_name="question_exams")
+    question_num = models.IntegerField(blank=True, null=True)
     students = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name='student_exams',
@@ -47,7 +48,7 @@ class Exam(models.Model):
         blank=True, null=True
     )
     duration = models.IntegerField(blank=True, null=True)
-    pass_score = models.FloatField(max_length=3, blank=True, null=True, default=5.0)
+    pass_score = models.FloatField(max_length=3, blank=True, null=True)
     percentage = models.FloatField(blank=True, null=True)
     max_try = models.IntegerField(default=1)
     start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)

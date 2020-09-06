@@ -21,7 +21,7 @@ class ExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'views', 'mandatory',
+            'id', 'name', 'get_result_type', 'views', 'mandatory', 'question_num',
             'exam_type', 'questions', 'students', 'enable_review',
             'topic', 'duration', 'pass_score', 'max_try', 'max_score',
             'status', 'expired_date', 'start_date', 'total_score', 'percentage'
@@ -46,7 +46,7 @@ class ExamShowSerializer(serializers.ModelSerializer):
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'max_try', 'mandatory', 'expired_date', 'start_date',
-            'exam_type', 'duration', 'pass_score', 'views', 'enable_review', 'max_score',
+            'exam_type', 'duration', 'pass_score', 'views', 'enable_review', 'max_score', 'question_num',
             'status', 'percentage'
         ]
 
@@ -59,7 +59,7 @@ class ExamMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score', 'percentage'
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score', 'percentage', 'question_num',
         ]
 
 
