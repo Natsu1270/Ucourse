@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table } from 'antd'
+import { message, Tabs, Table, Tag } from 'antd'
 import Constants from '../../constants'
 
 import { getStudentGradesByCourseHomeAPI } from '../../api/grades.services'
@@ -58,6 +58,23 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             render: result => <span>{result}</span>
         },
         {
+            title: 'Đạt yêu cầu',
+            dataIndex: 'isPass',
+            key: 'isPass',
+            filters: [
+                {
+                    text: 'Đạt',
+                    value: true,
+                },
+                {
+                    text: 'Không đạt',
+                    value: false,
+                },
+            ],
+            onFilter: (value, record) => record.isPass === value,
+            render: isPass => <span>{isPass ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>}</span>,
+        },
+        {
             title: 'Phần trăm điểm',
             dataIndex: 'percentage',
             key: 'percentage',
@@ -73,6 +90,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             name: exam.exam ? exam.exam.name : 'N/A',
             date: exam.last_update,
             result: exam.final_result,
+            isPass: exam.is_pass,
             percentage: exam.exam ? exam.exam.percentage : 'N/A'
         })
         examStudentChartData.push({

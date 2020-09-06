@@ -34,7 +34,7 @@ export const radioStyleWrong = {
 export const renderChoice = (question, choice, responses) => {
     const answers = question.answers;
     const repsonseQuestion = responses.find(response => response.question == question.id)
-    const responseChoices = repsonseQuestion.choices
+    const responseChoices = repsonseQuestion ? repsonseQuestion.choices : []
     if (responseChoices.includes(choice.id)) {
         if (answers.includes(choice.id)) {
             return (

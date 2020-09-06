@@ -101,7 +101,7 @@ class StudentExamResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentExamResult
-        fields = ['id', 'student', 'exam', 'final_result', 'last_update', 'course_home']
+        fields = ['id', 'student', 'exam', 'final_result', 'is_pass', 'last_update', 'course_home']
 
 
 class QuestionResponseReviewSerializer(serializers.ModelSerializer):

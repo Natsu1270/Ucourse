@@ -25,12 +25,14 @@ const RegisterClassPage = () => {
     const [loading, setLoading] = useState(true)
     const [myCourses, setMyCourses] = useState([])
     const [searched, setSearched] = useState(false)
+    // const [myClasses, setMyClasses] = useState([])
 
     const getMyCourses = async () => {
         setLoading(true)
         try {
             const { data } = await getMyCoursesAPI(token)
             setMyCourses(data.data)
+            // setMyClasses(data.)
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
@@ -164,7 +166,7 @@ const RegisterClassPage = () => {
                                                                             onClick={() => registerClass(item, course.is_my_course, course)}
                                                                             disabled={
                                                                                 !canRegister(item) || item.student_count === item.maximum_number
-                                                                                || moment(item.open_date).isSameOrBefore(now)
+                                                                                || (moment(item.open_date).isSameOrBefore(now) && item.isOwn)
                                                                             }
                                                                             type="primary"
                                                                             key="list-loadmore-edit">
