@@ -28,5 +28,8 @@ class Resource(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
     )
 
+    class Meta:
+        db_table = 'Resource'
+        
     def __str__(self):
         return self.name

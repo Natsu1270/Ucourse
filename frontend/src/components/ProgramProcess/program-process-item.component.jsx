@@ -61,7 +61,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                 </Tag>
             if (program.program_course.length - passNum == 0) {
                 return <Tag color="blue" style={{ fontSize: '1.8rem', padding: '0.8rem' }}>
-                    Bạn đã hoàn thành hết các khóa học, nhấn "Yêu cầu cấp phát chứng chỉ" để nhận chứng chỉ
+                    Bạn đã hoàn thành hết các khóa học trong chương trình
                     </Tag>
             }
             return <Tag color="#f50" style={{ fontSize: '1.8rem', padding: '0.5rem' }}>
@@ -94,7 +94,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
             <h1 className="text-grey mb-4 text-center">
                 Thông tin chương trình học: <Avatar src={program.icon} size={24} /> {program.name}
             </h1>
-            {
+            {/* {
                 program.student_program ?
                     <Row justify="center" className="mb-5">
                         <Col>
@@ -109,7 +109,7 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                             }
                         </Col>
                     </Row> : null
-            }
+            } */}
 
             <Row gutter={[18, 18]} className="text--sub__bigger" style={{ fontSize: '1.8rem' }}>
                 <Col span={12}>

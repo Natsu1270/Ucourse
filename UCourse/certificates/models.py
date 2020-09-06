@@ -13,6 +13,8 @@ class Certificate(models.Model):
     effective_time = models.IntegerField()
 
     created_date = models.DateTimeField(default=timezone.now)
+    class Meta:
+        db_table = 'Certificate'
 
     def __str__(self):
         return self.name
@@ -24,6 +26,8 @@ class StudentCertificate(models.Model):
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
+    class Meta:
+        db_table = 'StudentCertificate'
 
 
 class AllCourseCertificate(models.Model):
@@ -31,3 +35,5 @@ class AllCourseCertificate(models.Model):
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
+    class Meta:
+        db_table = 'AllCourseCertificate'

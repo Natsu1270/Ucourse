@@ -14,11 +14,15 @@ class Forum(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
+    class Meta:
+        db_table = 'Forum'
+
     def __str__(self):
         return self.name
 
     def set_created_by(self, user):
         self.created_by = user
+    
 
 
 class Thread(models.Model):
@@ -38,6 +42,7 @@ class Thread(models.Model):
 
     class Meta:
         ordering = ['-id']
+        db_table = 'Thread'
 
 
 class ThreadResponse(models.Model):
@@ -55,6 +60,7 @@ class ThreadResponse(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+        db_table ='ThreadResponse'
 
     def __str__(self):
         return self.content

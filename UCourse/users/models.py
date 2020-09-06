@@ -56,6 +56,9 @@ class UserManager(BaseUserManager):
         student_profile.save(using=self._db)
         return user
 
+    class Meta:
+        db_table = 'UserManager'
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username_validator = validators.UnicodeUsernameValidator()
@@ -82,6 +85,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
     USERNAME_FIELD = 'email'
+
+    class Meta:
+        db_table = 'User'
 
     def __str__(self):
         return self.email
