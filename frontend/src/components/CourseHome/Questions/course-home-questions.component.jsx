@@ -50,7 +50,7 @@ const QuestionBank = ({ token }) => {
                 setMyQuestions(myQuestions)
                 message.success("Tạo câu hỏi thành công")
             } else {
-                const result = await editQuestion(data)
+                const result = await editQuestion({ ...data, id: editingQuestion.id })
                 message.success("Chỉnh sửa câu hỏi thành công", 1.5, () => window.location.reload())
             }
         } catch (err) {
@@ -163,6 +163,7 @@ const QuestionBank = ({ token }) => {
                 destroyOnClose={true}
                 width={920}
                 style={{ paddingBottom: "0px" }}
+                bodyStyle={{ maxHeight: '70vh', overflow: 'auto' }}
                 className="bg-white"
                 visible={showModal}
                 title="Quản lý câu hỏi"

@@ -28,25 +28,25 @@ export const getStudentExamList = ({ token, exam_id }) => {
 }
 
 export const submitExam = (params) => {
-    const { token, exam, result, responses, courseHomeId } = params
+    const { token, exam, result, responses, courseHomeId, studentExamId } = params
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `token ${token}`,
         },
         method: 'POST',
-        url: `${API_URL}/submit`,
+        url: `${API_URL}/submit/${studentExamId}`,
         data: {
-            exam, result, responses, courseHomeId
+            exam, result, responses, courseHomeId, studentExamId
         }
     })
 }
 
 export const createExam = (params) => {
     const {
-        token, topic, name, exam_type,
-        get_result_type, duration, max_try,
-        pass_score, start_date, expired_date, percentage, mandatory
+        token, topic, name, exam_type, courseHomeId,
+        get_result_type, duration, max_try, question_num,
+        pass_percentage, start_date, expired_date, percentage, mandatory
     } = params
     return axios.request({
         headers: {
@@ -56,8 +56,8 @@ export const createExam = (params) => {
         method: 'POST',
         url: `${API_URL}/create`,
         data: {
-            topic, name, exam_type, get_result_type, duration,
-            max_try, pass_score, start_date, expired_date, percentage, mandatory
+            topic, name, exam_type, get_result_type, duration, courseHomeId, question_num,
+            max_try, pass_percentage, start_date, expired_date, percentage, mandatory
         }
     })
 }
@@ -84,5 +84,28 @@ export const editExam = (params) => {
         method: 'PATCH',
         url: `${API_URL}/${id}`,
         data: params
+    })
+}
+
+export const initExamAPI = ({ courseHomeId, examId, token }) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'POST',
+        url: `${API_URL}/init`,
+        data: { courseHomeId, examId }
+    })
+}
+
+export const reviewExamAPI = ({ studentExamId, token }) => {
+    return axios.request({
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `token ${token}`,
+        },
+        method: 'GET',
+        url: `${API_URL}/student_exams/${studentExamId}`,
     })
 }

@@ -16,7 +16,7 @@ import QuestionDrawer from './Schedule/question-drawer.component';
 import ScheduleForm from './Schedule/schedule-form.component';
 
 
-const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
+const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, courseHomeId }) => {
 
     const [showModal, setShowModal] = useState(false)
     const [showDrawer, setShowDrawer] = useState(false)
@@ -223,13 +223,14 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course }) => {
 
         const data = {
             token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
-            duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
-            start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory
+            duration: values.duration, max_try: values.max_try, pass_percentage: values.pass_percentage,
+            start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory,
+            courseHomeId, question_num: values.question_num
         }
 
         const editData = {
-            token, name: values.name, get_result_type: values.resultType,
-            duration: values.duration, max_try: values.max_try, pass_score: values.pass_score,
+            token, name: values.name, get_result_type: values.resultType, question_num: values.question_num,
+            duration: values.duration, max_try: values.max_try, pass_percentage: values.pass_percentage,
             start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory
         }
         try {

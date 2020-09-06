@@ -59,5 +59,5 @@ export const renderPrice = (price) => {
     if (price) {
         return price.toString != "0" ? price.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.") + " VND" : "Miễn phí"
     }
-    return "Chưa xác định"
+    return "Miễn phí"
 }

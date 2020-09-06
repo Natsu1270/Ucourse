@@ -196,7 +196,6 @@ class Assignment(models.Model):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
 
-    
     class Meta:
         db_table = 'Assignment'
 

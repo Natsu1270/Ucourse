@@ -14,7 +14,7 @@ const EventPage = () => {
     const getEventList = async () => {
         setLoading(true)
         try {
-            const { data } = getEventListAPI()
+            const { data } = await getEventListAPI()
             setEvents(data.data)
         } catch (err) {
             message.error('Có lỗi xảy ra')

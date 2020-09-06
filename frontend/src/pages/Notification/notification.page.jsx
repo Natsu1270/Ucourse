@@ -5,7 +5,7 @@ import Constants from '../../constants'
 import { formatDate } from '../../utils/text.utils'
 import './notification.styles.scss'
 import { readNotification } from '../../api/notification.services'
-import { TeamOutlined, ReadOutlined, RocketOutlined, LaptopOutlined } from '@ant-design/icons'
+import { TeamOutlined, ReadOutlined, RocketOutlined, LaptopOutlined, FileProtectOutlined } from '@ant-design/icons'
 
 const NotificationPage = ({ notifications, loading }) => {
 
@@ -43,7 +43,7 @@ const NotificationPage = ({ notifications, loading }) => {
                 if (n.type === "2") {
                     onClick = () => {
                         readNoti(n.id)
-                        window.open(`/program/${reference.slug}`, '_self')
+                        window.open(`/programs/${reference.slug}`, '_self')
                     }
                     content = <Space>
                         <RocketOutlined /> Đăng ký thành công chương trình học <span className="b-500">{reference.name}</span>
@@ -77,6 +77,18 @@ const NotificationPage = ({ notifications, loading }) => {
                     }
                     content = <span>
                         <TeamOutlined /> Có chủ đề mới được tạo ở lớp <span className="b-500">{reference.course_home.full_name}</span>
+                    </span>
+                }
+
+                if (n.type === "6") {
+                    onClick = () => {
+                        readNoti(n.id)
+                        window.open(
+                            `/learn/${reference.course_home.slug}/forums/${reference.forum}/threads/${reference.id}`, '_self'
+                        )
+                    }
+                    content = <span>
+                        <FileProtectOutlined /> Có bài kiểm tra mới phải làm ở lớp <span className="b-500">{reference.course_home.full_name}</span>
                     </span>
                 }
                 return { ...n, content, onClick }

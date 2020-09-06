@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
 from course_homes.models import LearningTopic, CourseHome
+from questions.models import Question
 from users.models import User
 from users.serializers import UserMinSerializer
 from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice, \
     StudentExamResult
-from questions.serializers import QuestionSerializer
+from questions.serializers import QuestionSerializer, ChoiceSerializer
 from courses.serializers import CourseMinSerializer
 
 
@@ -23,7 +24,7 @@ class ExamSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'get_result_type', 'views', 'mandatory', 'question_num',
             'exam_type', 'questions', 'students', 'enable_review',
-            'topic', 'duration', 'pass_score', 'max_try', 'max_score',
+            'topic', 'duration', 'pass_percentage', 'max_try', 'max_score',
             'status', 'expired_date', 'start_date', 'total_score', 'percentage'
         ]
 
@@ -46,7 +47,7 @@ class ExamShowSerializer(serializers.ModelSerializer):
         model = Exam
         fields = [
             'id', 'name', 'get_result_type', 'max_try', 'mandatory', 'expired_date', 'start_date',
-            'exam_type', 'duration', 'pass_score', 'views', 'enable_review', 'max_score', 'question_num',
+            'exam_type', 'duration', 'pass_percentage', 'views', 'enable_review', 'max_score', 'question_num',
             'status', 'percentage'
         ]
 
@@ -59,7 +60,7 @@ class ExamMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_score', 'max_score', 'percentage', 'question_num',
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_percentage', 'max_score', 'percentage', 'question_num',
         ]
 
 
@@ -75,7 +76,7 @@ class StudentExamSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentExam
         fields = [
-            'id', 'exam', 'student',
+            'id', 'exam', 'student', 'is_pass',
             'date_taken', 'result', 'duration',
             'topic'
         ]
@@ -88,7 +89,7 @@ class StudentExamDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentExam
         fields = [
-            'id', 'exam', 'student', 'date_taken', 'result', 'duration',
+            'id', 'exam', 'student', 'date_taken', 'result', 'duration', 'is_pass',
         ]
 
 
@@ -103,10 +104,10 @@ class StudentExamResultSerializer(serializers.ModelSerializer):
         fields = ['id', 'student', 'exam', 'final_result', 'last_update', 'course_home']
 
 
-class QuestionResponseSerializer(serializers.ModelSerializer):
+class QuestionResponseReviewSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    question = serializers.PrimaryKeyRelatedField(read_only=True)
-    choices = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    question = QuestionSerializer(required=False)
+    choices = ChoiceSerializer(many=True)
     student_exam = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
 
     class Meta:
@@ -116,13 +117,41 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
         ]
 
 
+class QuestionResponseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    question = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all())
+    choices = serializers.PrimaryKeyRelatedField(many=True, queryset=Choice.objects.all())
+    student_exam = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+
+    class Meta:
+        model = QuestionResponse
+        fields = [
+            'id', 'question', 'choices', 'student_exam'
+        ]
+
+
+class StudentExamReviewSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam = serializers.PrimaryKeyRelatedField(
+        queryset=Exam.objects.all()
+    )
+    student = serializers.StringRelatedField(read_only=True)
+    responses = QuestionResponseSerializer(many=True)
+
+    class Meta:
+        model = StudentExam
+        fields = [
+            'id', 'exam', 'student', 'result', 'responses'
+        ]
+
+
 class StudentExamSubmitSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     exam = serializers.PrimaryKeyRelatedField(
         queryset=Exam.objects.all()
     )
     student = serializers.StringRelatedField(read_only=True)
-    responses = QuestionResponseSerializer(many=True, read_only=True)
+    responses = QuestionResponseSerializer(many=True)
 
     class Meta:
         model = StudentExam
@@ -151,6 +180,22 @@ class StudentExamSubmitSerializer(serializers.ModelSerializer):
             question_response.save()
         return student_exam
 
+    def update(self, instance, validated_data):
+        responses = validated_data['responses']
+        result = validated_data['result']
+        student_exam = instance
+        student_exam.result = result
+        for response in responses:
+            question_response = QuestionResponse.objects.create(
+                student_exam=student_exam,
+                question=response['question']
+            )
+            choices = response['choices']
+            question_response.choices.add(*choices)
+            question_response.save()
+        student_exam.save()
+        return student_exam
+
 
 class StudentExamShowSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -159,7 +204,7 @@ class StudentExamShowSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentExam
         fields = [
-            'id', 'exam', 'date_taken', 'result',
+            'id', 'exam', 'date_taken', 'result', 'is_pass'
         ]
 
 

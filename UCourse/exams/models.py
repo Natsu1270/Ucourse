@@ -48,7 +48,7 @@ class Exam(models.Model):
         blank=True, null=True
     )
     duration = models.IntegerField(blank=True, null=True)
-    pass_score = models.FloatField(max_length=3, blank=True, null=True)
+    pass_percentage = models.FloatField(max_length=3, blank=True, null=True)
     percentage = models.FloatField(blank=True, null=True)
     max_try = models.IntegerField(default=1)
     start_date = models.DateTimeField(blank=True, null=True, default=timezone.now)
@@ -65,7 +65,6 @@ class Exam(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='exam_modifier'
     )
 
-
     class Meta:
         db_table = 'Exam'
 
@@ -77,7 +76,7 @@ class Exam(models.Model):
         questions = self.questions.all()
         res = 0
         for question in questions:
-            res += question.score
+            res += question.score if question.score else 0
         return res
 
     def set_created_by(self, user):
@@ -89,13 +88,14 @@ class Exam(models.Model):
 
 class StudentExam(models.Model):
     exam = models.ForeignKey(
-        Exam, related_name='student_exams', on_delete=models.SET_NULL, null=True
+        Exam, related_name='student_exams', on_delete=models.CASCADE, null=True
     )
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='exam_students', on_delete=models.SET_NULL, null=True
     )
     date_taken = models.DateTimeField(default=timezone.now)
     result = models.FloatField(null=True, blank=True)
+    is_pass = models.BooleanField(default=False, null=True, blank=True)
 
     class Meta:
         db_table = 'StudentExam'
@@ -114,12 +114,14 @@ class StudentExam(models.Model):
 
 class StudentExamResult(models.Model):
     exam = models.ForeignKey(
-        Exam, related_name='student_exams_result', on_delete=models.SET_NULL, null=True
+        Exam, related_name='student_exams_result', on_delete=models.CASCADE, null=True
     )
     student = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='exam_students_result', on_delete=models.SET_NULL, null=True
+        settings.AUTH_USER_MODEL, related_name='exam_students_result', on_delete=models.CASCADE, null=True
     )
     final_result = models.FloatField(blank=True, null=True)
+    is_pass = models.BooleanField(default=False, blank=True, null=True)
+    mandatory = models.BooleanField(default=True, blank=True, null=True)
     last_update = models.DateTimeField(auto_now=True, blank=True, null=True)
     course_home = models.ForeignKey(
         CourseHome, on_delete=models.CASCADE, null=True, blank=True
@@ -137,7 +139,7 @@ class QuestionResponse(models.Model):
     student_exam = models.ForeignKey(
         StudentExam,
         related_name='responses',
-        on_delete=models.SET_NULL, null=True)
+        on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'QuestionResponse'

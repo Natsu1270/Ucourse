@@ -15,6 +15,7 @@ import {
     InputNumber, Table
 } from 'antd'
 import ExamDetail from "./exam-detail.component";
+import ExamReview from './exam-review.component';
 import ExamHistoryTable from "./exam-history-table.component";
 import { isTimeBefore, formatDate, secondToTime, parseHtml } from '../../utils/text.utils'
 import { isRoleTeacherOrTA } from '../../utils/account.utils'
@@ -22,6 +23,8 @@ import Constants from '../../constants'
 
 import { SettingTwoTone, DeleteTwoTone, PlusCircleOutlined, PlusOutlined, MinusCircleTwoTone, AppstoreAddOutlined } from '@ant-design/icons'
 import { deleteQuestion, createQuestion, editQuestion, getQuestionsRemainByTeacher, addQuestionToExam } from '../../api/question.services'
+import { initExamAPI } from '../../api/exam.services'
+
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
@@ -54,6 +57,9 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     const [selectedRows, setSelectedRows] = useState([])
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [orgQuesitons, setOrgQuestions] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [studentExamId, setStudentExam] = useState(null)
+    const [reviewId, setReviewId] = useState(null)
 
 
     const { studentExams, examDetail, isProcessing } = useSelector(createStructuredSelector({
@@ -154,6 +160,21 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
         setSelectedRows([])
     }
 
+    const initExam = async () => {
+        setLoading(true)
+        try {
+            const { data } = await initExamAPI({ courseHomeId: courseHomeDetail.id, examId: exam_id, token })
+            if (data.result) {
+                setStudentExam(data.studentExamId)
+                setShowExam(true)
+            } else {
+                message.error('Bạn đã thực hiện tối đa số lần làm bài cho phép')
+            }
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+        }
+        setLoading(false)
+    }
     const canDoExam = () => {
         if (expired || isRoleTeacherOrTA(userRole.code)) return null
         if (studentExams.length >= examDetail.max_try) {
@@ -162,11 +183,11 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
         return (
             <Popconfirm
                 title="Bạn có làm bài kiểm tra ngay bây giờ ?"
-                onConfirm={() => setShowExam(true)}
+                onConfirm={initExam}
                 okText="Xác nhận"
                 cancelText="Hủy"
             >
-                <Button type="primary">Làm bài</Button>
+                <Button loading={loading} type="primary">Làm bài</Button>
             </Popconfirm>
         )
 
@@ -223,6 +244,11 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 columns={columns}
             />
         )
+    }
+
+    const triggerReview = (id) => {
+        setReviewId(id)
+        setShowExam(true)
     }
 
     return (
@@ -334,7 +360,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                                 Lịch sử làm bài
                             </h2>
                             {studentExams.length ?
-                                <ExamHistoryTable exams={studentExams} passScore={examDetail.pass_score} />
+                                <ExamHistoryTable exams={studentExams} setReviewId={triggerReview} />
                                 : <Empty description="Không có lịch sử làm bài" />}
                         </div>
                     </Skeleton>
@@ -345,7 +371,13 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 className="exam_drawer"
                 title={examDetail.name}
                 placement="right"
-                onClose={() => setShowExam(false)}
+                onClose={() => {
+                    if (!reviewId) {
+                        window.location.reload()
+                    }
+                    setShowExam(false)
+                    setReviewId(null)
+                }}
                 visible={showExam}
                 footer={
                     <div>
@@ -355,7 +387,11 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                     </div>
                 }
             >
-                <ExamDetail exam={examDetail} token={token} courseHomeId={courseHomeDetail.id} />
+                {
+                    reviewId ?
+                        <ExamReview exam={examDetail} studentExamId={reviewId} token={token} /> :
+                        <ExamDetail exam={examDetail} token={token} courseHomeId={courseHomeDetail.id} studentExamId={studentExamId} />
+                }
             </Drawer>
 
             {

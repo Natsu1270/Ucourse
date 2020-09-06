@@ -4,7 +4,7 @@ import uuid
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
-from courses.models import Course
+from courses.models import Course, UserBuyCourse, UserCourse
 from notifications.models import Notification
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from .serializers import FieldSerializer, FieldMinSerializer, ProgramDetailSerializer, ProgramSerializer
@@ -67,6 +67,9 @@ class BuyProgramAPI(generics.GenericAPIView):
                 price += int(course.get_price())
 
         if price != 0:
+            if program.discount_percentage:
+                price *= (1 - program.discount_percentage/100)
+            price = int(price)
             orderId = str(uuid.uuid4())
             requestId = str(uuid.uuid4())
             orderInfo = 'Card Payment'
@@ -88,15 +91,17 @@ class BuyProgramAPI(generics.GenericAPIView):
                 "status_code": 201
             }, status=status.HTTP_201_CREATED)
 
-        UserBuyProgram.objects.create(user=user, program_id=program_id)
+        UserBuyProgram.objects.create(user=user, program_id=program_id, money=0)
         StudentProgram.objects.create(student_id=user.id, program_id=program_id)
         Notification.objects.create(user=user, reference=program_id, type='2')
 
         if program_courses.count() > 0:
             for course in program_courses:
                 if user not in course.user_buy.all():
-                    course.user_buy.add(user)
-                    course.save()
+                    UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True)
+                if user not in course.usercourse_set.all():
+                    UserCourse.objects.create(user=user, course=course, program_id=program_id)
+
         return Response({
             "data": {
             },
@@ -118,7 +123,6 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
         program_id = request.data['program']
         errorCode = request.data['errorCode']
         extraData = request.data['extraData']
-        # resUrl = extraData.split("=")[1]
 
         if errorCode == "0":
             query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
@@ -128,20 +132,33 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
             if json_response["data"]["status"] == 0:
                 Notification.objects.create(user=user, reference=program_id, type='2')
                 amount = json_response["data"]["amount"]
-                try:
-                    instance = UserBuyProgram.objects.get(user=user, program_id=program_id)
-                    instance.money = amount
-                    instance.save()
-                except UserBuyProgram.DoesNotExist:
-                    UserBuyProgram.objects.create(user=user, program_id=program_id, money=amount)
+                check_bought = UserBuyProgram.objects.filter(user=user, program_id=program_id).count()
+                if check_bought > 0:
+                    return Response({
+                        "code": 10,
+                        "redirect": None,
+                        "result": True,
+                    }, status=status.HTTP_200_OK)
 
+                UserBuyProgram.objects.create(user=user, program_id=program_id, money=amount)
                 StudentProgram.objects.create(student_id=user.id, program_id=program_id)
+                Notification.objects.create(user=user, reference=program_id, type='2')
+                program = Program.objects.get(pk=program_id)
+                program_courses = program.program_course.all()
+                for course in program_courses:
+                    if user not in course.user_buy.all():
+                        UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True)
+                    if user not in course.usercourse_set.all():
+                        UserCourse.objects.create(user=user, course=course, program_id=program_id)
+
                 return Response({
+                    "code": 0,
                     "redirect": None,
                     "result": True,
                 }, status=status.HTTP_200_OK)
 
         return Response({
+            "code": 11,
             "redirect": None,
             "result": False,
         }, status=status.HTTP_200_OK)

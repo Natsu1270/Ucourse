@@ -31,41 +31,6 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         if (token && courseHomeId) getStudentGrades()
     }, [token, courseHomeId])
 
-    // const groupByExamId = (lst, key) => {
-    //     return lst.reduce((rv, x) => {
-    //         (rv[x['exam'][key]] = rv[x['exam'][key]] || []).push(x)
-    //         return rv
-    //     }, {})
-    // }
-
-    // const calculateResult = (type, exams) => {
-    //     const resultList = exams.map(exam => exam.result)
-
-    //     if (type === Constants.EXAM_GET_BEST) {
-    //         return Math.max(...resultList)
-    //     }
-    //     if (type === Constants.EXAM_GET_AVERAGE) {
-    //         const sum = resultList.reduce((x, y) => x + y, 0)
-    //         return sum / resultList.length
-    //     }
-    //     return resultList[0]
-    // }
-
-    // const calculateExam = (exams) => {
-    //     const res = groupByExamId(exams, 'id')
-    //     let examList = []
-    //     Object.keys(res).forEach(key => {
-    //         const exams = res[key]
-    //         const type = exams[0].exam.get_result_type
-    //         const exam_type = exams[0].exam.exam_type
-    //         const result = calculateResult(type, exams)
-    //         examList.push({
-    //             result,
-    //             exam: exams[0].exam
-    //         })
-    //     })
-    //     setExams(examList)
-    // }
 
     const columns = [
         {
@@ -105,21 +70,21 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
     exams.forEach((exam, index) => {
         examData.push({
             stt: index + 1,
-            name: exam.exam.name,
+            name: exam.exam ? exam.exam.name : 'N/A',
             date: exam.last_update,
             result: exam.final_result,
-            percentage: exam.exam.percentage
+            percentage: exam.exam ? exam.exam.percentage : 'N/A'
         })
         examStudentChartData.push({
-            name: exam.exam.name,
+            name: exam.exam ? exam.exam.name : 'N/A',
             type: "Điểm đạt được",
             score: exam.final_result
         })
 
         examStudentChartData.push({
-            name: exam.exam.name,
+            name: exam.exam ? exam.exam.name : 'N/A',
             type: "Điểm tối đa",
-            score: exam.exam.max_score
+            score: exam.exam ? exam.exam.max_score : 'N/A'
         })
     });
 
@@ -134,7 +99,9 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
     const calFinalScore = () => {
         let finalResult = 0
         exams.forEach(exam => {
-            finalResult += exam.final_result * exam.exam.percentage / 100
+            if (exam.exam) {
+                finalResult += exam.final_result * exam.exam.percentage / 100
+            }
         })
         assignments.forEach(ass => {
             finalResult += ass.score * ass.assignment.percentage / 100

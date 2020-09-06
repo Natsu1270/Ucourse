@@ -130,7 +130,9 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                             <Button
                                 loading={loading}
                                 onClick={() => registerClass(item)}
-                                disabled={!canRegister(item) || item.student_count === item.maximum_number}
+                                disabled={!canRegister(item) || item.student_count === item.maximum_number ||
+                                    moment(item.open_date).isSameOrBefore(now)
+                                }
                                 type="primary"
                                 key="list-loadmore-edit">
                                 {

@@ -162,7 +162,10 @@ const RegisterClassPage = () => {
                                                                         <Button
                                                                             loading={loading}
                                                                             onClick={() => registerClass(item, course.is_my_course, course)}
-                                                                            disabled={!canRegister(item) || item.student_count === item.maximum_number}
+                                                                            disabled={
+                                                                                !canRegister(item) || item.student_count === item.maximum_number
+                                                                                || moment(item.open_date).isSameOrBefore(now)
+                                                                            }
                                                                             type="primary"
                                                                             key="list-loadmore-edit">
                                                                             {

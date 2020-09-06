@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Drawer, Form, Col, Row, Button, Select, Input, InputNumber, Switch, DatePicker } from 'antd'
 import moment from 'moment'
 import { disabledDate } from '../../../utils/date.utils'
@@ -8,6 +8,12 @@ const { Option } = Select
 const { RangePicker } = DatePicker
 
 const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, loading }) => {
+
+    const [mandatory, setMandatory] = useState(editingQuize.mandatory || true)
+
+    const toggleMandatory = (checked) => {
+        setMandatory(checked)
+    }
 
     return (
         <Drawer
@@ -34,13 +40,14 @@ const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, lo
                         resultType: editingQuize.resultType,
                         duration: editingQuize.duration,
                         max_try: editingQuize.maxTry,
-                        pass_score: editingQuize.passScore,
+                        pass_percentage: editingQuize.passPercentage,
                         date: [
                             editingQuize.startDate ?
                                 moment(editingQuize.startDate) : null,
                             editingQuize.expired ? moment(editingQuize.expired) : null
                         ],
-                        percentage: editingQuize.percentage, mandatory: editingQuize.mandatory
+                        percentage: editingQuize.percentage, mandatory: editingQuize.mandatory || true,
+                        question_num: editingQuize.question_num
                     }
                 }
             >
@@ -88,15 +95,15 @@ const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, lo
                             hasFeedback
                             name="percentage"
                             label="Phần trăm điểm tổng kết"
-                            rules={[{ required: true, message: 'Nhập phần trăm điểm' }]}
+                            rules={[{ required: mandatory, message: 'Nhập phần trăm điểm' }]}
                         >
-                            <InputNumber style={{ width: "100%" }} min={0} />
+                            <InputNumber disabled={!mandatory} style={{ width: "100%" }} min={0} />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item hasFeedback name="pass_score" label="Điểm để qua bài test"
+                        <Form.Item hasFeedback name="pass_percentage" label="Phần trăm điểm tổi thiếu để qua bài kiểm tra"
                         >
-                            <InputNumber style={{ width: "100%" }} min={0} />
+                            <InputNumber style={{ width: "100%" }} min={0} placeholder='50,60,75...' />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -104,9 +111,22 @@ const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, lo
                 <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item name="mandatory" label="Bắt buộc" valuePropName="checked">
-                            <Switch />
+                            <Switch onChange={toggleMandatory} />
                         </Form.Item>
                     </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            hasFeedback
+                            name="question_num"
+                            label="Số câu hỏi (dự kiến, dùng cho việc chọn câu hỏi ngẫu nhiên)"
+                            rules={[{ required: true, message: 'Nhập số câu hỏi' }]}
+                        >
+                            <InputNumber style={{ width: "100%" }} min={0} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+
+                <Row gutter={16}>
                     <Col span={12}>
                         <Form.Item name="date" label="Thời gian bài kiểm tra">
                             <RangePicker

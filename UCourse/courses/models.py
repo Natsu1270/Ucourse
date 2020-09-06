@@ -132,6 +132,7 @@ class UserBuyCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     money = models.CharField(max_length=20, null=True, blank=True)
     bought_date = models.DateField(default=timezone.now)
+    in_program = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('user', 'course')
@@ -160,6 +161,7 @@ class UserCourse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     course_home = models.ForeignKey('course_homes.CourseHome', on_delete=models.SET_NULL, null=True)
+    program = models.ForeignKey('programs.Program', on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=ON_GOING, blank=True, null=True)
     rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
     received_certificate = models.BooleanField(default=False)
@@ -168,17 +170,19 @@ class UserCourse(models.Model):
     started_date = models.DateField(default=timezone.now, blank=True, null=True)
     rate = models.IntegerField(null=True, blank=True)
 
-
     class Meta:
         db_table = 'UserCourse'
+
 
 class Skill(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
+
     class Meta:
         db_table = 'Skill'
+
 
 class CourseDetail(models.Model):
     verbose_name = models.CharField(max_length=255)

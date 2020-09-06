@@ -1,9 +1,9 @@
 import React from 'react'
-import { Table } from "antd";
+import { Table, Tag, Button } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
 
-const ExamHistoryTable = ({ exams, passScore }) => {
+const ExamHistoryTable = ({ exams, setReviewId }) => {
     const columns = [
         {
             title: 'Lần',
@@ -25,22 +25,27 @@ const ExamHistoryTable = ({ exams, passScore }) => {
             key: 'result',
             filters: [
                 {
-                    text: 'Pass',
-                    value: 'Pass',
+                    text: 'Đạt',
+                    value: true,
                 },
                 {
-                    text: 'Fail',
-                    value: 'Fail',
+                    text: 'Không đạt',
+                    value: false,
                 },
             ],
-            onFilter: (value, record) => record.result.indexOf(value) === 0,
-            render: text => <span>{text}</span>,
+            onFilter: (value, record) => record.result === value,
+            render: isPass => <span>{isPass ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>}</span>,
         },
         {
             title: 'Ngày thực hiện',
             dataIndex: 'date',
             key: 'date',
             render: text => <a>{text}</a>,
+        },
+        {
+            dataIndex: 'btn',
+            key: 'btn',
+            render: (text, record) => <Button onClick={() => setReviewId(record.id)} type="primary">Xem lại</Button>,
         },
     ];
 
@@ -49,7 +54,8 @@ const ExamHistoryTable = ({ exams, passScore }) => {
         stt: exams.length - index,
         grade: exam.result,
         date: formatDate(exam.date_taken, Constants.MMM_Do__YY__TIME),
-        result: passScore ? exam.result >= passScore ? 'Pass' : 'Fail' : 'N/A'
+        result: exam.is_pass,
+        id: exam.id
     }))
 
     const tableColumns = columns.map(item => ({ ...item, ellipsis: true }));

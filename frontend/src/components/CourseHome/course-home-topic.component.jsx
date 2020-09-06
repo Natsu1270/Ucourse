@@ -56,9 +56,10 @@ const CourseHomeTopic = ({
                     duration: quiz.duration,
                     maxTry: quiz.max_try,
                     startDate: quiz.start_date,
-                    passScore: quiz.pass_score,
+                    passPercentage: quiz.pass_percentage,
                     percentage: quiz.percentage,
-                    mandatory: quiz.mandatory
+                    mandatory: quiz.mandatory,
+                    question_num: quiz.question_num
                 })
             )
             setQuizes(topicQuizes)

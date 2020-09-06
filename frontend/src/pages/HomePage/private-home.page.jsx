@@ -3,13 +3,14 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Skeleton, Collapse, Empty, List, Space, Button } from "antd";
+import { Avatar, Skeleton, Collapse, Empty, List, Space, Button, Col, Row, Card, Divider } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
 import MyCourseTable from './my-courses-table'
 
 const { Panel } = Collapse;
+const { Meta } = Card
 
 const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
@@ -110,31 +111,39 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                 <h3 className="text--main private-home--title mt-5">
                     Gợi ý cho bạn
                 </h3>
-                <div className="private-home__suggest--items">
+                <Row gutter={[32, 32]} className="mt-5">
                     {
-                        isGetting ? <Skeleton active avatar /> :
-                            suggestCourses.map(course => (
+                        suggestCourses.map(course => (
+                            <Col span={6}>
                                 <CourseCard
                                     key={course.id}
                                     course={course}
                                     onClick={() => history.push(`/courses/${course.slug}`)} />
-                            ))
+                            </Col>
+                        ))
                     }
-                </div>
+                </Row>
 
-                <div className="private-home__suggest--items">
+                <Divider />
+
+
+                <Row gutter={[16, 16]}>
                     {
-                        isGetting ? <Skeleton active avatar /> :
-                            suggestPrograms.map(program => (
-                                <SearchProgramItem
-                                    key={program.id}
-                                    img={program.icon}
-                                    title={program.name}
-                                    num_course={program.courses_count}
-                                    onClick={() => history.push(`/programs/${program.slug}`)} />
-                            ))
+                        suggestPrograms.map(program => (
+                            <Col key={program.id} span={6}>
+                                <Card
+                                    hoverable onClick={() => history.push(`/programs/${program.slug}`)} loading={isGetting}>
+                                    <Meta
+                                        avatar={<Avatar size={48} src={program.icon} />}
+                                        title={program.name}
+                                        description={<Row><Col>Số lớp: {program.courses_count}</Col></Row>}
+                                    />
+                                </Card>
+                            </Col>
+                        )
+                        )
                     }
-                </div>
+                </Row>
             </section>
 
         </main>
