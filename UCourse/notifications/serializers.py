@@ -28,20 +28,39 @@ class NotificationsSerializer(serializers.ModelSerializer):
     def get_reference_object(self, obj):
         reference = obj.reference
         if obj.type == '1':
-            instance = Course.objects.get(pk=reference)
-            return CourseMinSerializer(instance=instance).data
+            try:
+                instance = Course.objects.get(pk=reference)
+                return CourseMinSerializer(instance=instance).data
+            except Course.DoesNotExist:
+                return None
         if obj.type == '2':
-            instance = Program.objects.get(pk=reference)
-            return ProgramMinSerializer(instance=instance).data
+            try:
+                instance = Program.objects.get(pk=reference)
+                return ProgramMinSerializer(instance=instance).data
+            except Program.DoesNotExist:
+                return None
         if obj.type == '3':
-            instance = CourseHome.objects.get(pk=reference)
-            return CourseHomeMinSerializer(instance=instance).data
+            try:
+                instance = CourseHome.objects.get(pk=reference)
+                return CourseHomeMinSerializer(instance=instance).data
+            except CourseHome.DoesNotExist:
+                return None
+
         if obj.type == '4':
-            instance = Forum.objects.get(pk=reference)
-            return ForumSerializer(instance=instance).data
+            try:
+                instance = Forum.objects.get(pk=reference)
+                return ForumSerializer(instance=instance).data
+            except Forum.DoesNotExist:
+                return None
         if obj.type == '5':
-            instance = Thread.objects.get(pk=reference)
-            return ThreadSerializer(instance=instance).data
+            try:
+                instance = Thread.objects.get(pk=reference)
+                return ThreadSerializer(instance=instance).data
+            except Thread.DoesNotExist:
+                return None
         if obj.type == "6":
-            instance = Exam.objects.get(pk=reference)
-            return ExamSerializer(instance=instance).data
+            try:
+                instance = Exam.objects.get(pk=reference)
+                return ExamSerializer(instance=instance).data
+            except Exam.DoesNotExist:
+                return None

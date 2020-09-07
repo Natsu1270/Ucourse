@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {useParams} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import {
     Skeleton, message, Descriptions, Badge, Button,
     Tree, Space, Tabs, Table, Divider, InputNumber
@@ -8,21 +8,21 @@ import {
     getAssignmentDetailAPI, getStudentAssignmentListByTopicAPI,
     downloadAssignmentItem, downloadAllAssigment
 } from '../../api/assignment.services'
-import {formatDate, isTimeBefore, parseHtml} from '../../utils/text.utils';
+import { formatDate, isTimeBefore, parseHtml } from '../../utils/text.utils';
 import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';
 import {
     DownOutlined, DownloadOutlined
 } from '@ant-design/icons'
-import {Chart, Interval} from 'bizcharts'
+import { Chart, Interval } from 'bizcharts'
 import fileDownload from 'js-file-download'
-import {updateStudentAssignmentGrade} from "../../api/grades.services";
+import { updateStudentAssignmentGrade } from "../../api/grades.services";
 
-const {TabPane} = Tabs
+const { TabPane } = Tabs
 
-const AssignmentTeacher = ({token, courseHomeDetail}) => {
+const AssignmentTeacher = ({ token, courseHomeDetail }) => {
 
-    const {assignmentId, topicId} = useParams();
+    const { assignmentId, topicId } = useParams();
     const [loading, setLoading] = useState(false)
     const [assignmentDetail, setAssignmentDetail] = useState({})
     const [studentAssignments, setStudentAssignments] = useState([])
@@ -44,8 +44,8 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
 
     const getAssignmentDetail = async () => {
         setLoading(true)
-        const data = {token, assignment: assignmentId}
-        const listData = {token, topic: topicId}
+        const data = { token, assignment: assignmentId }
+        const listData = { token, topic: topicId }
         try {
             const [assignmentRes, assignmentListRes] = await Promise.all([
                 getAssignmentDetailAPI(data),
@@ -83,7 +83,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
     };
 
     const downloadItem = async (id, filename) => {
-        const data = {token, id, filename}
+        const data = { token, id, filename }
         setDownloading(true)
         try {
             const result = await downloadAssignmentItem(data)
@@ -96,7 +96,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
     }
 
     const downloadAllItem = async () => {
-        const data = {token, assignmentId: assignmentDetail.id}
+        const data = { token, assignmentId: assignmentDetail.id }
         setDownloading(true)
         try {
             const result = await downloadAllAssigment(data)
@@ -145,7 +145,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
             key: 'files',
             render: files => (<Tree
                 onSelect={onSelect}
-                switcherIcon={<DownOutlined/>}
+                switcherIcon={<DownOutlined />}
                 showLine
                 treeData={[
                     {
@@ -182,7 +182,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                         loading={downloading}
                         type="primary"
                         onClick={() => downloadItem(record.id, record.username)}>
-                        <DownloadOutlined style={{fontSize: '1.8rem', marginLeft: '0'}}/>
+                        <DownloadOutlined style={{ fontSize: '1.8rem', marginLeft: '0' }} />
                     </Button>
                     <Button
                         loading={loading}
@@ -197,10 +197,10 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
 
     const updateGrade = async () => {
         setUpdating(true)
-        const data = {token, score: editScore, studentAssignmentId: editAssignment.id}
+        const data = { token, score: editScore, studentAssignmentId: editAssignment.id, assignmentId: assignmentId }
         try {
             await updateStudentAssignmentGrade(data)
-            const newScoreList = {...scoreList, [editAssignment.id]: editScore}
+            const newScoreList = { ...scoreList, [editAssignment.id]: editScore }
             setScoreList(newScoreList)
             message.success("Cập nhật thành công")
         } catch (err) {
@@ -234,10 +234,9 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
     }
 
     const chartData = [
-        {type: "Số học viên đã xem", quantity: viewed},
+        { type: "Số học viên đã xem", quantity: viewed },
         {
-            type: "Số học viên đã nộp bài", quantity: assignmentDetail.students ?
-                assignmentDetail.students.length : 0
+            type: "Số học viên đã nộp bài", quantity: assignmentDetail.submitted_count
         }
     ]
 
@@ -252,7 +251,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                             </h3>
                         </Skeleton>
                     </div>
-                    <Skeleton loading={loading} active paragraph={{rows: 8}}>
+                    <Skeleton loading={loading} active paragraph={{ rows: 8 }}>
                         <p className="text--sub__bigger2">{parseHtml(assignmentDetail.info)}</p>
 
                         <Tabs defaultActiveKey="1">
@@ -260,7 +259,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                 <Descriptions
                                     title="Thông tin bài assignment" className="mb-5"
                                     bordered layout="vertical"
-                                    column={{xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1}}>
+                                    column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}>
                                     <Descriptions.Item label="Số lần nộp tối đa">
                                         {assignmentDetail.max_submit_time ? assignmentDetail.max_submit_time : "Không giới hạn"}
                                     </Descriptions.Item>
@@ -271,18 +270,18 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                         {
                                             !isTimeBefore(assignmentDetail.start_date) ?
                                                 <Badge status="processing"
-                                                       text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)}/> :
+                                                    text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} /> :
                                                 <Badge status="warning"
-                                                       text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)}/>
+                                                    text={formatDate(assignmentDetail.start_date, Constants.MMM_Do__YY__TIME)} />
                                         }
                                     </Descriptions.Item>
                                     <Descriptions.Item label="Deadline">
                                         {
                                             !isTimeBefore(assignmentDetail.due_date) ?
                                                 <Badge status="processing"
-                                                       text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)}/> :
+                                                    text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} /> :
                                                 <Badge status="error"
-                                                       text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)}/>
+                                                    text={formatDate(assignmentDetail.due_date, Constants.MMM_Do__YY__TIME)} />
                                         }
                                     </Descriptions.Item>
                                     {
@@ -290,7 +289,7 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                             <Descriptions.Item label="File đính kèm">
                                                 <Tree
                                                     onSelect={onSelect}
-                                                    switcherIcon={<DownOutlined/>}
+                                                    switcherIcon={<DownOutlined />}
                                                     defaultExpandedKeys={['a-1']}
                                                     showLine
                                                     treeData={[
@@ -311,26 +310,25 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                             </Descriptions.Item> : null
                                     }
                                 </Descriptions>
-                                <Chart scale={{ quantity: { max: studentNum } }}height={250} width={500} data={chartData}>
-                                    <Interval position="type*quantity"/>
+                                <Chart scale={{ quantity: { max: studentNum } }} height={250} width={500} data={chartData}>
+                                    <Interval position="type*quantity" />
                                 </Chart>
                             </TabPane>
                             <TabPane tab="Thống kê bài nộp" key="2">
                                 <Descriptions
-                                    column={{xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2}}
+                                    column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 2, xs: 2 }}
                                     title="Danh sách bài nộp" bordered>
                                     <Descriptions.Item label="Số học viên đã xem">
                                         {viewed} / {studentNum}
                                     </Descriptions.Item>
                                     <Descriptions.Item label="Số học viên đã nộp bài">
-                                        {assignmentDetail.students ?
-                                            assignmentDetail.students.length : 0} / {studentNum}
+                                        {assignmentDetail.submitted_count} / {studentNum}
                                     </Descriptions.Item>
 
                                 </Descriptions>
-                                <Divider/>
+                                <Divider />
                                 <Table
-                                    scroll={{y: 360}}
+                                    scroll={{ y: 360 }}
                                     loading={loading}
                                     bordered
                                     columns={columns}
@@ -352,11 +350,11 @@ const AssignmentTeacher = ({token, courseHomeDetail}) => {
                                 Hủy
                             </Button>,
                         ]}
-                        style={{background: 'white', paddingBottom: '0', textAlign: 'center'}}>
+                        style={{ background: 'white', paddingBottom: '0', textAlign: 'center' }}>
                         <h3 className="text-center mb-5">Nhập điểm cho học viên
                             : {editAssignment ? editAssignment.name : null}</h3>
                         <Space>
-                            <InputNumber min={0} value={editScore} onChange={(e) => setEditScore(e)}/>
+                            <InputNumber min={0} value={editScore} onChange={(e) => setEditScore(e)} />
                             <Button type="primary" loading={updating} onClick={updateGrade}>Cập nhật</Button>
                         </Space>
                     </Modal>

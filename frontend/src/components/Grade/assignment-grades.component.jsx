@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Menu, Table, Space, Avatar, Button, Modal, message, InputNumber } from 'antd'
+import { Menu, Table, Space, Avatar, Button, Modal, message, InputNumber, Tag } from 'antd'
 import Constants from '../../constants'
 import { formatDate } from '../../utils/text.utils'
 import { updateStudentAssignmentGrade } from '../../api/grades.services'
@@ -13,11 +13,13 @@ const AssignmentGrades = ({ assignments, token }) => {
     const [loading, setLoading] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const [editScore, setEditScore] = useState(null)
+    const [assignmentId, setAssignmentId] = useState(null)
 
 
-    const triggerModal = (assignment) => {
+    const triggerModal = (assignment, assignmentId) => {
         setEditAssignment(assignment)
         setShowModal(true)
+        setAssignmentId(assignmentId)
     }
 
     const modalClose = () => {
@@ -58,16 +60,25 @@ const AssignmentGrades = ({ assignments, token }) => {
             render: result => <span>{result}</span>
         },
         {
-            title: 'Nhập điểm',
-            dataIndex: 'input',
-            key: 'input',
-            render: (result, record) => (<Button type="primary" onClick={() => triggerModal(record.assignment)}>
-                Nhập điểm
-            </Button>)
-        }
+            title: 'Đạt yêu cầu',
+            dataIndex: 'isPass',
+            key: 'isPass',
+            filters: [
+                {
+                    text: 'Đạt',
+                    value: true,
+                },
+                {
+                    text: 'Không đạt',
+                    value: false,
+                },
+            ],
+            onFilter: (value, record) => record.isPass === value,
+            render: (isPass, record) => <span>{record.mandatory ? isPass ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag> : null}</span>,
+        },
     ]
 
-    const AssignmentTable = ({ assignments }) => {
+    const AssignmentTable = ({ assignments, assignmentId, assignmentDetail }) => {
         const assignmentData = assignments.map((assignment, index) => ({
             stt: index + 1,
             username: assignment.student.username,
@@ -75,7 +86,11 @@ const AssignmentGrades = ({ assignments, token }) => {
             fullname: assignment.student.user_profile.fullname,
             date: assignment.modified_date,
             result: assignment.score,
-            assignment
+            mandatory: assignmentDetail.mandatory,
+            passScore: assignmentDetail.pass_score,
+            isPass: assignment.score >= assignmentDetail.pass_score,
+            assignment,
+            assignmentId
         }))
 
         return (
@@ -88,7 +103,7 @@ const AssignmentGrades = ({ assignments, token }) => {
 
     const updateGrade = async () => {
         setLoading(true)
-        const data = { token, score: editScore, studentAssignmentId: editAssignment.id }
+        const data = { token, score: editScore, studentAssignmentId: editAssignment.id, assignmentId }
         try {
             const result = await updateStudentAssignmentGrade(data)
             message.success("Cập nhật thành công", 1.5, () => window.location.reload())
@@ -109,7 +124,11 @@ const AssignmentGrades = ({ assignments, token }) => {
                     <SubMenu key={key} title={<div>
                         {index + 1 + '. ' + key} - <small>{assignments[key][0].percentage}%</small>
                     </div>}>
-                        <AssignmentTable assignments={assignments[key][1]} key={key} />
+                        <AssignmentTable
+                            assignmentDetail={assignments[key][0]}
+                            assignments={assignments[key][1]}
+                            key={key}
+                            assignmentId={assignments[key][0].id} />
                     </SubMenu>
                 )
 

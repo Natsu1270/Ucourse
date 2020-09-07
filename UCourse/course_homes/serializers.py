@@ -60,14 +60,19 @@ class AssignmentSerializer(serializers.ModelSerializer):
     assignment_files = TopicAssetSerializer(many=True, required=False)
     students = serializers.StringRelatedField(many=True, required=False)
     views = serializers.StringRelatedField(many=True, required=False)
+    submitted_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Assignment
         fields = [
-            'id', 'name', 'start_date', 'due_date', 'assignment_files', 'views', 'mandatory',
-            'info', 'status', 'learning_topic', 'max_submit_time', 'max_score', 'percentage',
+            'id', 'name', 'start_date', 'due_date', 'assignment_files', 'views', 'mandatory', 'pass_score',
+            'info', 'status', 'learning_topic', 'max_submit_time', 'max_score', 'percentage', 'submitted_count',
             'students', 'created_date', 'created_by'
         ]
+
+    @staticmethod
+    def get_submitted_count(obj):
+        return StudentAssignment.objects.filter(assignment=obj, submit_time__gt=0).count()
 
 
 class AssignmentMinSerializer(serializers.ModelSerializer):
@@ -77,7 +82,7 @@ class AssignmentMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = [
-            'id', 'name', 'learning_topic', 'max_score', 'percentage'
+            'id', 'name', 'learning_topic', 'max_score', 'percentage', 'mandatory', 'pass_score'
         ]
 
 
@@ -105,7 +110,7 @@ class StudentAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentAssignment
         fields = [
-            'id', 'assignment', 'student', 'score', 'student_assignment_files',
+            'id', 'assignment', 'student', 'score', 'student_assignment_files', 'is_pass',
             'status', 'modified_date', 'assignment', 'submit_time'
         ]
 
@@ -130,7 +135,7 @@ class StudentAssignmentDetailGradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentAssignment
         fields = [
-            'id', 'assignment', 'student', 'score', 'status', 'assignment', 'modified_date'
+            'id', 'assignment', 'student', 'score', 'status', 'assignment', 'modified_date', 'is_pass',
         ]
 
 

@@ -120,7 +120,8 @@ const ScheduleForm = (
                     assMaxScore: editingAssignment.max_score,
                     assPercentage: editingAssignment.percentage,
                     assDate: [initStartDate, initDueDate],
-                    mandatory: editingAssignment.mandatory
+                    mandatory: editingAssignment.mandatory,
+                    pass_score: editingAssignment.pass_score
                 }}
             >
                 <Form.Item
@@ -224,6 +225,17 @@ const ScheduleForm = (
                     label="Điểm bài assignment"
                     rules={[
                         { required: true, message: 'Vui lòng nhập điểm bài assignment!', },
+                    ]}>
+                    <InputNumber style={{ width: '100%' }} placeholder="Nhập điểm" />
+                </Form.Item>
+
+                <Form.Item
+                    {...formItemLayout}
+                    hasFeedback
+                    name="pass_score"
+                    label="Điểm bài tối thiểu để đạt yêu cầu"
+                    rules={[
+                        { required: true, message: 'Vui lòng nhập điểm tối thiếu bài assignment!', },
                     ]}>
                     <InputNumber style={{ width: '100%' }} placeholder="Nhập điểm" />
                 </Form.Item>

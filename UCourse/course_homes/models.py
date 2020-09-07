@@ -182,6 +182,7 @@ class Assignment(models.Model):
     percentage = models.FloatField(null=True, blank=True)
     mandatory = models.BooleanField(default=True, blank=True, null=True)
     max_submit_time = models.IntegerField(blank=True, null=True)
+    pass_score = models.FloatField(blank=True, null=True)
     max_score = models.FloatField(blank=True, null=True)
     learning_topic = models.ForeignKey(
         LearningTopic, related_name='topic_assignments', on_delete=models.CASCADE
@@ -223,7 +224,8 @@ class StudentAssignment(models.Model):
         settings.AUTH_USER_MODEL, related_name='ass_student', on_delete=models.CASCADE)
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default=EMPTY)
-    score = models.FloatField(blank=True, null=True)
+    score = models.FloatField(blank=True, null=True, default=0)
+    is_pass = models.BooleanField(default=False, null=True, blank=True)
     submit_time = models.IntegerField(blank=True, null=True, default=0)
     modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -257,7 +259,7 @@ class StudentCourseHome(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     final_score = models.FloatField(null=True, blank=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, null=True, blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=ON_GOING, null=True, blank=True)
     rank = models.CharField(max_length=10, choices=RANK_CHOICES, null=True, blank=True)
 
 

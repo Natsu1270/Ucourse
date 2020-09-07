@@ -70,7 +70,8 @@ const CourseHomeTopic = ({
                     id: ass.id, name: ass.name, info: ass.info,
                     start_date: ass.start_date, due_date: ass.due_date,
                     max_score: ass.max_score, max_submit_time: ass.max_submit_time,
-                    assignment_files: ass.assignment_files, percentage: ass.percentage, mandatory: ass.mandatory
+                    assignment_files: ass.assignment_files, percentage: ass.percentage, mandatory: ass.mandatory,
+                    pass_score: ass.pass_score
                 })
             )
             setAssignments(topicAssignments)
@@ -209,7 +210,7 @@ const CourseHomeTopic = ({
                             deleteAsset={deleteAsset}
                             gotoExam={gotoExam}
                             userRole={userRole}
-                            triggerCreateAssignment={triggerCreateAsset}
+                            triggerCreateAssignment={triggerCreateAssignment}
                         /> : null
                 }
             </div>

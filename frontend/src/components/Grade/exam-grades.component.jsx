@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Table, Space, Avatar } from 'antd';
+import { Menu, Table, Space, Avatar, Tag } from 'antd';
 import Constants from '../../constants';
 import { formatDate } from '../../utils/text.utils';
 
@@ -38,17 +38,36 @@ const ExamGrades = ({ exams }) => {
             dataIndex: 'result',
             key: 'result',
             render: result => <span>{result}</span>
-        }
+        },
+        {
+            title: 'Đạt yêu cầu',
+            dataIndex: 'isPass',
+            key: 'isPass',
+            filters: [
+                {
+                    text: 'Đạt',
+                    value: true,
+                },
+                {
+                    text: 'Không đạt',
+                    value: false,
+                },
+            ],
+            onFilter: (value, record) => record.isPass === value,
+            render: (isPass, record) => <span>{record.mandatory ? isPass ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag> : null}</span>,
+        },
     ];
 
-    const ExamTable = ({ exams }) => {
+    const ExamTable = ({ exams, examDetail }) => {
         const examData = exams.map((exam, index) => ({
             stt: index + 1,
             username: exam.student.username,
             avatar: exam.student.user_profile.avatar,
             fullname: exam.student.user_profile.fullname,
             date: exam.last_update,
-            result: exam.final_result
+            result: exam.final_result,
+            mandatory: examDetail.mandatory,
+            isPass: exam.is_pass
         }))
 
         return (
@@ -70,7 +89,7 @@ const ExamGrades = ({ exams }) => {
                     <SubMenu key={key} title={<div>
                         {index + 1 + '. ' + key} - <small>{exams[key][0].percentage}%</small>
                     </div>}>
-                        <ExamTable exams={exams[key][1]} key={key} />
+                        <ExamTable exams={exams[key][1]} examDetail={exams[key][0]} key={key} />
                     </SubMenu>
                 )
 

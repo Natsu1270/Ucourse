@@ -177,7 +177,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     }
     const canDoExam = () => {
         if (expired || isRoleTeacherOrTA(userRole.code)) return null
-        if (studentExams.length >= examDetail.max_try) {
+        if (examDetail.max_try && studentExams.length >= examDetail.max_try) {
             return <Button type="dashed" onClick={() => message.info('Qúa số lần làm cho phép')} >Làm bài</Button>
         }
         return (
@@ -221,11 +221,13 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     })
 
     const addToExam = async () => {
+        setLoading(true)
         try {
             await addQuestionToExam({ token, examId: exam_id, rows: selectedRowKeys })
             message.success('Thêm thành công!', 1.5, () => window.location.reload())
         } catch (err) {
             message.error('Có lỗi xảy ra: ' + err.message)
+            setLoading(false)
         }
     }
 
@@ -270,8 +272,10 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                         null
                 }
                 <p className="text--sub__bigger">Thời gian làm bài: {secondToTime(examDetail.duration)}</p>
-                <p className="text--sub__bigger">Số lần làm bài cho phép: {examDetail.max_try}</p>
-                <p className="text--sub__bigger">Phần trăm điểm: {examDetail.percentage}%</p>
+                <p className="text--sub__bigger">Số lần làm bài cho phép: {examDetail.max_try ? examDetail.max_try : 'Không giới hạn'}</p>
+                <p className="text--sub__bigger">Phần trăm điểm (dùng để tổng kết): {examDetail.percentage}%</p>
+                <p className="text--sub__bigger">Phần trăm điểm tối thiếu phải đạt (được tính để tổng kết): {examDetail.pass_percentage}%</p>
+                <p className="text--sub__bigger">Điểm tối đa: {examDetail.max_score}</p>
                 <p className="text--sub__bigger">Hình thức chấm điểm: {
                     examDetail.get_result_type === "best" ? "Lấy kết quả cao nhất" :
                         examDetail.get_result_type === "last" ? "Lấy kết quả cuối cùng" : "Lấy kết quả trung bình"
@@ -414,7 +418,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                                     <Row justify="center" gutter={16} className="mb-3" align="middle">
                                         <Col>
                                             {
-                                                selectedRows.length ? <Button onClick={addToExam} type="primary">
+                                                selectedRows.length ? <Button loading={loading} onClick={addToExam} type="primary">
                                                     Thêm vào bài kiểm tra
                                             </Button> : 'Click vào checkbox để thêm'
                                             }

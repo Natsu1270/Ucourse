@@ -7,6 +7,7 @@ from notifications.models import Notification
 from .models import AbilityTest, UserAbilityTest, Exam, StudentExam, StudentExamResult
 from . import serializers
 from api.utils import uc_response
+from .serializers import StudentExamResultSerializer
 
 
 class ExamDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -33,11 +34,13 @@ class CreateExamAPI(generics.CreateAPIView):
 
         new_exam = Exam.objects.create(
             name=data['name'], get_result_type=data['get_result_type'], mandatory=data['mandatory'],
-            question_num=data['question_num'], topic=data['topic'], percentage=data['percentage'],
-            pass_percentage=data['pass_percentage'], duration=data['duration'], max_try=data['max_try'],
-            start_date=data['start_date'], expired_date=data['expired_date'], exam_type=data['exam_type']
+            question_num=data['question_num'], topic=data['topic'], percentage=data.get('percentage', None),
+            pass_percentage=data.get('pass_percentage', None), duration=data['duration'], max_try=data.get('max_try', None),
+            start_date=data.get('start_date', None), expired_date=data.get('expired_date', None),
+            exam_type=data['exam_type']
 
         )
+
         course_home = CourseHome.objects.get(pk=course_home_id)
         students = course_home.students.all()
         is_mandatory = data.get('mandatory', True)
@@ -47,7 +50,7 @@ class CreateExamAPI(generics.CreateAPIView):
             )
             Notification.objects.create(user_id=student.id, type="6", reference=new_exam.id)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"Result": True}, status=status.HTTP_201_CREATED)
 
 
 class StudentExamListAPI(generics.ListAPIView):
@@ -70,6 +73,16 @@ class StudentExamPrivateListAPI(generics.ListAPIView):
             Q(student=self.request.user) & Q(exam_id=exam)).order_by('-id')
         return queryset
 
+
+class GetStudentExamResultDetail(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        student = self.request.user
+        exam_id = self.request.query_params.get('examId')
+
+        instance = StudentExamResult.objects.get(student=student, exam_id=exam_id)
+        return Response(data=StudentExamResultSerializer(instance=instance).data, status=status.HTTP_200_OK)
 
 class ReviewStudentExam(generics.RetrieveAPIView):
     permission_classes = [
@@ -99,7 +112,7 @@ class InitExamAPI(generics.GenericAPIView):
 
         past_try_count = StudentExam.objects.filter(student_id=student.id, exam_id=exam_id).count()
 
-        if past_try_count >= max_try:
+        if max_try is not None and past_try_count >= max_try:
             return Response({
                 "result": False,
                 "message": "Reach limitation of try number"
@@ -180,6 +193,8 @@ class SubmitExamAPI(generics.RetrieveUpdateDestroyAPIView):
             "message": "Submit exam successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
+
+
 
 
 class AbilityTestListAPI(generics.ListCreateAPIView):

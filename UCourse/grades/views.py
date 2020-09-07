@@ -70,9 +70,14 @@ class UpdateStudentAssigmentGrade(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         student_assignment_id = self.request.data['studentAssignmentId']
+        assignment_id = self.request.data['assignmentId']
+        assignment = Assignment.objects.get(pk=assignment_id)
+        pass_score = assignment.pass_score
         score = self.request.data['score']
+        is_pass = score >= pass_score
         student_assignment = StudentAssignment.objects.get(pk=student_assignment_id)
         student_assignment.score = score
+        student_assignment.is_pass = is_pass
         student_assignment.save()
         return Response({
             "result": True,
@@ -86,9 +91,11 @@ class UpdateStudentCourseHomeGrade(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         student_coursehome_id = self.request.data['studentCourseHomeId']
         grade = self.request.data['grade']
+        is_pass = self.request.data['isQualified']
 
         student_coursehome = StudentCourseHome.objects.get(pk=student_coursehome_id)
         student_coursehome.final_score = grade
+        student_coursehome.status = 'pass' if is_pass else 'fail'
         student_coursehome.save()
 
         return Response({
@@ -105,6 +112,8 @@ class UpdateMultiStudentCourseHomeGrade(generics.GenericAPIView):
         for row in rows:
             student_coursehome = StudentCourseHome.objects.get(pk=row.get('key'))
             student_coursehome.final_score = row.get('result')
+            is_pass = row.get('isQualified')
+            student_coursehome.status = 'pass' if is_pass else 'fail'
             student_coursehome.save()
 
         return Response({

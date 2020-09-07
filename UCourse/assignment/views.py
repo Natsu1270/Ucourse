@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework.parsers import MultiPartParser, JSONParser
 
-from course_homes.models import Assignment, TopicAsset, StudentAssignment
+from course_homes.models import Assignment, TopicAsset, StudentAssignment, CourseHome
 from course_homes import serializers
 from utils import file_utils
 
@@ -18,9 +18,14 @@ class AssigmentListAPI(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         files = request.data.getlist('file[]')
+        course_home_id = request.data.get('courseHomeId')
+        course_home = CourseHome.objects.get(pk=course_home_id)
+        students = course_home.students.all()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         assignment = serializer.save()
+        assignment.students.add(*students)
+        assignment.save()
 
         for file in files:
             asset = TopicAsset.objects.create(
@@ -112,6 +117,7 @@ class SubmitAssignmentAPI(generics.GenericAPIView):
             student_assignment = StudentAssignment.objects.get(pk=int(student_assignment_id))
 
         student_assignment.submit_time = student_assignment.submit_time + 1
+        student_assignment.status = '1'
         student_assignment.save()
 
         for file in files:

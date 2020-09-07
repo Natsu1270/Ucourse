@@ -16,8 +16,8 @@ export const getAssignmentDetailAPI = (data) => {
 
 export const createAssignment = (data) => {
 
-    const { token, name, info, learning_topic, max_score,
-        max_submit_time, start_date, due_date, files, percentage, mandatory } = data
+    const { token, name, info, learning_topic, max_score, courseHomeId,
+        max_submit_time, start_date, due_date, files, percentage, mandatory, pass_score } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
@@ -28,6 +28,9 @@ export const createAssignment = (data) => {
     formData.set("due_date", due_date)
     formData.set("percentage", percentage)
     formData.set("mandatory", mandatory)
+    formData.set("courseHomeId", courseHomeId)
+    formData.set("pass_score", pass_score)
+
 
     files.forEach(file => formData.append("file[]", file.file, file.fileName))
 
@@ -41,7 +44,8 @@ export const createAssignment = (data) => {
 
 export const editAssignment = (data, id) => {
 
-    const { token, name, info, percentage, max_score, max_submit_time, start_date, due_date, files, mandatory } = data
+    const { token, name, info, percentage, max_score, max_submit_time,
+        start_date, due_date, files, mandatory, pass_score } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
@@ -51,6 +55,7 @@ export const editAssignment = (data, id) => {
     formData.set("due_date", due_date)
     formData.set("percentage", percentage)
     formData.set("mandatory", mandatory)
+    formData.set("pass_score", pass_score)
     files.forEach(file => formData.append("file[]", file.file, file.fileName))
 
     return axios.request({

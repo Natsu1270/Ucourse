@@ -6,6 +6,8 @@ import { getStudentGradesByCourseHomeAPI } from '../../api/grades.services'
 import { formatDate } from '../../utils/text.utils'
 
 import { Chart, Line, Point } from 'bizcharts';
+import { Link } from 'react-router-dom'
+import { calFinalScore, columns } from './course-home.utils'
 
 const { TabPane } = Tabs
 
@@ -14,6 +16,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
     const [loading, setLoading] = useState(false)
     const [assignments, setAssignments] = useState([])
     const [exams, setExams] = useState([])
+    const [finalResult, setFinalResult] = useState({})
 
     const getStudentGrades = async () => {
         setLoading(true)
@@ -21,77 +24,34 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             const result = await getStudentGradesByCourseHomeAPI({ token, courseHomeId })
             setExams(result.data.student_exams)
             setAssignments(result.data.student_assignments)
+            const final = calFinalScore(result.data.student_exams, result.data.student_assignments)
+            setFinalResult(final)
         } catch (err) {
             message.error(err.message)
         }
         setLoading(false)
     }
 
+
     useEffect(() => {
         if (token && courseHomeId) getStudentGrades()
     }, [token, courseHomeId])
 
 
-    const columns = [
-        {
-            title: '#',
-            dataIndex: 'stt',
-            key: 'stt',
-            render: stt => <span>{stt}</span>,
-        },
-        {
-            title: 'Tên',
-            dataIndex: 'name',
-            key: 'name',
-            render: name => <span>{name}</span>
-        },
-        {
-            title: 'Thời gian',
-            dataIndex: 'date',
-            key: 'date',
-            render: date => <span>{formatDate(date, Constants.MMM_Do__YY__TIME)}</span>
-        },
-        {
-            title: 'Điểm',
-            dataIndex: 'result',
-            key: 'result',
-            render: result => <span>{result}</span>
-        },
-        {
-            title: 'Đạt yêu cầu',
-            dataIndex: 'isPass',
-            key: 'isPass',
-            filters: [
-                {
-                    text: 'Đạt',
-                    value: true,
-                },
-                {
-                    text: 'Không đạt',
-                    value: false,
-                },
-            ],
-            onFilter: (value, record) => record.isPass === value,
-            render: isPass => <span>{isPass ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>}</span>,
-        },
-        {
-            title: 'Phần trăm điểm',
-            dataIndex: 'percentage',
-            key: 'percentage',
-            render: percentage => <span>{percentage}%</span>
-        }
-    ];
+
 
     let examData = []
     let examStudentChartData = []
     exams.forEach((exam, index) => {
         examData.push({
+            id: exam.exam ? exam.exam.id : null,
             stt: index + 1,
             name: exam.exam ? exam.exam.name : 'N/A',
             date: exam.last_update,
             result: exam.final_result,
             isPass: exam.is_pass,
-            percentage: exam.exam ? exam.exam.percentage : 'N/A'
+            percentage: exam.exam ? exam.exam.percentage : 'N/A',
+            mandatory: exam.mandatory
         })
         examStudentChartData.push({
             name: exam.exam ? exam.exam.name : 'N/A',
@@ -111,21 +71,12 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         name: assignment.assignment.name,
         date: assignment.modified_date,
         result: assignment.score,
-        percentage: assignment.assignment.percentage
+        percentage: assignment.assignment.percentage,
+        isPass: assignment.is_pass,
+        mandatory: assignment.assignment.mandatory
     }))
 
-    const calFinalScore = () => {
-        let finalResult = 0
-        exams.forEach(exam => {
-            if (exam.exam) {
-                finalResult += exam.final_result * exam.exam.percentage / 100
-            }
-        })
-        assignments.forEach(ass => {
-            finalResult += ass.score * ass.assignment.percentage / 100
-        })
-        return finalResult
-    }
+
 
     return (
         <section className="section-5 page-2">
@@ -147,7 +98,18 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                 </TabPane>
 
                 <TabPane tab="Điểm tổng kết" key="3">
-                    <h3 className="text--main">Điểm tổng kết tạm tính: {calFinalScore()}</h3>
+                    <h3 className="text--main">Điểm tổng kết tạm tính: {finalResult.finalResult}</h3>
+                    <p className="text--sub__bigger2">Tình trạng điểm: {
+                        finalResult.qualified ? 'Đạt yêu cầu' : 'Chưa đạt yêu cầu'
+                    }
+                    </p>
+                    <p className="text--sub__bigger2">
+                        {
+                            !finalResult.qualified ?
+                                `Lý do: ${finalResult.finalResult < 5 ? 'Điểm dưới 5, và có' : null} các bài kiểm tra, hoặc bài assignment chưa đạt yêu cầu: ${finalResult.unDoneTasks}`
+                                : null
+                        }
+                    </p>
                 </TabPane>
 
             </Tabs>

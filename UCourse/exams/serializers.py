@@ -16,13 +16,14 @@ class ExamSerializer(serializers.ModelSerializer):
     students = serializers.StringRelatedField(many=True, read_only=True, required=False)
     topic = serializers.PrimaryKeyRelatedField(queryset=LearningTopic.objects.all(), required=False)
     total_score = serializers.SerializerMethodField(read_only=True)
-    views = serializers.StringRelatedField(many=True, required=False)
+    # views = serializers.StringRelatedField(many=True, required=False)
     max_score = serializers.FloatField(read_only=True)
+    max_try = serializers.IntegerField(required=False)
 
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'views', 'mandatory', 'question_num',
+            'id', 'name', 'get_result_type', 'mandatory', 'question_num',
             'exam_type', 'questions', 'students', 'enable_review',
             'topic', 'duration', 'pass_percentage', 'max_try', 'max_score',
             'status', 'expired_date', 'start_date', 'total_score', 'percentage'
@@ -60,7 +61,8 @@ class ExamMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = [
-            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'pass_percentage', 'max_score', 'percentage', 'question_num',
+            'id', 'name', 'get_result_type', 'exam_type', 'duration', 'mandatory',
+            'pass_percentage', 'max_score', 'percentage', 'question_num',
         ]
 
 
@@ -101,7 +103,7 @@ class StudentExamResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StudentExamResult
-        fields = ['id', 'student', 'exam', 'final_result', 'is_pass', 'last_update', 'course_home']
+        fields = ['id', 'student', 'exam', 'final_result', 'is_pass', 'last_update', 'course_home', 'mandatory']
 
 
 class QuestionResponseReviewSerializer(serializers.ModelSerializer):

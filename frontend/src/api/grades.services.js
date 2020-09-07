@@ -27,7 +27,7 @@ export const getAllStudentGradesByCourseHomeAPI = ({ token, courseHomeId }) => {
     })
 };
 
-export const updateStudentAssignmentGrade = ({ token, studentAssignmentId, score }) => {
+export const updateStudentAssignmentGrade = ({ token, studentAssignmentId, score, assignmentId }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -35,13 +35,13 @@ export const updateStudentAssignmentGrade = ({ token, studentAssignmentId, score
         },
         method: 'POST',
         url: `${API_URL}/assignment/update`,
-        data: { studentAssignmentId, score }
+        data: { studentAssignmentId, score, assignmentId }
     })
 };
 
 
 
-export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade }) => {
+export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade, isQualified }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade
         },
         method: 'POST',
         url: `${API_URL}/student_coursehome/update`,
-        data: { studentCourseHomeId, grade }
+        data: { studentCourseHomeId, grade, isQualified }
     })
 };
 

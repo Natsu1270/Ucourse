@@ -46,7 +46,8 @@ const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, lo
                                 moment(editingQuize.startDate) : null,
                             editingQuize.expired ? moment(editingQuize.expired) : null
                         ],
-                        percentage: editingQuize.percentage, mandatory: editingQuize.mandatory || true,
+                        percentage: editingQuize.percentage,
+                        mandatory: editingQuize.mandatory || true,
                         question_num: editingQuize.question_num
                     }
                 }
@@ -103,7 +104,7 @@ const QuestionDrawer = ({ closeDrawer, showDrawer, createQuize, editingQuize, lo
                     <Col span={12}>
                         <Form.Item hasFeedback name="pass_percentage" label="Phần trăm điểm tổi thiếu để qua bài kiểm tra"
                         >
-                            <InputNumber style={{ width: "100%" }} min={0} placeholder='50,60,75...' />
+                            <InputNumber disabled={!mandatory} style={{ width: "100%" }} min={0} placeholder='50,60,75...' />
                         </Form.Item>
                     </Col>
                 </Row>

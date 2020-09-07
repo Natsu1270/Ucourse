@@ -79,7 +79,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
         setLoading(true)
         console.log(values)
         const { assName: name, assInfo: info, assDate, assPercentage: percentage,
-            assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile, mandatory
+            assMaxScore: max_score, assMaxSubmit: max_submit_time, assFile, mandatory, pass_score
         } = values
         const files = assFile ? assFile.map(file => ({
             file: file.originFileObj,
@@ -89,8 +89,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
         const due_date = assDate[1] ? assDate[1].format('YYYY-MM-DD HH:MM') : undefined
 
         const data = {
-            token, learning_topic: editingTopic, name, info, max_score, percentage,
-            max_submit_time, start_date: start_date, due_date: due_date, files, mandatory
+            token, learning_topic: editingTopic, name, info, max_score, percentage, courseHomeId: courseHomeId,
+            max_submit_time, start_date: start_date, due_date: due_date, files, mandatory, pass_score
         }
         try {
             const result = isCreateAssignment ?
@@ -223,9 +223,9 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
 
         const data = {
             token, topic: editingTopic, name: values.name, exam_type: 'lt', get_result_type: values.resultType,
-            duration: values.duration, max_try: values.max_try, pass_percentage: values.pass_percentage,
+            duration: values.duration, pass_percentage: values.pass_percentage,
             start_date, expired_date, id: editingQuize.id, percentage: values.percentage, mandatory: values.mandatory,
-            courseHomeId, question_num: values.question_num
+            courseHomeId, question_num: values.question_num, max_try: values.max_try,
         }
 
         const editData = {
@@ -320,7 +320,8 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
             <Modal
                 destroyOnClose={true}
                 width={920}
-                style={{ paddingBottom: "0px" }}
+                style={{ paddingBottom: "0px", top: '4rem' }}
+                bodyStyle={{ maxHeight: '75vh', overflow: 'auto' }}
                 className="bg-white"
                 title="Tạo mới chủ đề học"
                 visible={showModal}
