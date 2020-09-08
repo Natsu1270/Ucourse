@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getAllMyCoursesAndProgramsAPI } from '../../api/home.services'
 import { message, Skeleton, Timeline, Tree, Tabs, Tag, Button, List } from 'antd'
-import { dayDiff, formatDate } from '../../utils/text.utils'
+import { dayDiff, formatDate, renderPrice } from '../../utils/text.utils'
 import { useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
@@ -69,7 +69,7 @@ const MyCoursePage = () => {
                                             slug={program.slug}
                                             num_course={program.courses_count}
                                         />
-
+                                        <p className="search-course-card__body--content--title">Giá: {renderPrice(program.price)}</p>              
                                     </Timeline.Item>
                                 ))}
                             </Skeleton>
@@ -90,6 +90,7 @@ const MyCoursePage = () => {
                                                     course={course}
                                                     onClick={() => { history.push(`/courses/${course.slug}`) }}
                                                 />
+                                                <p className="search-course-card__body--content--title">Giá: {renderPrice(course.price)}</p>
                                             </Timeline.Item>
                                         )
                                     })
