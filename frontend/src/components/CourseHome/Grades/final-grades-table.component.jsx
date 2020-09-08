@@ -3,16 +3,28 @@ import { Button, Space, Table, Row, Col, Avatar, Tag, message } from 'antd'
 import { CSVLink } from 'react-csv'
 import { SwapOutlined, EditOutlined, } from '@ant-design/icons'
 
-import { updateMultiStudentCourseHomeGrade } from '../../../api/grades.services'
+import { updateMultiStudentCourseHomeGrade, updateStudentCourseHomeGrade } from '../../../api/grades.services'
+import { renderFinalStatus } from '../course-home.utils'
 
 
 
-const FinalGradesTable = (
-    { selectedRowKeys, setSelectedRowKeys, setSelectedRows,
-        exams, assignments, selectedRows, token, updateStudentFinalGrade,
-        setEditFinal, setShowModal, students, studentCourseHomes }) => {
+const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal, setShowModal, students, studentCourseHomes }) => {
 
     const [loading, setLoading] = useState(false)
+    const [selectedRows, setSelectedRows] = useState([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState([])
+
+    const updateStudentFinalGrade = async (grade, isQualified, id) => {
+        setLoading(true)
+        const data = { token, grade, isQualified, studentCourseHomeId: id }
+        try {
+            const result = await updateStudentCourseHomeGrade(data)
+            message.success("Cập nhật thành công", 1.5, () => window.location.reload())
+        } catch (err) {
+            message.error("Có lỗi xảy ra: " + err.message)
+            setLoading(false)
+        }
+    }
 
     const autoAll = async () => {
         setLoading(true)
@@ -48,15 +60,18 @@ const FinalGradesTable = (
             title: 'Điểm tự động',
             dataIndex: 'result',
             key: 'result',
-            render: result => <span>{result}</span>
+            render: (result, record) => <Row gutter={16}>
+                <Col><span className="text-black b-500">{result}</span></Col>
+                <Col>{record.isQualified ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>}</Col>
+            </Row>
         },
 
-        {
-            title: 'Tình trạng',
-            dataIndex: 'isQualified',
-            key: 'isQualified',
-            render: isQualified => isQualified ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>
-        },
+        // {
+        //     title: 'Tình trạng',
+        //     dataIndex: 'isQualified',
+        //     key: 'isQualified',
+        //     render: 
+        // },
 
         {
             title: 'Điểm tổng kết',
@@ -64,6 +79,16 @@ const FinalGradesTable = (
             key: 'finalResult',
             render: finalResult => <span>{
                 finalResult || finalResult == 0 ? finalResult : <Tag color="magenta">Chưa tổng kết</Tag>
+            }
+            </span>
+        },
+
+        {
+            title: 'Kết quả',
+            dataIndex: 'status',
+            key: 'status',
+            render: status => <span>{
+                renderFinalStatus(status)
             }
             </span>
         },
@@ -77,7 +102,7 @@ const FinalGradesTable = (
                     loading={loading}
                     onClick={() => updateStudentFinalGrade(record.result, record.isQualified, record.studentCourseHome.id)}
                 >
-                    <SwapOutlined /> Lấy từ điểm tự động
+                    <SwapOutlined /> Tự động
                 </Button>
                 <Button loading={loading}
                     onClick={() => {
@@ -153,6 +178,7 @@ const FinalGradesTable = (
             finalResult: studentCourseHome.final_score,
             studentCourseHome: studentCourseHome,
             key: studentCourseHome.id,
+            status: studentCourseHome.status,
             isQualified: qualified && finalResult >= 5
         }
     })
@@ -175,6 +201,7 @@ const FinalGradesTable = (
                 }
             </Row>
             <Table
+                loading={loadingData}
                 rowSelection={{
                     type: "checkbox",
                     selectedRowKeys,

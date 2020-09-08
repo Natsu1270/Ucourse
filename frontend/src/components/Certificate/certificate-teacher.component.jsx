@@ -9,9 +9,10 @@ import { Link } from 'react-router-dom'
 import { formatDate, dayDiff } from '../../utils/text.utils'
 import Constants from '../../constants'
 import moment from 'moment'
-import { CloudSyncOutlined, FileSearchOutlined, MailOutlined } from '@ant-design/icons'
+import { CloudSyncOutlined, FileSearchOutlined, MailOutlined, SwapOutlined } from '@ant-design/icons'
 import { Document, Page } from 'react-pdf'
 import PDFViewer from 'pdf-viewer-reactjs'
+import { renderStatus, renderRank, renderCertificate, parseRankByScore } from './certificate.utils'
 
 const { Search } = Input
 const { Option } = Select;
@@ -24,6 +25,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
 
     const [loading, setLoading] = useState(true)
     const [userCourses, setUserCourses] = useState([])
+    const [studentCourseHomes, setStudentCourseHomes] = useState({})
     const [orgUserCourses, setOrgUserCourse] = useState([])
     const [currentItem, setCurrentItem] = useState({})
     const [showModal, setShowModal] = useState(false)
@@ -33,23 +35,25 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
     const [file, setFile] = useState(null)
     const [cerItem, setCerItem] = useState({})
 
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-
-
-    function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-    }
 
     const [form] = Form.useForm()
     const [sumForm] = Form.useForm()
 
 
+    const normalize = (dataset) => {
+        const result = {}
+        dataset.forEach(item => {
+            result[item.student] = item
+        })
+        return result
+    }
 
     const getAll = async () => {
         setLoading(true)
         try {
             const { data } = await getListSummary({ token, course_id: course.id, class_id: courseHome.id })
+            const schList = normalize(data.data.studentCourseHomes)
+            setStudentCourseHomes(schList)
             setUserCourses(data.data.userCourses)
             setOrgUserCourse(data.data.userCourses)
         } catch (err) {
@@ -64,37 +68,6 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         }
     }, [course, courseHome])
 
-    const renderStatus = (status) => {
-        if (status === 'on_going') return <Tag color="purple">Trong tiến trình</Tag>
-        if (status === 'fail') return <Tag color="red">Chưa đạt tiêu chuẩn</Tag>
-        return <Tag color="blue">Đạt</Tag>
-    }
-
-    const renderRank = (rank) => {
-        if (rank === null || rank == "") return <Tag color="red">Chưa phân loại</Tag>
-        if (rank === 'bad') return <Tag color="magenta">Yếu</Tag>
-        if (rank === 'medium') return <Tag color="purple">Trung bình</Tag>
-        if (rank === 'good') return <Tag color="green">Khá</Tag>
-        return <Tag color="blue">Xuất sắc</Tag>
-    }
-
-    const renderCertificate = (received, record) => {
-        if (record.status == 'fail') {
-            return <Tag color="#ff8b94">Không đạt yêu cầu</Tag>
-        }
-        if (!received && record.status == 'pass') {
-            return <Button
-                type="primary"
-                style={{ background: "#8874a3", border: 'none' }}
-                onClick={() => genCertificate(record)}>
-                Cấp ngay
-                    </Button>
-        }
-        if (!received) {
-            return <Tag color="#ffcc5c">Chưa tổng kết</Tag>
-        }
-        return <Tag color="#2db7f5">Đã cấp</Tag>
-    }
 
     const onFinish = (values) => {
         let query = orgUserCourses
@@ -178,12 +151,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         });
     };
 
-    const parseRankByScore = score => {
-        if (score < 5) return 'bad'
-        if (score < 7) return 'medium'
-        if (score < 9) return 'good'
-        return 'xgood'
-    }
+
 
     const summaryStudent = async (values, record, isMultiple) => {
         setLoading(true)
@@ -191,11 +159,11 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         if (values != null) {
             datas = { token, userCourseId: currentItem.id, status: values.status, rank: values.rank }
         } else if (record != null) {
-            const status = record.finalScore >= 5 ? 'pass' : 'fail'
+            const status = record.schStatus
             datas = { token, userCourseId: record.id, status, rank: parseRankByScore(record.finalScore) }
         } else {
             datas = selectedRows.map(row => {
-                const status = row.finalScore >= 5 ? 'pass' : 'fail'
+                const status = row.schStatus
                 const rank = parseRankByScore(row.finalScore)
                 return {
                     userCourseId: row.id, status, rank
@@ -238,6 +206,12 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             key: 'finalScore',
             render: finalScore => <b>{finalScore || finalScore == 0 ? finalScore : "Chưa tổng kết"}</b>
         },
+        {
+            title: 'Tình trạng lớp',
+            dataIndex: 'schStatus',
+            key: 'schStatus',
+            render: schStatus => <span>{renderStatus(schStatus)}</span>
+        },
 
         {
             title: 'Tình trạng',
@@ -257,7 +231,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             title: 'Chứng chỉ',
             dataIndex: 'received',
             key: 'received',
-            render: (received, record) => renderCertificate(received, record)
+            render: (received, record) => renderCertificate(received, record, genCertificate)
         },
 
         {
@@ -265,13 +239,16 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             dataIndex: 'action',
             key: 'action',
             render: (action, record) => (<Space>
-                <Button type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
-                <Button onClick={() => summaryStudent(null, record, null)}>Tổng kết theo điểm</Button>
+                <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
+                <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} onClick={() => summaryStudent(null, record, null)}>
+                    <SwapOutlined />Tự động</Button>
             </Space>)
         },
     ]
 
     const finalData = userCourses.map((userCourse, index) => {
+        const studentId = userCourse.user ? userCourse.user.id : null
+        const schDetail = studentId ? studentCourseHomes[studentId] : {}
 
         return {
             stt: index + 1,
@@ -285,7 +262,8 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             rank: userCourse.rank,
             received: userCourse.received_certificate,
             end_date: userCourse.end_date,
-            finalScore: userCourse.final_score,
+            finalScore: schDetail.final_score,
+            schStatus: schDetail.status,
             is_summarised: userCourse.is_summarised,
             key: userCourse.id,
         }

@@ -96,3 +96,12 @@ export const columns = [
 ];
 
 
+export function renderFinalStatus(status) {
+    if (status == 'pass') {
+        return <Tag color='#63ace5'>Đạt</Tag>
+    }
+    if (status == 'fail') {
+        return <Tag color="#f50">Không đạt</Tag>
+    }
+    return <Tag color="#fed766">Chưa có</Tag>
+}

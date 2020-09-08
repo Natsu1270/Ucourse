@@ -2,6 +2,9 @@ import datetime
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+
+from course_homes.models import StudentCourseHome
+from course_homes.serializers import StudentCourseHomeSerializer
 from courses.models import UserCourse
 from courses.serializers import UserCourseSerializer
 
@@ -14,9 +17,11 @@ class GetListSummary(generics.GenericAPIView):
         class_id = self.request.query_params.get('class_id')
 
         user_courses = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
+        student_course_homes = StudentCourseHome.objects.filter(course_home_id=class_id)
 
         return Response({
-            "userCourses": UserCourseSerializer(instance=user_courses, many=True).data
+            "userCourses": UserCourseSerializer(instance=user_courses, many=True).data,
+            "studentCourseHomes": StudentCourseHomeSerializer(instance=student_course_homes, many=True).data
         }, status=status.HTTP_200_OK)
 
 

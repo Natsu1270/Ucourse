@@ -65,25 +65,24 @@ class UserCourseSerializer(serializers.ModelSerializer):
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
     course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
     end_date = serializers.SerializerMethodField(read_only=True)
-    final_score = serializers.SerializerMethodField(read_only=True)
+    # final_score = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserCourse
-        fields = ['id', 'user', 'course', 'course_home', 'status', 'end_date', 'final_score',
+        fields = ['id', 'user', 'course', 'course_home', 'status', 'end_date',
                   'rank', 'completed_date', 'rate', 'received_certificate', 'is_summarised']
 
     @staticmethod
     def get_end_date(obj):
         return obj.course_home.end_date
 
-    @staticmethod
-    def get_final_score(obj):
-
-        student_course_home = StudentCourseHome.objects.filter(
-            Q(student_id=obj.user.id) & Q(course_home_id=obj.course_home.id))
-        if student_course_home.count() > 0:
-            return student_course_home[0].final_score
-        return None
+    # @staticmethod
+    # def get_final_score(obj):
+    #     student_course_home = StudentCourseHome.objects.filter(
+    #         Q(student_id=obj.user.id) & Q(course_home_id=obj.course_home.id))
+    #     if student_course_home.count() > 0:
+    #         return student_course_home[0].final_score
+    #     return None
 
 
 class CourseHomeShowSerializer(serializers.ModelSerializer):

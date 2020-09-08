@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table, Skeleton, Menu, Button, Modal, InputNumber, Space, Avatar, Tag, Row, Col } from 'antd'
+import { message, Tabs, Table, Skeleton, Menu, Button, Modal, InputNumber, Space, Avatar, Tag, Row, Col, Switch } from 'antd'
 import Constants from '../../constants'
 
 import { getAllStudentGradesByCourseHomeAPI, updateStudentCourseHomeGrade } from '../../api/grades.services'
@@ -20,8 +20,8 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
     const [editScore, setEditScore] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [editFinal, setEditFinal] = useState(null)
-    const [selectedRows, setSelectedRows] = useState([])
-    const [selectedRowKeys, setSelectedRowKeys] = useState([])
+    const [isPassSwitch, setSwitch] = useState(false)
+
 
     const getStudentGrades = async () => {
         setLoading(true)
@@ -81,9 +81,8 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
                 <TabPane tab="Điểm tổng kết" key="3">
                     <h3 className="text--main">Danh sách điểm tổng kết tạm tính</h3>
                     <FinalGradesTable
-                        loading={loading} setSelectedRowKeys={setSelectedRowKeys} setSelectedRows={setSelectedRows}
-                        exams={exams} assignments={assignments} selectedRows={selectedRowKeys} selectedRowKeys={selectedRowKeys}
-                        token={token} updateStudentFinalGrade={updateStudentFinalGrade}
+                        loadingData={loading}
+                        exams={exams} assignments={assignments} token={token}
                         setEditFinal={setEditFinal} setShowModal={setShowModal} students={students} studentCourseHomes={studentCourseHomes}
                     />
                 </TabPane>
@@ -99,16 +98,30 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
                     </Button>,
                 ]}
                 style={{ background: 'white', paddingBottom: '0', textAlign: 'center' }}>
-                <h3 className="text-center mb-5">Nhập điểm </h3>
-                <Space>
-                    <InputNumber value={editScore} onChange={(e) => setEditScore(e)} />
-                    <Button
-                        type="primary"
-                        loading={loading}
-                        onClick={() => updateStudentFinalGrade(editScore, editFinal)}>
-                        Cập nhật
+
+                <Row justify="center">
+                    <Col span={12}>
+                        <h3 className="text-center mb-5">Nhập điểm: </h3>
+                    </Col>
+                    <Col span={12}>
+                        <InputNumber style={{ width: '100%' }} value={editScore} onChange={(e) => setEditScore(e)} />
+                    </Col>
+                </Row>
+                <Row justify="center">
+                    <Col span={12}>
+                        <h3 className="text-center mb-5">Đủ điều kiện qua môn: </h3>
+                    </Col>
+                    <Col span={12}>
+                        <Switch onChange={(checked) => setSwitch(checked)} />
+                    </Col>
+
+                </Row>
+                <Button
+                    type="primary"
+                    loading={loading}
+                    onClick={() => updateStudentFinalGrade(editScore, isPassSwitch, editFinal)}>
+                    Cập nhật
                     </Button>
-                </Space>
             </Modal>
         </section>
     )
