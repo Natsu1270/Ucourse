@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from course_homes.models import CourseHome
 from courses.models import Course
+from programs.models import Program
 from ucourse import settings
 
 
@@ -25,6 +26,7 @@ class StudentCertificate(models.Model):
     student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
+    program = models.ForeignKey(Program, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
     received_date = models.DateField(default=timezone.now)
 

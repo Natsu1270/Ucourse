@@ -37,8 +37,8 @@ const AdminSider = ({ match }) => {
                         key="c-3">
                         <MoneyCollectOutlined />Doanh thu</Menu.Item>
                 </SubMenu>
-                <Menu.Item key={"2"} onClick={() => history.push(`${match.url}/certificate`)}>
-                    <FileProtectOutlined />Chứng chỉ chương trình
+                <Menu.Item key={"2"} onClick={() => window.open(`/certificate-manage`, '_self')}>
+                    <FileProtectOutlined />Quản lý cấp phát chứng chỉ
                 </Menu.Item>
                 <Menu.Item onClick={() => history.push(`${match.url}/report`)} key="3"><BorderOutlined /> Báo cáo</Menu.Item>
             </Menu>

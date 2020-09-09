@@ -39,17 +39,18 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                     Trong tiến trình
             </h3>
 
-                <Collapse>
+                <Collapse ghost>
                     <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
 
                         {
                             ownPrograms.length ?
 
-                                <Collapse >
+                                <Collapse ghost>
                                     {
                                         ownPrograms.map(program => (
                                             <Panel key={program.id} header={program.name}>
                                                 <List
+                                                    bordered
                                                     className="demo-loadmore-list"
                                                     itemLayout="horizontal"
                                                     dataSource={program.program_course}

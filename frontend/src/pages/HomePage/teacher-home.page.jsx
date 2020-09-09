@@ -71,7 +71,7 @@ const TeacherHomePage = ({ token }) => {
                 </h3>
 
                 <Skeleton loading={loading} active paragraph={{ rows: 5 }}>
-                    <Collapse
+                    <Collapse ghost
                         defaultActiveKey={[courseHomes[0] ? courseHomes[0].id.toString() : '1']}
                         expandIconPosition="left"
                         accordion>

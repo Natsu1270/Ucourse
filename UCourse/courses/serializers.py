@@ -74,8 +74,9 @@ class UserCourseSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_end_date(obj):
-        return obj.course_home.end_date
-
+        if obj.course_home:
+            return obj.course_home.end_date
+        return None
     # @staticmethod
     # def get_final_score(obj):
     #     student_course_home = StudentCourseHome.objects.filter(
@@ -156,6 +157,17 @@ class CourseSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_view_count(obj):
         return obj.views.count()
+
+
+class CourseCertificateSerializer(serializers.ModelSerializer):
+    level = serializers.CharField(source='get_level_display')
+    c_homes = CourseHomeShowSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'title', 'icon', 'slug', 'level', 'status', 'c_homes'
+        ]
 
 
 class CourseSearchSerializer(serializers.ModelSerializer):

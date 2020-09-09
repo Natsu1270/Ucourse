@@ -198,10 +198,45 @@ class UserBuyProgramSerializer(serializers.ModelSerializer):
 class StudentProgramSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     student = UserMinSerializer(required=False)
-    program = serializers.PrimaryKeyRelatedField(queryset=Program.objects.all(), required=False)
+    program = ProgramMinSerializer(required=False)
+    course_num = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = StudentProgram
         fields = [
-            'id', 'file', 'student', 'program', 'status', 'started_date', 'completed_date', 'received_certificate'
+            'id', 'file', 'student', 'program', 'status', 'started_date', 'completed_date', 'received_certificate', 'course_num'
         ]
+
+    @staticmethod
+    def get_course_num(obj):
+        return obj.program.program_course.all().count()
+
+
+class StudentProgramCertificateSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    student = UserMinSerializer(required=False)
+    # program = ProgramMinSerializer(required=False)
+
+    class Meta:
+        model = StudentProgram
+        fields = [
+            'id', 'file', 'student', 'status', 'started_date', 'completed_date', 'received_certificate'
+        ]
+
+
+class ProgramCertificateSerializer(serializers.ModelSerializer):
+
+    id = serializers.IntegerField(read_only=True)
+    courses_count = serializers.IntegerField(read_only=True)
+    student_program = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Program
+        fields = [
+            'id', 'name', 'icon', 'slug', 'student_program', 'courses_count', 'status', 'field',
+        ]
+
+    @staticmethod
+    def get_student_program(obj):
+        queryset = StudentProgram.objects.filter(program_id=obj.id)
+        return StudentProgramCertificateSerializer(instance=queryset, many=True).data

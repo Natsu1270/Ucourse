@@ -1,12 +1,15 @@
 import datetime
-
+from django.db.models import Count
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from course_homes.models import StudentCourseHome
 from course_homes.serializers import StudentCourseHomeSerializer
-from courses.models import UserCourse
-from courses.serializers import UserCourseSerializer
+from courses.models import UserCourse, Course, UserBuyCourse
+from courses.serializers import UserCourseSerializer, CourseCertificateSerializer, CourseMinSerializer
+from programs.models import StudentProgram, Program
+from programs.serializers import StudentProgramSerializer, StudentProgramCertificateSerializer, \
+    ProgramCertificateSerializer
 
 
 class GetListSummary(generics.GenericAPIView):
@@ -15,11 +18,12 @@ class GetListSummary(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         course_id = self.request.query_params.get('course_id')
         class_id = self.request.query_params.get('class_id')
-
+        course = Course.objects.get(pk=course_id)
         user_courses = UserCourse.objects.filter(course_id=course_id, course_home_id=class_id)
         student_course_homes = StudentCourseHome.objects.filter(course_home_id=class_id)
 
         return Response({
+            "courseDetail": CourseMinSerializer(instance=course).data,
             "userCourses": UserCourseSerializer(instance=user_courses, many=True).data,
             "studentCourseHomes": StudentCourseHomeSerializer(instance=student_course_homes, many=True).data
         }, status=status.HTTP_200_OK)
@@ -60,6 +64,14 @@ class UpdateSummary(generics.GenericAPIView):
         user_course.is_summarised = True
         user_course.completed_date = datetime.date.today()
         user_course.save()
+
+        try:
+            user_buy_course = UserBuyCourse.objects.get(
+                course_id=user_course.course_id, user_id=user_course.user_id, status=True)
+            user_buy_course.status = False
+        except UserBuyCourse.DoesNotExist:
+            pass
+
         return Response({
             "userCourses": UserCourseSerializer(instance=user_course).data
         }, status=status.HTTP_200_OK)
@@ -80,4 +92,29 @@ class MultiUpdateSummary(generics.GenericAPIView):
 
         return Response({
             "result": True
+        }, status=status.HTTP_200_OK)
+
+
+class SearchSummary(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        name = self.request.query_params.get('name', None)
+        search_type = self.request.query_params.get('type', 'a')
+        courses = None
+        programs = None
+        if search_type == 'c' or search_type == 'a':
+            courses = Course.objects.annotate(num_course_home=Count('c_homes')).filter(num_course_home__gt=0)
+            if name is not None:
+                courses = courses.filter(title__icontains=name)
+        if search_type == 'p' or search_type == 'a':
+            programs = Program.objects.annotate(
+                num_student=Count('students')
+            ).filter(num_student__gt=0)
+
+            if name is not None:
+                programs = programs.filter(name__icontains=name)
+
+        return Response({
+            "courses": CourseCertificateSerializer(instance=courses, many=True).data if courses is not None else None,
+            "programs": ProgramCertificateSerializer(instance=programs, many=True).data if programs is not None else None
         }, status=status.HTTP_200_OK)

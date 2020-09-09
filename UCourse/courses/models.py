@@ -87,7 +87,7 @@ class Course(models.Model):
         super(Course, self).save(*args, **kwargs)
 
     def check_is_bought(self, student):
-        check = UserBuyCourse.objects.filter(user_id=student.id, course_id=self.id)
+        check = UserBuyCourse.objects.filter(user_id=student.id, course_id=self.id, status=True)
         return check.count() > 0
 
     @property
@@ -133,6 +133,7 @@ class UserBuyCourse(models.Model):
     money = models.CharField(max_length=20, null=True, blank=True)
     bought_date = models.DateField(default=timezone.now)
     in_program = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('user', 'course')
@@ -163,6 +164,7 @@ class UserCourse(models.Model):
     course_home = models.ForeignKey('course_homes.CourseHome', on_delete=models.SET_NULL, null=True)
     program = models.ForeignKey('programs.Program', on_delete=models.SET_NULL, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=ON_GOING, blank=True, null=True)
+    active = models.BooleanField(default=True, null=True, blank=True)
     rank = models.CharField(max_length=20, choices=RANK_CHOICES, blank=True, null=True)
     received_certificate = models.BooleanField(default=False)
     is_summarised = models.BooleanField(default=False)

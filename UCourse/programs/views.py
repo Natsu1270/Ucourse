@@ -1,6 +1,6 @@
 import json
 import uuid
-
+from django.db.models import Q
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
@@ -97,10 +97,14 @@ class BuyProgramAPI(generics.GenericAPIView):
 
         if program_courses.count() > 0:
             for course in program_courses:
-                if user not in course.user_buy.all():
-                    UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True)
-                if user not in course.usercourse_set.all():
-                    UserCourse.objects.create(user=user, course=course, program_id=program_id)
+                user_course = UserCourse.objects.filter(
+                    Q(user_id=user.id) & Q(course_id=course.id) & ~Q(status='fail')).count()
+                if user_course > 0:
+                    pass
+                else:
+                    if not course.check_is_bought(user):
+                        UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True, status=True)
+                        UserCourse.objects.create(user=user, course=course, program_id=program_id)
 
         return Response({
             "data": {
@@ -146,10 +150,15 @@ class BuyProgramSuccessAPI(generics.GenericAPIView):
                 program = Program.objects.get(pk=program_id)
                 program_courses = program.program_course.all()
                 for course in program_courses:
-                    if user not in course.user_buy.all():
-                        UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True)
-                    if user not in course.usercourse_set.all():
-                        UserCourse.objects.create(user=user, course=course, program_id=program_id)
+                    user_course = UserCourse.objects.filter(
+                        Q(user_id=user.id) & Q(course_id=course.id) & ~Q(status='fail')).count()
+                    if user_course > 0:
+                        pass
+                    else:
+                        if not course.check_is_bought(user):
+                            UserBuyCourse.objects.create(user=user, course=course, money=0, in_program=True,
+                                                         status=True)
+                            UserCourse.objects.create(user=user, course=course, program_id=program_id)
 
                 return Response({
                     "code": 0,

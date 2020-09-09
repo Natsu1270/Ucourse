@@ -68,18 +68,22 @@ class GenerateCertificate(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         template = get_template('course-certificate-template.html')
+        student_name = self.request.query_params['studentName']
+        certificate_type = self.request.query_params['type']
         name = self.request.query_params['name']
-        course_name = self.request.query_params['courseName']
-        rank = self.request.query_params['rank']
+        rank = self.request.query_params.get('rank', None)
+
+        message = 'Has completed the course' if certificate_type == 'c' else 'Has completed the program'
         context = {
+            'student_name': student_name,
             'name': name,
-            'course_name': course_name,
+            'message': message,
             'rank': rank,
             'date': datetime.date.today()
         }
         pdf, result = generate_certificate(template, context)
         if not pdf.err:
-            filename = "{0}-{1}_Certificate.pdf".format(name, course_name)
+            filename = "{0}-{1}_Certificate.pdf".format(student_name, name)
             response = HttpResponse(result.getvalue(), content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
             return response
@@ -89,46 +93,69 @@ class GenerateCertificate(generics.GenericAPIView):
 class HandoutCertificate(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
+        request_type = self.request.data.get('type', None)
+        certificate_type = 'course' if request_type == 'c' else 'program'
         email = self.request.data['email']
-        course_home_id = self.request.data['courseHomeId']
+        course_home_id = self.request.data.get('courseHomeId', None)
+        course_id = self.request.data.get('courseId', None)
+        program_id = self.request.data.get('programId', None)
+        student_course_id = self.request.data.get('studentCourseId', None)
+        student_program_id = self.request.data.get('studentProgramId', None)
         student_id = self.request.data['studentId']
-        course_id = self.request.data['courseId']
         file = self.request.data['file']
-        student_course_id = self.request.data['id']
-        course_name = self.request.data['courseName']
+        name = self.request.data['name']
         student_name = self.request.data['studentName']
 
         send_mail_with_attachments(
             subject="[Certificate Of Completion]",
-            body="""Hi {0}, 
-         Congratulations on completing course {1}, 
-         we are honored to give you the certificate, 
-         
-         Thanks,
-         UCOURSE CEO
+            body="""
+Hi {0}, 
+Congratulations on completing {1} {2}, 
+we are honored to give you the certificate, 
+ 
+Best Regards,
+UCOURSE CEO
                  """.format(
-                student_name, course_name),
+                student_name, certificate_type, name),
             send_from="ucourse.service@gmail.com",
             send_to=[email],
             cc=["hungduy1270@gmail.com", "1610107@hcmut.edu.vn"],
             attachments=[file]
         )
-        student_certificate = StudentCertificate.objects.filter(
-            student_id=student_id, course_id=course_id, course_home_id=course_home_id
-        )
-        if student_certificate.count() > 0:
-            student_certificate = student_certificate[0]
-            student_certificate.file = file
-            student_certificate.received_date = datetime.date.today()
-            student_certificate.save()
-        else:
-            StudentCertificate.objects.create(
-                student_id=student_id, course_id=course_id, course_home_id=course_home_id, file=file
+        if request_type == 'c':
+            student_certificate = StudentCertificate.objects.filter(
+                student_id=student_id, course_id=course_id, course_home_id=course_home_id
             )
 
-        instance = UserCourse.objects.get(pk=student_course_id)
-        instance.received_certificate = True
-        instance.save()
+            if student_certificate.count() > 0:
+                student_certificate = student_certificate[0]
+                student_certificate.file = file
+                student_certificate.received_date = datetime.date.today()
+                student_certificate.save()
+            else:
+                StudentCertificate.objects.create(
+                    student_id=student_id, course_id=course_id, course_home_id=course_home_id, file=file
+                )
+            instance = UserCourse.objects.get(pk=student_course_id)
+            instance.received_certificate = True
+            instance.save()
+        else:
+            student_certificate = StudentCertificate.objects.filter(
+                student_id=student_id, program_id=program_id
+            )
+
+            if student_certificate.count() > 0:
+                student_certificate = student_certificate[0]
+                student_certificate.file = file
+                student_certificate.received_date = datetime.date.today()
+                student_certificate.save()
+            else:
+                StudentCertificate.objects.create(
+                    student_id=student_id, program_id=program_id, file=file
+                )
+            instance = StudentProgram.objects.get(pk=student_program_id)
+            instance.received_certificate = True
+            instance.save()
 
         return HttpResponse({
             "result": True
@@ -249,12 +276,33 @@ class GetAllCourseCertificate(generics.GenericAPIView):
         )
 
 
-class GetALLProgramCertificate(generics.GenericAPIView):
+class GetProgramProcessDetail(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
-        instance = StudentProgram.objects.all()
+        student_program_id = self.request.query_params.get('studentProgramId')
+        student_id = self.request.query_params.get('studentId')
+        program_id = self.request.query_params.get('programId')
+
+        student_program = StudentProgram.objects.get(pk=student_program_id)
+        program = Program.objects.get(pk=program_id)
+        program_courses = program.program_course.all()
+        user_course_list = []
+        for course in program_courses:
+            try:
+                instance = UserCourse.objects.get(user_id=student_id, course_id=course.id, active=True)
+                user_course_list.append(instance)
+            except UserCourse.DoesNotExist:
+                pass
+
+        completed_course = [course for course in user_course_list if course.status == 'pass']
+        is_completed = len(completed_course) >= len(program_courses)
+
         return Response(
-            data=StudentProgramSerializer(
-                instance=instance, context=self.get_serializer_context(), many=True).data,
+            data={
+                "studentProgram": StudentProgramSerializer(instance=student_program).data,
+                "userCourses": UserCourseSerializer(instance=user_course_list, many=True).data,
+                "isCompleted": is_completed,
+                "completedNum": len(completed_course)
+            },
             status=status.HTTP_200_OK
         )

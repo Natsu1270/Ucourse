@@ -29,15 +29,15 @@
 
 
         @page {
-            background-image: url('https://i.imgur.com/uA2hPry.jpg');
-            size: letter landscape;
+            background-image: url('static/course-cer-back.png');
+            size: a4 landscape;
             margin: 2cm;
         }
 
         .container {
             position: relative;
             text-align: center;
-            padding-top: 30rem;
+            padding-top: 31rem;
 
         }
 
@@ -55,9 +55,9 @@
 
 
     <div class="content">
-        <span class="student-name" style="font-weight:bold; font-size: 6rem">{{ name }}</span><br/>
-        <span class="info" style="font-size: 1.6rem; color: darkgrey"><i>has completed the course</i></span><br/><br/>
-        <span class="info" style="font-weight:bold; color: red; font-size: 3rem">{{ course_name }}</span><br/>
+        <span class="student-name" style="font-weight:bold; font-size: 6rem">{{ student_name }}</span><br/>
+        <span class="info" style="font-size: 1.6rem; color: darkgrey"><i>{{ message }}</i></span><br/><br/>
+        <span class="info" style="font-weight:bold; color: red; font-size: 3rem">{{ name }}</span><br/>
         <span class="info" style="font-size: 1.6rem">Date completed: {{ date }}</span>
 
         <p id="cdate"></p>

@@ -52,6 +52,9 @@ const MyCertificatePage = lazy(() => import('./pages/MyCertificatePage/my-certif
 const ProgramProcess = lazy(() => import('./pages/ProgramProcess/program-process.component'))
 const RegisterClassPage = lazy(() => import('./pages/RegisterClass/register-class.page'))
 const NotificationPage = lazy(() => import('./pages/Notification/notification.page'))
+const AdminCertificate = lazy(() => import('./pages/AdminPage/admin-certificate.page'))
+const AdminCertificateCourse = lazy(() => import('./pages/AdminPage/admin-certificate-course.component'))
+const AdminCertificateProgram = lazy(() => import('./pages/AdminPage/admin-certificate-program.component'))
 
 
 function App() {
@@ -160,6 +163,22 @@ function App() {
                                         component={RegisterClassPage}
                                         token={token}
                                     />
+
+                                    <PrivateRoute
+                                        path="/certificate-manage"
+                                        component={AdminCertificate}>
+
+                                    </PrivateRoute>
+                                    <PrivateRoute
+                                        path="/certificate/course/:courseId/class/:courseHomeId"
+                                        component={AdminCertificateCourse}>
+
+                                    </PrivateRoute>
+                                    <PrivateRoute
+                                        path="/certificate/program/:programId/detail/:studentProgramId"
+                                        component={AdminCertificateProgram}>
+
+                                    </PrivateRoute>
 
 
                                     <Route component={Page404NotFound} />

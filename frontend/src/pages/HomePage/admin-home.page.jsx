@@ -83,11 +83,11 @@ const AdminHomePage = ({ token }) => {
                                 loading={loading}
                             />
                         </Route>
-                        <Route exact path={`${match.url}/certificate`}>
+                        {/* <Route exact path={`${match.url}/certificate`}>
                             <CertificateAdmin
                                 loading={loading}
                             />
-                        </Route>
+                        </Route> */}
                         <Route exact path={`${match.url}/report`}>
                             <AdminReport
                                 userData={userData.users}

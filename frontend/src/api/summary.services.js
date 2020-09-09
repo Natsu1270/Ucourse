@@ -116,3 +116,24 @@ export function getAllProgramCertificate() {
         url: `${CERTIFCATE_API_URL}/all-program-cer`,
     })
 }
+
+
+export function searchAllSummary({ name, type }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json' },
+        method: 'GET',
+        url: `${API_URL}/search`,
+        params: { name, type }
+    })
+}
+
+export function getStudentProgramDetail({ studentId, programId, studentProgramId }) {
+
+    return axios.request({
+        headers: { 'Content-type': 'application/json' },
+        method: 'GET',
+        url: `${CERTIFCATE_API_URL}/program-detail`,
+        params: { studentId, programId, studentProgramId }
+    })
+}

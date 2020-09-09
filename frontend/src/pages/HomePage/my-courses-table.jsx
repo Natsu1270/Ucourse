@@ -55,6 +55,7 @@ const MyCourseTable = ({ courses }) => {
 
     return (
         <Table
+            bordered
             size="middle"
             columns={tableColumns}
             dataSource={data}
