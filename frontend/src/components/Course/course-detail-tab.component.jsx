@@ -7,6 +7,7 @@ import { tokenSelector } from "../../redux/Auth/auth.selects";
 import { useHistory } from 'react-router-dom';
 import { isLoadingSelector, myCourseHomesSelector } from "../../redux/CourseHome/course-home.selects";
 import Constants from "../../constants";
+import {addToFavAPI} from "../../api/course.services.js";
 
 const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
 
@@ -33,6 +34,16 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
         setTabStick(window.pageYOffset > 400)
     };
 
+    const confirmAddToFAV= async () => {
+        if (token) {
+           await addToFavAPI({ token, courseId: course.id })
+           message.success("Thêm vào khóa học yêu thích thành công")
+        } else {
+            message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
+                1.5,
+                () => dispatch(showRLModal()))
+        }
+    };
     const confirm = (e) => {
         if (token) {
             dispatch(toggleAbilityTestModal());
@@ -68,6 +79,20 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                         </li> : null
                     }
                 </ul>
+                <div className="course-tab__btn">
+                    <Popconfirm
+                        placement={tabStick ? "bottomRight" : "topRight"}
+                        title="Bạn có chắc muốn thêm vào khóa học yêu thích?"
+                        onConfirm={confirmAddToFAV}
+                        okText="Xác nhận"
+                        cancelText="Hủy">
+                        <Button
+                            type="primary"
+                            className="ml-3 cs-btn-tab">Thêm vào khóa học yêu thích</Button>
+                    </Popconfirm>
+
+                </div>
+
                 <div className="course-tab__btn">
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}

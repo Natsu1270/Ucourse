@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import generics, permissions, views, status
+from django.core import serializers
 
 from notifications.models import Notification
-from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer
+from .serializers import CourseSerializer, CourseDetailSerializer, UserBuyCourseSerializer, FavoriteCourseSerializer
 from api.permissions import IsTeacherOrTARoleOrReadOnly
-from .models import Course, CourseDetail, UserBuyCourse, UserViewCourse
+from .models import Course, CourseDetail, UserBuyCourse, UserViewCourse, FavoriteCourse
 import uuid
 from services.momo_service import MoMoService, MoMoQueryStatusService
 from django.shortcuts import render, redirect, get_object_or_404, reverse
@@ -161,3 +162,22 @@ class CheckIsBought(generics.GenericAPIView):
                 "result": False,
                 "status_code": 400
             }, status=status.HTTP_400_BAD_REQUEST)
+
+class addToFavAPI(generics.GenericAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    def post(self, request, *args, **kwargs):
+        course_id = self.request.data.get('courseId', None)
+        user = self.request.user
+        tmp = FavoriteCourse.objects.create(user=user, course_id=course_id)
+        print(tmp)
+        return Response({},status=status.HTTP_200_OK)
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        favorite_course = FavoriteCourse.objects.filter(user=user)
+
+        return Response({
+            "data": FavoriteCourseSerializer(instance=favorite_course, context=self.get_serializer_context(), many=True).data
+        }, status=status.HTTP_200_OK)
