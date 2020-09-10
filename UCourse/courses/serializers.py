@@ -307,3 +307,11 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = ['id', 'name']
+
+class FavoriteCourseSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    user = serializers.StringRelatedField(required=False)
+    course = CourseSerializer(many=True, read_only=True)
+
+    class Meta:
+        fields = ['id', 'user', 'course']

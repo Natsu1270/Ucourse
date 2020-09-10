@@ -55,6 +55,7 @@ const NotificationPage = lazy(() => import('./pages/Notification/notification.pa
 const AdminCertificate = lazy(() => import('./pages/AdminPage/admin-certificate.page'))
 const AdminCertificateCourse = lazy(() => import('./pages/AdminPage/admin-certificate-course.component'))
 const AdminCertificateProgram = lazy(() => import('./pages/AdminPage/admin-certificate-program.component'))
+const FavoriteCoursePage = lazy(() => import('./pages/FavoriteCoursePage/my-favorite-courses.page'))
 
 
 function App() {
@@ -139,6 +140,13 @@ function App() {
                                         exact
                                         path="/my-courses"
                                         component={MyCoursePage}
+                                        token={token}
+                                    />
+                                    <PrivateRoute
+                                        referrer="/my-favorite-courses"
+                                        exact
+                                        path="/my-favorite-courses"
+                                        component={FavoriteCoursePage}
                                         token={token}
                                     />
                                     <PrivateRoute

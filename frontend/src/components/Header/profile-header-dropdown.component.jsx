@@ -12,7 +12,8 @@ import {
     LogoutOutlined,
     ReadOutlined,
     SmileOutlined,
-    TrophyOutlined
+    TrophyOutlined,
+    HeartOutlined 
 } from "@ant-design/icons";
 
 
@@ -50,6 +51,13 @@ const ProfileHeaderDropdown = (props) => {
                     <ReadOutlined /> Khoá học của tôi
                 </Link>
             </Menu.Item> :null :null }
+
+            {userrole ? userrole === "SD" ?
+            <Menu.Item>  
+                <Link to="/my-favorite-courses" style={styles}>
+                    <HeartOutlined /> Các khóa học yêu thích
+                </Link> 
+            </Menu.Item> : null : null }
             
             {userrole ? userrole === "SD" ?
             <Menu.Item>  
