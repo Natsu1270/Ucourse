@@ -22,13 +22,14 @@ const ExamReview = ({ token, exam, studentExamId }) => {
     const [responses, setResponses] = useState(null)
     const [loading, setLoading] = useState(false)
     const [studentExam, setStudentExam] = useState({})
-    const questions = exam.questions
+    const [questions, setQuestions] = useState([])
 
     const getStudentExam = async () => {
         setLoading(true)
         try {
             const { data } = await reviewExamAPI({ token, studentExamId })
             setStudentExam(data)
+            setQuestions(data.questions)
             setResponses(data.responses)
         } catch (err) {
             message.error('Có lỗi xảy ra: ' + err.message)

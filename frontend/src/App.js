@@ -144,9 +144,9 @@ function App() {
                                         token={token}
                                     />
                                     <PrivateRoute
-                                        referrer="/my-favorite-courses"
+                                        referrer="/favorite-courses"
                                         exact
-                                        path="/my-favorite-courses"
+                                        path="/favorite-courses"
                                         component={FavoriteCoursePage}
                                         token={token}
                                     />

@@ -93,6 +93,7 @@ class StudentExam(models.Model):
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='exam_students', on_delete=models.SET_NULL, null=True
     )
+    questions = models.ManyToManyField(Question, related_name="question_student_exams")
     date_taken = models.DateTimeField(default=timezone.now)
     result = models.FloatField(null=True, blank=True)
     is_pass = models.BooleanField(default=False, null=True, blank=True)

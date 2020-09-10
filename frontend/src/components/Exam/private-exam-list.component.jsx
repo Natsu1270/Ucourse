@@ -60,6 +60,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     const [loading, setLoading] = useState(false)
     const [studentExamId, setStudentExam] = useState(null)
     const [reviewId, setReviewId] = useState(null)
+    const [randomQuestions, setRandomQuestions] = useState([])
 
 
     const { studentExams, examDetail, isProcessing } = useSelector(createStructuredSelector({
@@ -166,6 +167,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
             const { data } = await initExamAPI({ courseHomeId: courseHomeDetail.id, examId: exam_id, token })
             if (data.result) {
                 setStudentExam(data.studentExamId)
+                setRandomQuestions(data.studentExam.questions)
                 setShowExam(true)
             } else {
                 message.error('Bạn đã thực hiện tối đa số lần làm bài cho phép')
@@ -376,16 +378,21 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 title={examDetail.name}
                 placement="right"
                 onClose={() => {
-                    if (!reviewId) {
-                        window.location.reload()
-                    }
+
                     setShowExam(false)
                     setReviewId(null)
                 }}
                 visible={showExam}
                 footer={
                     <div>
-                        <Button onClick={() => setShowExam(false)} type="danger">
+                        <Button onClick={() => {
+                            if (!reviewId) {
+                                window.location.reload()
+                            }
+                            setShowExam(false)
+                            setReviewId(null)
+                        }
+                        } type="danger">
                             Đóng
                         </Button>
                     </div>
@@ -394,7 +401,12 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 {
                     reviewId ?
                         <ExamReview exam={examDetail} studentExamId={reviewId} token={token} /> :
-                        <ExamDetail exam={examDetail} token={token} courseHomeId={courseHomeDetail.id} studentExamId={studentExamId} />
+                        <ExamDetail
+                            randomQuestions={randomQuestions}
+                            exam={examDetail}
+                            token={token}
+                            courseHomeId={courseHomeDetail.id}
+                            studentExamId={studentExamId} />
                 }
             </Drawer>
 

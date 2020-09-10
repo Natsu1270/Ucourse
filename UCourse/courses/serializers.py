@@ -14,7 +14,7 @@ class CourseMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'slug', 'icon', 'status', 'is_my_course',
+            'id', 'title', 'slug', 'icon', 'status', 'is_my_course', 'price'
         ]
 
     def get_is_my_course(self, obj):
@@ -315,10 +315,12 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = ['id', 'name']
 
+
 class FavoriteCourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.StringRelatedField(required=False)
-    course = CourseSerializer(many=True, read_only=True)
+    course = CourseMinSerializer(read_only=True)
 
     class Meta:
-        fields = ['id', 'user', 'course']
+        model = FavoriteCourse
+        fields = ['id', 'user', 'course', 'add_date']

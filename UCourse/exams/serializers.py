@@ -74,13 +74,31 @@ class StudentExamSerializer(serializers.ModelSerializer):
     student = serializers.StringRelatedField(read_only=True)
     duration = serializers.IntegerField(read_only=True)
     topic = serializers.PrimaryKeyRelatedField(read_only=True)
+    questions = QuestionSerializer(many=True, required=False)
 
     class Meta:
         model = StudentExam
         fields = [
             'id', 'exam', 'student', 'is_pass',
             'date_taken', 'result', 'duration',
-            'topic'
+            'topic', 'questions'
+        ]
+
+
+class StudentExamInitSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    exam = serializers.PrimaryKeyRelatedField(
+        queryset=Exam.objects.all()
+    )
+    student = serializers.StringRelatedField(read_only=True)
+    duration = serializers.IntegerField(read_only=True)
+    questions = QuestionSerializer(many=True, required=False)
+
+    class Meta:
+        model = StudentExam
+        fields = [
+            'id', 'exam', 'student', 'is_pass',
+            'date_taken', 'result', 'duration', 'questions'
         ]
 
 
@@ -139,11 +157,12 @@ class StudentExamReviewSerializer(serializers.ModelSerializer):
     )
     student = serializers.StringRelatedField(read_only=True)
     responses = QuestionResponseSerializer(many=True)
+    questions = QuestionSerializer(many=True, required=False)
 
     class Meta:
         model = StudentExam
         fields = [
-            'id', 'exam', 'student', 'result', 'responses'
+            'id', 'exam', 'student', 'result', 'responses', 'questions'
         ]
 
 

@@ -271,7 +271,6 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         return None
 
 
-
 class StudentCourseHomeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     student = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)

@@ -47,7 +47,7 @@ export function getFavoriteCourse(token) {
     return axios.request({
         headers,
         method: 'GET',
-        url: `${COURSE_API_URL}/user/getFav`
+        url: `${COURSE_API_URL}/user/favorite_course`
     })
 }
 

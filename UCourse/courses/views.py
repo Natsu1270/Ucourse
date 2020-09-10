@@ -182,11 +182,13 @@ class FavoriteCourseAPI(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        favorite_course = FavoriteCourse.objects.filter(user=user)
+        favorite_course = FavoriteCourse.objects.filter(user=user).order_by('-add_date')
 
-        return Response({
-            "data": FavoriteCourseSerializer(instance=favorite_course, context=self.get_serializer_context(), many=True).data
-        }, status=status.HTTP_200_OK)
+        return Response(
+            data=FavoriteCourseSerializer(
+                instance=favorite_course, context=self.get_serializer_context(), many=True
+            ).data, status=status.HTTP_200_OK
+        )
 
     def delete(self, request, *args, **kwargs):
         fav_course_id = self.request.data.get('id')

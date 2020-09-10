@@ -18,14 +18,14 @@ import Constants from '../../constants';
 const { Countdown } = Statistic
 
 
-const ExamDetail = ({ exam, token, courseHomeId, studentExamId }) => {
+const ExamDetail = ({ exam, token, courseHomeId, studentExamId, randomQuestions }) => {
 
     const [finished, setFinished] = useState(false)
     const [responses, setResponses] = useState(null)
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const isSubmitting = useSelector(state => isProcessingSelector(state))
-    const questions = exam.questions
+    // const questions = exam.questions
 
 
     const [form] = Form.useForm();
@@ -68,7 +68,7 @@ const ExamDetail = ({ exam, token, courseHomeId, studentExamId }) => {
             }
         })
         const responses = questionResponses.filter(response => response)
-        const result = calResult(values, questions)
+        const result = calResult(values, randomQuestions)
         submitQuiz({ token, exam: exam.id, result, responses, courseHomeId, studentExamId })
     }
 
@@ -96,7 +96,7 @@ const ExamDetail = ({ exam, token, courseHomeId, studentExamId }) => {
 
                 {
                     !finished ?
-                        questions.length > 0 ?
+                        randomQuestions.length > 0 ?
                             <div><Row className="exam-detail--info">
                                 <Col span={10}>
                                     <h1 className="exam-detail--title">
@@ -104,7 +104,7 @@ const ExamDetail = ({ exam, token, courseHomeId, studentExamId }) => {
                                     </h1>
                                     <h3 className="exam-detail--sub-title">
                                         Tổng điểm:
-                    </h3>
+                                    </h3>
                                 </Col>
                                 <Col span={12} style={{ fontSize: '2.5rem', fontWeight: '500' }}>
                                     {
@@ -128,7 +128,7 @@ const ExamDetail = ({ exam, token, courseHomeId, studentExamId }) => {
                                         {...formItemLayout}
                                     >
                                         {
-                                            questions.map((question, index) => (
+                                            randomQuestions.map((question, index) => (
                                                 <div className="choices" key={question.id}>
                                                     <div
                                                         className="exam-detail--content--question__header dis-flex-start">

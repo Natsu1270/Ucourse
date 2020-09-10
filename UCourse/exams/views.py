@@ -1,3 +1,5 @@
+import random
+
 from rest_framework import generics, permissions, status, views
 from rest_framework.response import Response
 from django.db.models import Q
@@ -7,7 +9,7 @@ from notifications.models import Notification
 from .models import AbilityTest, UserAbilityTest, Exam, StudentExam, StudentExamResult
 from . import serializers
 from api.utils import uc_response
-from .serializers import StudentExamResultSerializer
+from .serializers import StudentExamResultSerializer, StudentExamSerializer, StudentExamInitSerializer
 
 
 class ExamDetailAPI(generics.RetrieveUpdateDestroyAPIView):
@@ -84,6 +86,7 @@ class GetStudentExamResultDetail(generics.GenericAPIView):
         instance = StudentExamResult.objects.get(student=student, exam_id=exam_id)
         return Response(data=StudentExamResultSerializer(instance=instance).data, status=status.HTTP_200_OK)
 
+
 class ReviewStudentExam(generics.RetrieveAPIView):
     permission_classes = [
         permissions.IsAuthenticated
@@ -118,7 +121,13 @@ class InitExamAPI(generics.GenericAPIView):
                 "message": "Reach limitation of try number"
             }, status=status.HTTP_200_OK)
 
+        exam_questions = exam.questions.all()
+        question_num = exam.question_num
+        # select random questions
+        random_questions = random.sample(list(exam_questions), question_num)
         student_exam = StudentExam.objects.create(student_id=student.id, exam_id=exam_id, result=0)
+        student_exam.questions.add(*random_questions)
+        student_exam.save()
         student_exam_result = StudentExamResult.objects.filter(
             Q(student_id=student.id) & Q(exam_id=exam_id)
         )
@@ -127,6 +136,7 @@ class InitExamAPI(generics.GenericAPIView):
                 student_id=student.id, exam_id=exam_id, final_result=0, course_home_id=course_home_id)
 
         return Response({
+            "studentExam": StudentExamInitSerializer(instance=student_exam).data,
             "result": True,
             "studentExamId": student_exam.id
         }, status=status.HTTP_200_OK)
@@ -193,8 +203,6 @@ class SubmitExamAPI(generics.RetrieveUpdateDestroyAPIView):
             "message": "Submit exam successfully",
             "status_code": 201
         }, status=status.HTTP_201_CREATED)
-
-
 
 
 class AbilityTestListAPI(generics.ListCreateAPIView):

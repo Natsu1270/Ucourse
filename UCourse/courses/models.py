@@ -212,7 +212,7 @@ class FavoriteCourse(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     program = models.ForeignKey('programs.Program', on_delete=models.SET_NULL, null=True, blank=True)
-    add_date = models.DateField(default=timezone.now)
+    add_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
         db_table = 'FavoriteCourse'
