@@ -26,7 +26,7 @@ import PrivateHomePage from "./pages/HomePage/private-home.page";
 import { getAllStart, getAllMyStart } from "./redux/Home/home.actions";
 import RoleComponent from './components/RoleComponent';
 import TeacherHomePage from './pages/HomePage/teacher-home.page';
-import { myNotificationsSelector, fetchingNotificationSelector } from './redux/Notification/notification.selects';
+import { myNotificationsSelector, fetchingNotificationSelector, favCourseCountSelector } from './redux/Notification/notification.selects';
 
 
 const AdminHomePage = lazy(() => import('./pages/HomePage/admin-home.page'));
@@ -62,7 +62,7 @@ function App() {
 
     const dispatch = useDispatch();
     const {
-        token, currentUser, userRole, myCourses, myPrograms, notifications, fetchingNotify
+        token, currentUser, userRole, myCourses, myPrograms, notifications, fetchingNotify, favCourseCount
     } = useSelector(createStructuredSelector({
         token: tokenSelector,
         currentUser: currentUserSelector,
@@ -70,7 +70,8 @@ function App() {
         myCourses: myCoursesSelector,
         myPrograms: myProgramsSelector,
         notifications: myNotificationsSelector,
-        fetchingNotify: fetchingNotificationSelector
+        fetchingNotify: fetchingNotificationSelector,
+        favCourseCount: favCourseCountSelector
     }));
 
     useEffect(() => {
@@ -89,7 +90,7 @@ function App() {
                 <Layout>
                     <Header
                         token={token} currentUser={currentUser} notifications={notifications}
-                        isFetching={fetchingNotify} />
+                        isFetching={fetchingNotify} favCourseCount={favCourseCount} />
 
                     <Switch>
                         <Route exact path="/">

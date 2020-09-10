@@ -3,7 +3,7 @@ from django.db.models import Q
 from programs.models import UserBuyProgram
 from users.models import User
 from users.serializers import UserMinSerializer
-from .models import Course, CourseDetail, Skill, UserBuyCourse, UserViewCourse, UserCourse
+from .models import Course, CourseDetail, Skill, UserBuyCourse, UserViewCourse, UserCourse, FavoriteCourse
 from course_homes.models import CourseHome, StudentCourseHome
 from profiles.serializers import ProfileMinSerializer
 
@@ -136,11 +136,12 @@ class CourseSerializer(serializers.ModelSerializer):
     is_my_course = serializers.SerializerMethodField()
     # views = serializers.StringRelatedField(many=True, required=False)
     view_count = serializers.SerializerMethodField(read_only=True)
+    is_love = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'icon', 'slug', 'level', 'outline_detail', 'outline_file',
+            'id', 'title', 'icon', 'slug', 'level', 'outline_detail', 'outline_file', 'is_love',
             'fee_type', 'status', 'course_detail', 'program', 'view_count',
             'field', 'tags', 'ability_test', 'created_date',
             'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
@@ -156,6 +157,12 @@ class CourseSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_view_count(obj):
         return obj.views.count()
+
+    def get_is_love(self, obj):
+        request = self.context.get('request', None)
+        if request and request.user and not request.user.is_anonymous:
+            return FavoriteCourse.objects.filter(course_id=obj.id, user=request.user).count() > 0
+        return False
 
 
 class CourseCertificateSerializer(serializers.ModelSerializer):

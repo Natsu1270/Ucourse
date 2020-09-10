@@ -50,3 +50,12 @@
 }
 
 
+.love-btn {
+	border: 1px solid red;
+	color: red;
+	&:hover {
+		background-color: red !important;
+		color: #ffffff !important;
+		border: 1px solid red;
+	}
+}

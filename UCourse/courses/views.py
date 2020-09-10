@@ -163,16 +163,22 @@ class CheckIsBought(generics.GenericAPIView):
                 "status_code": 400
             }, status=status.HTTP_400_BAD_REQUEST)
 
-class addToFavAPI(generics.GenericAPIView):
+
+class FavoriteCourseAPI(generics.GenericAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
     def post(self, request, *args, **kwargs):
         course_id = self.request.data.get('courseId', None)
+        action = self.request.data.get('action', 'add')
         user = self.request.user
-        tmp = FavoriteCourse.objects.create(user=user, course_id=course_id)
-        print(tmp)
-        return Response({},status=status.HTTP_200_OK)
+        if action == 'add':
+            FavoriteCourse.objects.create(user=user, course_id=course_id)
+        else:
+            instance = FavoriteCourse.objects.get(user=user, course_id=course_id)
+            instance.delete()
+        return Response({"result": True}, status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
@@ -181,3 +187,9 @@ class addToFavAPI(generics.GenericAPIView):
         return Response({
             "data": FavoriteCourseSerializer(instance=favorite_course, context=self.get_serializer_context(), many=True).data
         }, status=status.HTTP_200_OK)
+
+    def delete(self, request, *args, **kwargs):
+        fav_course_id = self.request.data.get('id')
+        instance = FavoriteCourse.objects.get(pk=fav_course_id)
+        instance.delete()
+        return Response({"Result": True}, status=status.HTTP_200_OK)

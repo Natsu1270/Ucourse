@@ -2,6 +2,7 @@ import NotificationActionTypes from './notification.types'
 
 const initState = {
     notifications: {},
+    favCourseCount: null,
     isFetching: false,
     errorResponse: null,
 };
@@ -18,7 +19,8 @@ const courseReducer = (state = initState, action) => {
             return {
                 ...state,
                 isFetching: false,
-                notifications: action.payload
+                notifications: action.payload.notifications,
+                favCourseCount: action.payload.favCourseCount
             };
         case NotificationActionTypes.GET_MY_NOTIFICATIONS_FAIL:
             return {

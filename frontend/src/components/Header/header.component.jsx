@@ -4,16 +4,16 @@ import { Link } from 'react-router-dom'
 import { logoutStart } from '../../redux/Auth/auth.actions';
 import { showRLModal } from '../../redux/UI/ui.actions'
 
-import { Button, Layout, Badge } from 'antd'
+import { Button, Layout, Badge, Row, Col } from 'antd'
 import SearchInput from '../SearchInput/search-input.component';
 import ProfileHeaderDropdown from './profile-header-dropdown.component'
 import { clearCurrentProfile } from "../../redux/Profile/profile.actions";
-import { NotificationTwoTone, BellTwoTone } from '@ant-design/icons';
+import { NotificationTwoTone, BellTwoTone, HeartTwoTone } from '@ant-design/icons';
 
 const RegisterOrLogin = React.lazy(() => import('../RegisterOrLogin/register-or-login.component'))
 
 
-const Header = ({ token, currentUser, notifications, isFetching }) => {
+const Header = ({ token, currentUser, notifications, isFetching, favCourseCount }) => {
     const dispatch = useDispatch();
     const [unRead, setUnRead] = useState([])
 
@@ -32,51 +32,70 @@ const Header = ({ token, currentUser, notifications, isFetching }) => {
     };
 
     return (
-        <Header className='cs-main-header' id="main-header">
-            <ul className='cs-navbar' mode="horizontal">
-                <li>
-                    <Link to="/" className="cs-logo text--main bold">
-                        UCourse
+        // <Header  >
+        <Row align="middle" className='cs-main-header pl-5 pr-5 pb-3 pt-3' gutter={16}>
+            <Col span={3}>
+                <Link to="/" className="cs-logo text--main bold">
+                    UCourse
                     </Link>
-                </li>
-                <li className='header-item-text'>
-                    <Link to="/field">Khám phá</Link>
-                    <Link to="/about">Giới Thiệu</Link>
-                    <Link to="/event">Sự kiện</Link>
-                    <Link to="/guideline">Trợ giúp</Link>
-                    <Link to="/register-class">Đăng ký lớp</Link>
-                    {
-                        token ? <Link to="/notification">
-                            <Badge count={unRead.length} >
-                                <Button
-                                    type="ghost"
-                                    style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
-                                    <BellTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
-                            </Badge>
-                        </Link> : null
-                    }
-                </li>
-                <li className='header-search'>
-                    <SearchInput width={400} />
-                </li>
+            </Col>
+            <Col span={8}>
+                <Row gutter={16}>
+                    <Col><Link className="header_link" to="/field">Khám phá</Link></Col>
+                    <Col><Link className="header_link" to="/about">Giới Thiệu</Link></Col>
+                    <Col><Link className="header_link" to="/event">Sự kiện</Link></Col>
+                    <Col><Link className="header_link" to="/guideline">Trợ giúp</Link></Col>
+                    <Col><Link className="header_link" to="/register-class">Đăng ký lớp</Link></Col>
+                </Row>
+
+            </Col>
+            <Col className='header-search'>
+                <SearchInput width={400} />
+            </Col>
+            <Col>
                 {
-                    currentUser ? (
-                        <li>
-                            <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout} />
-                        </li>
-                    ) : (
-                            <li className="nav-item active-nav" id="logout-btn">
-                                <Button type="primary" onClick={() => dispatch(showRLModal())}>
-                                    Đăng ký
-                                </Button>
-                            </li>
-                        )
+                    token ? <Link to="/notification">
+                        <Badge count={unRead.length} >
+                            <Button
+                                type="ghost"
+                                style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
+                                <BellTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
+                        </Badge>
+                    </Link> : null
                 }
-            </ul>
+            </Col>
+            <Col>
+                {
+                    token ? <Link to="/favorite-courses">
+                        <Badge count={favCourseCount} >
+                            <Button
+                                type="ghost"
+                                style={{ border: '1px solid white', color: '#fff', fontWeight: '600' }}>
+                                <HeartTwoTone style={{ fontSize: '1.8rem' }} twoToneColor="white" /></Button>
+                        </Badge>
+                    </Link> : null
+                }
+            </Col>
+
+            {
+                currentUser ? (
+                    <Col>
+                        <ProfileHeaderDropdown currentUser={currentUser} handleLogout={handleLogout} />
+                    </Col>
+                ) : (
+                        <Col className="nav-item active-nav" id="logout-btn">
+                            <Button type="primary" onClick={() => dispatch(showRLModal())}>
+                                Đăng ký
+                                </Button>
+                        </Col>
+                    )
+            }
             <Suspense fallback={<span />}>
                 <RegisterOrLogin />
             </Suspense>
-        </Header>
+        </Row>
+
+        // </Header>
     )
 };
 

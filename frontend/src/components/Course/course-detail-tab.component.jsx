@@ -7,11 +7,14 @@ import { tokenSelector } from "../../redux/Auth/auth.selects";
 import { useHistory } from 'react-router-dom';
 import { isLoadingSelector, myCourseHomesSelector } from "../../redux/CourseHome/course-home.selects";
 import Constants from "../../constants";
-import {addToFavAPI} from "../../api/course.services.js";
+import { addToFavAPI } from "../../api/course.services.js";
+import { HeartFilled, HeartTwoTone } from '@ant-design/icons';
 
 const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
 
     const [tabStick, setTabStick] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const [isLove, setIsLove] = useState(false)
 
     const history = useHistory();
     const dispatch = useDispatch();
@@ -24,7 +27,12 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
     };
 
     useEffect(() => {
+        if (course.id) setIsLove(course.is_love)
+    }, [course])
+
+    useEffect(() => {
         window.addEventListener('scroll', handleScroll);
+
         return () => {
             window.removeEventListener('scroll', () => handleScroll)
         }
@@ -34,15 +42,24 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
         setTabStick(window.pageYOffset > 400)
     };
 
-    const confirmAddToFAV= async () => {
+    const confirmAddToFAV = async () => {
+        setLoading(true)
+        const action = isLove ? 'remove' : 'add'
         if (token) {
-           await addToFavAPI({ token, courseId: course.id })
-           message.success("Thêm vào khóa học yêu thích thành công")
+            try {
+                await addToFavAPI({ token, courseId: course.id, action })
+                const resultMessage = isLove ? "Xóa khóa học yêu thích thành công" : "Thêm vào khóa học yêu thích thành công"
+                message.success(resultMessage)
+                setIsLove(!isLove)
+            } catch (err) {
+                message.error('Có lỗi xảy ra: ' + err.message)
+            }
         } else {
             message.error('Bạn phải đăng nhập để thực hiện chức năng này!',
                 1.5,
                 () => dispatch(showRLModal()))
         }
+        setLoading(false)
     };
     const confirm = (e) => {
         if (token) {
@@ -80,17 +97,10 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                     }
                 </ul>
                 <div className="course-tab__btn">
-                    <Popconfirm
-                        placement={tabStick ? "bottomRight" : "topRight"}
-                        title="Bạn có chắc muốn thêm vào khóa học yêu thích?"
-                        onConfirm={confirmAddToFAV}
-                        okText="Xác nhận"
-                        cancelText="Hủy">
-                        <Button
-                            type="primary"
-                            className="ml-3 cs-btn-tab">Thêm vào khóa học yêu thích</Button>
-                    </Popconfirm>
-
+                    <Button onClick={confirmAddToFAV} className="ml-3 cs-btn-tab love-btn">
+                        <HeartTwoTone spin={loading} style={{ fontSize: '1.6rem' }} twoToneColor="#f50" />
+                        {isLove ? 'Bỏ yêu thích' : 'Yêu thích'}
+                    </Button>
                 </div>
 
                 <div className="course-tab__btn">

@@ -9,6 +9,5 @@ urlpatterns = [
     path('user/buy', views.BuyCourseAPI.as_view()),
     path('user/buy/success', views.BuyCourseSuccessAPI.as_view()),
     path('user/check', views.CheckIsBought.as_view()),
-    path('user/addToFav', views.addToFavAPI.as_view()),
-    path('user/getFav', views.addToFavAPI.as_view())
+    path('user/favorite_course', views.FavoriteCourseAPI.as_view()),
 ]

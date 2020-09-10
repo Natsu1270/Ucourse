@@ -2,6 +2,8 @@ from datetime import datetime
 
 from rest_framework import permissions, generics, status
 from rest_framework.response import Response
+
+from courses.models import FavoriteCourse
 from . import serializers
 from .models import Notification
 
@@ -12,11 +14,15 @@ class MyNotifications(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user = self.request.user
         queryset = Notification.objects.filter(user=user).order_by('-created_date')
+        fav_course_count = FavoriteCourse.objects.filter(user=user).count()
 
         return Response(
-            data=serializers.NotificationsSerializer(
-                instance=queryset, context=self.get_serializer_context(), many=True
-            ).data, status=status.HTTP_200_OK
+            data={
+                "notifications": serializers.NotificationsSerializer(
+                    instance=queryset, context=self.get_serializer_context(), many=True
+                ).data,
+                "favCourseCount": fav_course_count
+            }, status=status.HTTP_200_OK
         )
 
 

@@ -15,11 +15,11 @@ export const getCourseListAPI = () => {
 
 
 export const getCourseDetailAPI = async (params) => {
-    const {slug, token} = params
+    const { slug, token } = params
     const headers = token ?
-        {'Content-Type': 'application/json', 'Authorization': `token ${token}`} :
-        {'Content-Type': 'application/json'}
-    const detail =  axios.request({
+        { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
+        { 'Content-Type': 'application/json' }
+    const detail = axios.request({
         headers,
         method: 'GET',
         url: `${COURSE_API_URL}/${slug}`
@@ -28,14 +28,14 @@ export const getCourseDetailAPI = async (params) => {
 };
 
 export const addToFavAPI = async (params) => {
-    const {token, courseId} = params;
+    const { token, courseId, action } = params;
 
     return axios.request({
-        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}`, 'Access-Control-Allow-Origin': '*' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
         method: 'POST',
-        url: `${COURSE_API_URL}/user/addToFav`,
-        data:{
-            courseId
+        url: `${COURSE_API_URL}/user/favorite_course`,
+        data: {
+            courseId, action
         }
     })
 };
@@ -53,7 +53,7 @@ export function getFavoriteCourse(token) {
 
 
 export const buyCourseAPI = async (params) => {
-    const {token, course} = params;
+    const { token, course } = params;
 
     return axios.request({
         headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}`, 'Access-Control-Allow-Origin': '*' },
@@ -66,19 +66,19 @@ export const buyCourseAPI = async (params) => {
 }
 
 export const buyCourseSuccessAPI = async (params) => {
-    const {token, course,
-        partnerRefId, 
-        requestId, 
+    const { token, course,
+        partnerRefId,
+        requestId,
         errorCode,
-        extraData} = params;
+        extraData } = params;
     const data = axios.request({
         headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}`, 'Access-Control-Allow-Origin': '*' },
         method: 'POST',
         url: `${COURSE_API_URL}/user/buy/success`,
         data: {
             course,
-            partnerRefId, 
-            requestId, 
+            partnerRefId,
+            requestId,
             errorCode,
             extraData
         }
@@ -87,7 +87,7 @@ export const buyCourseSuccessAPI = async (params) => {
 }
 
 export const checkBoughtCourseAPI = (params) => {
-    const {token, course} = params
+    const { token, course } = params
     return axios.request({
         headers: { 'Content-Type': 'application/json', 'Authorization': `token ${token}` },
         method: 'POST',

@@ -251,20 +251,24 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
         ]
 
     def get_status(self, obj):
-        request = self.context.get('request')
-        try:
-            student_course_home = StudentCourseHome.objects.get(student=request.user, course_home_id=obj.id)
-            return student_course_home.status
-        except StudentCourseHome.DoesNotExist:
-            return None
+        request = self.context.get('request', None)
+        if request and request.user and not request.user.is_anonymous:
+            try:
+                student_course_home = StudentCourseHome.objects.get(student=request.user, course_home_id=obj.id)
+                return student_course_home.status
+            except StudentCourseHome.DoesNotExist:
+                return None
+        return None
 
     def get_is_summarised(self, obj):
-        request = self.context.get('request')
-        try:
-            user_course = UserCourse.objects.get(user=request.user, course_home_id=obj.id)
-            return user_course.is_summarised
-        except UserCourse.DoesNotExist:
-            return None
+        request = self.context.get('request', None)
+        if request and request.user and not request.user.is_anonymous:
+            try:
+                user_course = UserCourse.objects.get(user=request.user, course_home_id=obj.id)
+                return user_course.is_summarised
+            except UserCourse.DoesNotExist:
+                return None
+        return None
 
 
 
