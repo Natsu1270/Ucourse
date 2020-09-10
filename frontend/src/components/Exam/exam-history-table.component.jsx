@@ -2,8 +2,18 @@ import React from 'react'
 import { Table, Tag, Button } from "antd";
 import { formatDate } from "../../utils/text.utils";
 import Constants from "../../constants";
+import moment from 'moment'
 
-const ExamHistoryTable = ({ exams, setReviewId }) => {
+const ExamHistoryTable = ({ exams, setReviewId, examDetail }) => {
+
+    const reviewBtn = (record) => {
+        if (moment(examDetail.expired_date).isBefore(moment(), 'days')) {
+            return <Button onClick={() => setReviewId(record.id)} type="primary">Xem lại</Button>
+        } else {
+            return <Button disabled type="primary">Xem lại</Button>
+        }
+    }
+
     const columns = [
         {
             title: 'Lần',
@@ -45,7 +55,7 @@ const ExamHistoryTable = ({ exams, setReviewId }) => {
         {
             dataIndex: 'btn',
             key: 'btn',
-            render: (text, record) => <Button onClick={() => setReviewId(record.id)} type="primary">Xem lại</Button>,
+            render: (text, record) => reviewBtn(record)
         },
     ];
 

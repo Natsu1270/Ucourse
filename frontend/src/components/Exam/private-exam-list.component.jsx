@@ -366,7 +366,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                                 Lịch sử làm bài
                             </h2>
                             {studentExams.length ?
-                                <ExamHistoryTable exams={studentExams} setReviewId={triggerReview} />
+                                <ExamHistoryTable examDetail={examDetail} exams={studentExams} setReviewId={triggerReview} />
                                 : <Empty description="Không có lịch sử làm bài" />}
                         </div>
                     </Skeleton>
