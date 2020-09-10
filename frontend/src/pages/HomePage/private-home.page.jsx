@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Skeleton, Collapse, Empty, List, Space, Button, Col, Row, Card, Divider } from "antd";
+import { Avatar, Skeleton, Collapse, Empty, List, Space, Button, Col, Row, Card, Divider, Tabs } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
 import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
@@ -11,6 +11,7 @@ import MyCourseTable from './my-courses-table'
 
 const { Panel } = Collapse;
 const { Meta } = Card
+const { TabPane } = Tabs
 
 const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
@@ -26,6 +27,11 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
         window.scrollTo(0, 0)
     }, []);
     const ownCourseIds = ownCourses.map(course => course.course.id)
+    const inProcessPrograms = ownPrograms.filter(program => program.status == 'on_going')
+    const completedPrograms = ownPrograms.filter(program => program.status == 'completed')
+
+    const inProcessCourses = ownCourses.filter(course => course.is_summarised == false)
+    const completedCourses = ownCourses.filter(course => course.is_summarised == true)
 
     const suggestCourses = courses.filter(course => !ownCourseIds.includes(course.id))
     const suggestPrograms = programs.filter(program => !ownPrograms.includes(program))
@@ -35,62 +41,124 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
             <section className="private-home__learning mb-5">
 
-                <h3 className="text--main private-home--title">
-                    Trong tiến trình
-            </h3>
+                <Tabs>
+                    <TabPane tab="Trong tiến trình" key="1">
+                        <h3 className="text--main private-home--title">
+                            Trong tiến trình
+                        </h3>
 
-                <Collapse ghost>
-                    <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
+                        <Collapse ghost>
+                            <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
 
-                        {
-                            ownPrograms.length ?
+                                {
+                                    inProcessPrograms.length ?
 
-                                <Collapse ghost>
-                                    {
-                                        ownPrograms.map(program => (
-                                            <Panel key={program.id} header={program.name}>
-                                                <List
-                                                    bordered
-                                                    className="demo-loadmore-list"
-                                                    itemLayout="horizontal"
-                                                    dataSource={program.program_course}
-                                                    renderItem={item => (
-                                                        <List.Item
-                                                            actions={[<Link to={`courses/${item.slug}`} key="detail">Chi tiết</Link>]}
-                                                        >
-                                                            <List.Item.Meta
-                                                                avatar={
-                                                                    <Avatar src={item.icon} />
-                                                                }
-                                                                title={<a href="https://ant.design">{item.title}</a>}
-                                                            // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                                                            />
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </Panel>
-                                        ))
-                                    }
+                                        <Collapse ghost>
+                                            {
+                                                inProcessPrograms.map(program => (
+                                                    <Panel key={program.id} header={program.name}>
+                                                        <List
+                                                            bordered
+                                                            className="demo-loadmore-list"
+                                                            itemLayout="horizontal"
+                                                            dataSource={program.program_course}
+                                                            renderItem={item => (
+                                                                <List.Item
+                                                                    actions={[<Link to={`courses/${item.slug}`} key="detail">Chi tiết</Link>]}
+                                                                >
+                                                                    <List.Item.Meta
+                                                                        avatar={
+                                                                            <Avatar src={item.icon} />
+                                                                        }
+                                                                        title={<Link to={`courses/${item.slug}`}>{item.title}</Link>}
+                                                                    // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                                    />
+                                                                </List.Item>
+                                                            )}
+                                                        />
+                                                    </Panel>
+                                                ))
+                                            }
 
-                                </Collapse>
-                                : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                        }
-                    </Panel>
+                                        </Collapse>
+                                        : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                }
+                            </Panel>
 
-                    <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Khóa học</h4>} key="2">
-                        {
-                            isLoadingLearnings ?
-                                <div className="d-flex">
-                                    <Skeleton active avatar />
-                                    <Skeleton active avatar />
-                                    <Skeleton active avatar />
-                                </div> : <div className="private-home__learning--courses--items">
-                                    <MyCourseTable courses={ownCourses} />
-                                </div>
-                        }
-                    </Panel>
+                            <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Khóa học</h4>} key="2">
+                                {
+                                    isLoadingLearnings ?
+                                        <div className="d-flex">
+                                            <Skeleton active avatar />
+                                            <Skeleton active avatar />
+                                            <Skeleton active avatar />
+                                        </div> : <div className="private-home__learning--courses--items">
+                                            <MyCourseTable courses={inProcessCourses} />
+                                        </div>
+                                }
+                            </Panel>
 
-                </Collapse>
+                        </Collapse>
+                    </TabPane>
+                    <TabPane tab="Đã hoàn thành" key="2">
+                        <h3 className="text--main private-home--title">
+                            Đã được tổng kết
+                        </h3>
+
+                        <Collapse ghost>
+                            <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Chương trình học</h4>} key="1">
+
+                                {
+                                    completedPrograms.length ?
+
+                                        <Collapse ghost>
+                                            {
+                                                inProcessPrograms.map(program => (
+                                                    <Panel key={program.id} header={program.name}>
+                                                        <List
+                                                            bordered
+                                                            className="demo-loadmore-list"
+                                                            itemLayout="horizontal"
+                                                            dataSource={program.program_course}
+                                                            renderItem={item => (
+                                                                <List.Item
+                                                                    actions={[<Link to={`courses/${item.slug}`} key="detail">Chi tiết</Link>]}
+                                                                >
+                                                                    <List.Item.Meta
+                                                                        avatar={
+                                                                            <Avatar src={item.icon} />
+                                                                        }
+                                                                        title={<a href="https://ant.design">{item.title}</a>}
+                                                                    // description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                                                    />
+                                                                </List.Item>
+                                                            )}
+                                                        />
+                                                    </Panel>
+                                                ))
+                                            }
+
+                                        </Collapse>
+                                        : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                }
+                            </Panel>
+
+                            <Panel header={<h4 className="text--main text--main__smaller private-home__learning--header">Khóa học</h4>} key="2">
+                                {
+                                    isLoadingLearnings ?
+                                        <div className="d-flex">
+                                            <Skeleton active avatar />
+                                            <Skeleton active avatar />
+                                            <Skeleton active avatar />
+                                        </div> : <div className="private-home__learning--courses--items">
+                                            <MyCourseTable courses={completedCourses} />
+                                        </div>
+                                }
+                            </Panel>
+
+                        </Collapse>
+                    </TabPane>
+                </Tabs>
 
                 <div className="mt-4">
                     <Space>
@@ -137,7 +205,7 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                                     <Meta
                                         avatar={<Avatar size={48} src={program.icon} />}
                                         title={program.name}
-                                        description={<Row><Col>Số lớp: {program.courses_count}</Col></Row>}
+                                        description={<Row><Col>Số môn: {program.courses_count}</Col></Row>}
                                     />
                                 </Card>
                             </Col>

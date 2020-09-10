@@ -165,7 +165,7 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
             username: student.username,
             fullname: student.user_profile.fullname,
             autoResult: finalResult,
-            finalResult: studentCourseHome.final_score,
+            finalResult: studentCourseHome.final_score ? studentCourseHome.final_score.toFixed(2) : 'N/A',
             isQualified: qualified ? 'Đạt' : 'Không đạt'
         })
 
@@ -174,8 +174,8 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
             username: student.username,
             avatar: student.user_profile.avatar,
             fullname: student.user_profile.fullname,
-            result: finalResult,
-            finalResult: studentCourseHome.final_score,
+            result: finalResult.toFixed(2),
+            finalResult: studentCourseHome.final_score ? studentCourseHome.final_score.toFixed(2) : null,
             studentCourseHome: studentCourseHome,
             key: studentCourseHome.id,
             status: studentCourseHome.status,

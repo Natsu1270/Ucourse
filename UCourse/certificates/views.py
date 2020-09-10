@@ -155,6 +155,7 @@ UCOURSE CEO
                 )
             instance = StudentProgram.objects.get(pk=student_program_id)
             instance.received_certificate = True
+            instance.status = 'completed'
             instance.save()
 
         return HttpResponse({

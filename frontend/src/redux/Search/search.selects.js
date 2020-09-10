@@ -65,3 +65,8 @@ export const searchTeacherSelector = createSelector(
     [searchSelector],
     search => search.searchFilterTeacher
 )
+
+export const searchPriceSelector = createSelector(
+    [searchSelector],
+    search => search.searchFilterPrice
+)

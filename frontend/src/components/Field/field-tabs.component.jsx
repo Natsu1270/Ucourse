@@ -49,10 +49,10 @@ const FieldTabs = ({ fields, isLoading }) => {
                                                 }
                                             </Skeleton>
                                         </Row>
-                                        <Row gutter={[30, 25]}>
+                                        <Row gutter={[28, 28]}>
                                             {
                                                 field.field_courses.map(course => (
-                                                    <Col>
+                                                    <Col span={6}>
                                                         <CourseCard
                                                             course={course}
                                                             onClick={() => history.push(`/courses/${course.slug}`)} />

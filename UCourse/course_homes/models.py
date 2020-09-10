@@ -222,6 +222,7 @@ class StudentAssignment(models.Model):
         Assignment, related_name='student_ass', on_delete=models.CASCADE)
     student = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='ass_student', on_delete=models.CASCADE)
+
     status = models.CharField(
         max_length=1, choices=STATUS_CHOICES, default=EMPTY)
     score = models.FloatField(blank=True, null=True, default=0)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table, Tag } from 'antd'
+import { message, Tabs, Table, Tag, Divider } from 'antd'
 import Constants from '../../constants'
 
 import { getStudentGradesByCourseHomeAPI } from '../../api/grades.services'
@@ -17,6 +17,8 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
     const [assignments, setAssignments] = useState([])
     const [exams, setExams] = useState([])
     const [finalResult, setFinalResult] = useState({})
+    const [classStatus, setClassStatus] = useState(null)
+    const [finalScore, setFinalScore] = useState(null)
 
     const getStudentGrades = async () => {
         setLoading(true)
@@ -26,6 +28,8 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             setAssignments(result.data.student_assignments)
             const final = calFinalScore(result.data.student_exams, result.data.student_assignments)
             setFinalResult(final)
+            setClassStatus(result.data.class_status)
+            setFinalScore(result.data.final_score)
         } catch (err) {
             message.error(err.message)
         }
@@ -98,7 +102,20 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                 </TabPane>
 
                 <TabPane tab="Điểm tổng kết" key="3">
-                    <h3 className="text--main">Điểm tổng kết tạm tính: {finalResult.finalResult}</h3>
+
+                    <h3 className="text--sub__bigger3 text-black mt-3">
+                        Điểm tổng kết từ giảng viên: {finalScore || 'Chưa tổng kết điểm'}
+                    </h3>
+                    <p className="text--sub__bigger2">Tình trạng lớp: {
+                        classStatus == 'pass' ? 'Đạt' : classStatus == 'fail' ? 'Không đạt' : 'Chưa tổng kết'
+                    }
+                    </p>
+
+                    <Divider />
+
+                    <h3 className="text--sub__bigger3 text-black">
+                        Điểm tổng kết tạm tính: {finalResult.finalResult ? finalResult.finalResult.toFixed(2) : 'Chưa có'}
+                    </h3>
                     <p className="text--sub__bigger2">Tình trạng điểm: {
                         finalResult.qualified ? 'Đạt yêu cầu' : 'Chưa đạt yêu cầu'
                     }

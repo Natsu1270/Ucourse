@@ -15,11 +15,22 @@ class GetStudentGradesAPI(generics.GenericAPIView):
         course_home_id = self.request.query_params['courseHomeId']
         user = self.request.user
         student_exams = StudentExamResult.objects.filter(student_id=user.id, course_home_id=course_home_id)
-        student_assignments = StudentAssignment.objects.filter(student_id=user.id)
+        student_assignments = StudentAssignment.objects.filter(
+            student_id=user.id, assignment__learning_topic__course_home_id=course_home_id)
+        final_score = None
+        class_status = None
+        try:
+            student_course_home = StudentCourseHome.objects.get(student=user, course_home_id=course_home_id)
+            final_score = student_course_home.final_score
+            class_status = student_course_home.status
+        except StudentCourseHome.DoesNotExist:
+            pass
 
         return Response({
             "student_exams": StudentExamResultSerializer(instance=student_exams, many=True).data,
             "student_assignments": StudentAssignmentDetailGradeSerializer(instance=student_assignments, many=True).data,
+            "final_score": final_score,
+            "class_status": class_status,
             "result": True,
             "status_code": 200
         }, status=status.HTTP_200_OK)
@@ -32,7 +43,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
 
         course_home_id = self.request.query_params['courseHomeId']
 
-        course_home_exams = Exam.objects.filter(topic__course_home__course_id=course_home_id)
+        course_home_exams = Exam.objects.filter(topic__course_home_id=course_home_id)
         course_home_assignments = Assignment.objects.filter(learning_topic__course_home_id=course_home_id)
         student_course_homes = StudentCourseHome.objects.filter(course_home_id=course_home_id)
         filter_exams = {}

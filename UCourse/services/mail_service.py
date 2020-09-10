@@ -1,6 +1,8 @@
 from django.core.mail import send_mail, EmailMessage
+from asgiref.sync import sync_to_async
 
 
+# @sync_to_async
 def send_mail_with_attachments(subject, body, send_from, send_to, cc, attachments):
     email = EmailMessage(
         subject=subject,
@@ -14,6 +16,7 @@ def send_mail_with_attachments(subject, body, send_from, send_to, cc, attachment
     email.send()
 
 
+# @sync_to_async
 def send_mail_with_attachment(subject, body, send_from, send_to, cc, attachment, filename=None):
     email = EmailMessage(
         subject=subject,

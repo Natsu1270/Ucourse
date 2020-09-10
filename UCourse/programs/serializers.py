@@ -74,13 +74,24 @@ class ProgramSearchSerializer(serializers.ModelSerializer):
     field = serializers.StringRelatedField(read_only=True)
     courses_count = serializers.IntegerField(read_only=True)
     program_course = CourseSearchSerializer(many=True, read_only=True)
+    status = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Program
         fields = [
-            'id', 'name', 'icon', 'slug', 'discount_percentage',
+            'id', 'name', 'icon', 'slug', 'discount_percentage', 'status',
             'courses_count', 'status', 'field', 'program_course'
         ]
+
+    def get_status(self, obj):
+        request = self.context.get('request', None)
+        if request and request.user is not None and not request.user.is_anonymous:
+            try:
+                student_program = StudentProgram.objects.get(student=request.user, program_id=obj.id)
+                return student_program.status
+            except StudentProgram.DoesNotExist:
+                return None
+        return None
 
 
 class ProgramMinSerializer(serializers.ModelSerializer):

@@ -12,7 +12,8 @@ import {
     updateSearchFilterLevel,
     updateSearchFilterRating,
     updateSearchFilterDate,
-    updateSearchFilterTeacher
+    updateSearchFilterTeacher,
+    updateSearchFilterPrice
 } from "../../redux/Search/search.actions";
 
 
@@ -54,6 +55,10 @@ const SearchFilter = () => {
         dispatch(updateSearchFilterLevel(checkedValues))
     }
 
+    function onChangePrice(checkedValues) {
+        dispatch(updateSearchFilterPrice(checkedValues))
+    }
+
     // function onChangeRate(checkedValues) {
     //     dispatch(updateSearchFilterRating(checkedValues))
     // }
@@ -65,6 +70,19 @@ const SearchFilter = () => {
 
     return (
         <Collapse>
+            <Panel key="6" header="Chi phí" className='white-bg'>
+                <Checkbox.Group style={{ width: '100%' }} onChange={onChangePrice}>
+                    <Row>
+                        <Col key="1" span={24} style={{ marginBottom: '1rem' }}>
+                            <Checkbox value="free">Miễn phí</Checkbox>
+                        </Col>
+                        <Col key="2" span={24} style={{ marginBottom: '1rem' }}>
+                            <Checkbox value="paid">Trả phí</Checkbox>
+                        </Col>
+                    </Row>
+
+                </Checkbox.Group>
+            </Panel>
             <Panel key="1" header="Lĩnh vực" className='white-bg'>
                 {
                     isFetching ? <Spin /> :

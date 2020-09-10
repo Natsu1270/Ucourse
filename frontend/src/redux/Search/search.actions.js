@@ -64,3 +64,9 @@ export const updateSearchFilterTeacher = (filter) => ({
     type: SearchActionTypes.UPDATE_SEARCH_FILTER_TEACHER,
     payload: filter
 })
+
+
+export const updateSearchFilterPrice = (filter) => ({
+    type: SearchActionTypes.UPDATE_SEARCH_FILTER_PRICE,
+    payload: filter
+})

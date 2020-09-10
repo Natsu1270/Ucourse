@@ -1,5 +1,5 @@
 import SearchActionTypes from "./search.types";
-import {updateFilter} from "./search.utils";
+import { updateFilter } from "./search.utils";
 
 const initState = {
     isSearching: false,
@@ -12,6 +12,7 @@ const initState = {
     searchFilterRating: null,
     searchFilterTeacher: null,
     searchFilterDate: null,
+    searchFilterPrice: null,
 };
 
 const searchReducer = (state = initState, action) => {
@@ -78,6 +79,12 @@ const searchReducer = (state = initState, action) => {
             return {
                 ...state,
                 searchFilterTeacher: action.payload
+            }
+
+        case SearchActionTypes.UPDATE_SEARCH_FILTER_PRICE:
+            return {
+                ...state,
+                searchFilterPrice: action.payload
             }
 
 

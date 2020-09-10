@@ -30,14 +30,14 @@ class GetAllAPI(views.APIView):
             status=status.HTTP_200_OK)
 
 
-class GetAllMyAPI(views.APIView):
+class GetAllMyAPI(generics.GenericAPIView):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         my_courses = CourseHome.objects.filter(students__in=[self.request.user])
         my_programs = Program.objects.filter(user_buy__in=[self.request.user])
         data = {
-            "myCourses": CourseHomeMinSerializer(instance=my_courses, many=True).data,
-            "myPrograms": ProgramSearchSerializer(instance=my_programs, many=True).data
+            "myCourses": CourseHomeMinSerializer(instance=my_courses, context=self.get_serializer_context(), many=True).data,
+            "myPrograms": ProgramSearchSerializer(instance=my_programs, context=self.get_serializer_context(), many=True).data
         }
 
         return Response(

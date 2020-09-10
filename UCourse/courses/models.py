@@ -90,6 +90,10 @@ class Course(models.Model):
         check = UserBuyCourse.objects.filter(user_id=student.id, course_id=self.id, status=True)
         return check.count() > 0
 
+    def check_is_completed(self, student):
+        check = UserCourse.objects.filter(user_id=student.id, course_id=self.id, status='completed')
+        return check.count() > 0
+
     @property
     def course_home_count(self):
         return self.c_homes.count()

@@ -19,8 +19,8 @@ class CourseMinSerializer(serializers.ModelSerializer):
 
     def get_is_my_course(self, obj):
         user = self.context.get('user')
-        if user:
-            return obj.user_buy.filter(pk=user.id).count() > 0
+        if user and not user.is_anonymous:
+            return UserBuyCourse.objects.filter(user=user, course_id=obj.id, status=True).count() > 0
         else:
             return False
 
@@ -149,10 +149,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_is_my_course(self, obj):
         user = self.context.get('user')
-        if user:
-            return obj.user_buy.filter(pk=user.id).count() > 0
-        else:
-            return False
+        if user and not user.is_anonymous:
+            return UserBuyCourse.objects.filter(user=user, course_id=obj.id, status=True).count() > 0
+        return False
 
     @staticmethod
     def get_view_count(obj):
@@ -204,8 +203,8 @@ class CourseSearchSerializer(serializers.ModelSerializer):
         if request is not None:
             user_ctx = request.user
         user = self.context.get('user', user_ctx)
-        if user:
-            return obj.user_buy.filter(pk=user.id).count() > 0
+        if user and not user.is_anonymous:
+            return UserBuyCourse.objects.filter(user=user, course_id=obj.id, status=True).count() > 0
         else:
             return False
 
@@ -241,8 +240,8 @@ class CourseMySerializer(serializers.ModelSerializer):
     def get_is_my_course(self, obj):
         request = self.context.get('request')
         user = self.context.get('user', request.user)
-        if user:
-            return obj.user_buy.filter(pk=user.id).count() > 0
+        if user and not user.is_anonymous:
+            return UserBuyCourse.objects.filter(user=user, course_id=obj.id, status=True).count() > 0
         else:
             return False
 

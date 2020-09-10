@@ -69,6 +69,7 @@ class UpdateSummary(generics.GenericAPIView):
             user_buy_course = UserBuyCourse.objects.get(
                 course_id=user_course.course_id, user_id=user_course.user_id, status=True)
             user_buy_course.status = False
+            user_buy_course.save()
         except UserBuyCourse.DoesNotExist:
             pass
 

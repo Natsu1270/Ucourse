@@ -77,14 +77,10 @@ const RegisterClassPage = () => {
 
     const registerBtn = (item) => {
         if (item.isOwn) {
-            if (canRegister(item)) {
-                if (dayDiff(item.open_date, now) <= 0) {
-                    return 'Đăng ký thành công'
-                } else {
-                    return 'Hủy đăng ký'
-                }
-            } else {
+            if (moment(item.open_date).isSameOrBefore(now, 'days')) {
                 return 'Đăng ký thành công'
+            } else {
+                return 'Hủy đăng ký'
             }
         }
         if (!canRegister(item)) return 'Hết hạn đăng ký'
@@ -201,7 +197,7 @@ const RegisterClassPage = () => {
                                                                                     <span style={{ color: '#000' }}>Ngày mở đăng ký {item.register_date}</span>
                                                                                 </Col>
                                                                                 <Col span={10}>
-                                                                                    <span style={{ color: '#000' }}>Gia hạn đăng ký khi khóa học đã mở: {item.over_admission_days} ngày</span>
+                                                                                    <span style={{ color: '#000' }}>Gia hạn đăng ký khi khóa học đã mở: {item.over_admission_days || 0} ngày</span>
                                                                                 </Col>
                                                                             </Row>
                                                                         }

@@ -15,6 +15,7 @@ import {
     searchLevelSelector,
     searchRatingSelector,
     searchTeacherSelector,
+    searchPriceSelector
 } from '../../redux/Search/search.selects'
 import { Empty, Tabs } from 'antd'
 import SearchCourses from "../../components/SearchResult/search-courses.component";
@@ -48,7 +49,7 @@ const CourseSearchPage = ({ token }) => {
     const {
         searchCourses, searchPrograms,
         filterField, filterLevel,
-        filterRating, filterTeacher,
+        filterRating, filterTeacher, filterPrice,
         isSearching, myCourses, myPrograms
     } = useSelector(createStructuredSelector({
         searchCourses: searchCoursesSelector,
@@ -58,6 +59,7 @@ const CourseSearchPage = ({ token }) => {
         filterLevel: searchLevelSelector,
         filterRating: searchRatingSelector,
         filterTeacher: searchTeacherSelector,
+        filterPrice: searchPriceSelector,
         myCourses: myCoursesSelector,
         myPrograms: myProgramsSelector
     }));
@@ -137,6 +139,29 @@ const CourseSearchPage = ({ token }) => {
         }
         setCourses(filterCourses)
     }, [filterTeacher]);
+
+    useEffect(() => {
+        let filterCourses = [];
+        if (filterPrice && filterPrice.length) {
+            filterCourses = searchCourses.filter(course => filterPrice.includes(course.fee_type))
+        } else {
+            filterCourses = searchCourses
+        }
+        if (filterField && filterField.length) {
+            filterCourses = filterCourses.filter(course => filterField.includes(course.field))
+        }
+        if (filterLevel && filterLevel.length) {
+            filterCourses = filterCourses.filter(course => filterLevel.includes(course.level))
+        }
+        if (filterTeacher && filterTeacher.length) {
+            filterCourses = searchCourses.filter(course =>
+                course.course_teachers.some(
+                    teacher => filterTeacher.includes(teacher)
+                )
+            )
+        }
+        setCourses(filterCourses)
+    }, [filterPrice]);
 
     const { TabPane } = Tabs;
 

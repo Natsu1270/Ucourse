@@ -36,7 +36,7 @@ class RegisterClassAPI(generics.GenericAPIView):
                 "message": "Full students",
                 "status_code": 400
             }, status=status.HTTP_400_BAD_REQUEST)
-
+        # check if registered to unregister
         registered_class = CourseHome.objects.filter(
             Q(course_id=course_id) & Q(students__in=[
                 request.user]) & ~Q(status__exact='closed')
@@ -52,7 +52,8 @@ class RegisterClassAPI(generics.GenericAPIView):
                     c.save()
 
         if can_register:
-            user_course = UserCourse.objects.filter(course_id=course_id, user_id=user.id)
+            # ignore past summarised user-course
+            user_course = UserCourse.objects.filter(course_id=course_id, user_id=user.id, is_summarised=False)
             if user_course.count() == 0:
                 UserCourse.objects.create(course_id=course_id, user_id=user.id, course_home_id=class_id)
             else:

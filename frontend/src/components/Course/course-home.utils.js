@@ -10,7 +10,8 @@ const now = moment()
 export const courseHomeStatus = (home) => {
     const registerDate = home.register_date
     const openDate = home.open_date
-    const extendDate = moment(openDate).add(home.over_admission_days, 'days')
+    const extendDays = home.over_admission_days ? home.over_admission_days : 0
+    const extendDate = moment(openDate).add(extendDays, 'days')
 
     let endDays;
     if (home.end_date) {
@@ -39,7 +40,8 @@ export const courseHomeStatus = (home) => {
 export const canRegister = (home) => {
     const registerDate = home.register_date
     const openDate = home.open_date
-    const delayDate = moment(home.open_date).add(home.over_admission_days, 'days')
+    const extendDays = home.over_admission_days ? home.over_admission_days : 0
+    const delayDate = moment(home.open_date).add(extendDays, 'days')
 
     if (moment(registerDate).isAfter(now, 'days')) {
         return false

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from courses.models import UserCourse
 from courses.serializers import CourseMinSerializer
 from programs.serializers import FieldMinSerializer
 from users.models import User
@@ -240,12 +241,31 @@ class CourseHomeMinSerializer(serializers.ModelSerializer):
     # course = serializers.PrimaryKeyRelatedField(read_only=True)
     teacher = serializers.StringRelatedField(read_only=True)
     course = CourseMinSerializer(read_only=True)
+    status = serializers.SerializerMethodField(read_only=True)
+    is_summarised = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = CourseHome
         fields = [
-            'id', 'course', 'status', 'slug', 'full_name', 'teacher'
+            'id', 'course', 'status', 'slug', 'full_name', 'teacher', 'status', 'is_summarised'
         ]
+
+    def get_status(self, obj):
+        request = self.context.get('request')
+        try:
+            student_course_home = StudentCourseHome.objects.get(student=request.user, course_home_id=obj.id)
+            return student_course_home.status
+        except StudentCourseHome.DoesNotExist:
+            return None
+
+    def get_is_summarised(self, obj):
+        request = self.context.get('request')
+        try:
+            user_course = UserCourse.objects.get(user=request.user, course_home_id=obj.id)
+            return user_course.is_summarised
+        except UserCourse.DoesNotExist:
+            return None
+
 
 
 class StudentCourseHomeSerializer(serializers.ModelSerializer):
