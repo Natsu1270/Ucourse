@@ -63,7 +63,7 @@ const QuestionBank = ({ token }) => {
     const searchQuestion = (name) => {
         let filterQuesitons = orgQuesitons
         if (name.trim() != "") {
-            filterQuesitons = filterQuesitons.filter(q => q.name.includes(name))
+            filterQuesitons = filterQuesitons.filter(q => q.name.toLowerCase().includes(name.toLowerCase()) || q.content.toLowerCase().includes(name.toLowerCase()))
         }
         setMyQuestions(filterQuesitons)
     }
