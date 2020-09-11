@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
     Row, Col, Table, List, Input, Modal, Space,
-    message, Tag, Form, Button, Select, notification
+    message, Tag, Form, Button, Select, notification, Alert
 } from 'antd'
 import { getListSummary, updateSummary, multiUpdateSummary, genCertificateAPI, handOutCertificateAPI } from '../../api/summary.services'
 import Avatar from 'antd/lib/avatar/avatar'
@@ -94,7 +94,13 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         setLoading(true)
         setCerItem(item)
         const params = {
-            name: course.title, studentName: item.fullname, type: 'c',
+            name: course.title,
+            type: 'c',
+            courseHomeId: courseHome.id,
+            courseId: course.id,
+            studentId: item.studentId,
+            name: course.title,
+            studentCourseId: item.id,
             rank: parseRankByScore(item.rank)
         }
         try {
@@ -110,27 +116,27 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         setLoading(false)
     }
 
-    const handOut = async () => {
-        setLoading(true)
-        const formData = new FormData()
-        formData.set('type', 'c')
-        formData.set('email', cerItem.email)
-        formData.set('courseHomeId', courseHome.id)
-        formData.set('courseId', course.id)
-        formData.set('studentId', cerItem.studentId)
-        formData.set('name', course.title)
-        formData.set('studentName', cerItem.fullname)
-        formData.set('studentCourseId', cerItem.id)
-        formData.set('file', file, cerItem.username + course.slug + "_Certificate.pdf")
+    // const handOut = async () => {
+    //     setLoading(true)
+    //     const formData = new FormData()
+    //     formData.set('type', 'c')
+    //     formData.set('email', cerItem.email)
+    //     formData.set('courseHomeId', courseHome.id)
+    //     formData.set('courseId', course.id)
+    //     formData.set('studentId', cerItem.studentId)
+    //     formData.set('name', course.title)
+    //     formData.set('studentName', cerItem.fullname)
+    //     formData.set('studentCourseId', cerItem.id)
+    //     formData.set('file', file, cerItem.username + course.slug + "_Certificate.pdf")
 
-        try {
-            const { data } = await handOutCertificateAPI({ token, formData })
-            message.success('Cấp chứng chỉ thành công', 1.5, () => window.location.reload())
-        } catch (err) {
-            message.error('Có lỗi xảy ra: ' + err.message)
-            setLoading(false)
-        }
-    }
+    //     try {
+    //         const { data } = await handOutCertificateAPI({ token, formData })
+    //         message.success('Cấp chứng chỉ thành công', 1.5, () => window.location.reload())
+    //     } catch (err) {
+    //         message.error('Có lỗi xảy ra: ' + err.message)
+    //         setLoading(false)
+    //     }
+    // }
 
     const genSummary = (item) => {
         // if (dayDiff(moment(), item.end_date) < 0) {
@@ -397,7 +403,16 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
                     setShowModal(false)
                     setCurrentItem({})
                 }}
-                onOk={() => sumForm.submit()}
+                onOk={() => {
+                    if (currentItem.id != null) {
+                        sumForm.submit()
+                    } else {
+                        setShowModal(false)
+                        setCurrentItem({})
+                    }
+                }
+
+                }
                 cancelText="Hủy"
             >
                 {
@@ -431,20 +446,23 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
                             </Select>
                         </Form.Item>
 
-                    </Form> : <Row gutter={20} justify="center">
+                    </Form> : <Row gutter={[20, 20]} justify="center">
+                            <Col span={24}>
+                                <Alert
+                                    message="Cấp chứng chỉ thành công"
+                                    description="Chứng chỉ đã được gửi tới email của học viên"
+                                    type="success"
+                                    showIcon
+                                />
+                            </Col>
                             <Col>
                                 <Button
                                     loading={loading}
                                     onClick={() => window.open(fileURL)}>
-                                    <FileSearchOutlined /> Xem trước
+                                    <FileSearchOutlined /> Xem file đã cấp
                                 </Button>
                             </Col>
-                            <Col>
-                                <Button
-                                    loading={loading}
-                                    type="primary" danger
-                                    onClick={handOut}><MailOutlined /> Cấp chứng chỉ</Button>
-                            </Col>
+
                         </Row>
 
                 }

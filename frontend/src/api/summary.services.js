@@ -78,9 +78,9 @@ export function genCertificateAPI({ token, params }) {
 
     return axios.request({
         headers: { 'Content-type': 'application/json', 'Authorization': `token ${token}` },
-        method: 'GET',
+        method: 'POST',
         url: `${CERTIFCATE_API_URL}/generate`,
-        params: params,
+        data: params,
         responseType: 'blob'
     })
 }

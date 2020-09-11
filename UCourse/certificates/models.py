@@ -28,6 +28,7 @@ class StudentCertificate(models.Model):
     course_home = models.ForeignKey(CourseHome, on_delete=models.SET_NULL, null=True)
     program = models.ForeignKey(Program, on_delete=models.SET_NULL, null=True)
     file = models.FileField(upload_to='certificates/file')
+    uuid = models.CharField(max_length=100, blank=True, null=True)
     received_date = models.DateField(default=timezone.now)
 
     class Meta:

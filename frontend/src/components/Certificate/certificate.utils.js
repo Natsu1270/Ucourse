@@ -24,7 +24,7 @@ export const renderCertificate = (received, record, genCertificate) => {
             type="primary"
             style={{ background: "#8874a3", border: 'none' }}
             onClick={() => genCertificate(record)}>
-            Tạo chứng chỉ
+            Cấp chứng chỉ
                 </Button>
     }
     if (!received) {

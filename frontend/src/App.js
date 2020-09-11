@@ -56,6 +56,8 @@ const AdminCertificate = lazy(() => import('./pages/AdminPage/admin-certificate.
 const AdminCertificateCourse = lazy(() => import('./pages/AdminPage/admin-certificate-course.component'))
 const AdminCertificateProgram = lazy(() => import('./pages/AdminPage/admin-certificate-program.component'))
 const FavoriteCoursePage = lazy(() => import('./pages/FavoriteCoursePage/my-favorite-courses.page'))
+const CertificateInquryPage = lazy(() => import('./pages/CertificateInquiry/certificate-inquiry.page'))
+
 
 
 function App() {
@@ -135,6 +137,9 @@ function App() {
                                     </Route>
                                     <Route exact path="/user/:username">
                                         <UserProfilePage userRole={userRole} />
+                                    </Route>
+                                    <Route exact path="/certificate-info">
+                                        <CertificateInquryPage />
                                     </Route>
                                     <PrivateRoute
                                         referrer="/my-courses"

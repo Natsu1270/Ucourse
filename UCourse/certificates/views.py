@@ -1,6 +1,8 @@
 import base64
 import datetime
 import io
+import json
+
 from django.db.models import Q
 from django.core.files.base import ContentFile
 
@@ -19,8 +21,9 @@ from courses.serializers import UserCourseSerializer
 from programs.models import StudentProgram, Program
 from programs.serializers import StudentProgramSerializer
 from services.mail_service import send_mail_with_attachments, send_mail_with_attachment
+from users.models import User
 from . import serializers
-
+import uuid
 
 def link_callback(uri, rel):
     """
@@ -66,101 +69,90 @@ def generate_certificate(template, context):
 
 class GenerateCertificate(generics.GenericAPIView):
 
-    def get(self, request, *args, **kwargs):
-        template = get_template('course-certificate-template.html')
-        student_name = self.request.query_params['studentName']
-        certificate_type = self.request.query_params['type']
-        name = self.request.query_params['name']
-        rank = self.request.query_params.get('rank', None)
-
-        message = 'Has completed the course' if certificate_type == 'c' else 'Has completed the program'
-        context = {
-            'student_name': student_name,
-            'name': name,
-            'message': message,
-            'rank': rank,
-            'date': datetime.date.today()
-        }
-        pdf, result = generate_certificate(template, context)
-        if not pdf.err:
-            filename = "{0}-{1}_Certificate.pdf".format(student_name, name)
-            response = HttpResponse(result.getvalue(), content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
-            return response
-            # return HttpResponse(result.getvalue(), content_type='application/pdf')
-
-
-class HandoutCertificate(generics.GenericAPIView):
-
     def post(self, request, *args, **kwargs):
         request_type = self.request.data.get('type', None)
-        certificate_type = 'course' if request_type == 'c' else 'program'
-        email = self.request.data['email']
+        student_id = self.request.data['studentId']
         course_home_id = self.request.data.get('courseHomeId', None)
         course_id = self.request.data.get('courseId', None)
         program_id = self.request.data.get('programId', None)
         student_course_id = self.request.data.get('studentCourseId', None)
         student_program_id = self.request.data.get('studentProgramId', None)
-        student_id = self.request.data['studentId']
-        file = self.request.data['file']
         name = self.request.data['name']
-        student_name = self.request.data['studentName']
 
-        send_mail_with_attachments(
-            subject="[Certificate Of Completion]",
-            body="""
-Hi {0}, 
-Congratulations on completing {1} {2}, 
-we are honored to give you the certificate, 
- 
-Best Regards,
-UCOURSE CEO
-                 """.format(
-                student_name, certificate_type, name),
-            send_from="ucourse.service@gmail.com",
-            send_to=[email],
-            cc=["hungduy1270@gmail.com", "1610107@hcmut.edu.vn"],
-            attachments=[file]
-        )
-        if request_type == 'c':
-            student_certificate = StudentCertificate.objects.filter(
-                student_id=student_id, course_id=course_id, course_home_id=course_home_id
+        student = User.objects.get(pk=student_id)
+        email = student.email
+        student_name = student.user_profile.fullname
+        rank = self.request.data.get('rank', None)
+        uuid_string = uuid.uuid4()
+
+        # Generate certificate pdf file
+        template = get_template('course-certificate-template.html')
+        message = 'Has completed the course' if request_type == 'c' else 'Has completed the program'
+        context = {
+            'student_name': student_name,
+            'name': name,
+            'message': message,
+            'rank': rank,
+            'date': datetime.date.today(),
+            'uuid': uuid_string
+        }
+        pdf, result = generate_certificate(template, context)
+        if not pdf.err:
+            file = result.getvalue()
+            filename = "{0}.pdf".format(uuid_string)
+            file_content = ContentFile(file, filename)
+            response = HttpResponse(file, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+            send_mail_with_attachment(
+                subject="[Certificate Of Completion]",
+                body="""
+            Hi {0}, 
+            Congratulations on completing {1} {2}, 
+            we are honored to give you the certificate, 
+
+            Best Regards,
+            UCOURSE CEO
+                             """.format(
+                    student_name, "course" if request_type == 'c' else "program", name),
+                send_from="ucourse.service@gmail.com",
+                send_to=[email],
+                cc=["hungduy1270@gmail.com", "1610107@hcmut.edu.vn"],
+                attachment=file,
+                filename=filename
             )
-
-            if student_certificate.count() > 0:
-                student_certificate = student_certificate[0]
-                student_certificate.file = file
-                student_certificate.received_date = datetime.date.today()
-                student_certificate.save()
-            else:
-                StudentCertificate.objects.create(
-                    student_id=student_id, course_id=course_id, course_home_id=course_home_id, file=file
+            if request_type == 'c':
+                student_certificate = StudentCertificate.objects.create(
+                    student_id=student_id,
+                    course_id=course_id,
+                    course_home_id=course_home_id,
+                    uuid=uuid_string
                 )
-            instance = UserCourse.objects.get(pk=student_course_id)
-            instance.received_certificate = True
-            instance.save()
-        else:
-            student_certificate = StudentCertificate.objects.filter(
-                student_id=student_id, program_id=program_id
-            )
-
-            if student_certificate.count() > 0:
-                student_certificate = student_certificate[0]
-                student_certificate.file = file
-                student_certificate.received_date = datetime.date.today()
+                student_certificate.file.save(name=filename, content=file_content, save=False)
                 student_certificate.save()
+                instance = UserCourse.objects.get(pk=student_course_id)
+                instance.received_certificate = True
+                instance.save()
             else:
-                StudentCertificate.objects.create(
-                    student_id=student_id, program_id=program_id, file=file
+                student_certificate = StudentCertificate.objects.create(
+                    student_id=student_id, program_id=program_id, uuid=uuid_string
                 )
-            instance = StudentProgram.objects.get(pk=student_program_id)
-            instance.received_certificate = True
-            instance.status = 'completed'
-            instance.save()
+                student_certificate.file.save(name=filename, content=file_content, save=False)
+                student_certificate.save()
+                instance = StudentProgram.objects.get(pk=student_program_id)
+                instance.received_certificate = True
+                instance.status = 'completed'
+                instance.save()
+            return response
 
-        return HttpResponse({
-            "result": True
-        }, status=status.HTTP_200_OK)
+            # return HttpResponse({
+            #     "result": True
+            # }, status=status.HTTP_200_OK)
+
+            # return HttpResponse(result.getvalue(), content_type='application/pdf')
+
+# class HandoutCertificate(generics.GenericAPIView):
+#
+#     def post(self, request, *args, **kwargs):
 
 
 class GetStudentCertificate(generics.GenericAPIView):

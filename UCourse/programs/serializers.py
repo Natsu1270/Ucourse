@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.db.models import Q, QuerySet
 
+from certificates.models import StudentCertificate
 from courses.models import UserCourse
 from users.serializers import UserMinSerializer
 from .models import Program, Field, UserBuyProgram, StudentProgram, UserViewProgram
@@ -137,9 +138,11 @@ class ProgramProcessSerializer(serializers.ModelSerializer):
 
     def get_student_program(self, obj):
         user = self.context.get('user')
+        request = self.context.get('request')
+        context = {"user": user, "request": request}
         try:
             instance = StudentProgram.objects.get(student_id=user.id, program_id=obj.id)
-            return StudentProgramSerializer(instance=instance).data
+            return StudentProgramSerializer(instance=instance, context=context).data
         except StudentProgram.DoesNotExist:
             return None
 
@@ -211,16 +214,28 @@ class StudentProgramSerializer(serializers.ModelSerializer):
     student = UserMinSerializer(required=False)
     program = ProgramMinSerializer(required=False)
     course_num = serializers.SerializerMethodField(read_only=True)
+    # file = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = StudentProgram
         fields = [
-            'id', 'file', 'student', 'program', 'status', 'started_date', 'completed_date', 'received_certificate', 'course_num'
+            'id', 'file', 'student', 'program', 'status',
+            'started_date', 'completed_date', 'received_certificate', 'course_num'
         ]
 
     @staticmethod
     def get_course_num(obj):
         return obj.program.program_course.all().count()
+
+    # def get_file(self, obj):
+    #     user = self.context.get('user')
+    #     if user:
+    #         try:
+    #             instance = StudentCertificate.objects.get(student_id=user.id, program_id=obj.program.id)
+    #             return instance.file
+    #         except StudentCertificate.DoesNotExist:
+    #             return None
+    #     return None
 
 
 class StudentProgramCertificateSerializer(serializers.ModelSerializer):

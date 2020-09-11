@@ -13,10 +13,11 @@ class StudentCertificateSerializer(serializers.ModelSerializer):
     course_home = CourseHomeMinSerializer(required=False)
     # course_home = serializers.PrimaryKeyRelatedField(queryset=CourseHome.objects.all(), required=False)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+    program = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = StudentCertificate
         fields = [
-            'id', 'student', 'course', 'course_home',
+            'id', 'student', 'course', 'course_home', 'program',
             'file', 'received_date'
         ]

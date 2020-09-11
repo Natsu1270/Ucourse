@@ -31,7 +31,7 @@ const FieldTabs = ({ fields, isLoading }) => {
                                             <Skeleton loading={isLoading}>
                                                 {
                                                     field.field_programs.map(program => (
-                                                        <Col>
+                                                        <Col key={program.id}>
                                                             <Card
                                                                 hoverable
                                                                 className="program-card"
@@ -52,7 +52,7 @@ const FieldTabs = ({ fields, isLoading }) => {
                                         <Row gutter={[28, 28]}>
                                             {
                                                 field.field_courses.map(course => (
-                                                    <Col span={6}>
+                                                    <Col span={6} key={course.id}>
                                                         <CourseCard
                                                             course={course}
                                                             onClick={() => history.push(`/courses/${course.slug}`)} />

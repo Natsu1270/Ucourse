@@ -25,6 +25,7 @@ const ProgramProcess = () => {
     const [loading, setLoading] = useState(true)
     const [programs, setPrograms] = useState([])
     const [currentProgram, setCurrentProgram] = useState({})
+    const [studentCertificates, setSCertificate] = useState([])
     const [orgPrograms, setOrgPrograms] = useState([])
 
     const token = useSelector(state => tokenSelector(state))
@@ -38,6 +39,7 @@ const ProgramProcess = () => {
                 setPrograms(data.programs)
                 setOrgPrograms(data.programs)
                 setCurrentProgram(data.programs[0])
+                setSCertificate(data.studentCertificates)
             }
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
@@ -79,7 +81,7 @@ const ProgramProcess = () => {
                         </Menu>
                     </Sider>
                     <Content style={{ padding: '0 24px', minHeight: 200, background: '#fff' }}>
-                        <ProgramProcessItem program={currentProgram} loading={loading} token={token} />
+                        <ProgramProcessItem studentCertificates={studentCertificates} program={currentProgram} loading={loading} token={token} />
                     </Content>
                 </Layout>
 

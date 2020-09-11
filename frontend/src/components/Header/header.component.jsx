@@ -39,18 +39,19 @@ const Header = ({ token, currentUser, notifications, isFetching, favCourseCount 
                     UCourse
                     </Link>
             </Col>
-            <Col span={8}>
+            <Col span={10}>
                 <Row gutter={16}>
                     <Col><Link className="header_link" to="/field">Khám phá</Link></Col>
                     <Col><Link className="header_link" to="/about">Giới Thiệu</Link></Col>
                     <Col><Link className="header_link" to="/event">Sự kiện</Link></Col>
                     <Col><Link className="header_link" to="/guideline">Trợ giúp</Link></Col>
                     <Col><Link className="header_link" to="/register-class">Đăng ký lớp</Link></Col>
+                    <Col><Link className="header_link" to="/certificate-info">Tra cứu chứng chỉ</Link></Col>
                 </Row>
 
             </Col>
             <Col className='header-search'>
-                <SearchInput width={400} />
+                <SearchInput width={350} />
             </Col>
             <Col>
                 {

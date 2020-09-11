@@ -4,6 +4,8 @@ from rest_framework import views, status, generics, permissions
 from rest_framework.response import Response
 
 from api.utils import uc_response
+from certificates.models import StudentCertificate
+from certificates.serializers import StudentCertificateSerializer
 from course_homes.models import CourseHome
 from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
@@ -74,11 +76,14 @@ class GetProgramProcess(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         student = self.request.user
         programs = Program.objects.filter(user_buy=student)
+        student_certificate = StudentCertificate.objects.filter(student_id=student.id)
 
         return Response({
             "programs": ProgramProcessSerializer(
                 instance=programs, context=self.get_serializer_context(), many=True
             ).data,
+            "studentCertificates": StudentCertificateSerializer(
+                instance=student_certificate, context=self.get_serializer_context(), many=True).data,
             "result": True
         }, status=status.HTTP_200_OK)
 

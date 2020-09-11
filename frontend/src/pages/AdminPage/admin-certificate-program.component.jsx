@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { getProgramProcessAPI } from '../../api/home.services'
 import {
     message, DatePicker, Tag, Button, Form, Row, Col,
-    Input, Switch, Menu, Spin, Layout, Divider, Space, notification, Skeleton
+    Input, Switch, Menu, Spin, Layout, Divider, Space, notification, Skeleton, Alert
 } from 'antd'
 import { useSelector } from 'react-redux'
 import { useHistory, useParams, useLocation } from 'react-router-dom'
@@ -116,7 +116,9 @@ const AdminCertificateProgram = () => {
         setLoading(true)
         const params = {
             name: programDetail.name,
-            studentName: studentProfile.fullname,
+            studentId: studentId,
+            programId: programDetail.id,
+            studentProgramId: studentProgram.id,
             type: 'p',
         }
         try {
@@ -132,29 +134,29 @@ const AdminCertificateProgram = () => {
         setLoading(false)
     }
 
-    const handOut = async () => {
-        const key = 'handout'
+    // const handOut = async () => {
+    //     const key = 'handout'
 
-        setLoading(true)
-        message.loading({ content: 'Đang gửi chứng chỉ đến học viên...', key })
-        const formData = new FormData()
-        formData.set('type', 'p')
-        formData.set('email', studentProfile.email)
-        formData.set('programId', programDetail.id)
-        formData.set('studentId', studentId)
-        formData.set('name', programDetail.name)
-        formData.set('studentName', studentProfile.fullname)
-        formData.set('studentProgramId', studentProgram.id)
-        formData.set('file', file, programDetail.slug + "_Certificate.pdf")
+    //     setLoading(true)
+    //     message.loading({ content: 'Đang gửi chứng chỉ đến học viên...', key })
+    //     const formData = new FormData()
+    //     formData.set('type', 'p')
+    //     formData.set('email', studentProfile.email)
+    //     formData.set('programId', programDetail.id)
+    //     formData.set('studentId', studentId)
+    //     formData.set('name', programDetail.name)
+    //     formData.set('studentName', studentProfile.fullname)
+    //     formData.set('studentProgramId', studentProgram.id)
+    //     formData.set('file', file, programDetail.slug + "_Certificate.pdf")
 
-        try {
-            const { data } = await handOutCertificateAPI({ token, formData })
-            message.success({ content: 'Cấp chứng chỉ thành công', key, duration: 1.5, onClose: () => window.location.reload() })
-        } catch (err) {
-            message.error('Có lỗi xảy ra: ' + err.message)
-            setLoading(false)
-        }
-    }
+    //     try {
+    //         const { data } = await handOutCertificateAPI({ token, formData })
+    //         message.success({ content: 'Cấp chứng chỉ thành công', key, duration: 1.5, onClose: () => window.location.reload() })
+    //     } catch (err) {
+    //         message.error('Có lỗi xảy ra: ' + err.message)
+    //         setLoading(false)
+    //     }
+    // }
 
     const renderCerButton = () => {
         if (studentProgram.received_certificate) {
@@ -162,7 +164,7 @@ const AdminCertificateProgram = () => {
         }
         if (isCompleted) {
             return <Button type="primary" onClick={genCertificate}>
-                <AuditOutlined /> Tạo chứng chỉ
+                <AuditOutlined /> Cấp chứng chỉ
             </Button>
         }
     }
@@ -264,24 +266,28 @@ const AdminCertificateProgram = () => {
                     style={{ background: 'white', paddingBottom: '0' }}
                     visible={showModal}
                     onCancel={() => {
-                        setShowModal(false)
+                        window.location.reload()
                     }}
+                    onOk={() => window.location.reload()}
                     cancelText="Hủy"
                 >
-                    <Row gutter={20} justify="center">
+                    <Row gutter={[20, 20]} justify="center">
+                        <Col span={24}>
+                            <Alert
+                                message="Cấp chứng chỉ thành công"
+                                description="Chứng chỉ đã được gửi tới email của học viên"
+                                type="success"
+                                showIcon
+                            />
+                        </Col>
                         <Col>
                             <Button
                                 loading={loading}
                                 onClick={() => window.open(fileURL)}>
-                                <FileSearchOutlined /> Xem trước
+                                <FileSearchOutlined /> Xem file chứng chỉ đã cấp
                             </Button>
                         </Col>
-                        <Col>
-                            <Button
-                                loading={loading}
-                                type="primary" danger
-                                onClick={handOut}><MailOutlined /> Cấp chứng chỉ</Button>
-                        </Col>
+
                     </Row>
 
                 </Modal>

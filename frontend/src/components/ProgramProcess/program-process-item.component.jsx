@@ -10,14 +10,17 @@ import { BACKEND_HOST } from '../../configs';
 
 const { SubMenu } = Menu
 
-const ProgramProcessItem = ({ token, program, loading }) => {
+const ProgramProcessItem = ({ token, program, loading, studentCertificates }) => {
 
     const [studentCourses, setStudentCourses] = useState([])
+    const [studentCertificate, setSC] = useState({})
     const [requesting, setRequesting] = useState(false)
 
     useEffect(() => {
         if (program.student_course) {
             setStudentCourses(program.student_course)
+            const sc = studentCertificates.find(item => item.program == program.id)
+            setSC(sc)
         }
     }, [program])
 
@@ -155,13 +158,23 @@ const ProgramProcessItem = ({ token, program, loading }) => {
                                 program.student_program ? renderCer(program.student_program.received_certificate) : 'N/A'
                             }
                         </Col>
+
                     </Row>
                 </Col>
 
             </Row>
 
-            <Row className="mb-3">
-                {renderRemain()}
+            <Row className="mb-3" justify="space-between">
+                <Col>
+                    {renderRemain()}
+                </Col>
+                {
+                    program.student_program ?
+                        program.student_program.received_certificate ?
+                            <Col>
+                                <Button onClick={() => window.open(studentCertificate.file)}><FileProtectOutlined />Xem chứng chỉ</Button>
+                            </Col> : null : null
+                }
             </Row>
             <List
                 header={<Row justify="space-between" className="text--sub__bigger3">

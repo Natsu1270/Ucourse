@@ -27,7 +27,9 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
     };
 
     useEffect(() => {
-        if (course.id) setIsLove(course.is_love)
+        if (!isProgram) {
+            if (course.id) setIsLove(course.is_love)
+        }
     }, [course])
 
     useEffect(() => {
@@ -96,12 +98,14 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                         </li> : null
                     }
                 </ul>
-                <div className="course-tab__btn">
-                    <Button onClick={confirmAddToFAV} className="ml-3 cs-btn-tab love-btn">
-                        <HeartTwoTone spin={loading} style={{ fontSize: '1.6rem' }} twoToneColor="#f50" />
-                        {isLove ? 'Bỏ yêu thích' : 'Yêu thích'}
-                    </Button>
-                </div>
+                {
+                    !isProgram ? <div className="course-tab__btn">
+                        <Button onClick={confirmAddToFAV} className="ml-3 cs-btn-tab love-btn">
+                            <HeartTwoTone spin={loading} style={{ fontSize: '1.6rem' }} twoToneColor="#f50" />
+                            {isLove ? 'Bỏ yêu thích' : 'Yêu thích'}
+                        </Button>
+                    </div> : null
+                }
 
                 <div className="course-tab__btn">
                     <Popconfirm
