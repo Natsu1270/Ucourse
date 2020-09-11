@@ -216,7 +216,7 @@ const CourseSearchPage = ({ token }) => {
                                 </Form.Item>
                             </Col>
                             <Col>
-                                <Form.Item name="date" label="Có lớp dự kiến mở vào">
+                                <Form.Item name="date" label="Có lớp dự kiến mở vào khoảng">
                                     <RangePicker
                                         disabledDate={disabledDate}
                                         format="DD-MM-YYYY"

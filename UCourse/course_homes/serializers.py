@@ -217,7 +217,7 @@ class CourseHomeShowSerializer(serializers.ModelSerializer):
         model = CourseHome
         fields = [
             'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
-            'expected_date', 'register_date', 'field', 'course',
+            'register_date', 'field', 'course',
             'over_admission_days', 'teacher', 'maximum_number', 'student_count', 'is_my_class'
         ]
 

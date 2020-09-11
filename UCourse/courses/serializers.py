@@ -14,7 +14,7 @@ class CourseMinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'slug', 'icon', 'status', 'is_my_course', 'price'
+            'id', 'title', 'slug', 'icon', 'status', 'is_my_course', 'price', 'expected_date',
         ]
 
     def get_is_my_course(self, obj):
@@ -97,7 +97,7 @@ class CourseHomeShowSerializer(serializers.ModelSerializer):
         model = CourseHome
         fields = [
             'id', 'status', 'name', 'full_name', 'open_date', 'end_date',
-            'expected_date', 'register_date',
+            'register_date',
             'over_admission_days', 'teacher', 'maximum_number', 'student_count', 'is_my_class'
         ]
 
@@ -142,7 +142,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'icon', 'slug', 'level', 'outline_detail', 'outline_file', 'is_love',
-            'fee_type', 'status', 'course_detail', 'program', 'view_count',
+            'fee_type', 'status', 'course_detail', 'program', 'view_count', 'expected_date',
             'field', 'tags', 'ability_test', 'created_date',
             'updated_date', 'created_by', 'c_homes', 'is_my_course', 'price'
         ]
@@ -172,7 +172,7 @@ class CourseCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title', 'icon', 'slug', 'level', 'status', 'c_homes'
+            'id', 'title', 'icon', 'slug', 'level', 'status', 'c_homes', 'expected_date',
         ]
 
 
@@ -189,7 +189,7 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = [
-            'id', 'title',  'fee_type', 'price', 'is_my_course',
+            'id', 'title',  'fee_type', 'price', 'is_my_course', 'expected_date',
             'icon', 'slug', 'level', 'status', 'view_count',
             'field', 'course_home_count', 'course_teachers', 'bought_date'
         ]
@@ -236,7 +236,7 @@ class CourseMySerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'fee_type', 'price', 'view_count', 'is_my_course',
-            'icon', 'slug', 'level', 'status', 'field', 'c_homes',
+            'icon', 'slug', 'level', 'status', 'field', 'c_homes', 'expected_date',
             'course_home_count', 'course_teachers', 'bought_date', 'my_course_homes'
         ]
 
@@ -280,7 +280,7 @@ class CourseProcessSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'icon', 'slug', 'level', 'status',
-            'field', 'course_home_count', 'bought_date'
+            'field', 'course_home_count', 'bought_date', 'expected_date',
         ]
 
     def get_bought_date(self, obj):
@@ -300,7 +300,7 @@ class CourseDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'title', 'created_date', 'view_count',
+        fields = ['id', 'title', 'created_date', 'view_count', 'expected_date',
                   'fee_type', 'price', 'level', 'field']
 
     @staticmethod

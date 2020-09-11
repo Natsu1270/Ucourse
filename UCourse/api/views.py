@@ -39,7 +39,7 @@ class AdvancedSearch(generics.GenericAPIView):
         keyword = request.query_params.get('keyword', "")
         can_register = request.query_params.get('canRegister', False)
         from_date = request.query_params.get('fromDate', None)
-        to_date = request.query_params.get('toDate', None)
+        to_date = request.query_params.get('toDate', '2100-01-01')
         keyword = keyword.strip()
         create_search_keyword(keyword)
 
@@ -51,9 +51,9 @@ class AdvancedSearch(generics.GenericAPIView):
             programs = Program.objects.filter(name__icontains=keyword)
 
         if from_date:
-            courses = courses.filter(c_homes__expected_date__range=[from_date, to_date])
+            courses = courses.filter(Q(expected_date__range=[from_date, to_date]) | Q(c_homes__open_date__range=[from_date, to_date])).distinct()
 
-        if can_register:
+        if can_register == 'true':
             courses = [course for course in courses if course.can_register_class]
 
         return Response({

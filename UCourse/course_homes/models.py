@@ -27,7 +27,7 @@ class CourseHome(models.Model):
     open_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     register_date = models.DateField(blank=True, null=True)
-    expected_date = models.DateField(blank=True, null=True)
+    # expected_date = models.DateField(blank=True, null=True)
     over_admission_days = models.IntegerField(blank=True, null=True)
     teacher = models.ForeignKey(
         Profile,
@@ -46,6 +46,7 @@ class CourseHome(models.Model):
     created_date = models.DateField(default=timezone.now)
     modified_date = models.DateField(auto_now=True)
     course_info = RichTextField(blank=True, null=True)
+
     class Meta:
         db_table = 'CourseHome'
 
@@ -63,7 +64,7 @@ class CourseHome(models.Model):
     @property
     def can_register(self):
         register_date = self.register_date
-        over_date = self.over_admission_days
+        over_date = self.over_admission_days if self.over_admission_days is not None else 0
         last_register_date = register_date + timedelta(days=over_date)
         if last_register_date >= date.today():
             return True

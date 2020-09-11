@@ -48,6 +48,7 @@ class Course(models.Model):
     discount = models.FloatField(blank=True, null=True)
     outline_detail = RichTextField(blank=True, null=True)
     outline_file = models.FileField(upload_to='courses/outlines', blank=True, null=True)
+    expected_date = models.DateField(null=True, blank=True)
     user_buy = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserBuyCourse', related_name='buy_courses')
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UserCourse', related_name='course_user')
     program = models.ManyToManyField(

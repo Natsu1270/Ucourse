@@ -190,7 +190,7 @@ class CourseHomeShowAPI(generics.ListAPIView):
 
     def get_queryset(self):
         course_id = self.request.query_params['course_id']
-        return CourseHome.objects.filter(course_id=course_id)
+        return CourseHome.objects.filter(course_id=course_id, end_date__gt=datetime.date.today())
 
     def get_serializer_context(self):
         user = self.request.user
