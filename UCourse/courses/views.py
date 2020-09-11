@@ -65,7 +65,7 @@ class BuyCourseAPI(generics.GenericAPIView):
         course_id = request.data['course']
         course = Course.objects.get(pk=course_id)
         amount = course.get_price()
-        check_bought = UserBuyCourse.objects.filter(course_id=course_id, user_id=user.id).count()
+        check_bought = UserBuyCourse.objects.filter(course_id=course_id, user_id=user.id, status=True).count()
         if check_bought > 0:
             return Response({
                 "result": False,

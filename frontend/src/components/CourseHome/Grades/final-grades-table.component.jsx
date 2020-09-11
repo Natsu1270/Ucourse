@@ -160,12 +160,14 @@ const FinalGradesTable = (
             const studentExams = normalizeData(xExams)
             const studentExamDetail = studentExams[student.id]
 
-            if (examDetail.mandatory) {
-                if (!studentExamDetail.is_pass) {
-                    qualified = false
-                }
-                if (studentExamDetail.final_result != undefined) {
-                    finalResult += studentExamDetail.final_result * examDetail.percentage / 100
+            if (examDetail && studentExamDetail) {
+                if (examDetail.mandatory) {
+                    if (!studentExamDetail.is_pass) {
+                        qualified = false
+                    }
+                    if (studentExamDetail.final_result != undefined) {
+                        finalResult += studentExamDetail.final_result * examDetail.percentage / 100
+                    }
                 }
             }
 
@@ -176,11 +178,13 @@ const FinalGradesTable = (
             const studentAsses = normalizeData(xAss)
             const studentAssDetail = studentAsses[student.id]
 
-            if (assDetail.mandatory) {
-                if (studentAssDetail.score < assDetail.pass_score) {
-                    qualified = false
+            if (assDetail && studentAssDetail) {
+                if (assDetail.mandatory) {
+                    if (studentAssDetail.score < assDetail.pass_score) {
+                        qualified = false
+                    }
+                    finalResult += studentAssDetail.score * assDetail.percentage / 100
                 }
-                finalResult += studentAssDetail.score * assDetail.percentage / 100
             }
         })
 

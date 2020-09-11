@@ -140,7 +140,7 @@ class UserBuyCourse(models.Model):
     status = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ('user', 'course')
+        # unique_together = ('user', 'course')
         db_table = 'UserBuyCourse'
 
 
