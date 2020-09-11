@@ -70,4 +70,11 @@
     color: #fff;
     font-size: 1.6rem;
     font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: #fff;
+        text-decoration: none;
+        text-shadow: 2px 4px 6px rgba(#fff,0.3);
+    }
 }

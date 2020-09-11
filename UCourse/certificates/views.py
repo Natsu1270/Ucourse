@@ -299,3 +299,21 @@ class GetProgramProcessDetail(generics.GenericAPIView):
             },
             status=status.HTTP_200_OK
         )
+
+
+class CertificateInquiry(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        uuid_string = self.request.query_params.get('uuid')
+        try:
+            instance = StudentCertificate.objects.get(uuid=uuid_string)
+            return Response({
+                "data": serializers.StudentCertificateSerializer(instance=instance).data,
+                "result": True
+            }, status=status.HTTP_200_OK)
+        except StudentCertificate.DoesNotExist:
+            return Response({
+                "data": None,
+                "result": False
+            })
+
