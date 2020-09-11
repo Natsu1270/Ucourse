@@ -2,10 +2,10 @@ import React, { useState, useEffect, Suspense, lazy } from 'react'
 
 
 import { getUserAdminData, getProgramCourseAdminData, getIncomeAdminData } from '../../api/admin.services'
-import { message, Collapse, Avatar, Button, Descriptions, Badge, Space, Typography, Row, Col, Layout, Menu, } from 'antd';
+import { message, Layout, } from 'antd';
 import {
-    useParams, Route, BrowserRouter as Router,
-    Switch, useRouteMatch, useLocation, useHistory, Redirect
+    Route, BrowserRouter as Router,
+    useRouteMatch, Redirect
 } from 'react-router-dom'
 
 import './admin-home.styles.scss'
@@ -14,7 +14,6 @@ import Constants from '../../constants';
 import AdminSider from '../../components/Admin/admin-sider.component';
 const AdminReport = lazy(() => import('../../components/Admin/report-admin.component'))
 const IncomeAdmin = lazy(() => import('../../components/Admin/income-admin.component'))
-const CertificateAdmin = lazy(() => import('../../components/Admin/certificate-admin.component'))
 const ResourcesAdmin = lazy(() => import('../../components/Admin/resources-admin.component'))
 
 
@@ -23,7 +22,6 @@ const AdminHomePage = ({ token }) => {
 
 
 
-    const history = useHistory()
     const match = useRouteMatch();
     const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState({})

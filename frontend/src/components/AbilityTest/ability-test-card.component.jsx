@@ -1,6 +1,6 @@
- import React from 'react'
- import {formatDate} from "../../utils/text.utils";
- import Constants from "../../constants";
+ import React from 'react';
+import Constants from "../../constants";
+import { formatDate } from "../../utils/text.utils";
 
 const AbilityTestCard = ({date, result, icon, name, index}) => {
 

@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import { Layout, Menu, Skeleton } from "antd";
-import { Link, useHistory } from 'react-router-dom';
-import { TeamOutlined, MoneyCollectOutlined, AppstoreOutlined, BorderOutlined, BarChartOutlined, FileProtectOutlined } from '@ant-design/icons'
-import Constants from "../../constants";
+import { AppstoreOutlined, BarChartOutlined, BorderOutlined, FileProtectOutlined, MoneyCollectOutlined, TeamOutlined } from '@ant-design/icons';
+import { Layout, Menu } from "antd";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const AdminSider = ({ match }) => {
 

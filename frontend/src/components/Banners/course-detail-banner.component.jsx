@@ -1,17 +1,12 @@
-import React, { useState } from 'react'
-import { useHistory } from "react-router-dom";
-import { Button, Skeleton, Row, Col } from "antd";
-import { formatDate } from "../../utils/text.utils";
-import Constants from "../../constants";
+import { Button, Col, Row, Skeleton } from "antd";
+import Modal from 'antd/lib/modal/Modal';
+import React, { useState } from 'react';
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import momo from "../../assets/momo-logo-80x80.png";
+import Constants from "../../constants";
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
 
-import { showRLModal } from "../../redux/UI/ui.actions";
-import { useDispatch } from "react-redux";
-import Modal from 'antd/lib/modal/Modal';
-import LoginSignUpOverlay from '../RegisterOrLogin/login-signup-overlay.ulti';
-import Register from '../Register/register.component';
-import momo from "../../assets/momo-logo-80x80.png";
 
 const CourseDetailBanner = ({ course, courseDetail, own, handleRegister, isLoading, userRole }) => {
 

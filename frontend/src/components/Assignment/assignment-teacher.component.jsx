@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { DownloadOutlined, DownOutlined } from '@ant-design/icons';
 import {
-    Skeleton, message, Descriptions, Badge, Button,
-    Tree, Space, Tabs, Table, Divider, InputNumber
+    Badge, Button, Descriptions,
+    Divider, InputNumber, message, Skeleton,
+    Space, Table, Tabs, Tree
 } from "antd";
-import {
-    getAssignmentDetailAPI, getStudentAssignmentListByTopicAPI,
-    downloadAssignmentItem, downloadAllAssigment
-} from '../../api/assignment.services'
-import { formatDate, isTimeBefore, parseHtml } from '../../utils/text.utils';
-import Constants from '../../constants';
 import Modal from 'antd/lib/modal/Modal';
-import {
-    DownOutlined, DownloadOutlined
-} from '@ant-design/icons'
-import { Chart, Interval } from 'bizcharts'
-import fileDownload from 'js-file-download'
+import { Chart, Interval } from 'bizcharts';
+import fileDownload from 'js-file-download';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { downloadAllAssigment, downloadAssignmentItem, getAssignmentDetailAPI, getStudentAssignmentListByTopicAPI } from '../../api/assignment.services';
 import { updateStudentAssignmentGrade } from "../../api/grades.services";
+import Constants from '../../constants';
+import { formatDate, isTimeBefore, parseHtml } from '../../utils/text.utils';
 
 const { TabPane } = Tabs
 

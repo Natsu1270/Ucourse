@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { getStudentSummary, getStudentCertificate } from '../../api/summary.services'
-import { message, Divider, Row, Col, Tag, Spin, Button } from 'antd'
-import { FireOutlined, RocketOutlined, SolutionOutlined, FileProtectOutlined, FieldTimeOutlined, FileOutlined, SafetyCertificateOutlined } from '@ant-design/icons'
+import { FieldTimeOutlined, FileProtectOutlined, FireOutlined, RocketOutlined, SafetyCertificateOutlined, SolutionOutlined } from '@ant-design/icons'
+import { Button, Col, Divider, message, Row, Spin } from 'antd'
+import React, { useEffect, useState } from 'react'
+import { getStudentCertificate, getStudentSummary } from '../../api/summary.services'
 import Constants from '../../constants'
-
-import ResultComponent from '../Common/result.component'
-import { formatDate } from '../../utils/text.utils'
 import { renderCer, renderRank, renderStatus, renderSummary } from '../../utils/common'
+import { formatDate } from '../../utils/text.utils'
+
 
 
 

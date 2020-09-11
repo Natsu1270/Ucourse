@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { message, Tabs, Table, Skeleton, Menu, Button, Modal, InputNumber, Space, Avatar, Tag, Row, Col, Switch } from 'antd'
-import Constants from '../../constants'
-
+import React, { useEffect, useState } from 'react'
+import { Button, Col, InputNumber, message, Modal, Row, Skeleton, Switch, Tabs } from 'antd'
 import { getAllStudentGradesByCourseHomeAPI, updateStudentCourseHomeGrade } from '../../api/grades.services'
-
-import ExamGrades from '../Grade/exam-grades.component'
 import AssignmentGrades from '../Grade/assignment-grades.component'
+import ExamGrades from '../Grade/exam-grades.component'
 import FinalGradesTable from './Grades/final-grades-table.component'
 
 const { TabPane } = Tabs
-const { SubMenu } = Menu
 
 const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
 
@@ -21,6 +17,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
     const [showModal, setShowModal] = useState(false)
     const [editFinal, setEditFinal] = useState(null)
     const [isPassSwitch, setSwitch] = useState(false)
+    const [userCourses, setUserCourses] = useState([])
 
 
     const getStudentGrades = async () => {
@@ -30,6 +27,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
             setExams(data.student_exams)
             setAssignments(data.student_assignments)
             setStudentCourseHomes(data.student_course_homes)
+            setUserCourses(data.user_courses)
         } catch (err) {
             message.error(err.message)
         }
@@ -81,7 +79,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
                 <TabPane tab="Điểm tổng kết" key="3">
                     <h3 className="text--main">Danh sách điểm tổng kết tạm tính</h3>
                     <FinalGradesTable
-                        loadingData={loading}
+                        loadingData={loading} userCourses={userCourses}
                         exams={exams} assignments={assignments} token={token}
                         setEditFinal={setEditFinal} setShowModal={setShowModal} students={students} studentCourseHomes={studentCourseHomes}
                     />

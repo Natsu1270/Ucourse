@@ -1,29 +1,32 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react'
-import { useSelector, useDispatch } from "react-redux";
+import { Layout } from 'antd';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import {
+    BrowserRouter as Router,
+    Redirect, Route, useParams,
+    useRouteMatch
+} from 'react-router-dom';
 import { createStructuredSelector } from "reselect";
-import {
-    useParams, Route, BrowserRouter as Router,
-    Switch, useRouteMatch, useLocation, useHistory, Redirect
-} from 'react-router-dom'
-import { Layout, Menu, Skeleton } from 'antd'
-import { UserOutlined, LaptopOutlined } from "@ant-design/icons";
-import { getCourseHomeDetailStart } from "../../redux/CourseHome/course-home.actions";
-import { tokenSelector } from "../../redux/Auth/auth.selects";
-import { checkClassOwnership } from "../../api/courseHome.services"
-import {
-    courseHomeDetailSelector, courseInfoSelector,
-    isLoadingSelector,
-    ofCourseSelector,
-    courseHomeTopicsSelector, forumsSelector, courseHomeDetailStudentSelector,
-} from "../../redux/CourseHome/course-home.selects";
-import CourseHomeSider from "../../components/CourseHome/course-home-sider.component";
 import CourseHomeInfo from "../../components/CourseHome/course-home-info.component";
-import Constants from "../../constants"
-import Forums from "../../components/Forum/forums.component";
-import ForumDetail from "../../components/Forum/forum-detail.component";
-import ThreadDetail from "../../components/Forum/thread-detail.component";
-import RoleComponent from "../../components/RoleComponent"
+import CourseHomeSider from "../../components/CourseHome/course-home-sider.component";
 import QuestionBank from '../../components/CourseHome/Questions/course-home-questions.component';
+import ForumDetail from "../../components/Forum/forum-detail.component";
+import Forums from "../../components/Forum/forums.component";
+import ThreadDetail from "../../components/Forum/thread-detail.component";
+import RoleComponent from "../../components/RoleComponent";
+import Constants from "../../constants";
+import { tokenSelector } from "../../redux/Auth/auth.selects";
+import { getCourseHomeDetailStart } from "../../redux/CourseHome/course-home.actions";
+import {
+    courseHomeDetailSelector,
+
+
+    courseHomeDetailStudentSelector, courseHomeTopicsSelector, courseInfoSelector,
+
+
+    forumsSelector, isLoadingSelector,
+    ofCourseSelector
+} from "../../redux/CourseHome/course-home.selects";
 
 
 const CourseHomeSchedule = lazy(() => import("../../components/CourseHome/course-home-schedule.component"))

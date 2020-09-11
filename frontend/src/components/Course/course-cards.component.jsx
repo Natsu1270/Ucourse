@@ -1,21 +1,24 @@
+import { Col, Row } from 'antd';
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import CourseCard from "./course-card.component";
 
 
-const CourseCards = ({courses}) => {
+const CourseCards = ({ courses }) => {
 
     const history = useHistory()
 
     return (
         <div className="course-cards">
-            <div className="course-cards__items">
+            <Row gutter={[32, 32]}>
                 {
-                    courses.map(course => <CourseCard key={course.id}
-                        onClick={() => history.push(`/courses/${course.slug}`)}
-                        course={course} />)
+                    courses.map(course => <Col key={course.id} span={6}>
+                        <CourseCard
+                            onClick={() => history.push(`/courses/${course.slug}`)}
+                            course={course} />
+                    </Col>)
                 }
-            </div>
+            </Row>
         </div>
     )
 }

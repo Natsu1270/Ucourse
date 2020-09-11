@@ -5,18 +5,30 @@ import { SwapOutlined, EditOutlined, } from '@ant-design/icons'
 
 import { updateMultiStudentCourseHomeGrade, updateStudentCourseHomeGrade } from '../../../api/grades.services'
 import { renderFinalStatus } from '../course-home.utils'
+import { renderCertificate } from '../../Certificate/certificate.utils'
 
 
 
-const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal, setShowModal, students, studentCourseHomes }) => {
+const FinalGradesTable = (
+    { loadingData, exams, assignments, token, setEditFinal, userCourses, setShowModal, students, studentCourseHomes }) => {
 
     const [loading, setLoading] = useState(false)
     const [selectedRows, setSelectedRows] = useState([])
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
 
-    const updateStudentFinalGrade = async (grade, isQualified, id) => {
+    const normalizeUserCourses = () => {
+        const res = {}
+        if (userCourses && userCourses.length) {
+            userCourses.forEach(item => {
+                res[item.user.id] = item.received_certificate
+            })
+        }
+        return res
+    }
+
+    const updateStudentFinalGrade = async (grade, isQualified, id, studentId) => {
         setLoading(true)
-        const data = { token, grade, isQualified, studentCourseHomeId: id }
+        const data = { token, grade, isQualified, studentCourseHomeId: id, studentId }
         try {
             const result = await updateStudentCourseHomeGrade(data)
             message.success("Cập nhật thành công", 1.5, () => window.location.reload())
@@ -94,17 +106,31 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
         },
 
         {
+            title: 'Chứng chỉ',
+            dataIndex: 'receivedCertificate',
+            key: 'receivedCertificate',
+            render: receivedCertificate => <span>{
+                receivedCertificate ? 'Đã cấp' : 'Chưa cấp'
+            }
+            </span>
+        },
+
+        {
             title: 'Tổng kết điểm',
             dataIndex: 'action',
             key: 'action',
             render: (action, record) => (<Space>
                 <Button
+                    disabled={record.receivedCertificate}
                     loading={loading}
-                    onClick={() => updateStudentFinalGrade(record.result, record.isQualified, record.studentCourseHome.id)}
+                    onClick={
+                        () => updateStudentFinalGrade(record.result, record.isQualified, record.studentCourseHome.id, record.studentId)
+                    }
                 >
                     <SwapOutlined /> Tự động
                 </Button>
                 <Button loading={loading}
+                    disabled={record.receivedCertificate}
                     onClick={() => {
                         setShowModal(true)
                         setEditFinal(record.studentCourseHome.id)
@@ -159,6 +185,7 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
         })
 
         const studentCourseHome = studentCourseHomes.find(item => item.student == student.id) || {}
+        const userCourse = normalizeUserCourses()
 
         csvData.push({
             stt: index + 1,
@@ -179,7 +206,9 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
             studentCourseHome: studentCourseHome,
             key: studentCourseHome.id,
             status: studentCourseHome.status,
-            isQualified: qualified && finalResult >= 5
+            isQualified: qualified && finalResult >= 5,
+            studentId: student.id,
+            receivedCertificate: userCourse[student.id]
         }
     })
 
@@ -210,7 +239,8 @@ const FinalGradesTable = ({ loadingData, exams, assignments, token, setEditFinal
                         setSelectedRows(selectedRows)
                     },
                     getCheckboxProps: record => ({
-                        name: record.username
+                        name: record.username,
+                        disabled: record.receivedCertificate
                     })
                 }}
                 dataSource={finalData}

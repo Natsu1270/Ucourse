@@ -1,52 +1,42 @@
 
-import React, { useState, useEffect } from 'react'
-import { getProgramProcessAPI } from '../../api/home.services'
+import { AuditOutlined, BookOutlined, FieldTimeOutlined, FileProtectOutlined, FileSearchOutlined, FireOutlined, UserOutlined } from '@ant-design/icons'
 import {
-    message, DatePicker, Tag, Button, Form, Row, Col,
-    Input, Switch, Menu, Spin, Layout, Divider, Space, notification, Skeleton, Alert
+    Alert, Button, Col, Divider, Layout, message,
+    Skeleton, Tag, Row
 } from 'antd'
-import { useSelector } from 'react-redux'
-import { useHistory, useParams, useLocation } from 'react-router-dom'
-
-import queryString from 'query-string'
-import { getStudentProgramDetail, genCertificateAPI, handOutCertificateAPI } from '../../api/summary.services'
-import Constants from '../../constants';
-import { formatDate } from '../../utils/text.utils';
-import { FireOutlined, FileProtectOutlined, FieldTimeOutlined, FileDoneOutlined, UserOutlined, BookOutlined, MailOutlined, FileSearchOutlined, AuditOutlined } from '@ant-design/icons';
-import { renderCer, renderRank, renderStatus, renderSummary } from '../../utils/common'
-import certificateIcon from '../../assets/certificate.png'
-import { requestProgramCertificate } from '../../api/summary.services';
-import { BACKEND_HOST } from '../../configs';
 import Modal from 'antd/lib/modal/Modal'
+import queryString from 'query-string'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useLocation, useParams } from 'react-router-dom'
+import { genCertificateAPI, getStudentProgramDetail } from '../../api/summary.services'
+import Constants from '../../constants'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
+import { renderCer } from '../../utils/common'
+import { formatDate } from '../../utils/text.utils'
 
 
 
-const { RangePicker } = DatePicker
-const { Sider, Content } = Layout
 
-const formItemLayout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 20 },
-};
+const { Content } = Layout
+
 
 const AdminCertificateProgram = () => {
 
-    const history = useHistory()
     const { programId, studentProgramId } = useParams()
     const location = useLocation()
     const { studentId } = queryString.parse(location.search)
 
     const [loading, setLoading] = useState(true)
     const [studentProgram, setStudentProgram] = useState({})
-    const [studentProfile, setStudentProfile] = useState({})
+    const [, setStudentProfile] = useState({})
     const [programDetail, setProgramDetail] = useState({})
-    const [userCourses, setUserCourse] = useState([])
+    const [, setUserCourse] = useState([])
     const [isCompleted, setIsCompleted] = useState(false)
     const [completedNum, setCompletedNum] = useState(0)
     const [showModal, setShowModal] = useState(false)
     const [fileURL, setFileURL] = useState(null)
-    const [file, setFile] = useState(null)
+    const [, setFile] = useState(null)
 
     const token = useSelector(state => tokenSelector(state))
 
@@ -92,24 +82,6 @@ const AdminCertificateProgram = () => {
         </Tag>
     }
 
-    const openNotification = (code) => {
-        const key = `open${Date.now()}`;
-        const btn = (
-            <Button type="primary" danger size="small" onClick={() => {
-                notification.close(key)
-            }}>
-                Đóng
-            </Button>
-        );
-        notification.open({
-            message: 'Thông báo',
-            description: code == -1 ? 'Vui lòng hoàn thành hết khóa học để nhận chứng chỉ chương trình' :
-                'Chứng chỉ đã được cấp phát và gửi về email của bạn, hoặc tải lại trang để thấy file chứng chỉ'
-            ,
-            btn,
-            key,
-        });
-    };
 
     const genCertificate = async () => {
         // if (dayDiff(moment(), item.end_date) < 0) openNotification(item.end_date)

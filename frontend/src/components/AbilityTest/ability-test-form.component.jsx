@@ -1,16 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Progress, message, Skeleton, Spin } from 'antd'
-import { Form, Radio, Carousel, Button, notification, Statistic } from 'antd'
-import { parseHtml, secondToTime } from '../../utils/text.utils'
-import { ClockCircleOutlined, LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons'
-import 'highlight.js/styles/github.css'
+import { LeftCircleOutlined, RightCircleOutlined } from '@ant-design/icons'
+import { Button, Carousel, Form, message, notification, Radio, Spin, Statistic } from 'antd'
 import hljs from 'highlight.js'
-import { useDispatch, useSelector } from "react-redux";
-import { submitAbilityTestStart } from "../../redux/AbilityTest/abilityTest.actions";
-import { tokenSelector } from "../../redux/Auth/auth.selects";
-import AbilityTestResult from "./ability-test-result.component";
+import 'highlight.js/styles/github.css'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux"
 import { submitAbilityTestAPI } from '../../api/abilityTest.services'
 import Constants from '../../constants'
+import { tokenSelector } from "../../redux/Auth/auth.selects"
+import { parseHtml } from '../../utils/text.utils'
+import AbilityTestResult from "./ability-test-result.component"
 import './ability-test.styles.css'
 
 const { Countdown } = Statistic;

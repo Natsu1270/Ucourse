@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { mapKeys } from 'lodash'
-
 import {
-    Button, Checkbox, Form, Radio, message, Popconfirm, Row,
-    Col, Tag, Space, Statistic, Result, Spin
-} from 'antd'
-import { parseHtml } from "../../utils/text.utils";
-import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-light.css'
-import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
-import {
-    formItemLayout, renderChoice, renderQuestion, renderResultQuestion,
-} from './exam.utils'
+    Col, Form, message, Row,
+    Spin, Tag
+} from 'antd';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-light.css';
+import React, { useEffect, useState } from 'react';
 import { reviewExamAPI } from '../../api/exam.services';
 import Constants from '../../constants';
+import { parseHtml } from "../../utils/text.utils";
+import {
+    formItemLayout, renderResultQuestion
+} from './exam.utils';
+
 
 
 const ExamReview = ({ token, exam, studentExamId }) => {

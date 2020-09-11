@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { getAllMyCoursesAndProgramsAPI } from '../../api/home.services'
-import { message, Skeleton, Timeline, Tree, Tabs, Tag, Button, List, Card, Avatar } from 'antd'
-import { dayDiff, formatDate, renderPrice } from '../../utils/text.utils'
+import { message, Skeleton, Timeline, Tag, Card, Avatar } from 'antd'
+import { formatDate, renderPrice } from '../../utils/text.utils'
 import { useSelector } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
-import SearchCourseItem from '../../components/SearchResult/search-course-item.component'
-import { DownOutlined } from '@ant-design/icons'
 import Constants from '../../constants'
 import { getFavoriteCourse } from '../../api/course.services'
-const { TabPane } = Tabs
 
 const { Meta } = Card
 

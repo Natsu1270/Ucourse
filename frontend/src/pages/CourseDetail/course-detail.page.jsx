@@ -1,6 +1,6 @@
 import React, { useEffect, lazy, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 
 import { buyCourseStart, fetchCourseDetailStart } from '../../redux/Course/course.actions'
 import { Breadcrumb, Modal, Result, Button, message } from 'antd'
@@ -26,7 +26,7 @@ import {
     errorResponseRegisterCourseSelector,
     courseHomeShowSelector
 } from "../../redux/CourseHome/course-home.selects";
-import { getCourseHomeShowStart, registerCourseStart } from "../../redux/CourseHome/course-home.actions";
+import { getCourseHomeShowStart } from "../../redux/CourseHome/course-home.actions";
 import { tokenSelector, userRoleSelector } from "../../redux/Auth/auth.selects";
 import { registerCourseModalSelector } from "../../redux/UI/ui.selects";
 import { showRLModal, toggleRegisterCourseModal } from "../../redux/UI/ui.actions";
@@ -34,12 +34,10 @@ import { showRLModal, toggleRegisterCourseModal } from "../../redux/UI/ui.action
 const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
 
 const CourseDetail = () => {
-    const history = useHistory();
     const dispatch = useDispatch();
     const { slug } = useParams();
     const {
-        course, courseDetail, isFetching, errorResponse, myCourses,
-        token, registerCourseModal, errorRegister, classes, courseHomeShows, userRole
+        course, courseDetail, isFetching, errorResponse, token, registerCourseModal, errorRegister, courseHomeShows, userRole
     } = useSelector(createStructuredSelector({
         course: courseDetailSelector,
         courseDetail: courseDetailDetailSelector,

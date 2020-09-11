@@ -3,16 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { mapKeys } from 'lodash'
 
 import {
-    Button, Checkbox, Form, Radio, message, Popconfirm, Row,
+    Button, Form, message, Popconfirm, Row,
     Col, Tag, Space, Statistic, Result, Spin, Alert
 } from 'antd'
 import { parseHtml } from "../../utils/text.utils";
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-light.css'
 import { isProcessingSelector } from "../../redux/Exam/exam.selects";
-import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
+import { ClockCircleTwoTone } from "@ant-design/icons";
 import { submitExam } from '../../api/exam.services';
-import { renderChoice, renderQuestion, renderResultQuestion, formItemLayout } from './exam.utils'
+import { renderQuestion, formItemLayout } from './exam.utils'
 import Constants from '../../constants';
 
 const { Countdown } = Statistic

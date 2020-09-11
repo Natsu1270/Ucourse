@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import { CloudSyncOutlined, FileSearchOutlined, SwapOutlined } from '@ant-design/icons'
 import {
-    Row, Col, Table, List, Input, Modal, Space,
-    message, Tag, Form, Button, Select, notification, Alert
+    Alert, Button, Col,
+    Form, Input,
+    message, Modal,
+    notification, Row,
+    Select, Space, Table
 } from 'antd'
-import { getListSummary, updateSummary, multiUpdateSummary, genCertificateAPI, handOutCertificateAPI } from '../../api/summary.services'
 import Avatar from 'antd/lib/avatar/avatar'
-import { Link, useParams } from 'react-router-dom'
-import { formatDate, dayDiff } from '../../utils/text.utils'
-import Constants from '../../constants'
-import moment from 'moment'
-import { CloudSyncOutlined, FileSearchOutlined, MailOutlined, SwapOutlined } from '@ant-design/icons'
-import { Document, Page } from 'react-pdf'
-import PDFViewer from 'pdf-viewer-reactjs'
-import { renderStatus, renderRank, renderCertificate, parseRankByScore } from '../../components/Certificate/certificate.utils'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { genCertificateAPI, getListSummary, multiUpdateSummary, updateSummary } from '../../api/summary.services'
+import { parseRankByScore, renderCertificate, renderRank, renderStatus } from '../../components/Certificate/certificate.utils'
+import Constants from '../../constants'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
-import { keys } from 'lodash'
+import { formatDate } from '../../utils/text.utils'
 
 const { Search } = Input
 const { Option } = Select;
@@ -222,12 +221,12 @@ const AdminCertificateCourse = ({ }) => {
             key: 'finalScore',
             render: finalScore => <b>{finalScore || finalScore == 0 ? finalScore : "Chưa tổng kết"}</b>
         },
-        {
-            title: 'Tình trạng lớp',
-            dataIndex: 'schStatus',
-            key: 'schStatus',
-            render: schStatus => <span>{renderStatus(schStatus)}</span>
-        },
+        // {
+        //     title: 'Tình trạng lớp',
+        //     dataIndex: 'schStatus',
+        //     key: 'schStatus',
+        //     render: schStatus => <span>{renderStatus(schStatus)}</span>
+        // },
 
         {
             title: 'Tình trạng',
@@ -250,21 +249,21 @@ const AdminCertificateCourse = ({ }) => {
             render: (received, record) => renderCertificate(received, record, genCertificate)
         },
 
-        {
-            title: '',
-            dataIndex: 'action',
-            key: 'action',
-            render: (action, record) => (<Space>
-                <Button
-                    disabled={(record.schStatus != 'pass' && record.schStatus != 'fail') || record.received}
-                    type="primary"
-                    onClick={() => genSummary(record)}>Tổng kết</Button>
-                <Button
-                    disabled={(record.schStatus != 'pass' && record.schStatus != 'fail') || record.received}
-                    onClick={() => summaryStudent(null, record, null)}>
-                    <SwapOutlined />Tự động</Button>
-            </Space>)
-        },
+        // {
+        //     title: '',
+        //     dataIndex: 'action',
+        //     key: 'action',
+        //     render: (action, record) => (<Space>
+        //         <Button
+        //             disabled={(record.schStatus != 'pass' && record.schStatus != 'fail') || record.received}
+        //             type="primary"
+        //             onClick={() => genSummary(record)}>Tổng kết</Button>
+        //         <Button
+        //             disabled={(record.schStatus != 'pass' && record.schStatus != 'fail') || record.received}
+        //             onClick={() => summaryStudent(null, record, null)}>
+        //             <SwapOutlined />Tự động</Button>
+        //     </Space>)
+        // },
     ]
 
     const finalData = userCourses.map((userCourse, index) => {

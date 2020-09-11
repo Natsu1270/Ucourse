@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { List, Avatar, Skeleton, Tag, Button, message, notification, Row, Col } from 'antd'
-import { dayDiff } from "../../utils/text.utils";
+import { List, Avatar, Skeleton, Button, message, notification, Row, Col } from 'antd'
 import moment from 'moment'
 import { useDispatch } from "react-redux";
 import { useHistory } from 'react-router-dom';
-import { registerCourseStart, unRegisterCourseStart } from "../../redux/CourseHome/course-home.actions";
 import Constants from "../../constants";
-import CourseHomeDrawer from "../CourseHome/course-home-drawer.component";
 import { registerCourseAPI, unRegisterCourseAPI } from '../../api/courseHome.services'
 
 import { courseHomeStatus, canRegister } from './course-home.utils'
@@ -15,7 +12,6 @@ import { courseHomeStatus, canRegister } from './course-home.utils'
 const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
 
     const history = useHistory()
-    const dispatch = useDispatch()
     const now = moment()
     const [loading, setLoading] = useState(false)
     const [courseClasses, setClass] = useState([])
@@ -26,10 +22,8 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
 
     const registerCourse = async (type, class_id, course_id) => {
         setLoading(true)
-        const data = { token, class_id }
         try {
             if (type === 1) {
-                const { data } = await registerCourseAPI({ course_id, token, class_id })
                 const updateCourses = courseClasses.map(c => {
                     if (c.id === class_id) {
                         c.is_my_class = true
@@ -42,7 +36,6 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                 setClass(updateCourses)
                 message.success('Đăng ký thành công')
             } else {
-                const { data } = await unRegisterCourseAPI({ token, class_id, course_id })
                 const updateCourses = courseClasses.map(c => {
                     if (c.id === class_id) c.is_my_class = false
                     return c

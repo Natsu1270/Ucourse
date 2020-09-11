@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import { CloudSyncOutlined, FileSearchOutlined, SwapOutlined } from '@ant-design/icons'
 import {
-    Row, Col, Table, List, Input, Modal, Space,
-    message, Tag, Form, Button, Select, notification, Alert
+    Alert, Button, Col,
+    Form, Input,
+    message, Modal,
+    notification, Row,
+    Select, Space, Table
 } from 'antd'
-import { getListSummary, updateSummary, multiUpdateSummary, genCertificateAPI, handOutCertificateAPI } from '../../api/summary.services'
 import Avatar from 'antd/lib/avatar/avatar'
-import { Link } from 'react-router-dom'
-import { formatDate, dayDiff } from '../../utils/text.utils'
+import React, { useEffect, useState } from 'react'
+import { genCertificateAPI, getListSummary, multiUpdateSummary, updateSummary } from '../../api/summary.services'
 import Constants from '../../constants'
-import moment from 'moment'
-import { CloudSyncOutlined, FileSearchOutlined, MailOutlined, SwapOutlined } from '@ant-design/icons'
-import { Document, Page } from 'react-pdf'
-import PDFViewer from 'pdf-viewer-reactjs'
-import { renderStatus, renderRank, renderCertificate, parseRankByScore } from './certificate.utils'
+import { formatDate } from '../../utils/text.utils'
+import { parseRankByScore, renderCertificate, renderRank, renderStatus } from './certificate.utils'
 
 const { Search } = Input
 const { Option } = Select;
@@ -116,27 +115,6 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         setLoading(false)
     }
 
-    // const handOut = async () => {
-    //     setLoading(true)
-    //     const formData = new FormData()
-    //     formData.set('type', 'c')
-    //     formData.set('email', cerItem.email)
-    //     formData.set('courseHomeId', courseHome.id)
-    //     formData.set('courseId', course.id)
-    //     formData.set('studentId', cerItem.studentId)
-    //     formData.set('name', course.title)
-    //     formData.set('studentName', cerItem.fullname)
-    //     formData.set('studentCourseId', cerItem.id)
-    //     formData.set('file', file, cerItem.username + course.slug + "_Certificate.pdf")
-
-    //     try {
-    //         const { data } = await handOutCertificateAPI({ token, formData })
-    //         message.success('Cấp chứng chỉ thành công', 1.5, () => window.location.reload())
-    //     } catch (err) {
-    //         message.error('Có lỗi xảy ra: ' + err.message)
-    //         setLoading(false)
-    //     }
-    // }
 
     const genSummary = (item) => {
         // if (dayDiff(moment(), item.end_date) < 0) {
@@ -213,12 +191,12 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             key: 'finalScore',
             render: finalScore => <b>{finalScore || finalScore == 0 ? finalScore : "Chưa tổng kết"}</b>
         },
-        {
-            title: 'Tình trạng lớp',
-            dataIndex: 'schStatus',
-            key: 'schStatus',
-            render: schStatus => <span>{renderStatus(schStatus)}</span>
-        },
+        // {
+        //     title: 'Tình trạng lớp',
+        //     dataIndex: 'schStatus',
+        //     key: 'schStatus',
+        //     render: schStatus => <span>{renderStatus(schStatus)}</span>
+        // },
 
         {
             title: 'Tình trạng',
@@ -241,16 +219,16 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             render: (received, record) => renderCertificate(received, record, genCertificate)
         },
 
-        {
-            title: '',
-            dataIndex: 'action',
-            key: 'action',
-            render: (action, record) => (<Space>
-                <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
-                <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} onClick={() => summaryStudent(null, record, null)}>
-                    <SwapOutlined />Tự động</Button>
-            </Space>)
-        },
+        // {
+        //     title: '',
+        //     dataIndex: 'action',
+        //     key: 'action',
+        //     render: (action, record) => (<Space>
+        //         <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} type="primary" onClick={() => genSummary(record)}>Tổng kết</Button>
+        //         <Button disabled={record.schStatus != 'pass' && record.schStatus != 'fail'} onClick={() => summaryStudent(null, record, null)}>
+        //             <SwapOutlined />Tự động</Button>
+        //     </Space>)
+        // },
     ]
 
     const finalData = userCourses.map((userCourse, index) => {
@@ -270,7 +248,7 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
             received: userCourse.received_certificate,
             end_date: userCourse.end_date,
             finalScore: schDetail.final_score,
-            schStatus: schDetail.status,
+            // schStatus: schDetail.status,
             is_summarised: userCourse.is_summarised,
             key: userCourse.id,
         }
@@ -280,18 +258,18 @@ const CertificateTeacher = ({ token, course, courseHome }) => {
         return (
             <Table
                 loading={loading}
-                rowSelection={{
-                    type: "checkbox",
-                    selectedRowKeys,
-                    onChange: (selectedRowKeys, selectedRows) => {
-                        setSelectedRowKeys(selectedRowKeys)
-                        setSelectedRows(selectedRows)
-                    },
-                    getCheckboxProps: record => ({
-                        name: record.username,
-                        disabled: record.is_summarised == true
-                    })
-                }}
+                // rowSelection={{
+                //     type: "checkbox",
+                //     selectedRowKeys,
+                //     onChange: (selectedRowKeys, selectedRows) => {
+                //         setSelectedRowKeys(selectedRowKeys)
+                //         setSelectedRows(selectedRows)
+                //     },
+                //     getCheckboxProps: record => ({
+                //         name: record.username,
+                //         disabled: record.is_summarised == true
+                //     })
+                // }}
                 dataSource={finalData}
                 columns={columns}
             />

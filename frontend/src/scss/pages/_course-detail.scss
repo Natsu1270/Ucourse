@@ -326,6 +326,10 @@
         //box-shadow: $shadow-light;
         padding: 2rem 3rem;
     }
+
+    &__content {
+        overflow: visible;
+    }
 }
 
 

@@ -3,15 +3,7 @@ import { Card } from 'antd'
 import CourseCardSub from "./course-card-sub.component";
 
 const CourseCard = ({ course, onClick, isBought }) => {
-    // const coverStyle = {
-    //     width: '100%',
-    //     height: '17rem',
-    //     minWidth: '25rem',
-    //     // backgroundImage: `url(${course.icon})`,
-    //     backgroundRepeat: 'no-repeat',
-    //     backgroundPosition: 'center',
-    //     backgroundSize: 'cover'
-    // };
+    
     const { Meta } = Card;
     return (
         <div

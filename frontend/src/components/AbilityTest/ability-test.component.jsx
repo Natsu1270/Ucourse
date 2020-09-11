@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Modal, Skeleton, message } from "antd";
+import { Button, message, Modal, Skeleton } from "antd";
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { isAbilityTestModalActiveSelector } from "../../redux/UI/ui.selects";
-import {
-    generatedAbilityTestSelector,
-    isGeneratingAbilityTestSelector,
-    atDurationSelector,
-    atQuestionsSelector, uatIdSelector
-} from "../../redux/AbilityTest/abilityTest.selects";
+import { generateAbilityTestAPI } from '../../api/abilityTest.services';
 import { toggleAbilityTestModal } from "../../redux/UI/ui.actions";
+import { isAbilityTestModalActiveSelector } from "../../redux/UI/ui.selects";
 import AbilityTestForm from './ability-test-form.component';
 
-import { Button } from 'antd'
-import { generateAbilityTestAPI } from '../../api/abilityTest.services';
 
 const AbilityTest = ({ abilityTestId, token }) => {
 

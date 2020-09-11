@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react'
-import {parseHtml, secondToTime} from "../../utils/text.utils";
-import {Button, Form, Radio} from "antd";
-import {CheckCircleTwoTone} from '@ant-design/icons'
+import { CheckCircleTwoTone } from '@ant-design/icons';
+import { Form, Radio } from "antd";
 import hljs from "highlight.js";
+import React, { useEffect } from 'react';
+import { parseHtml } from "../../utils/text.utils";
 
 const AbilityTestResult = ({questions, responses, result}) => {
 

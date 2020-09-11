@@ -6,17 +6,14 @@ import {
     fieldProgramsSelector,
     isFetchingDetailSelector
 } from "../../redux/Field/field.selects";
-import SearchInput from "../SearchInput/search-input.component";
 import SearchPrograms from "../SearchResult/search-programs.component";
 import { Breadcrumb, Skeleton, Tabs } from "antd";
 import FieldContainer from "./field-container.component";
 import CourseCards from "../Course/course-cards.component";
-import SearchFilter from "../SearchResult/search-filter.component";
 import FieldDetailBanner from "../Banners/field-detail-banner.component";
 import ErrorBoundary from '../ErrorBoundary/error-boundary.component';
 
 import { HomeOutlined } from "@ant-design/icons";
-import { slugifyString } from "../../utils/text.utils";
 
 
 const FieldDetail = () => {

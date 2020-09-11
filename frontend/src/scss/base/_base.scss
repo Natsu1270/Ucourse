@@ -128,6 +128,7 @@ button, input {
 	border-radius: 1rem;
 	padding: 2rem;
 	background-color: #ffffff;
+	overflow: visible;
 }
 
 .page-card-2 {
@@ -135,12 +136,14 @@ button, input {
 	border-radius: 1rem;
 	padding: 2rem 4rem;
 	background-color: #ffffff;
+	overflow: visible;
 }
 
 .page-card-3{
 	box-shadow: $shadow-light-2;
 	padding: 2rem;
 	background-color: #ffffff;
+	overflow: visible;
 }
 
 .pd-5 {
@@ -197,3 +200,7 @@ button, input {
 // 	background-color: white;
 // 	padding-top: 6rem;
 // }
+
+.ant-tabs-content {
+	overflow: visible !important;
+}

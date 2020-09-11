@@ -1,32 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { getProgramProcessAPI } from '../../api/home.services'
-import { message, DatePicker, Tag, Button, Form, Row, Col, Input, Switch, Menu, Spin, Layout, Divider, Space } from 'antd'
+import { message, Menu, Layout } from 'antd'
 import { useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
 import { BookOutlined } from '@ant-design/icons'
-import { disabledDate } from '../../utils/date.utils'
 import ProgramProcessItem from '../../components/ProgramProcess/program-process-item.component'
-import moment from 'moment'
 
 
-const { RangePicker } = DatePicker
 const { Sider, Content } = Layout
 
-const formItemLayout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 20 },
-};
 
 const ProgramProcess = () => {
 
-    const history = useHistory()
 
     const [loading, setLoading] = useState(true)
     const [programs, setPrograms] = useState([])
     const [currentProgram, setCurrentProgram] = useState({})
     const [studentCertificates, setSCertificate] = useState([])
-    const [orgPrograms, setOrgPrograms] = useState([])
+    const [, setOrgPrograms] = useState([])
 
     const token = useSelector(state => tokenSelector(state))
 

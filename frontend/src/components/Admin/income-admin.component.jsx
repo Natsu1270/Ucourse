@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Chart, LineAdvance, Coordinate, Line, Point, Area, G2, Interval, Axis,
-    Tooltip,
+    Chart, LineAdvance,
 } from 'bizcharts';
-import DataSet from "@antv/data-set";
 import { Skeleton, Layout, Row, Col } from 'antd';
 import { dataByMonth, moneyChartData } from './admin.utils.js'
-import { DatabaseOutlined, PieChartOutlined, FireTwoTone, DatabaseTwoTone, PieChartTwoTone, FileSearchOutlined, DollarTwoTone } from '@ant-design/icons';
+import { DollarTwoTone } from '@ant-design/icons';
 
 
 const { Content } = Layout

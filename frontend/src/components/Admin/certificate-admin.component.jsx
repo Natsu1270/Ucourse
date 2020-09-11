@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Skeleton, Layout, Row, Col } from 'antd';
+import { Layout } from 'antd';
+import React, { useEffect } from 'react';
 
 
 const { Content } = Layout

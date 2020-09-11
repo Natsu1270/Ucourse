@@ -1,9 +1,13 @@
+from datetime import datetime
+
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
 from course_homes.models import StudentAssignment, Assignment, StudentCourseHome
 from course_homes.serializers import StudentAssignmentDetailGradeSerializer, StudentAssignmentAllGradeSerializer, \
     AssignmentMinSerializer, StudentCourseHomeSerializer
+from courses.models import UserCourse
+from courses.serializers import UserCourseSerializer
 from exams.models import StudentExamResult, Exam
 from exams.serializers import StudentExamResultSerializer, ExamMinSerializer
 
@@ -46,6 +50,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
         course_home_exams = Exam.objects.filter(topic__course_home_id=course_home_id)
         course_home_assignments = Assignment.objects.filter(learning_topic__course_home_id=course_home_id)
         student_course_homes = StudentCourseHome.objects.filter(course_home_id=course_home_id)
+        user_courses = UserCourse.objects.filter(course_home_id=course_home_id)
         filter_exams = {}
         filter_assignments = {}
 
@@ -64,6 +69,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
             "student_exams": filter_exams,
             "student_assignments": filter_assignments,
             "student_course_homes": StudentCourseHomeSerializer(instance=student_course_homes, many=True).data,
+            "user_courses": UserCourseSerializer(instance=user_courses, many=True).data,
             "result": True,
             "status_code": 200
         }, status=status.HTTP_200_OK)
@@ -96,19 +102,39 @@ class UpdateStudentAssigmentGrade(generics.GenericAPIView):
         }, status=status.HTTP_200_OK)
 
 
+def parse_rank_by_score(score):
+    if score < 5:
+        return 'bad'
+    if score < 7:
+        return 'medium'
+    if score < 9:
+        return 'good'
+    return 'xgood'
+
+
 class UpdateStudentCourseHomeGrade(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
+
+
     def post(self, request, *args, **kwargs):
         student_coursehome_id = self.request.data['studentCourseHomeId']
+        student_id = self.request.data.get('studentId')
         grade = self.request.data['grade']
         is_pass = self.request.data['isQualified']
+        rank = parse_rank_by_score(int(float(grade)))
 
         student_coursehome = StudentCourseHome.objects.get(pk=student_coursehome_id)
+        user_course = UserCourse.objects.get(user_id=student_id, course_home_id=student_coursehome.course_home_id)
         student_coursehome.final_score = grade
+        student_coursehome.rank = rank
         student_coursehome.status = 'pass' if is_pass else 'fail'
         student_coursehome.save()
-
+        user_course.status = 'pass' if is_pass else 'fail'
+        user_course.rank = rank
+        user_course.is_summarised = True
+        user_course.completed_date = datetime.today()
+        user_course.save()
         return Response({
             "result": True,
             "status_code": 200
@@ -122,10 +148,20 @@ class UpdateMultiStudentCourseHomeGrade(generics.GenericAPIView):
         rows = self.request.data
         for row in rows:
             student_coursehome = StudentCourseHome.objects.get(pk=row.get('key'))
-            student_coursehome.final_score = row.get('result')
+            user_course = UserCourse.objects.get(user_id=student_coursehome.student_id, course_home_id=student_coursehome.course_home_id)
+            score = row.get('result')
+            rank = parse_rank_by_score(int(float(score)))
+            student_coursehome.final_score = score
             is_pass = row.get('isQualified')
             student_coursehome.status = 'pass' if is_pass else 'fail'
+            student_coursehome.rank = rank
             student_coursehome.save()
+
+            user_course.rank = rank
+            user_course.status = 'pass' if is_pass else 'fail'
+            user_course.is_summarised = True
+            user_course.completed_date = datetime.today()
+            user_course.save()
 
         return Response({
             "result": True,

@@ -41,7 +41,7 @@ export const updateStudentAssignmentGrade = ({ token, studentAssignmentId, score
 
 
 
-export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade, isQualified }) => {
+export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade, isQualified, studentId }) => {
     return axios.request({
         headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ export const updateStudentCourseHomeGrade = ({ token, studentCourseHomeId, grade
         },
         method: 'POST',
         url: `${API_URL}/student_coursehome/update`,
-        data: { studentCourseHomeId, grade, isQualified }
+        data: { studentCourseHomeId, grade, isQualified, studentId }
     })
 };
 
