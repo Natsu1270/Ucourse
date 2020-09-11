@@ -99,7 +99,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
     const searchQuestion = (name) => {
         let filterQuesitons = orgQuesitons
         if (name.trim() != "") {
-            filterQuesitons = filterQuesitons.filter(q => q.name.includes(name))
+            filterQuesitons = filterQuesitons.filter(q => q.name.toLowerCase().includes(name.toLowerCase()) || q.content.toLowerCase().includes(name.toLowerCase()))
         }
         setBankQuestions(filterQuesitons)
     }
@@ -426,7 +426,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                             </Button>,]}>
                         {
                             fromBank ?
-                                <div style={{ maxHeight: '70vh', overflow: 'auto' }}>
+                                <div style={{ maxHeight: '70vh', overflowY: 'scroll' }}>
                                     <Row justify="center" gutter={16} className="mb-3" align="middle">
                                         <Col>
                                             {
