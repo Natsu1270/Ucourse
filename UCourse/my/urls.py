@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GetAllAPI, GetAllMyAPI, GetAllBoughtAndRegister, GetProgramProcess, GetMyCourses, SearchRegisterCourses
+from .views import GetAllAPI, GetAllMyAPI, GetAllBoughtAndRegister, GetProgramProcess, GetMyCourses, SearchRegisterCourses, GetTransactionHistory
 
 urlpatterns = [
     path('', GetAllAPI.as_view()),
@@ -7,6 +7,7 @@ urlpatterns = [
     path('my-all', GetAllBoughtAndRegister.as_view()),
     path('program-process', GetProgramProcess.as_view()),
     path('courses', GetMyCourses.as_view()),
-    path('search', SearchRegisterCourses.as_view())
+    path('search', SearchRegisterCourses.as_view()),
+    path('transaction-history', GetTransactionHistory.as_view())
 
 ]

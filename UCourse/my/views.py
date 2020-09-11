@@ -8,8 +8,9 @@ from certificates.models import StudentCertificate
 from certificates.serializers import StudentCertificateSerializer
 from course_homes.models import CourseHome
 from course_homes.serializers import CourseHomeMinSerializer
-from courses.models import Course
-from programs.models import Program, StudentProgram
+from courses.models import Course, UserBuyCourse
+from my.serializers import UserBuyCourseSerializer, UserBuyProgramSerializer
+from programs.models import Program, StudentProgram, UserBuyProgram
 from courses.serializers import CourseSearchSerializer, CourseMySerializer
 from programs.serializers import ProgramSearchSerializer, ProgramMinSerializer, StudentProgramSerializer, \
     ProgramProcessSerializer
@@ -68,6 +69,18 @@ class GetAllBoughtAndRegister(generics.GenericAPIView):
         if user.is_anonymous:
             return {"user": None, "request": self.request}
         return {"user": user, "request": self.request}
+
+
+class GetTransactionHistory(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        courses = UserBuyCourse.objects.filter(user=self.request.user).order_by('-bought_date')
+        programs = UserBuyProgram.objects.filter(user=self.request.user).order_by('-bought_date')
+
+        return Response({
+            "courses": UserBuyCourseSerializer(instance=courses, many=True).data,
+            "programs": UserBuyProgramSerializer(instance=programs, many=True).data
+        }, status=status.HTTP_200_OK)
 
 
 class GetProgramProcess(generics.GenericAPIView):

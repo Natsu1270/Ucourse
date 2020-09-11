@@ -21,14 +21,14 @@ export function getAllMyAPI(token) {
     })
 }
 
-export function getAllMyCoursesAndProgramsAPI(token) {
+export function getTransactionHistory(token) {
     const headers = token ?
         { 'Content-Type': 'application/json', 'Authorization': `token ${token}` } :
         { 'Content-Type': 'application/json' }
     return axios.request({
         headers,
         method: 'GET',
-        url: `${GET_ALL_URL}/my-all`
+        url: `${GET_ALL_URL}/transaction-history`
     })
 }
 

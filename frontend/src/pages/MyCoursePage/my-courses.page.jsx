@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { getAllMyCoursesAndProgramsAPI } from '../../api/home.services'
-import { message, Skeleton, Timeline, Tree, Tabs, Tag, Button, List } from 'antd'
+import { getTransactionHistory } from '../../api/home.services'
+import { message, Skeleton, Timeline, Tabs, Tag, Row, Col, Card, Avatar, Divider } from 'antd'
 import { dayDiff, formatDate, renderPrice } from '../../utils/text.utils'
 import { useSelector } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
 import { tokenSelector } from '../../redux/Auth/auth.selects'
-import SearchProgramItem from '../../components/SearchResult/search-program-item.component'
-import SearchCourseItem from '../../components/SearchResult/search-course-item.component'
-import { DownOutlined } from '@ant-design/icons'
 import Constants from '../../constants'
 const { TabPane } = Tabs
+
+const { Meta } = Card
 
 const MyCoursePage = () => {
 
@@ -18,19 +17,15 @@ const MyCoursePage = () => {
     const [loading, setLoading] = useState(false)
     const [courses, setCourses] = useState([])
     const [programs, setPrograms] = useState([])
-    const [courseHome, setCourseHome] = useState([])
 
     const token = useSelector(state => tokenSelector(state))
 
     const getAllMy = async () => {
         setLoading(true)
         try {
-            const { data } = await getAllMyCoursesAndProgramsAPI(token)
-            const mCourses = data.courses.sort((a, b) => dayDiff(b.bought_date, a.bought_date))
-            const mPrograms = data.programs.sort((a, b) => dayDiff(b.bought_date, a.bought_date))
-            setCourseHome(data.courseHomes)
-            setCourses(mCourses)
-            setPrograms(mPrograms)
+            const { data } = await getTransactionHistory(token)
+            setCourses(data.data.courses)
+            setPrograms(data.data.programs)
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
@@ -47,29 +42,40 @@ const MyCoursePage = () => {
     return (
         <section className="section-10 page">
             <div className="page-card">
-                <h2 className="title--big text-center">Lớp học của tôi</h2>
+                <h2 className="title--big text-center">Lịch sử đăng ký</h2>
 
                 <Tabs defaultActiveKey="1">
-                    <TabPane key="1" tab="Lịch sử đăng ký">
+                    <TabPane key="1" tab="Lịch sử giao dịch">
                         <Timeline>
                             <Timeline.Item>
                                 <h3 className="text--main">Chương trình học</h3>
                             </Timeline.Item>
                             <Skeleton loading={loading} active>
-                                {programs.map(program => (
+                                {programs.map(item => (
                                     <Timeline.Item>
-                                        <Tag color="#108ee9" className="mb-4" style={{ fontSize: '1.8rem', padding: '0.4rem' }}>
-                                            {formatDate(program.bought_date, Constants.MMM_Do_YYYY)}
-                                        </Tag>
-                                        <SearchProgramItem
-                                            onClick={() => history.push(`/programs/${program.slug}`)}
-                                            key={program.id}
-                                            img={program.icon}
-                                            title={program.name}
-                                            slug={program.slug}
-                                            num_course={program.courses_count}
-                                        />
-                                        <p className="search-course-card__body--content--title">Giá: {renderPrice(program.price)}</p>              
+                                        <Row gutter={32} align="middle">
+                                            <Col span={5}>
+                                                {/* <Tag color="#4a4e4d" className="mb-4" style={{ fontSize: '1.8rem', padding: '0.4rem', width: '100%' }}>
+                                                    
+                                                </Tag> */}
+                                                {formatDate(item.bought_date, Constants.MMM_Do_YYYY)}
+                                                <p className="text--sub__bigger text-black">Giá mua: {renderPrice(item.money)}</p>
+                                            </Col>
+                                            <Col span={8}>
+                                                <Card
+                                                    className="box-shadow-light"
+                                                    size={480}
+                                                    hoverable onClick={() => history.push(`/programs/${item.program.slug}`)} loading={loading}>
+                                                    <Meta
+                                                        avatar={<Avatar size={48} src={item.program.icon} />}
+                                                        title={item.program.name}
+                                                        description={<Row><Col>Giá hiện tại: {renderPrice(item.program.price)}</Col></Row>}
+                                                    />
+                                                </Card>
+                                            </Col>
+
+                                        </Row>
+                                        <Divider />
                                     </Timeline.Item>
                                 ))}
                             </Skeleton>
@@ -80,17 +86,37 @@ const MyCoursePage = () => {
                             </Timeline.Item>
                             <Skeleton loading={loading} active>
                                 {
-                                    courses.map(course => {
+                                    courses.map(item => {
                                         return (
-                                            <Timeline.Item key={course.is}>
-                                                <Tag color="#108ee9" className="mb-4" style={{ fontSize: '1.8rem', padding: '0.4rem' }}>
-                                                    {formatDate(course.bought_date, Constants.MMM_Do_YYYY)}
-                                                </Tag>
-                                                <SearchCourseItem
-                                                    course={course}
-                                                    onClick={() => { history.push(`/courses/${course.slug}`) }}
-                                                />
-                                                <p className="search-course-card__body--content--title">Giá: {renderPrice(course.price)}</p>
+                                            <Timeline.Item key={item.id}>
+                                                <Row gutter={32} align="middle">
+                                                    <Col span={5}>
+                                                        {/* <Tag color="#4a4e4d" className="mb-4" style={{ fontSize: '1.8rem', padding: '0.4rem', width: '100%' }}>
+                                                            {formatDate(item.bought_date, Constants.MMM_Do_YYYY)}
+                                                        </Tag> */}
+                                                        {formatDate(item.bought_date, Constants.MMM_Do_YYYY)}
+                                                        <p className="text--sub__bigger text-black">Giá mua: {renderPrice(item.money)}</p>
+                                                        {item.in_program ? <p className="text--sub text-black">Đăng ký từ khóa học</p> : null}
+                                                    </Col>
+                                                    <Col span={8}>
+                                                        <Card
+                                                            className="box-shadow-light"
+                                                            size={480}
+                                                            hoverable onClick={() => history.push(`/courses/${item.course.slug}`)} loading={loading}>
+                                                            <Meta
+                                                                avatar={<Avatar size={48} src={item.course.icon} />}
+                                                                title={item.course.title}
+                                                                description={<Row><Col>Giá hiện tại: {renderPrice(item.course.price)}</Col></Row>}
+                                                            />
+                                                        </Card>
+                                                    </Col>
+
+                                                </Row>
+
+                                                <Divider />
+
+
+
                                             </Timeline.Item>
                                         )
                                     })
@@ -99,7 +125,7 @@ const MyCoursePage = () => {
                             </Skeleton>
                         </Timeline>
                     </TabPane>
-                    <TabPane key="2" tab="Lớp học">
+                    {/* <TabPane key="2" tab="Lớp học">
                         <List
                             bordered
                             loading={loading}
@@ -118,7 +144,7 @@ const MyCoursePage = () => {
                                 </List.Item>
                             )}
                         />
-                    </TabPane>
+                    </TabPane> */}
 
                 </Tabs>
 
