@@ -26,15 +26,15 @@ const CertificateInqury = () => {
                     Tra cứu thông tin chứng chỉ
                 </h3>
 
-                <Divider />
-                <Row gutter={16}>
+                <Row gutter={16} align="middle" justify="center" className="mt-5">
                     <Col>
-                        Nhập dãy số trên chứng chỉ
-                </Col>
+                        <span className="text--sub__bigger3 text-black">Nhập dãy số trên chứng chỉ</span>
+                    </Col>
                     <Col>
                         <Search size="large" enterButton onSearch={inqury} loading={loading} placeholder="Nhập mã chứng chỉ..." />
                     </Col>
                 </Row>
+                <Divider />
             </div>
 
 
