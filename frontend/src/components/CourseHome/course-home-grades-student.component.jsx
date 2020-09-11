@@ -19,6 +19,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
     const [finalResult, setFinalResult] = useState({})
     const [classStatus, setClassStatus] = useState(null)
     const [finalScore, setFinalScore] = useState(null)
+    const [totalGrade, setTotalGrade] = useState(0)
 
     const getStudentGrades = async () => {
         setLoading(true)
@@ -30,6 +31,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
             setFinalResult(final)
             setClassStatus(result.data.class_status)
             setFinalScore(result.data.final_score)
+            setTotalGrade(result.data.total_grade)
         } catch (err) {
             message.error(err.message)
         }
@@ -80,6 +82,13 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
         mandatory: assignment.assignment.mandatory
     }))
 
+    const normalizeGrade = () => {
+        if (finalResult.finalResult) {
+            const grade = finalResult.finalResult * 10 / totalGrade
+            return grade.toFixed(2)
+        }
+        return null
+    }
 
 
     return (
@@ -112,9 +121,16 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                     </p>
 
                     <Divider />
+                    <h3 className="text--sub__bigger3 text-black">
+                        Điểm tổng hiện tại của lớp: {totalGrade}
+                    </h3>
 
                     <h3 className="text--sub__bigger3 text-black">
-                        Điểm tổng kết tạm tính: {finalResult.finalResult ? finalResult.finalResult.toFixed(2) : 'Chưa có'}
+                        Điểm tổng hiện tại: {finalResult.finalResult ? finalResult.finalResult.toFixed(2) : 'Chưa có'}
+                    </h3>
+
+                    <h3 className="text--sub__bigger3 text-black">
+                        Điểm tổng kết tạm tính (thang điểm 10): {normalizeGrade() ? normalizeGrade() : 'Chưa có'}
                     </h3>
                     <p className="text--sub__bigger2">Tình trạng điểm: {
                         finalResult.qualified ? 'Đạt yêu cầu' : 'Chưa đạt yêu cầu'
@@ -123,7 +139,7 @@ const CourseHomeGradesStudent = ({ token, courseHomeId }) => {
                     <p className="text--sub__bigger2">
                         {
                             !finalResult.qualified ?
-                                `Lý do: ${finalResult.finalResult < 5 ? 'Điểm dưới 5, và có' : null} các bài kiểm tra, hoặc bài assignment chưa đạt yêu cầu: ${finalResult.unDoneTasks}`
+                                `Lý do: ${normalizeGrade() < 5 ? 'Điểm dưới 5, và có' : null} các bài kiểm tra, hoặc bài assignment chưa đạt yêu cầu: ${finalResult.unDoneTasks}`
                                 : null
                         }
                     </p>

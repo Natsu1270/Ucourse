@@ -23,6 +23,18 @@ class GetStudentGradesAPI(generics.GenericAPIView):
             student_id=user.id, assignment__learning_topic__course_home_id=course_home_id)
         final_score = None
         class_status = None
+
+        course_home_exams = Exam.objects.filter(topic__course_home_id=course_home_id)
+        course_home_assignments = Assignment.objects.filter(learning_topic__course_home_id=course_home_id)
+        total_grade = 0
+
+        for exam in course_home_exams:
+            if exam.mandatory:
+                total_grade += exam.max_score
+
+        for assignment in course_home_assignments:
+            if assignment.mandatory:
+                total_grade += assignment.max_score
         try:
             student_course_home = StudentCourseHome.objects.get(student=user, course_home_id=course_home_id)
             final_score = student_course_home.final_score
@@ -33,6 +45,7 @@ class GetStudentGradesAPI(generics.GenericAPIView):
         return Response({
             "student_exams": StudentExamResultSerializer(instance=student_exams, many=True).data,
             "student_assignments": StudentAssignmentDetailGradeSerializer(instance=student_assignments, many=True).data,
+            "total_grade": total_grade,
             "final_score": final_score,
             "class_status": class_status,
             "result": True,
@@ -53,13 +66,17 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
         user_courses = UserCourse.objects.filter(course_home_id=course_home_id)
         filter_exams = {}
         filter_assignments = {}
-
+        total_grade = 0
         for exam in course_home_exams:
+            if exam.mandatory:
+                total_grade += exam.max_score
             student_exams = StudentExamResult.objects.filter(exam_id=exam.id)
             filter_exams[exam.name] = [ExamMinSerializer(instance=exam).data,
                                        StudentExamResultSerializer(instance=student_exams, many=True).data]
 
         for assignment in course_home_assignments:
+            if assignment.mandatory:
+                total_grade += assignment.max_score
             student_assignments = StudentAssignment.objects.filter(assignment_id=assignment.id)
             filter_assignments[assignment.name] = [AssignmentMinSerializer(instance=assignment).data,
                                                    StudentAssignmentAllGradeSerializer(instance=student_assignments,
@@ -70,6 +87,7 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
             "student_assignments": filter_assignments,
             "student_course_homes": StudentCourseHomeSerializer(instance=student_course_homes, many=True).data,
             "user_courses": UserCourseSerializer(instance=user_courses, many=True).data,
+            "total_grade": total_grade,
             "result": True,
             "status_code": 200
         }, status=status.HTTP_200_OK)

@@ -21,7 +21,7 @@ class GetAllAPI(views.APIView):
     @staticmethod
     def get(request):
 
-        courses = Course.objects.all().order_by('-created_date')[:10]
+        courses = Course.objects.all().order_by('-created_date')[:12]
         programs = Program.objects.all().order_by('-created_date')[:10]
         data = {
             "courses": CourseSearchSerializer(instance=courses, many=True).data,

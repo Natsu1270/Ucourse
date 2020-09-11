@@ -13,6 +13,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
     const [assignments, setAssignments] = useState({})
     const [exams, setExams] = useState({})
     const [studentCourseHomes, setStudentCourseHomes] = useState([])
+    const [totalGrade, setTotalGrade] = useState(0)
     const [editScore, setEditScore] = useState(null)
     const [showModal, setShowModal] = useState(false)
     const [editFinal, setEditFinal] = useState(null)
@@ -28,6 +29,7 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
             setAssignments(data.student_assignments)
             setStudentCourseHomes(data.student_course_homes)
             setUserCourses(data.user_courses)
+            setTotalGrade(data.total_grade)
         } catch (err) {
             message.error(err.message)
         }
@@ -77,8 +79,9 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
                 </TabPane>
 
                 <TabPane tab="Điểm tổng kết" key="3">
-                    <h3 className="text--main">Danh sách điểm tổng kết tạm tính</h3>
+                    <h3 className="text--main">Danh sách điểm tổng kết tạm tính (tổng điểm lớp học: {totalGrade})</h3>
                     <FinalGradesTable
+                        totalGrade={totalGrade}
                         loadingData={loading} userCourses={userCourses}
                         exams={exams} assignments={assignments} token={token}
                         setEditFinal={setEditFinal} setShowModal={setShowModal} students={students} studentCourseHomes={studentCourseHomes}

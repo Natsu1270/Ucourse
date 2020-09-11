@@ -10,7 +10,7 @@ import { renderCertificate } from '../../Certificate/certificate.utils'
 
 
 const FinalGradesTable = (
-    { loadingData, exams, assignments, token, setEditFinal, userCourses, setShowModal, students, studentCourseHomes }) => {
+    { loadingData, exams, totalGrade, assignments, token, setEditFinal, userCourses, setShowModal, students, studentCourseHomes }) => {
 
     const [loading, setLoading] = useState(false)
     const [selectedRows, setSelectedRows] = useState([])
@@ -69,7 +69,16 @@ const FinalGradesTable = (
         },
 
         {
-            title: 'Điểm tự động',
+            title: 'Điểm tính',
+            dataIndex: 'sumGrade',
+            key: 'sumGrade',
+            render: (sumGrade, record) => <Row gutter={16}>
+                <Col><span className="text-black b-500">{sumGrade}</span></Col>
+            </Row>
+        },
+
+        {
+            title: 'Điểm tự động (thang 10)',
             dataIndex: 'result',
             key: 'result',
             render: (result, record) => <Row gutter={16}>
@@ -188,6 +197,8 @@ const FinalGradesTable = (
             }
         })
 
+        const normalizeTenGrade = finalResult * 10 / totalGrade
+
         const studentCourseHome = studentCourseHomes.find(item => item.student == student.id) || {}
         const userCourse = normalizeUserCourses()
 
@@ -205,7 +216,8 @@ const FinalGradesTable = (
             username: student.username,
             avatar: student.user_profile.avatar,
             fullname: student.user_profile.fullname,
-            result: finalResult.toFixed(2),
+            result: normalizeTenGrade.toFixed(2),
+            sumGrade: finalResult.toFixed(2),
             finalResult: studentCourseHome.final_score ? studentCourseHome.final_score.toFixed(2) : null,
             studentCourseHome: studentCourseHome,
             key: studentCourseHome.id,
