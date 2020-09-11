@@ -12,7 +12,7 @@ import {
     Skeleton, Button, Drawer, Empty, List,
     Space, message, Row, Col, Modal, Form,
     Input, Select, Switch, Popconfirm,
-    InputNumber, Table
+    InputNumber, Table, Tag
 } from 'antd'
 import ExamDetail from "./exam-detail.component";
 import ExamReview from './exam-review.component';
@@ -27,7 +27,7 @@ import { initExamAPI } from '../../api/exam.services'
 
 import CKEditor from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-
+import moment from 'moment'
 import { columns } from '../CourseHome/Questions/questions.utils'
 
 const { Search } = Input
@@ -170,17 +170,30 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 setRandomQuestions(data.studentExam.questions)
                 setShowExam(true)
             } else {
-                message.error('Bạn đã thực hiện tối đa số lần làm bài cho phép')
+                if (data.errorCode == 1) {
+                    message.error('Bạn đã thực hiện tối đa số lần làm bài cho phép')
+                } else {
+                    message.error('Chưa đến thời gian được phép làm bài')
+                }
             }
         } catch (err) {
             message.error("Có lỗi xảy ra: " + err.message)
         }
         setLoading(false)
     }
+    // const isStart = () => {
+    //     if (examDetail) {
+    //         return moment(examDetail.start_date).isSameOrBefore(moment(), 'seconds')
+    //     }
+    //     return true
+    // }
     const canDoExam = () => {
         if (expired || isRoleTeacherOrTA(userRole.code)) return null
         if (examDetail.max_try && studentExams.length >= examDetail.max_try) {
             return <Button type="dashed" onClick={() => message.info('Qúa số lần làm cho phép')} >Làm bài</Button>
+        }
+        if (examDetail.start_date && moment(examDetail.start_date).isAfter(moment(), 'seconds')) {
+            return <Tag color="#f50">Chưa đến thời gian cho phép làm bài</Tag>
         }
         return (
             <Popconfirm
@@ -270,7 +283,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                 {
                     expired ?
                         <p className="text--sub__bigger text-red">
-                            Bài kiểm tra đã kết thúc vào: {formatDate(examDetail.expired_date, Constants.MMM_Do__YY__TIME)}</p> :
+                            Bài kiểm tra đã kết thúc vào: {formatDate(examDetail.expired_date, Constants.MMM_Do__YY__TIME_SS)}</p> :
                         null
                 }
                 <p className="text--sub__bigger">Thời gian làm bài: {secondToTime(examDetail.duration)}</p>

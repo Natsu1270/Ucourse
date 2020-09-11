@@ -7,7 +7,7 @@ import moment from 'moment'
 const ExamHistoryTable = ({ exams, setReviewId, examDetail }) => {
 
     const reviewBtn = (record) => {
-        if (moment(examDetail.expired_date).isBefore(moment(), 'days')) {
+        if (moment(examDetail.expired_date).isBefore(moment(), 'seconds')) {
             return <Button onClick={() => setReviewId(record.id)} type="primary">Xem lại</Button>
         } else {
             return <Button disabled type="primary">Xem lại</Button>

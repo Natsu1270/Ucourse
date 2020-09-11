@@ -48,6 +48,7 @@ const Constants = {
     // SPINNER_STYLE: override,
     MMM_Do_YYYY: 'MMM Do YY',
     MMM_Do__YY__TIME: 'Do-MMM-YY HH:mm',
+    MMM_Do__YY__TIME_SS: 'Do-MMM-YY HH:mm:ss',
     DD_MM_YYYY: 'DD-MM-YYYY',
     FIELD: 'field',
     LEVEL: 'level',

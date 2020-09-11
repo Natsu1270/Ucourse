@@ -5,7 +5,7 @@ import { List, Dropdown, Menu, Avatar, Tag, Row, Col, Typography } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 import { isTimeBefore, formatDate } from '../../../utils/text.utils'
 import Constants from '../../../constants'
-
+import moment from 'moment'
 
 const { Text } = Typography
 
@@ -39,8 +39,8 @@ const QuizList = ({ quizes, deleteAsset, triggerEditQuize, gotoExam, userRole })
                                 {item.expired ?
                                     <Col>
                                         {
-                                            !isTimeBefore(item.expired) ?
-                                                <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text> :
+                                            moment(item.expired).isAfter(moment(), 'seconds') ?
+                                                <Text mark>Bài kiểm tra sẽ hết hạn vào: {formatDate(item.expired, Constants.MMM_Do__YY__TIME_SS)}</Text> :
                                                 <Text style={{ fontWeight: '500' }} type="danger">Quá thời gian làm bài: {formatDate(item.expired, Constants.MMM_Do__YY__TIME)}</Text>
                                         }
                                     </Col> : null

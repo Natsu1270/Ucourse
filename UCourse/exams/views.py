@@ -1,3 +1,4 @@
+import datetime
 import random
 
 from rest_framework import generics, permissions, status, views
@@ -118,7 +119,14 @@ class InitExamAPI(generics.GenericAPIView):
         if max_try is not None and past_try_count >= max_try:
             return Response({
                 "result": False,
+                "errorCode": 1,
                 "message": "Reach limitation of try number"
+            }, status=status.HTTP_200_OK)
+        if exam.start_date.now().__gt__(datetime.datetime.now()):
+            return Response({
+                "result": False,
+                "errorCode": 2,
+                "message": "Start date"
             }, status=status.HTTP_200_OK)
 
         exam_questions = exam.questions.all()
