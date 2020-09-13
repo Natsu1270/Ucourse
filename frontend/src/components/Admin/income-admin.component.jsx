@@ -74,7 +74,7 @@ const IncomeAdmin = ({ data, loading }) => {
                                     </Col>
                                 </Row>
                                 <Chart
-                                    scale={{ count: { min: 0, max: 80000000 } }}
+                                    scale={{ count: { min: 0, max: 1000000 } }}
                                     padding={[10, 20, 50, 100]} autoFit height={400} data={chartData} >
                                     <LineAdvance
                                         shape="smooth"

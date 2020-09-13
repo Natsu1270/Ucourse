@@ -43,7 +43,7 @@ class TopicAssetSerializer(serializers.ModelSerializer):
         model = TopicAsset
         fields = [
             'id', 'name', 'learning_topic', 'views', 'notes',
-            'file', 'file_type', 'status', 'info',
+            'file', 'file_type', 'status', 'info', 'youtube_src'
         ]
 
     def get_notes(self, obj):
@@ -166,12 +166,13 @@ class CourseHomeSerializer(serializers.ModelSerializer):
     quiz_num = serializers.SerializerMethodField(read_only=True)
     lecture_num = serializers.SerializerMethodField(read_only=True)
     assignment_num = serializers.SerializerMethodField(read_only=True)
+    teacher = ProfileMinSerializer(required=False)
 
     class Meta:
         model = CourseHome
         fields = [
             'id', 'full_name', 'status', 'slug', 'maximum_number', 'quiz_num', 'lecture_num', 'assignment_num',
-            'course', 'course_info', 'learning_topics', 'students', 'forums', 'is_my_class',
+            'course', 'course_info', 'learning_topics', 'students', 'forums', 'is_my_class', 'teacher',
             'created_date', 'modified_date'
         ]
 

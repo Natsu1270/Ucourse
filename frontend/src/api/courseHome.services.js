@@ -143,13 +143,16 @@ export const deleteLearningTopic = (data) => {
 
 export const createTopicAsset = (data) => {
 
-    const { token, name, info, learning_topic, file_type, file } = data
+    const { token, name, info, learning_topic, file_type, file, youtube_src } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
+    formData.set("youtube_src", youtube_src)
     formData.set("learning_topic", learning_topic)
+    if (file_type != 'youtube') {
+        formData.append("file", file)
+    }
     formData.set("file_type", file_type)
-    formData.append("file", file)
 
     return axios.request({
         headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `token ${token}` },
@@ -169,12 +172,13 @@ export const getTopicAssetAPI = (data) => {
 }
 
 export const editTopicAsset = (data) => {
-    const { token, name, info, file_type, file, id } = data
+    const { token, name, info, file_type, file, id, youtube_src } = data
     const formData = new FormData()
     formData.set("name", name)
     formData.set("info", info)
     formData.set("file_type", file_type)
-    if (file !== undefined && file !== null) {
+    formData.set("youtube_src", youtube_src)
+    if (file !== undefined && file !== null && file_type != 'youtube') {
         formData.append("file", file)
     }
     return axios.request({

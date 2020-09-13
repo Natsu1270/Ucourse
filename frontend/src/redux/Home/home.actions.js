@@ -1,7 +1,8 @@
 import HomeActionType from "./home.types";
 
-export const getAllStart = () => ({
+export const getAllStart = (payload) => ({
     type: HomeActionType.GET_ALL_START,
+    payload: payload
 });
 
 export const getAllSuccess = (results) => ({

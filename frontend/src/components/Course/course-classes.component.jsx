@@ -24,6 +24,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
         setLoading(true)
         try {
             if (type === 1) {
+                const { data } = await registerCourseAPI({ course_id, token, class_id })
                 const updateCourses = courseClasses.map(c => {
                     if (c.id === class_id) {
                         c.is_my_class = true
@@ -36,6 +37,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                 setClass(updateCourses)
                 message.success('Đăng ký thành công')
             } else {
+                const { data } = await unRegisterCourseAPI({ token, class_id, course_id })
                 const updateCourses = courseClasses.map(c => {
                     if (c.id === class_id) c.is_my_class = false
                     return c
@@ -104,7 +106,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
     }
 
     return (
-        <section className="mt-10 section-course-classes" id="cs-course-classes">
+        <section className="mt-5 section-course-classes" id="cs-course-classes">
             <h2 className="text--main section-header" id="cs-course-overview">
                 Danh sách lớp thuộc khóa học
             </h2>

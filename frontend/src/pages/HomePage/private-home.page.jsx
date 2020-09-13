@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { useHistory, Link } from 'react-router-dom';
 import { isLoadingSelector } from "../../redux/CourseHome/course-home.selects";
-import { Avatar, Skeleton, Collapse, Empty, List, Space, Button, Col, Row, Card, Divider, Tabs } from "antd";
+import { Avatar, Skeleton, Collapse, Empty, List, Space, Button, Col, Row, Card, Divider, Tabs, Pagination, Spin } from "antd";
 import CourseCard from "../../components/Course/course-card.component";
-import { homeCoursesSelector, homeProgramsSelector, isGettingSelector } from "../../redux/Home/home.selects";
+import { homeCoursesSelector, homeProgramsSelector, isGettingSelector, maxSizeSelector } from "../../redux/Home/home.selects";
 import SearchProgramItem from "../../components/SearchResult/search-program-item.component";
 import MyCourseTable from './my-courses-table'
+import { getAllStart } from '../../redux/Home/home.actions';
+import Constants from '../../constants';
 
 const { Panel } = Collapse;
 const { Meta } = Card
@@ -16,11 +18,14 @@ const { TabPane } = Tabs
 const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
     const history = useHistory();
-    const { isLoadingLearnings, isGetting, courses, programs } = useSelector(createStructuredSelector({
+    const dispatch = useDispatch()
+
+    const { isLoadingLearnings, isGetting, courses, programs, maxSize } = useSelector(createStructuredSelector({
         isLoadingLearnings: isLoadingSelector,
         isGetting: isGettingSelector,
         courses: homeCoursesSelector,
         programs: homeProgramsSelector,
+        maxSize: maxSizeSelector
     }))
 
     useEffect(() => {
@@ -176,43 +181,50 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
 
             </section>
 
-            <section className="private-home__suggest mb-5">
+            <section className="private-home__suggest mb-5" style={{ overflow: 'visible' }}>
                 <h3 className="text--main private-home--title mt-5">
                     Gợi ý cho bạn
                 </h3>
-                <Row gutter={[32, 32]} className="mt-5">
-                    {
-                        suggestCourses.map(course => (
-                            <Col span={6}>
-                                <CourseCard
-                                    key={course.id}
-                                    course={course}
-                                    onClick={() => history.push(`/courses/${course.slug}`)} />
-                            </Col>
-                        ))
-                    }
-                </Row>
 
-                <Divider />
+                <Spin spinning={isGetting} indicator={Constants.SPIN_ICON}>
+
+                    <Row gutter={[16, 16]}>
+                        {
+                            suggestPrograms.map(program => (
+                                <Col key={program.id} span={6}>
+                                    <Card
+                                        hoverable onClick={() => history.push(`/programs/${program.slug}`)} loading={isGetting}>
+                                        <Meta
+                                            avatar={<Avatar size={48} src={program.icon} />}
+                                            title={program.name}
+                                            description={<Row><Col>Số môn: {program.courses_count}</Col></Row>}
+                                        />
+                                    </Card>
+                                </Col>
+                            )
+                            )
+                        }
+                    </Row>
+                    <Divider />
+
+                    <Row gutter={[32, 32]} className="mt-5 pl-2 pr-2" style={{ overflow: 'visible' }}>
+                        {
+                            suggestCourses.map(course => (
+                                <Col span={6} style={{ overflow: 'visible' }}>
+                                    <CourseCard
+                                        key={course.id}
+                                        course={course}
+                                        onClick={() => history.push(`/courses/${course.slug}`)} />
+                                </Col>
+                            ))
+                        }
+                        <Col span={24}>
+                            <Pagination defaultCurrent={1} total={maxSize} onChange={(page, pageSize) => dispatch(getAllStart(page))} />
+                        </Col>
+                    </Row>
 
 
-                <Row gutter={[16, 16]}>
-                    {
-                        suggestPrograms.map(program => (
-                            <Col key={program.id} span={6}>
-                                <Card
-                                    hoverable onClick={() => history.push(`/programs/${program.slug}`)} loading={isGetting}>
-                                    <Meta
-                                        avatar={<Avatar size={48} src={program.icon} />}
-                                        title={program.name}
-                                        description={<Row><Col>Số môn: {program.courses_count}</Col></Row>}
-                                    />
-                                </Card>
-                            </Col>
-                        )
-                        )
-                    }
-                </Row>
+                </Spin>
             </section>
 
         </main>

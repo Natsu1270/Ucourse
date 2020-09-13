@@ -3,7 +3,7 @@ import { Card } from 'antd'
 import CourseCardSub from "./course-card-sub.component";
 
 const CourseCard = ({ course, onClick, isBought }) => {
-    
+
     const { Meta } = Card;
     return (
         <div
@@ -19,6 +19,7 @@ const CourseCard = ({ course, onClick, isBought }) => {
                 level={course.level}
                 open_date={course.open_date}
                 isBought={isBought}
+                price={course.price}
             />
 
         </div>

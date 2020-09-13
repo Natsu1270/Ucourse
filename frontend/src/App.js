@@ -13,7 +13,7 @@ import { tokenSelector, currentUserSelector, userRoleSelector } from './redux/Au
 
 import 'antd/dist/antd.css'
 import './App.scss';
-import { Spin, Layout } from 'antd';
+import { Spin, Layout, BackTop } from 'antd';
 import PrivateRoute from "./components/Common/private-route.component";
 import AuthRoute from "./components/Common/auth-route.component";
 import { getProfileStart } from "./redux/Profile/profile.actions";
@@ -198,6 +198,7 @@ function App() {
                                     <Route component={Page404NotFound} />
                                 </Switch>
                             </Suspense>
+                            <BackTop />
                         </Content>
                     </Switch>
 

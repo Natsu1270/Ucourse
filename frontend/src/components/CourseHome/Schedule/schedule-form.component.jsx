@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Form, Button, Input, Upload, Radio, Switch, Skeleton,
     List, Space, DatePicker, InputNumber, Popconfirm,
@@ -32,6 +32,9 @@ const ScheduleForm = (
     }
 ) => {
 
+
+
+    const [isYoutube, setYoutube] = useState(false)
     const props = {
         onRemove: file => {
             setFile([])
@@ -42,6 +45,15 @@ const ScheduleForm = (
         },
         fileList,
     };
+
+    const checkYoutube = (e) => {
+        const value = e.target.value
+        if (value == 'youtube') {
+            setYoutube(true)
+        } else {
+            setYoutube(false)
+        }
+    }
 
     const assFileProps = {
         onRemove: file => {
@@ -259,6 +271,8 @@ const ScheduleForm = (
             </Form>
         )
     }
+
+
     return (
         <Form
             name="asset_form"
@@ -267,7 +281,8 @@ const ScheduleForm = (
             initialValues={{
                 assetName: editingAsset.title,
                 description: editingAsset.info,
-                fileType: editingAsset.file_type
+                fileType: editingAsset.file_type,
+                youtube_src: editingAsset.youtube_src
             }}
         >
             <Form.Item
@@ -288,33 +303,49 @@ const ScheduleForm = (
             <Form.Item
                 hasFeedback
                 name="fileType" label="Loại bài giảng">
-                <Radio.Group>
+                <Radio.Group onChange={checkYoutube}>
                     <Radio value="pdf">PDF</Radio>
                     <Radio value="doc">DOC</Radio>
                     <Radio value="video">Video</Radio>
+                    <Radio value="youtube">Nhúng từ Youtube</Radio>
                     <Radio value="other">Loại khác</Radio>
                 </Radio.Group>
             </Form.Item>
 
-            <Form.Item
-                hasFeedback
-                name="file"
-                label="File bài giảng"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                rules={[
-                    {
-                        required: !isEditAsset,
-                        message: 'Vui lòng tải lên file bài giảng',
-                    },
-                ]}
-            >
-                <Upload {...props} name="file" multiple={false}>
-                    <Button disabled={fileList.length > 0}>
-                        <UploadOutlined /> Nhấn để chọn file
+            {
+                isYoutube ? <Form.Item
+                    hasFeedback
+                    {...formItemLayout}
+                    name="youtube_src"
+                    label="Đường dẫn youtube"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Vui lòng tải nhập link youtube',
+                        },
+                    ]}
+                >
+                    <Input placeholder="Nhập mô tả bải giảng" value={name} />
+                </Form.Item> : <Form.Item
+                    hasFeedback
+                    name="file"
+                    label="File bài giảng"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    rules={[
+                        {
+                            required: !isEditAsset || isYoutube,
+                            message: 'Vui lòng tải lên file bài giảng',
+                        },
+                    ]}
+                >
+                        <Upload {...props} name="file" multiple={false} disabled={isYoutube}>
+                            <Button disabled={fileList.length > 0}>
+                                <UploadOutlined /> Nhấn để chọn file
                 </Button>
-                </Upload>
-            </Form.Item>
+                        </Upload>
+                    </Form.Item>
+            }
 
             <Form.Item
                 hasFeedback

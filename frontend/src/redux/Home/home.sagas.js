@@ -4,9 +4,9 @@ import HomeActionTypes from "./home.types"
 import * as HomeActions from './home.actions'
 import * as HomeService from '../../api/home.services'
 
-export function* getAllCoursesAndPrograms() {
+export function* getAllCoursesAndPrograms({ payload }) {
     try {
-        let { data } = yield call(HomeService.getAllAPI)
+        let { data } = yield call(HomeService.getAllAPI, payload)
         yield put(HomeActions.getAllSuccess(data.data))
     } catch (e) {
         yield put(HomeActions.getAllFail(e.response))

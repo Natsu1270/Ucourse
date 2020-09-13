@@ -116,12 +116,14 @@ class TopicAsset(models.Model):
     VIDEO = 'video'
     DOCUMENT = 'doc'
     PDF = 'pdf'
+    YOUTUBE = 'youtube'
     OTHER = 'other'
 
     MEDIA_CHOICES = [
         (VIDEO, 'Video'),
         (DOCUMENT, 'Document'),
         (PDF, 'PDF'),
+        (YOUTUBE, 'Youtube Embed'),
         (OTHER, 'Other'),
     ]
 
@@ -140,6 +142,7 @@ class TopicAsset(models.Model):
     file = models.FileField(upload_to=asset_upload_path)
     file_type = models.CharField(
         max_length=10, choices=MEDIA_CHOICES, blank=True, null=True)
+    youtube_src = models.CharField(max_length=200, blank=True, null=True)
     views = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='lecture_viewed', blank=True)
     status = models.BooleanField(default=True)
     info = models.CharField(max_length=255, null=True, blank=True)

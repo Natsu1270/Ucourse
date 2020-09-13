@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { parseHtml } from "../../utils/text.utils";
-import { Button, message, Skeleton, Space } from "antd";
+import { Avatar, Button, message, Skeleton, Space } from "antd";
 import { EditOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons'
 
 import CKEditor from '@ckeditor/ckeditor5-react'
@@ -8,7 +8,7 @@ import CKEditorInline from '@ckeditor/ckeditor5-build-classic'
 
 import { updateCourseHomeInfo } from "../../api/courseHome.services";
 
-const CourseHomeInfo = ({ courseInfo, isLoading, userRole, token, slug }) => {
+const CourseHomeInfo = ({ courseInfo, isLoading, userRole, token, slug, teacher }) => {
 
     const [editing, setEditing] = useState(false)
     const [info, setInfo] = useState(courseInfo)
@@ -78,6 +78,10 @@ const CourseHomeInfo = ({ courseInfo, isLoading, userRole, token, slug }) => {
                     </CKEditor> :
                         parseHtml(info)
                 }
+                <Space>
+                    <Avatar size={64} src={teacher.avatar} />
+                    <span className="text--sub__bigger"> - {teacher.fullname}</span>
+                </Space>
 
             </Skeleton>
         </section>

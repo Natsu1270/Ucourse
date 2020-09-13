@@ -8,8 +8,9 @@ import { Link, useHistory } from 'react-router-dom'
 import Avatar from 'antd/lib/avatar/avatar'
 const { TabPane } = Tabs
 
-const CourseHomeStudent = ({ students, isLoading }) => {
+const CourseHomeStudent = ({ students, isLoading, teacher }) => {
     const [studentData, setStudents] = useState([])
+    const [teacherDetail, setTeacher] = useState({})
     // getCourseHomeDetailAPI(studentId).then(response => {
     //     setStudents(response.CourseHomeStudent.data.data)
     // })
@@ -25,6 +26,10 @@ const CourseHomeStudent = ({ students, isLoading }) => {
             lastLogin: student.last_login
         })));
     }, [students])
+
+    useEffect(() => {
+        if (teacher) setTeacher(teacher)
+    }, [teacher])
 
 
 
@@ -66,6 +71,9 @@ const CourseHomeStudent = ({ students, isLoading }) => {
             <h3 className="text--main mb-5">
                 Danh sách học viên
             </h3>
+            <p className="text--sub__bigger2 text-black" onClick={() => window.open(`/user/${teacherDetail.username}`)}>
+                Giảng viên : {teacherDetail.fullname}
+            </p>
             <Table bordered pagination={{ pageSize: 5 }} size="large" dataSource={studentData} columns={columns} />
         </section>
     )

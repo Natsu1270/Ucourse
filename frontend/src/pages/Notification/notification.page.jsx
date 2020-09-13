@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Timeline, Spin, Divider, Row, Col, message, Space, Alert } from 'antd'
+import { Timeline, Spin, Divider, Row, Col, message, Space, Alert, Skeleton, Button } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import Constants from '../../constants'
 import { formatDate } from '../../utils/text.utils'
 import './notification.styles.scss'
-import { readNotification } from '../../api/notification.services'
+import { deleteNotification, readNotification } from '../../api/notification.services'
 import { TeamOutlined, ReadOutlined, RocketOutlined, LaptopOutlined, FileProtectOutlined } from '@ant-design/icons'
 import ResultComponent from '../../components/Common/result.component'
 
@@ -27,11 +27,12 @@ const NotificationPage = ({ notifications, loading }) => {
 
     useEffect(() => {
         if (notifications.length) {
-            const notiList = notifications.map(n => {
+            const notiList = notifications.flatMap(n => {
                 const reference = n.reference_object
+                if (reference == null) return []
                 let content = ""
                 let onClick = null
-                if (n.type === "1") {
+                if (n.type === "1" && reference != null) {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/courses/${reference.slug}`, '_self')
@@ -41,7 +42,7 @@ const NotificationPage = ({ notifications, loading }) => {
                         <ReadOutlined /> Đăng ký thành công khóa học <span className="b-500">{reference.title}</span>
                     </Space>
                 }
-                if (n.type === "2") {
+                if (n.type === "2" && reference != null) {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/programs/${reference.slug}`, '_self')
@@ -50,7 +51,7 @@ const NotificationPage = ({ notifications, loading }) => {
                         <RocketOutlined /> Đăng ký thành công chương trình học <span className="b-500">{reference.name}</span>
                     </Space>
                 }
-                if (n.type === "3") {
+                if (n.type === "3" && reference != null) {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/learn/${reference.slug}`, '_self')
@@ -59,7 +60,7 @@ const NotificationPage = ({ notifications, loading }) => {
                         <LaptopOutlined /> Đăng ký thành công lớp <span className="b-500">{reference.full_name}</span>
                     </Space>
                 }
-                if (n.type === "4") {
+                if (n.type === "4" && reference != null) {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(`/learn/${reference.course_home.slug}/forums`, '_self')
@@ -69,7 +70,7 @@ const NotificationPage = ({ notifications, loading }) => {
                     </Space>
                 }
 
-                if (n.type === "5") {
+                if (n.type === "5" && reference != null) {
                     onClick = () => {
                         readNoti(n.id)
                         window.open(
@@ -81,7 +82,7 @@ const NotificationPage = ({ notifications, loading }) => {
                     </span>
                 }
 
-                if (n.type === "6") {
+                if (n.type === "6" && reference != null) {
                     if (reference) {
                         onClick = () => {
                             readNoti(n.id)
@@ -95,11 +96,25 @@ const NotificationPage = ({ notifications, loading }) => {
                         </span>
                     }
                 }
-                return { ...n, content, onClick }
+                return [{ ...n, content, onClick }]
             })
             setMyNotifications(notiList)
         }
     }, [notifications])
+
+    const deleteNoti = async (id) => {
+
+        setLoading(true)
+        try {
+            const { data } = await deleteNotification(id)
+            message.success('Xóa thông báo thành công')
+            const updateNotifications = myNotifications.filter(n => n.id != id)
+            setMyNotifications(updateNotifications)
+        } catch (err) {
+            message.error('Có lỗi xảy ra: ' + err.message)
+        }
+        setLoading(false)
+    }
 
     return (
         <section className="section-10 page">
@@ -109,30 +124,35 @@ const NotificationPage = ({ notifications, loading }) => {
                 </h3>
                 <Divider />
                 <Spin spinning={loading} indicator={Constants.SPIN_ICON}>
-                    {
-                        myNotifications.length ? 
-                            (<Timeline >
-                                {
-                                    myNotifications.map(n => {
-        
-                                        return (
-                                            <Timeline.Item
-                                                onClick={n.onClick}
-                                                key={n.id} color={n.is_read ? 'green' : 'red'}>
-                                                <Row className={`noti-item ${!n.is_read ? 'is-read' : null}`} gutter={16}>
-                                                    <Col>
-                                                        <span style={{ fontStyle: 'italic', fontSize: '1.4rem' }}>{formatDate(n.created_date, Constants.MMM_Do_YYYY)}</span>
-                                                    </Col>
-                                                    <Col>
-                                                        <span className="text--sub__bigger2">{n.content}</span>
-                                                    </Col>
-                                                </Row>
-                                            </Timeline.Item>
-                                        )
-                                    })
-                                }
-                            </Timeline>) : <ResultComponent type={Constants.RESULT_TYPE_NODATA} title="Hôp thư thông báo rỗng" info="Bạn chưa có thông báo nào" />
-                    }
+                    <Skeleton active paragraph={{ rows: 4 }} loading={loading}>
+                        {
+                            myNotifications.length ?
+                                (<Timeline >
+                                    {
+                                        myNotifications.map(n => {
+
+                                            return (
+                                                <Timeline.Item
+
+                                                    key={n.id} color={n.is_read ? 'green' : 'red'}>
+                                                    <Row gutter={16} align="middle" className={`noti-item ${!n.is_read ? 'is-read' : null}`}>
+                                                        <Col span={3}>
+                                                            <span style={{ fontStyle: 'italic', fontSize: '1.4rem' }}>{formatDate(n.created_date, Constants.MMM_Do_YYYY)}</span>
+                                                        </Col>
+                                                        <Col span={18} onClick={n.onClick}>
+                                                            <span className="text--sub__bigger2">{n.content}</span>
+                                                        </Col>
+                                                        <Col span={3} className="text-right">
+                                                            <Button type="primary" danger onClick={() => deleteNoti(n.id)}>Xóa</Button>
+                                                        </Col>
+                                                    </Row>
+                                                </Timeline.Item>
+                                            )
+                                        })
+                                    }
+                                </Timeline>) : <ResultComponent type={Constants.RESULT_TYPE_NODATA} title="Hôp thư thông báo rỗng" info="Bạn chưa có thông báo nào" />
+                        }
+                    </Skeleton>
                 </Spin>
             </div>
         </section>

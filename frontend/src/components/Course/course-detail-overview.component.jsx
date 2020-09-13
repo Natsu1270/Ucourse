@@ -55,11 +55,11 @@ const CourseDetailOverview = ({ full_description, open_date, end_date, level, be
                 </Skeleton>
 
                 {benefits ? <div>
-                    <h3 className="theme-font-color">Bạn sẽ học được từ khóa học</h3>
+                    <h3 className="text--main">Bạn sẽ học được từ khóa học</h3>
                     <div className="section-course-overview__detail-items">
                         <div className="section-course-overview__detail-item">
 
-                            <div className="section-course-overview__detail-text">
+                            <div className="section-course-overview__detail-text pl-5">
                                 {
                                     parseHtml(benefits)
                                 }
@@ -69,7 +69,7 @@ const CourseDetailOverview = ({ full_description, open_date, end_date, level, be
                 </div> : <span />}
                 {
                     skills ? (<div className="section-course-overview__skill mt-5">
-                        <h3 className="theme-font-color">Các kỹ năng sẽ đạt được</h3>
+                        <h3 className="text--main">Các kỹ năng sẽ đạt được</h3>
                         <ul className="section-course-overview__skill--sets">
                             {
                                 skills.map(skill => <Skill key={skill} skill={skill} />)

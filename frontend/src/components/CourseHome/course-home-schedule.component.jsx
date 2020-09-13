@@ -57,12 +57,12 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
 
     const createAsset = async (values) => {
         setLoading(true)
-        const { assetName: name, description: info, fileType: file_type } = values
+        const { assetName: name, description: info, fileType: file_type, youtube_src } = values
         const data = {
-            token, learning_topic: editingTopic, name, info, file_type, file: fileList[0]
+            token, learning_topic: editingTopic, name, info, file_type, file: fileList[0], youtube_src
         }
         const editData = {
-            token, id: editingAsset.id, name, info, file_type, file: fileList[0]
+            token, id: editingAsset.id, name, info, file_type, file: fileList[0], youtube_src
         }
         try {
 
@@ -170,6 +170,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
     }
 
     const handleClose = () => {
+        setInfo(null)
         setShowModal(false)
         setEditingAsset({})
         setEditingTopic({})
@@ -282,6 +283,7 @@ const CourseHomeSchedule = ({ topics, isLoading, userRole, token, course, course
                             <Button onClick={() => {
                                 setShowModal(true)
                                 setIsCreateTopic(true)
+                                setInfo(null)
                             }
                             } type="primary">Thêm chủ đề học</Button> : null
                         : null

@@ -4,7 +4,7 @@ const initState = {
     coursesAndPrograms: null,
     isGetting: false,
     errorResponse: null,
-    myCoursesAndPrograms: null
+    myCoursesAndPrograms: null,
 };
 
 const homeReducer = (state = initState, action) => {

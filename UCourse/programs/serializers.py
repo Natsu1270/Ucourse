@@ -35,12 +35,13 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
     is_my_program = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
     bought_courses = serializers.SerializerMethodField(read_only=True)
+    completed_courses = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Program
         fields = [
             'id', 'name', 'icon', 'slug', 'discount_percentage', 'price',
-            'program_course', 'benefits', 'pre_requisites',
+            'program_course', 'benefits', 'pre_requisites', 'completed_courses',
             'courses_count', 'status', 'field', 'bought_courses',
             'short_description', 'full_description', 'is_my_program'
         ]
@@ -64,9 +65,19 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
 
     def get_bought_courses(self, obj):
         user = self.context.get('user')
-        program_courses = obj.program_course.all()
-        queryset = [course for course in program_courses if course.check_is_bought(student=user)]
-        return CourseMinSerializer(instance=queryset, many=True).data
+        if user and not user.is_anonymous:
+            program_courses = obj.program_course.all()
+            queryset = [course for course in program_courses if course.check_is_bought(student=user)]
+            return CourseMinSerializer(instance=queryset, many=True).data
+        return []
+
+    def get_completed_courses(self, obj):
+        user = self.context.get('user')
+        if user and not user.is_anonymous:
+            program_courses = obj.program_course.all()
+            queryset = [course for course in program_courses if course.check_is_completed(student=user)]
+            return CourseMinSerializer(instance=queryset, many=True).data
+        return []
 
 
 class ProgramSearchSerializer(serializers.ModelSerializer):

@@ -2,11 +2,12 @@ import axios from 'axios'
 
 const GET_ALL_URL = '/api/all'
 
-export function getAllAPI() {
+export function getAllAPI(page) {
     return axios.request({
         headers: { 'Content-Type': 'application/json' },
         method: 'GET',
-        url: GET_ALL_URL
+        url: GET_ALL_URL,
+        params: { page }
     })
 }
 
@@ -29,6 +30,13 @@ export function getTransactionHistory(token) {
         headers,
         method: 'GET',
         url: `${GET_ALL_URL}/transaction-history`
+    })
+}
+
+export function getMaterialCount() {
+    return axios.request({
+        method: 'GET',
+        url: `${GET_ALL_URL}/total-material`
     })
 }
 

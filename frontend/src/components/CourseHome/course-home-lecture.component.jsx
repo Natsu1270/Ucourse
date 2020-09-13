@@ -89,11 +89,15 @@ const CourseHomeLecture = ({ token }) => {
                         <Row gutter={24}>
                             <Col span={15}>
                                 <div className="page-card">
-                                    {
-                                        lecture.file_type === "video" ? (<div className="course-lecture--video">
-                                            <VideoPlayer videoUrl={lecture.file} videoId={lecture.id} />
-                                        </div>) : <FileViewer filePath={lecture.file} fileType={lecture.file_type} />
-                                    }
+                                    <div className="course-lecture--video">
+                                        <VideoPlayer
+                                            videoUrl={lecture.file}
+                                            videoId={lecture.id}
+                                            fileType={lecture.file_type}
+                                            src={lecture.youtube_src}
+                                        />
+                                    </div>)
+
                                 </div>
                             </Col>
                             <Col span={9}>

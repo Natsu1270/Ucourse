@@ -1,7 +1,9 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 
 from rest_framework import views, status, generics, permissions
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from api.utils import uc_response
 from certificates.models import StudentCertificate
@@ -14,18 +16,31 @@ from programs.models import Program, StudentProgram, UserBuyProgram
 from courses.serializers import CourseSearchSerializer, CourseMySerializer
 from programs.serializers import ProgramSearchSerializer, ProgramMinSerializer, StudentProgramSerializer, \
     ProgramProcessSerializer
+from users.models import User
 
 
-class GetAllAPI(views.APIView):
+class GetAllAPI(generics.GenericAPIView):
 
-    @staticmethod
-    def get(request):
+    pagination_class = PageNumberPagination
 
-        courses = Course.objects.all().order_by('-created_date')[:12]
-        programs = Program.objects.all().order_by('-created_date')[:10]
+    def get(self, request, *args, **kwargs):
+
+        # courses = Course.objects.all().order_by('-created_date')[:12]
+        courses = Course.objects.all().order_by('created_date')
+        programs = Program.objects.all().order_by('-created_date')
+        paginator = Paginator(courses, 8)
+        page = self.request.query_params.get('page')
+        try:
+            courses = paginator.page(page)
+        except PageNotAnInteger:
+            courses = paginator.page(1)
+        except EmptyPage:
+            courses = paginator.page(paginator.num_pages)
+
         data = {
             "courses": CourseSearchSerializer(instance=courses, many=True).data,
-            "programs": ProgramSearchSerializer(instance=programs, many=True).data
+            "programs": ProgramSearchSerializer(instance=programs, many=True).data,
+            "maxSize": paginator.num_pages * 8
         }
 
         return Response(
@@ -133,3 +148,17 @@ class SearchRegisterCourses(generics.GenericAPIView):
             data=CourseMySerializer(instance=courses, context=self.get_serializer_context(), many=True).data,
             status=status.HTTP_200_OK
         )
+
+
+class GetTotalMaterialCount(generics.GenericAPIView):
+
+    def get(self, request, *args, **kwargs):
+        course_count = Course.objects.filter(status='active').count()
+        program_count = Program.objects.filter(status=True).count()
+        teacher_count = User.objects.filter(role__code='TC').count()
+
+        return Response({
+            "courseCount": course_count,
+            "programCount": program_count,
+            "teacherCount": teacher_count
+        })

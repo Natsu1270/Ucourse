@@ -59,6 +59,7 @@ const Constants = {
     SPIN_ICON_WHITE: spinWhite,
     COURSE_HOME_LINK: '/learn',
     VIDEO_FILE_TYPE: 'video',
+    YOUTUBE: 'youtube',
     PDF_FILE_TYPE: 'pdf',
     DOC_FILE_TYPE: 'doc',
     DOCUMENT_FILE_TYPE: 'document',

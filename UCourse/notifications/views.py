@@ -66,3 +66,8 @@ class CreateRegisterNotification(generics.GenericAPIView):
         return Response({
             "result": True
         }, status=status.HTTP_201_CREATED)
+
+
+class DeleteNotification(generics.DestroyAPIView):
+    serializer_class = serializers.NotificationsSerializer
+    queryset = Notification.objects.all()

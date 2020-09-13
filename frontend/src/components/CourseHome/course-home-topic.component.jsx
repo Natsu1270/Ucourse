@@ -81,7 +81,7 @@ const CourseHomeTopic = ({
 
     function gotoLecture(assetId, fileUrl, type) {
         if (
-            type === Constants.VIDEO_FILE_TYPE
+            type === Constants.VIDEO_FILE_TYPE || type == Constants.YOUTUBE
         ) {
             history.push(`lecture/${topic.id}/${assetId}`)
         } else {

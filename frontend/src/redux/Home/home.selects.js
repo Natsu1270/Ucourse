@@ -29,6 +29,12 @@ export const homeCoursesSelector = createSelector(
         coursesAndPrograms.courses : []
 )
 
+export const maxSizeSelector = createSelector(
+    [coursesAndProgramsSelector],
+    coursesAndPrograms => coursesAndPrograms.maxSize ?
+        coursesAndPrograms.maxSize : 0
+)
+
 
 export const myCoursesAndProgramsSelector = createSelector(
     [homeSelector],

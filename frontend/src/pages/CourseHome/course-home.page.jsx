@@ -102,6 +102,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                         userRole={userRole}
                         token={token}
                         slug={slug}
+                        teacher={courseHomeDetail.teacher || {}}
                     />
                 </Route>
                 <Suspense fallback={Constants.SPIN_ICON}>
@@ -159,7 +160,7 @@ const CourseHomePage = ({ myCourses, userRole }) => {
                 </Route>
 
                 <Route exact path={`${match.url}/students`}>
-                    <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} />
+                    <CourseHomeStudent students={courseHomeDetail.students} isLoading={isLoading} teacher={courseHomeDetail.teacher} />
                 </Route>
 
                 <Route exact path={`${match.url}/calendar`}>

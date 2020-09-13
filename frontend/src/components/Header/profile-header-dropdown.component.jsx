@@ -13,7 +13,7 @@ import {
     ReadOutlined,
     SmileOutlined,
     TrophyOutlined,
-    HeartOutlined 
+    HeartOutlined
 } from "@ant-design/icons";
 
 
@@ -45,33 +45,33 @@ const ProfileHeaderDropdown = (props) => {
                 </Link>
             </Menu.Item>
 
-            {userrole ? userrole === "SD" || username === "TC" ?    
-            <Menu.Item>
-                <Link to="/my-courses" style={styles}>
-                    <ReadOutlined /> Khoá học của tôi
+            {userrole ? userrole === "SD" || username === "TC" ?
+                <Menu.Item>
+                    <Link to="/my-courses" style={styles}>
+                        <ReadOutlined /> Khoá học của tôi
                 </Link>
-            </Menu.Item> :null :null }
+                </Menu.Item> : null : null}
 
             {userrole ? userrole === "SD" ?
-            <Menu.Item>  
-                <Link to="/my-favorite-courses" style={styles}>
-                    <HeartOutlined /> Các khóa học yêu thích
-                </Link> 
-            </Menu.Item> : null : null }
-            
-            {userrole ? userrole === "SD" ?
-            <Menu.Item>  
-                <Link to="/my-certificates" style={styles}>
-                    <TrophyOutlined /> Chứng chỉ của tôi
-                </Link> 
-            </Menu.Item> : null : null }
+                <Menu.Item>
+                    <Link to="/favorite-courses" style={styles}>
+                        <HeartOutlined /> Các khóa học yêu thích
+                </Link>
+                </Menu.Item> : null : null}
 
             {userrole ? userrole === "SD" ?
-            <Menu.Item>
-                <Link to="/ability-tests" style={styles}>
-                    <AppstoreOutlined /> Tổng hợp
-                </Link>     
-            </Menu.Item> : null : null }
+                <Menu.Item>
+                    <Link to="/my-certificates" style={styles}>
+                        <TrophyOutlined /> Chứng chỉ của tôi
+                </Link>
+                </Menu.Item> : null : null}
+
+            {userrole ? userrole === "SD" ?
+                <Menu.Item>
+                    <Link to="/ability-tests" style={styles}>
+                        <AppstoreOutlined /> Tổng hợp
+                </Link>
+                </Menu.Item> : null : null}
 
             <Menu.Item>
                 <Link to="/profile" style={styles}>

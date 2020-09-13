@@ -47,7 +47,7 @@ class ProgramDetailAPI(generics.RetrieveAPIView):
         return Response(serializer.data)
 
     def get_serializer_context(self):
-        return {"user": self.request.user}
+        return {"user": self.request.user, "request": self.request}
 
 
 class BuyProgramAPI(generics.GenericAPIView):

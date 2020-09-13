@@ -29,3 +29,10 @@ export function readNotification(id) {
     })
 }
 
+export function deleteNotification(id) {
+    return axios.request({
+        headers: { 'Content-Type': 'application/json' },
+        method: 'DELETE',
+        url: `${API_URL}/delete/${id}`,
+    })
+}

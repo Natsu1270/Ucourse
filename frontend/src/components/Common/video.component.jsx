@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import plyr from 'plyr';
 import "plyr/dist/plyr.css"
 
-export default function VideoPlayer({videoUrl, videoId}) {
+export default function VideoPlayer({ videoUrl, videoId, fileType, src }) {
     const target = `plyr-player-${videoId}`
     const options = {
         controls: [
@@ -39,11 +39,21 @@ export default function VideoPlayer({videoUrl, videoId}) {
         }
     }, [])
     return (
-        <video id={target} playsInline controls data-poster="">
-            <source src={videoUrl} type="video/mp4"/>
-            <source src={videoUrl} type="video/webm"/>
+        fileType == 'video' ?
+            <video id={target} playsInline controls data-poster="">
+                <source src={videoUrl} type="video/mp4" />
+                <source src={videoUrl} type="video/webm" />
 
-            {/*<track kind="captions" label="English captions" src="/path/to/captions.vtt" srcLang="en" default/>*/}
-        </video>
+                {/*<track kind="captions" label="English captions" src="/path/to/captions.vtt" srcLang="en" default/>*/}
+            </video> : <div class="plyr__video-embed" id={target}>
+                <iframe
+                    src={src}
+                    allowfullscreen
+                    allowtransparency
+                    allow="autoplay"
+                ></iframe>
+            </div>
+
+
     );
 }

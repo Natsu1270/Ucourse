@@ -7,7 +7,7 @@ import { renderPrice } from '../../utils/text.utils';
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
-const ProgramDetailComponents = ({ courses, boughtCourses }) => {
+const ProgramDetailComponents = ({ courses, boughtCourses, completedCourses }) => {
 
     const history = useHistory()
 
@@ -17,6 +17,42 @@ const ProgramDetailComponents = ({ courses, boughtCourses }) => {
     const adCourses = courses.filter(course => course.level === 'Advanced')
     const allLvCourses = courses.filter(course => course.level == 'All level')
 
+    const renderCourses = (courses) => {
+        return (<Row gutter={[16, 16]}>
+            {
+                courses.map(course => {
+                    const checkBought = boughtCourses.some(c => c.id == course.id)
+                    const checkCompleted = completedCourses.some(c => c.id == course.id)
+                    return (
+                        <Col key={course.code}>
+                            <Card
+                                hoverable
+                                className="program-card"
+                                style={{ width: 300 }}
+                                onClick={() => history.push(`/courses/${course.slug}`)}
+                            >
+                                <Meta
+                                    avatar={<Avatar size={48} src={course.icon} />}
+                                    title={course.title}
+                                    description={<Space>
+                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                        {
+                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                        }
+                                        {
+                                            checkCompleted ? <Tag color="#f50">Đã hoàn thành</Tag> : null
+                                        }
+                                    </Space>}
+                                />
+                            </Card>
+
+                        </Col>
+                    )
+                })
+            }
+        </Row>)
+    }
+
     return (
         <section className="mt-5 page-card" id="cs-course-components">
             <div className="section-course-components__content">
@@ -25,130 +61,23 @@ const ProgramDetailComponents = ({ courses, boughtCourses }) => {
                 </h2>
                 <Tabs defaultActiveKey="1">
 
-                    <TabPane tab="Khóa cơ bản" key="1" style={{ fontSize: '2rem' }}>
-                        <Row gutter={[16, 16]}>
-                            {
-                                bgCourses.map(course => {
-                                    const checkBought = boughtCourses.some(c => c.id == course.id)
-                                    return (
-                                        <Col key={course.code}>
-                                            <Card
-                                                hoverable
-                                                className="program-card"
-                                                style={{ width: 300 }}
-                                                onClick={() => history.push(`/courses/${course.slug}`)}
-                                            >
-                                                <Meta
-                                                    avatar={<Avatar size={48} src={course.icon} />}
-                                                    title={course.title}
-                                                    description={<Space>
-                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
-                                                        {
-                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
-                                                        }
-                                                    </Space>}
-                                                />
-                                            </Card>
+                    {bgCourses.length ? <TabPane tab="Khóa cơ bản" key="1" style={{ fontSize: '2rem' }}>
+                        {renderCourses(bgCourses)}
+                    </TabPane> : null}
+                    {
+                        mdCourses.length ? <TabPane key="2" style={{ fontSize: '2rem' }} tab="Khóa trung cấp" >
+                            {renderCourses(mdCourses)}
+                        </TabPane> : null
+                    }
+                    {
+                        adCourses.length ? <TabPane key="3" style={{ fontSize: '2rem' }} tab="Khóa nâng cao" >
+                            {renderCourses(adCourses)}
+                        </TabPane> : null
+                    }
 
-                                        </Col>
-                                    )
-                                })
-                            }
-                        </Row>
-                    </TabPane>
-                    <TabPane key="2" style={{ fontSize: '2rem' }} tab="Khóa trung cấp" >
-                        <Row gutter={[16, 16]}>
-                            {
-                                mdCourses.map(course => {
-                                    const checkBought = boughtCourses.some(c => c.id == course.id)
-                                    return (
-                                        <Col key={course.code}>
-                                            <Card
-                                                hoverable
-                                                className="program-card"
-                                                style={{ width: 300 }}
-                                                onClick={() => history.push(`/courses/${course.slug}`)}
-                                            >
-                                                <Meta
-                                                    avatar={<Avatar size={48} src={course.icon} />}
-                                                    title={course.title}
-                                                    description={<Space>
-                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
-                                                        {
-                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
-                                                        }
-                                                    </Space>}
-                                                />
-                                            </Card>
-
-                                        </Col>
-                                    )
-                                })
-                            }
-                        </Row>
-                    </TabPane>
-                    <TabPane key="3" style={{ fontSize: '2rem' }} tab="Khóa nâng cao" >
-                        <Row gutter={[16, 16]}>
-                            {
-                                adCourses.map(course => {
-                                    const checkBought = boughtCourses.some(c => c.id == course.id)
-                                    return (
-                                        <Col key={course.code}>
-                                            <Card
-                                                hoverable
-                                                className="program-card"
-                                                style={{ width: 300 }}
-                                                onClick={() => history.push(`/courses/${course.slug}`)}
-                                            >
-                                                <Meta
-                                                    avatar={<Avatar size={48} src={course.icon} />}
-                                                    title={course.title}
-                                                    description={<Space>
-                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
-                                                        {
-                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
-                                                        }
-                                                    </Space>}
-                                                />
-                                            </Card>
-
-                                        </Col>
-                                    )
-                                })
-                            }
-                        </Row>
-                    </TabPane>
-
-                    <TabPane key="4" style={{ fontSize: '2rem' }} tab="Khóa tổng hợp" >
-                        <Row gutter={[16, 16]}>
-                            {
-                                allLvCourses.map(course => {
-                                    const checkBought = boughtCourses.some(c => c.id == course.id)
-                                    return (
-                                        <Col key={course.code}>
-                                            <Card
-                                                hoverable
-                                                className="program-card"
-                                                style={{ width: 300 }}
-                                                onClick={() => history.push(`/courses/${course.slug}`)}
-                                            >
-                                                <Meta
-                                                    avatar={<Avatar size={48} src={course.icon} />}
-                                                    title={course.title}
-                                                    description={<Space>
-                                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
-                                                        {
-                                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
-                                                        }
-                                                    </Space>}
-                                                />
-                                            </Card>
-                                        </Col>
-                                    )
-                                })
-                            }
-                        </Row>
-                    </TabPane>
+                    {allLvCourses.length ? <TabPane key="4" style={{ fontSize: '2rem' }} tab="Khóa tổng hợp" >
+                        {renderCourses(allLvCourses)}
+                    </TabPane> : null}
                 </Tabs>
             </div>
         </section>

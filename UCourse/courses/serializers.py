@@ -219,6 +219,14 @@ class CourseSearchSerializer(serializers.ModelSerializer):
     def get_view_count(obj):
         return UserViewCourse.objects.filter(course_id=obj.id).count()
 
+    # def get_is_completed(self, obj):
+    #     request = self.context.get('request', None)
+    #
+    #     if request and request.user and not request.user.is_anonymous:
+    #         return UserCourse.objects.filter(user=request.user, course_id=obj.id, status='pass').count() > 0
+    #     else:
+    #         return False
+
 
 class CourseMySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
