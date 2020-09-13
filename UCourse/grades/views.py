@@ -30,11 +30,11 @@ class GetStudentGradesAPI(generics.GenericAPIView):
 
         for exam in course_home_exams:
             if exam.mandatory:
-                total_grade += exam.max_score
+                total_grade += exam.max_score * exam.percentage / 100
 
         for assignment in course_home_assignments:
             if assignment.mandatory:
-                total_grade += assignment.max_score
+                total_grade += assignment.max_score * assignment.percentage / 100
         try:
             student_course_home = StudentCourseHome.objects.get(student=user, course_home_id=course_home_id)
             final_score = student_course_home.final_score
@@ -69,14 +69,14 @@ class GetAllStudentGradesAPI(generics.GenericAPIView):
         total_grade = 0
         for exam in course_home_exams:
             if exam.mandatory:
-                total_grade += exam.max_score
+                total_grade += exam.max_score * exam.percentage / 100
             student_exams = StudentExamResult.objects.filter(exam_id=exam.id)
             filter_exams[exam.name] = [ExamMinSerializer(instance=exam).data,
                                        StudentExamResultSerializer(instance=student_exams, many=True).data]
 
         for assignment in course_home_assignments:
             if assignment.mandatory:
-                total_grade += assignment.max_score
+                total_grade += assignment.max_score * assignment.percentage / 100
             student_assignments = StudentAssignment.objects.filter(assignment_id=assignment.id)
             filter_assignments[assignment.name] = [AssignmentMinSerializer(instance=assignment).data,
                                                    StudentAssignmentAllGradeSerializer(instance=student_assignments,

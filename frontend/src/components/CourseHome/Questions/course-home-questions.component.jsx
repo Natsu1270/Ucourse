@@ -229,7 +229,7 @@ const QuestionBank = ({ token }) => {
                         <Select placeholder="Chọn loại câu hỏi">
                             <Option value="mc">Chọn một đáp án</Option>
                             <Option value="cb">Chọn nhiều đáp án</Option>
-                            <Option value="tx">Câu hỏi văn bản</Option>
+                            {/* <Option value="tx">Câu hỏi văn bản</Option> */}
                         </Select>
                     </Form.Item>
 

@@ -71,9 +71,9 @@ const CourseHomeStudent = ({ students, isLoading, teacher }) => {
             <h3 className="text--main mb-5">
                 Danh sách học viên
             </h3>
-            <p className="text--sub__bigger2 text-black" onClick={() => window.open(`/user/${teacherDetail.username}`)}>
-                Giảng viên : {teacherDetail.fullname}
-            </p>
+            <Space className="text--sub__bigger2 text-black mb-3" onClick={() => window.open(`/user/${teacherDetail.username}`)}>
+                Giảng viên : <Avatar src={teacherDetail.avatar} size={58} /> <span style={{ color: 'blue', cursor: 'pointer', textDecoration: 'underline' }}>{teacherDetail.fullname}</span>
+            </Space>
             <Table bordered pagination={{ pageSize: 5 }} size="large" dataSource={studentData} columns={columns} />
         </section>
     )

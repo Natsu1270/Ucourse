@@ -172,8 +172,10 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
             } else {
                 if (data.errorCode == 1) {
                     message.error('Bạn đã thực hiện tối đa số lần làm bài cho phép')
-                } else {
+                } else if (data.errorCode == 2) {
                     message.error('Chưa đến thời gian được phép làm bài')
+                } else {
+                    message.error('Chưa có câu hỏi cho bài kiểm tra này')
                 }
             }
         } catch (err) {
@@ -514,7 +516,7 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
                                         <Select placeholder="Chọn loại câu hỏi">
                                             <Option value="mc">Chọn một đáp án</Option>
                                             <Option value="cb">Chọn nhiều đáp án</Option>
-                                            <Option value="tx">Câu hỏi văn bản</Option>
+                                            {/* <Option value="tx">Câu hỏi văn bản</Option> */}
                                         </Select>
                                     </Form.Item>
 

@@ -294,18 +294,18 @@ const AdminCertificateCourse = ({ }) => {
             <Table
                 bordered
                 loading={loading}
-                rowSelection={{
-                    type: "checkbox",
-                    selectedRowKeys,
-                    onChange: (selectedRowKeys, selectedRows) => {
-                        setSelectedRowKeys(selectedRowKeys)
-                        setSelectedRows(selectedRows)
-                    },
-                    getCheckboxProps: record => ({
-                        name: record.username,
-                        disabled: record.is_summarised == true || record.schStatus == 'on_going' || record.received
-                    })
-                }}
+                // rowSelection={{
+                //     type: "checkbox",
+                //     selectedRowKeys,
+                //     onChange: (selectedRowKeys, selectedRows) => {
+                //         setSelectedRowKeys(selectedRowKeys)
+                //         setSelectedRows(selectedRows)
+                //     },
+                //     getCheckboxProps: record => ({
+                //         name: record.username,
+                //         disabled: record.is_summarised == true || record.schStatus == 'on_going' || record.received
+                //     })
+                // }}
                 dataSource={finalData}
                 columns={columns}
             />
@@ -401,12 +401,9 @@ const AdminCertificateCourse = ({ }) => {
                 </div>
                 <Row className="mb-4">
                     <Col>
-                        {
-                            selectedRows.length > 0 ? <Button type="primary" onClick={() => summaryStudent(null, null, true)}
-                                style={{ background: "#3d1e6d", border: 'none' }}>
-                                <CloudSyncOutlined /> Tổng kết theo điểm các hàng đã chọn
-                        </Button> : <span style={{ fontSize: '1.6rem' }}>Chọn checkbox để tổng kết theo điểm hàng loạt</span>
-                        }
+
+                        <span style={{ fontSize: '1.6rem' }}>Chọn checkbox để tổng kết theo điểm hàng loạt</span>
+
                     </Col>
                 </Row>
                 <SummaryTable />

@@ -34,15 +34,24 @@ const ProgramDetailComponents = ({ courses, boughtCourses, completedCourses }) =
                                 <Meta
                                     avatar={<Avatar size={48} src={course.icon} />}
                                     title={course.title}
-                                    description={<Space>
-                                        <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                    description={<Row>
+                                        <Col span={24}>
+                                            <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                        </Col>
+
                                         {
-                                            checkBought ? <Tag color="#f50">Đã sở hữu</Tag> : null
+                                            checkBought ?
+                                                <Col>
+                                                    <Tag color="#f50">Đã sở hữu</Tag>
+
+                                                </Col> : null
                                         }
                                         {
-                                            checkCompleted ? <Tag color="#f50">Đã hoàn thành</Tag> : null
+                                            checkCompleted ? <Col>
+                                                <Tag color="#f50">Đã hoàn thành</Tag>
+                                            </Col> : null
                                         }
-                                    </Space>}
+                                    </Row>}
                                 />
                             </Card>
 

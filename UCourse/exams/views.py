@@ -122,7 +122,7 @@ class InitExamAPI(generics.GenericAPIView):
                 "errorCode": 1,
                 "message": "Reach limitation of try number"
             }, status=status.HTTP_200_OK)
-        if exam.start_date.now().__gt__(datetime.datetime.now()):
+        if exam.start_date and exam.start_date.now().__gt__(datetime.datetime.now()):
             return Response({
                 "result": False,
                 "errorCode": 2,
@@ -130,6 +130,12 @@ class InitExamAPI(generics.GenericAPIView):
             }, status=status.HTTP_200_OK)
 
         exam_questions = exam.questions.all()
+        if exam_questions.count() < 1:
+            return Response({
+                "result": False,
+                "errorCode": 3,
+                "message": "No questions"
+            }, status=status.HTTP_200_OK)
         question_num = exam.question_num
         # select random questions
         random_questions = random.sample(list(exam_questions), question_num)
