@@ -216,12 +216,12 @@ const PrivateExamList = ({ userRole, token, courseHomeDetail }) => {
             const resultList = studentExams.map(exam => exam.result)
             if (resultList.length === 0) return "Chưa có lần làm bài nào"
             if (examType === Constants.EXAM_GET_BEST) {
-                return Math.max(...resultList) + '/' + examDetail.total_score
+                return Math.max(...resultList) + '/' + examDetail.max_score
             } else if (examType === Constants.EXAM_GET_AVERAGE) {
                 const sum = resultList.reduce((x, y) => x + y, 0)
-                return sum / resultList.length + '/' + examDetail.total_score
+                return sum / resultList.length + '/' + examDetail.max_score
             } else {
-                return resultList[0] + '/' + examDetail.total_score
+                return resultList[0] + '/' + examDetail.max_score
             }
         }
     }

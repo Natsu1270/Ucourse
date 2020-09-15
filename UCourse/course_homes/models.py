@@ -84,7 +84,7 @@ class LearningTopic(models.Model):
     ]
 
     name = models.CharField(max_length=50)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(blank=True, null=True)
     info = RichTextField(blank=True, null=True)
     course_home = models.ForeignKey(
         CourseHome, related_name='learning_topics', on_delete=models.CASCADE)

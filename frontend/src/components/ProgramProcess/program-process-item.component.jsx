@@ -195,6 +195,7 @@ const ProgramProcessItem = ({ token, program, loading, studentCertificates }) =>
                         >
                             <Skeleton avatar title={false} loading={item.loading} active>
                                 <List.Item.Meta
+                                    onClick={() => window.open(`/courses/${item.slug}`)}
                                     avatar={
                                         <Avatar src={item.icon} size={48} />
                                     }

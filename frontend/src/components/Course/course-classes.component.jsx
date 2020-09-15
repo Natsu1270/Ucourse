@@ -131,7 +131,7 @@ const CourseClasses = ({ course, classes, isLoading, isOwn, token }) => {
                                 }
                             </Button>,
                             // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                            <Button onClick={() => history.push(`${course.slug}/${item.name}`)} key={`a-${item.id}`}>
+                            <Button onClick={() => history.push(`${course.slug}/class/${item.name}`)} key={`a-${item.id}`}>
                                 Chi tiết
                             </Button>,
                         ]}

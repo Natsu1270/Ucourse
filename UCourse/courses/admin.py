@@ -1,5 +1,11 @@
 from django.contrib import admin
+
+from course_homes.models import CourseHome
 from .models import Course, CourseDetail, Skill, UserBuyCourse
+
+
+class CourseHomeInline(admin.StackedInline):
+    model = CourseHome
 
 
 class CourseAdmin(admin.ModelAdmin):
@@ -9,6 +15,7 @@ class CourseAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     ordering = ('id',)
     readonly_fields = ('created_by', 'created_by_name', 'created_date', 'updated_date')
+    # inlines = [CourseHomeInline]
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:

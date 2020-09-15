@@ -84,7 +84,9 @@ const CourseHomeGradesTeacher = ({ token, courseHomeId, students }) => {
                         totalGrade={totalGrade}
                         loadingData={loading} userCourses={userCourses}
                         exams={exams} assignments={assignments} token={token}
-                        setEditFinal={setEditFinal} setShowModal={setShowModal} students={students} studentCourseHomes={studentCourseHomes}
+                        setEditFinal={setEditFinal}
+                        setShowModal={setShowModal}
+                        students={students} studentCourseHomes={studentCourseHomes}
                     />
                 </TabPane>
 

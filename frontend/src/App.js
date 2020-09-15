@@ -125,9 +125,9 @@ function App() {
                                     <Route exact path="/field" component={FieldPage} />
                                     <Route path="/field/:slug" component={FieldDetailPage} />
                                     <Route path="/programs/:slug" component={ProgramDetail} />
+                                    <Route exact path="/courses/:slug/class/:name" component={ClassDetailPage} />
                                     <Route path="/courses/:slug" component={CourseDetail} />
                                     {/* <Route exact path="/courses/:slug/redirect" component={CoursePaymentPage} /> */}
-                                    <Route exact path="/courses/:slug/:name" component={ClassDetailPage} />
                                     <Route exact path="/ability-tests" component={AbilityTestPage} />
                                     <Route path="/learn/:slug">
                                         <CourseHomePage myCourses={myCourses} userRole={userRole} />

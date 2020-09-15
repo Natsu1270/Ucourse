@@ -143,7 +143,7 @@ class UpdateStudentCourseHomeGrade(generics.GenericAPIView):
         rank = parse_rank_by_score(int(float(grade)))
 
         student_coursehome = StudentCourseHome.objects.get(pk=student_coursehome_id)
-        user_course = UserCourse.objects.get(user_id=student_id, course_home_id=student_coursehome.course_home_id)
+        user_course = UserCourse.objects.get(user_id=student_coursehome.student_id, course_home_id=student_coursehome.course_home_id)
         student_coursehome.final_score = grade
         student_coursehome.rank = rank
         student_coursehome.status = 'pass' if is_pass else 'fail'

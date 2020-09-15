@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Calendar, Badge } from 'antd';
 
 const CourseHomeCalendar = ({ courseHome }) => {
@@ -8,25 +8,19 @@ const CourseHomeCalendar = ({ courseHome }) => {
         switch (value.date()) {
             case 8:
                 listData = [
-                    { type: 'warning', content: 'This is warning event.' },
-                    { type: 'success', content: 'This is usual event.' },
+                    { type: 'warning', content: 'Bài kiểm tra chương 1' },
+
                 ];
                 break;
             case 10:
                 listData = [
-                    { type: 'warning', content: 'This is warning event.' },
-                    { type: 'success', content: 'This is usual event.' },
-                    { type: 'error', content: 'This is error event.' },
+                    { type: 'warning', content: 'Bài assignment 1' },
+
                 ];
                 break;
-            case 15:
+            case 25:
                 listData = [
-                    { type: 'warning', content: 'This is warning event' },
-                    { type: 'success', content: 'This is very long usual event。。....' },
-                    { type: 'error', content: 'This is error event 1.' },
-                    { type: 'error', content: 'This is error event 2.' },
-                    { type: 'error', content: 'This is error event 3.' },
-                    { type: 'error', content: 'This is error event 4.' },
+                    { type: 'warning', content: 'Hạn nộp bài assignment 1' },
                 ];
                 break;
             default:

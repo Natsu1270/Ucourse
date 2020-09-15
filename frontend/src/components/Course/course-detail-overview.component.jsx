@@ -30,7 +30,7 @@ const CourseDetailOverview = ({ full_description, open_date, end_date, level, be
         <section ref={overviewRef} className="mt-5 page-card" id="cs-course-overview">
             <div className="section-course-overview__content">
                 <h2 className="text--main section-header" id="cs-course-overview">
-                    Tổng quan về khóa học
+                    Tổng quan
                 </h2>
 
                 <Skeleton active paragraph={{ rows: 4 }} loading={isLoading}>
@@ -55,7 +55,7 @@ const CourseDetailOverview = ({ full_description, open_date, end_date, level, be
                 </Skeleton>
 
                 {benefits ? <div>
-                    <h3 className="text--main">Bạn sẽ học được từ khóa học</h3>
+                    <h3 className="text--main">Kiến thức sẽ đạt được</h3>
                     <div className="section-course-overview__detail-items">
                         <div className="section-course-overview__detail-item">
 

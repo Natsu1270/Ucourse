@@ -210,9 +210,8 @@ const PrivateHomePage = ({ ownCourses, ownPrograms }) => {
                     <Row gutter={[32, 32]} className="mt-5 pl-2 pr-2" style={{ overflow: 'visible' }}>
                         {
                             suggestCourses.map(course => (
-                                <Col span={6} style={{ overflow: 'visible' }}>
+                                <Col key={course.id} span={6} style={{ overflow: 'visible' }}>
                                     <CourseCard
-                                        key={course.id}
                                         course={course}
                                         onClick={() => history.push(`/courses/${course.slug}`)} />
                                 </Col>
