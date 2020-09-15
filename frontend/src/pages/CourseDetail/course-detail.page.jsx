@@ -1,8 +1,8 @@
 import React, { useEffect, lazy, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, useLocation } from 'react-router-dom'
 
-import { buyCourseStart, fetchCourseDetailStart } from '../../redux/Course/course.actions'
+import { buyCourseFinish, buyCourseStart, fetchCourseDetailStart } from '../../redux/Course/course.actions'
 import { Breadcrumb, Modal, Result, Button, message } from 'antd'
 import { HomeOutlined } from '@ant-design/icons'
 import { createStructuredSelector } from "reselect";
@@ -30,12 +30,16 @@ import { getCourseHomeShowStart } from "../../redux/CourseHome/course-home.actio
 import { tokenSelector, userRoleSelector } from "../../redux/Auth/auth.selects";
 import { registerCourseModalSelector } from "../../redux/UI/ui.selects";
 import { showRLModal, toggleRegisterCourseModal } from "../../redux/UI/ui.actions";
+import { buyCourseSuccessAPI } from '../../api/course.services';
 
 const AbilityTest = lazy(() => import("../../components/AbilityTest/ability-test.component"));
 
 const CourseDetail = () => {
+    const location = useLocation()
     const dispatch = useDispatch();
     const { slug } = useParams();
+    const params = new URLSearchParams(location.search);
+
     const {
         course, courseDetail, isFetching, errorResponse, token, registerCourseModal, errorRegister, courseHomeShows, userRole
     } = useSelector(createStructuredSelector({
@@ -55,9 +59,7 @@ const CourseDetail = () => {
     const [ownCourse, setOwnCourse] = useState(false);
 
     useEffect(() => {
-
         dispatch(fetchCourseDetailStart({ slug, token }));
-
         window.scrollTo(0, 0)
     }, []);
 
@@ -66,6 +68,34 @@ const CourseDetail = () => {
 
             dispatch(getCourseHomeShowStart({ token, course_id: course.id }))
             setOwnCourse(course.is_my_course)
+        }
+    }, [course])
+
+    const updatePayment = async () => {
+        // setIsCall(true)
+        const partnerRefId = params.get("orderId")
+        const requestId = params.get("requestId")
+        const errorCode = params.get("errorCode")
+        const extraData = params.get("extraData")
+
+        try {
+            const { data } = await buyCourseSuccessAPI({ token, partnerRefId, requestId, errorCode, extraData, course: course.id })
+            if (data.result) {
+                setOwnCourse(true)
+                dispatch(toggleRegisterCourseModal())
+            } else {
+                message.error("Thanh toán thất bại!")
+            }
+        } catch (err) {
+            message.error("Lỗi: " + err.message)
+        }
+        // setIsRegistering(false)
+    }
+
+    useEffect(() => {
+
+        if (course.id && params.get("requestId") != undefined) {
+            updatePayment()
         }
     }, [course])
 

@@ -117,7 +117,7 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
         course_id = request.data['course']
         errorCode = request.data['errorCode']
         extraData = request.data['extraData']
-        resUrl = extraData.split("=")[1]
+        # resUrl = extraData.split("=")[1]
 
         if errorCode == "0":
             query = MoMoQueryStatusService(partnerRefId=partnerRefId, requestId=requestId)
@@ -133,13 +133,13 @@ class BuyCourseSuccessAPI(generics.GenericAPIView):
                 except UserBuyCourse.DoesNotExist:
                     instance = UserBuyCourse.objects.create(user=user, course_id=course_id, money=amount)
                 return Response({
-                        "redirect": resUrl,
-                        "ok": True,
+                        # "redirect": resUrl,
+                        "result": True,
                 }, status=status.HTTP_201_CREATED)
                     
         return Response({
-            "redirect": resUrl,
-            "ok": False,
+            # "redirect": resUrl,
+            "result": False,
         }, status=status.HTTP_201_CREATED)
 
 

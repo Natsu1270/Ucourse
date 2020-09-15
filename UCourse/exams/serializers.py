@@ -2,12 +2,22 @@ from rest_framework import serializers
 
 from course_homes.models import LearningTopic, CourseHome
 from questions.models import Question
-from users.models import User
 from users.serializers import UserMinSerializer
 from .models import Exam, StudentExam, QuestionResponse, AbilityTest, UserAbilityTest, UserResponse, Choice, \
     StudentExamResult
 from questions.serializers import QuestionSerializer, ChoiceSerializer
 from courses.serializers import CourseMinSerializer
+
+
+class CourseHomeNoSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course = CourseMinSerializer(read_only=True)
+
+    class Meta:
+        model = CourseHome
+        fields = [
+            'id', 'course', 'status', 'slug', 'full_name'
+        ]
 
 
 class ExamSerializer(serializers.ModelSerializer):
@@ -36,6 +46,23 @@ class ExamSerializer(serializers.ModelSerializer):
         for q in questions:
             res += q.score
         return res
+
+
+class ExamNotificationSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    course_home = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Exam
+        fields = [
+            'id', 'name', 'course_home', 'mandatory',
+            'status', 'expired_date', 'start_date'
+        ]
+
+    @staticmethod
+    def get_course_home(obj):
+        return CourseHomeNoSerializer(instance=obj.topic.course_home).data
+
 
 
 class ExamShowSerializer(serializers.ModelSerializer):

@@ -1,4 +1,4 @@
-import { Button, message, Modal, Skeleton } from "antd";
+import { Alert, Button, message, Modal, Skeleton } from "antd";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -22,6 +22,11 @@ const AbilityTest = ({ abilityTestId, token }) => {
     const generateTest = async () => {
         setLoading(true)
         try {
+            if (abilityTestId == undefined) {
+                message.info('Chưa có bài kiểm tra năng lực cho khóa học này')
+                setLoading(false)
+                return
+            }
             const { data } = await generateAbilityTestAPI({ token, ability_test: abilityTestId })
             setTest(data.data.user_ability_test)
         } catch (err) {
@@ -71,13 +76,13 @@ const AbilityTest = ({ abilityTestId, token }) => {
             bodyStyle={bodyStyle}
         >
             {
-                <Skeleton active loading={loading}>
-                    <AbilityTestForm
-                        duration={test.duration}
-                        questions={test.questions}
-                        uATId={test.id}
-                    />
-                </Skeleton>
+                abilityTestId ? <Skeleton active loading={loading}>
+                <AbilityTestForm
+                    duration={test.duration}
+                    questions={test.questions}
+                    uATId={test.id}
+                />
+            </Skeleton> : <Alert showIcon type="info" message="Không có bài kiểm tra năng lực cho khóa học này" />
             }
         </Modal>
     )

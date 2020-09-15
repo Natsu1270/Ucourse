@@ -86,14 +86,14 @@ const NotificationPage = ({ notifications, loading }) => {
                     if (reference) {
                         onClick = () => {
                             readNoti(n.id)
-                            // window.open(
-                            //     `/learn/${reference.course_home.slug}/forums/${reference.forum}/threads/${reference.id}`, '_self'
-                            // )
+                            window.open(
+                                `/learn/${reference.course_home.slug}/exams/${reference.id}`, '_self'
+                            )
                         }
-                        content = <span>
+                        content = <Space>
                             <FileProtectOutlined /> Có bài kiểm tra mới phải làm ở lớp
-                            {/* <span className="b-500">{reference.course_home.full_name}</span> */}
-                        </span>
+                            <span className="b-500">{reference.course_home.full_name}</span>
+                        </Space>
                     }
                 }
                 return [{ ...n, content, onClick }]

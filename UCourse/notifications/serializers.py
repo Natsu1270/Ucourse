@@ -5,7 +5,7 @@ from course_homes.serializers import CourseHomeMinSerializer
 from courses.models import Course
 from courses.serializers import CourseMinSerializer
 from exams.models import Exam
-from exams.serializers import ExamSerializer
+from exams.serializers import ExamSerializer, ExamNotificationSerializer
 from forums.models import Forum, Thread
 from forums.serializers import ForumSerializer, ThreadSerializer
 from programs.models import Program
@@ -61,6 +61,6 @@ class NotificationsSerializer(serializers.ModelSerializer):
         if obj.type == "6":
             try:
                 instance = Exam.objects.get(pk=reference)
-                return ExamSerializer(instance=instance).data
+                return ExamNotificationSerializer(instance=instance).data
             except Exam.DoesNotExist:
                 return None

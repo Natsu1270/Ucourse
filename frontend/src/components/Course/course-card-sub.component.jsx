@@ -24,10 +24,15 @@ const CourseCardSub = ({ title, homeNum, level, price, isBought }) => {
             <Divider />
             <Row justify="space-between">
                 <Col>
-                    {homeNum === 0 ? "Chưa có lớp" : homeNum + " lớp"}
+                    <span className="text--sub__bigger">
+                        {homeNum === 0 ? "Chưa có lớp" : homeNum + " lớp"}
+                    </span>
                 </Col>
                 <Col>
-                    <span style={{}}><DollarCircleTwoTone twoToneColor="#ffa700" /> {renderPrice(price)}</span>
+                    <Space className="text--sub__bigger">
+                        <DollarCircleTwoTone twoToneColor="#ffa700" />
+                        {renderPrice(price)}
+                    </Space>
                 </Col>
             </Row>
             <Row gutter={16}>

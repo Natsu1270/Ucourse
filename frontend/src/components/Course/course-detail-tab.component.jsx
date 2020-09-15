@@ -107,7 +107,7 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                     </div> : null
                 }
 
-                <div className="course-tab__btn">
+                {!isProgram ? <div className="course-tab__btn">
                     <Popconfirm
                         placement={tabStick ? "bottomRight" : "topRight"}
                         title="Bạn có chắc muốn làm bài test kiểm tra năng lực?"
@@ -119,7 +119,7 @@ const CourseDetailTab = ({ course, isOwn, isProgram, handleRegister }) => {
                             className="ml-3 cs-btn-tab">Kiểm tra năng lực</Button>
                     </Popconfirm>
 
-                </div>
+                </div> : null}
             </div>
         </section>
     )

@@ -28,24 +28,27 @@ const ProgramDetailComponents = ({ courses, boughtCourses, completedCourses }) =
                             <Card
                                 hoverable
                                 className="program-card"
-                                style={{ width: 300 }}
+                                style={{ width: 350 }}
                                 onClick={() => history.push(`/courses/${course.slug}`)}
                             >
                                 <Meta
                                     avatar={<Avatar size={48} src={course.icon} />}
-                                    title={course.title}
-                                    description={<Row>
-                                        <Col span={24}>
-                                            <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
-                                        </Col>
-
-                                        {
+                                    title={<Row justify="space-between">
+                                        <Col>{course.title}</Col>
+                                        <Col>{
                                             checkBought ?
                                                 <Col>
                                                     <Tag color="#f50">Đã sở hữu</Tag>
 
                                                 </Col> : null
-                                        }
+                                        }</Col>
+                                    </Row>}
+                                    description={<Row justify="space-between">
+                                        <Col>
+                                            <p className="text-sub__bigger text-black">Giá: {renderPrice(course.price)}</p>
+                                        </Col>
+
+
                                         {
                                             checkCompleted ? <Col>
                                                 <Tag color="#f50">Đã hoàn thành</Tag>
