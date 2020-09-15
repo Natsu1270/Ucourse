@@ -50,8 +50,8 @@ const Header = ({ token, currentUser, notifications, isFetching, favCourseCount 
                 </Row>
 
             </Col>
-            <Col className='header-search'>
-                <SearchInput width={350} />
+            <Col className='header-search' span={5}>
+                <SearchInput />
             </Col>
             <Col>
                 {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, AutoComplete, Button } from "antd";
+import { Input, AutoComplete, Button, Row, Col } from "antd";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { createStructuredSelector } from 'reselect'
@@ -41,7 +41,7 @@ const renderItem = (title, count) => ({
 });
 
 
-const SearchInput = ({ width, value }) => {
+const SearchInput = ({ value }) => {
     const dispatch = useDispatch();
     let history = useHistory();
     const [search, setSearch] = useState('')
@@ -75,33 +75,37 @@ const SearchInput = ({ width, value }) => {
     const startSearch = () => history.push(`/search?query=${search}`)
 
     return (
-        <div className="certain-category-search-wrapper d-flex" style={{ width: width }}>
-            <AutoComplete
-                backfill={true}
-                className="certain-category-search"
-                defaultValue={value}
-                dropdownClassName="certain-category-search-dropdown"
-                dropdownMatchSelectWidth={false}
-                dropdownStyle={{ width: 300 }}
-                style={{ width: '100%' }}
-                options={options}
-                // optionLabelProp="value"
-                onChange={(value) => setSearch(value)}
-            >
-                <Input
-                    size="large"
-                    placeholder="Tìm kiếm"
-                    value={search}
-                    onChange={e => handleChange(e)}
-                    onPressEnter={
-                        () => history.push(`/search?query=${search}`)
-                    } />
+        <Row>
+            <Col span={18}>
+                <AutoComplete
+                    backfill={true}
+                    className="certain-category-search"
+                    defaultValue={value}
+                    dropdownClassName="certain-category-search-dropdown"
+                    dropdownMatchSelectWidth={false}
+                    dropdownStyle={{ width: 300 }}
+                    style={{ width: '100%' }}
+                    options={options}
+                    // optionLabelProp="value"
+                    onChange={(value) => setSearch(value)}
+                >
+                    <Input
+                        size="large"
+                        placeholder="Tìm kiếm"
+                        value={search}
+                        onChange={e => handleChange(e)}
+                        onPressEnter={
+                            () => history.push(`/search?query=${search}`)
+                        } />
 
-            </AutoComplete>
-            <Button style={{ height: '4rem' }} onClick={startSearch}>
-                <SearchOutlined />
-            </Button>
-        </div>
+                </AutoComplete>
+            </Col>
+            <Col>
+                <Button style={{ height: '100%' }} onClick={startSearch}>
+                    <SearchOutlined />
+                </Button>
+            </Col>
+        </Row>
     );
 }
 
