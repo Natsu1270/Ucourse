@@ -5,7 +5,6 @@ from .serializers import SearchKeyWordSerializer
 
 class SearchKeyWordAPI(generics.ListAPIView):
     serializer_class = SearchKeyWordSerializer
-    pagination_class = None
 
     def get_queryset(self):
         return SearchKeyWord.objects.all().order_by('-count')[:5]

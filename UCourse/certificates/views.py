@@ -83,7 +83,12 @@ class GenerateCertificate(generics.GenericAPIView):
         email = student.email
         student_name = student.user_profile.fullname
         rank = self.request.data.get('rank', None)
-        uuid_string = uuid.uuid4()
+        uuid_string = 'UCOURSE-' + str(course_id) if course_id else str(program_id)
+        uuid_string += '-'
+        uuid_string += str(uuid.uuid4())[:8]
+        uuid_string += '-'
+        uuid_string += str(datetime.date.today())
+        uuid_string = uuid_string.upper()
 
         # Generate certificate pdf file
         template = get_template('course-certificate-template.html')
