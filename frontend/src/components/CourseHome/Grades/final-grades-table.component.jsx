@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Space, Table, Row, Col, Avatar, Tag, message } from 'antd'
+import { Button, Space, Table, Row, Col, Avatar, Tag, message, Tooltip } from 'antd'
 import { CSVLink } from 'react-csv'
 import { SwapOutlined, EditOutlined, } from '@ant-design/icons'
 
@@ -83,7 +83,11 @@ const FinalGradesTable = (
             key: 'result',
             render: (result, record) => <Row gutter={16}>
                 <Col><span className="text-black b-500">{result}</span></Col>
-                <Col>{record.isQualified ? <Tag color="#63ace5">Đạt</Tag> : <Tag color="#f50">Không đạt</Tag>}</Col>
+                <Col>{record.isQualified ? <Tag color="#63ace5">Đạt</Tag> : <Tooltip color="blue" title={
+                    result < 5 ? "Điểm dưới 5" : `Chưa hoàn thành các bài kiểm tra/ assignment bắt buộc: ${record.unDoneTasks}`
+                }>
+                    <Tag color="#f50">Không đạt</Tag>
+                </Tooltip>}</Col>
             </Row>
         },
 
@@ -163,6 +167,8 @@ const FinalGradesTable = (
     const finalData = students.map((student, index) => {
         let finalResult = 0
         let qualified = true
+        let unDoneTasks = []
+
         Object.keys(exams).forEach(key => {
             const xExams = exams[key][1]
             const examDetail = exams[key][0]
@@ -173,6 +179,7 @@ const FinalGradesTable = (
                 if (examDetail.mandatory) {
                     if (!studentExamDetail.is_pass) {
                         qualified = false
+                        unDoneTasks.push(examDetail.name)
                     }
                     if (studentExamDetail.final_result != undefined) {
                         finalResult += studentExamDetail.final_result * examDetail.percentage / 100
@@ -191,6 +198,7 @@ const FinalGradesTable = (
                 if (assDetail.mandatory) {
                     if (studentAssDetail.score < assDetail.pass_score) {
                         qualified = false
+                        unDoneTasks.push(assDetail.name)
                     }
                     finalResult += studentAssDetail.score * assDetail.percentage / 100
                 }
@@ -201,6 +209,8 @@ const FinalGradesTable = (
 
         const studentCourseHome = studentCourseHomes.find(item => item.student == student.id) || {}
         const userCourse = normalizeUserCourses()
+        unDoneTasks = unDoneTasks.join(", ")
+
 
         csvData.push({
             stt: index + 1,
@@ -224,7 +234,8 @@ const FinalGradesTable = (
             status: studentCourseHome.status,
             isQualified: qualified && finalResult >= 5,
             studentId: student.id,
-            receivedCertificate: userCourse[student.id]
+            receivedCertificate: userCourse[student.id],
+            unDoneTasks: unDoneTasks
         }
     })
 
