@@ -14,7 +14,7 @@ django-rest-knox==4.1.0
 djangorestframework==3.11.0
 elasticsearch==7.5.1
 elasticsearch-dsl==7.1.0
-Pillow==7.0.0
+Pillow==9.0.1
 pycparser==2.19
 python-dateutil==2.8.1
 pytz==2019.3
